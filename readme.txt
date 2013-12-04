@@ -19,7 +19,7 @@ Build forms easily, i still have to write the plugin description and to get some
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Go to Smart Forms /Add new and create a new form
 4. To add the form to a widget go to widgets and drag the smart form widget
-5. To add the form to a post type [sform]formid[/sform] (example:[sdonations]1[/sdonations]), you can find the formid of your form on the form list
+5. To add the form to a post type [sform]formid[/sform] (example:[sform]1[/sform]), you can find the formid of your form on the form list
 
 == Frequently Asked Questions ==
 N/A
