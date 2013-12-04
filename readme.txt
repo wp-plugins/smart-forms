@@ -10,7 +10,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Build responsive forms easily by dragging and dropping elements.
 == Description ==
-Build forms easily,
+Build forms easily, i still have to write the plugin description and to get some screnshots, please be patient =). If you have any question just let me know!!
 
 
 
