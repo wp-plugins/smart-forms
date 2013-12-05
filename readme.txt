@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: form,  forms,  contact form, contact forms,  form plugin, forms plugin, forms plugin, form builder,  form manager, multiple forms, custom  form, form maker, form with recaptcha,  form with google map, feedback form, feedback forms, contact us
 Requires at least: 3.1
 Tested up to: 3.5
-Stable tag: 0.1
+Stable tag: 0.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -30,11 +30,16 @@ N/A
 
 == Screenshots ==
 1. Dragging a form element
+2. Form Entries example
+3. Example of a form
+4. Example of the same form seen in an iphone
 
 == Changelog ==
 = 0.1 =
 *First release of smart forms.
-
-
+= 0.1.1 =
+* Fixing issues with the form entries screen
+* Allow the grid of the form entries to expand based on entries
+* Fixing responsive forms
 == Upgrade Notice ==
 N/A

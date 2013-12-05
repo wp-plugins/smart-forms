@@ -88,6 +88,6 @@ if(!defined('ABSPATH'))
 
 
 <div>
-    <div class="smartFormsSlider">
+    <div class="smartFormsSlider" style="margin-right:10px;">
         <table id='grid' class="ui-jqdialogasdf" style="width:100%;height:100%;"></table><div id='pager'></div>
     </div>

@@ -200,3 +200,8 @@
 .redNaoCompactForm.rednaoFormContainer .redNaoTextArea{
     width:100% !important;
 }
+
+.redNaoCompactForm .rednao_label_container,.redNaoCompactForm .redNaoControls
+{
+    width:100% !important;
+}
