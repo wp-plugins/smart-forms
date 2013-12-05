@@ -32,7 +32,8 @@ N/A
 1. Dragging a form element
 
 == Changelog ==
-0.1 First release of smart forms.
+= 0.1 =
+*First release of smart forms.
 
 
 == Upgrade Notice ==
