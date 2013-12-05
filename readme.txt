@@ -8,15 +8,15 @@ Stable tag: 0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Build responsive forms easily by dragging and dropping elements.
+Build forms easily by dragging and dropping elements. The forms are responsive and you can receive an email after a form was submitted and also check all the form entries.
 == Description ==
-Build forms easily, i still have to write the plugin description and to get some screnshots, please be patient =). If you have any question just let me know!!
+Build forms easily by dragging and dropping elements. The forms are responsive and you can receive an email after a form was submitted and also check all the form entries.
 
 
 
 == Installation ==
 1. Upload smart forms to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
+2. Activate the item named  'smart forms' in the 'Plugins' menu in WordPress
 3. Go to Smart Forms /Add new and create a new form
 4. To add the form to a widget go to widgets and drag the smart form widget
 5. To add the form to a post type [sform]formid[/sform] (example:[sform]1[/sform]), you can find the formid of your form on the form list
@@ -29,10 +29,10 @@ N/A
 
 
 == Screenshots ==
-
+1. Dragging a form element
 
 == Changelog ==
-
+0.1 First release of smart forms.
 
 
 == Upgrade Notice ==
