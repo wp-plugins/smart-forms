@@ -132,14 +132,14 @@ smartFormGenerator.prototype.SaveForm=function()
     var amount=0;
 
     this.GetRootContainer().find('.redNaoValidationMessage').remove();
-    this.GetRootContainer().find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').css('border-color','#ccc');
+    this.GetRootContainer().find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').removeClass('redNaoInvalid');
     for(var i=0;i<this.FormElements.length;i++)
     {
 
         if((this.FormElements[i].Options.IsRequired==1||this.FormElements[i].Options.IsRequired=='y')&&!this.FormElements[i].IsValid())
         {
             formIsValid=false;
-            rnJQuery('#'+this.FormElements[i].Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').css('border-color','red');
+            rnJQuery('#'+this.FormElements[i].Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
             continue;
         }
         if(this.FormElements[i].StoresInformation())

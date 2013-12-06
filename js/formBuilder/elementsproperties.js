@@ -129,7 +129,7 @@ SimpleTextProperty.prototype.GenerateHtml=function()
 {
     var value=this.GetPropertyCurrentValue().trim();
     var newProperty=rnJQuery( '<td style="text-align: right"><label class="rednao-properties-control-label"> '+this.PropertyTitle+' </label></td>\
-            <td><input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="Default"/></td>');
+            <td style="text-align: left"><input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="Default"/></td>');
 
     var self=this;
     newProperty.keyup(function(){
@@ -158,11 +158,11 @@ CheckBoxProperty.prototype=Object.create(ElementPropertiesBase.prototype);
 CheckBoxProperty.prototype.GenerateHtml=function()
 {
     var newProperty=rnJQuery('<td style="text-align: right"><label class="checkbox control-group" style="display: block;">'+this.PropertyTitle+'</label></td>\
-                <td><input type="checkbox" class="input-inline field" name="checked" id="'+this.PropertyId+'" '+(this.GetPropertyCurrentValue()=='y'? 'checked="checked"':'')+'/></td>');
+                <td style="text-align: left"><input type="checkbox" class="input-inline field" name="checked" id="'+this.PropertyId+'" '+(this.GetPropertyCurrentValue()=='y'? 'checked="checked"':'')+'/></td>');
 
     var self=this;
     newProperty.find('#'+this.PropertyId).change(function(){
-        self.Manipulator.SetValue(this.PropertiesObject,this.PropertyName, (rnJQuery("#"+this.PropertyId).is(':checked')?'y':'n'),this.AdditionalInformation);
+        self.Manipulator.SetValue(self.PropertiesObject,self.PropertyName, (rnJQuery("#"+self.PropertyId).is(':checked')?'y':'n'),self.AdditionalInformation);
         self.RefreshElement();
     });
 
@@ -201,7 +201,7 @@ ArrayProperty.prototype.GenerateHtml=function()
     if(valuesText.length>0)
         valuesText=valuesText.substr(1);
 
-    var newProperty=rnJQuery('<td style="vertical-align: top;text-align: right;"><label class="checkbox control-group" style="display: block;vertical-align: top;">'+this.PropertyTitle+'</label></td><td><textarea class="field" data-type="textarea-split" style="min-height: 200px;width: 206px;" id="'+this.PropertyId+'">'+valuesText+'</textarea></td>');
+    var newProperty=rnJQuery('<td style="vertical-align: top;text-align: right;"><label class="checkbox control-group" style="display: block;vertical-align: top;">'+this.PropertyTitle+'</label></td><td style="text-align: left"><textarea class="field" data-type="textarea-split" style="min-height: 200px;width: 206px;" id="'+this.PropertyId+'">'+valuesText+'</textarea></td>');
 
     var self=this;
     newProperty.find('#'+this.PropertyId).change(function(){self.UpdateProperty();});
@@ -250,7 +250,7 @@ IdProperty.prototype.GenerateHtml=function()
 
     var value=this.PreviousId;
     var newProperty=rnJQuery( '<td style="text-align: right"><label class="rednao-properties-control-label"> '+this.PropertyTitle+' </label></td>\
-            <td><input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+value+'" placeholder="Default"/></td>');
+            <td style="text-align: left"><input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+value+'" placeholder="Default"/></td>');
 
 
     var self=this;
