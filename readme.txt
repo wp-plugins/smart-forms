@@ -10,6 +10,8 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Build forms easily by dragging and dropping elements. The forms are responsive and you can receive an email after a form was submitted and also check all the form entries.
 == Description ==
+If you have question or suggestion please let me know in the smart form official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601
+
 Build forms easily by dragging and dropping elements. The forms are responsive and you can receive an email after a form was submitted and also check all the form entries.
 
 Features
