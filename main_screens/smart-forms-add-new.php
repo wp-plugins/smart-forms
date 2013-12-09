@@ -10,7 +10,7 @@
 if(!defined('ABSPATH'))
     die('Forbidden');
 
-
+smart_forms_load_license_manager("");
 
 wp_enqueue_script('jquery');
 wp_enqueue_script('isolated-slider',SMART_FORMS_DIR_URL.'js/rednao-isolated-jq.js',array('jquery'));
@@ -25,6 +25,13 @@ wp_enqueue_script('smart-forms-dragmanager',SMART_FORMS_DIR_URL.'js/formBuilder/
 wp_enqueue_script('smart-forms-dragitembehaviors',SMART_FORMS_DIR_URL.'js/formBuilder/dragManager/dragitembehaviors.js');
 
 
+
+
+
+
+//wp_enqueue_script('smart-forms-mce',SMART_FORMS_DIR_URL.'js/tn_mce/tinymce.min.js',array('smart-forms-add-new'));
+wp_enqueue_script('email-editor',SMART_FORMS_DIR_URL.'js/editors/email-editor.js',array('isolated-slider'));
+
 wp_enqueue_script('json2');
 
 
@@ -37,19 +44,13 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
 ?>
 
 
-
-
-
 <script type="text/javascript">
 
-var payPalCurrencies=new Array("USD","AUD","BRL","GBP","CAD","CZK","DKK","EUR","HKD","HUF","ILS","JPY","MXN","TWD","NZD","NOK","PHP","PLN","SGD","SEK","CHF","THB");
-var wePayCurrencies=new Array("USD");
 
+    var smartForms_arrow_closed="<?php echo SMART_FORMS_DIR_URL?>images/arrow_right.png";
+    var smartForms_arrow_open="<?php echo SMART_FORMS_DIR_URL?>images/arrow_down.png";
 
-var smartForms_arrow_closed="<?php echo SMART_FORMS_DIR_URL?>images/arrow_right.png";
-var smartForms_arrow_open="<?php echo SMART_FORMS_DIR_URL?>images/arrow_down.png";
-
-var smartFormsRootPath="<?php echo SMART_FORMS_DIR_URL?>";
+    var smartFormsRootPath="<?php echo SMART_FORMS_DIR_URL?>";
 
 
 </script>
@@ -57,8 +58,43 @@ var smartFormsRootPath="<?php echo SMART_FORMS_DIR_URL?>";
 
 
 
+<div id="redNaoEmailEditor" title="Email" style="display: none;">
+    <table>
+        <tr>
+            <td style="text-align: right">From email address</td><td> <input placeholder="Default (wordpress@yoursite.com)" type="text" id="redNaoFromEmail" style="width:300px"></td>
+        </tr>
+
+        <tr>
+            <td style="text-align: right">From name</td><td> <input placeholder="Default (Wordpress)" type="text" id="redNaoFromName" style="width:300px"></td>
+        </tr>
+
+        <tr>
+            <td style="text-align: right">To email address(es)</td><td> <input placeholder="Default (Blog Administrator)" type="text" id="redNaoToEmail" style="width:300px"></td>
+        </tr>
+
+        <tr>
+            <td style="text-align: right">Email subject</td><td> <input placeholder="Default (Form Submitted)" type="text" id="redNaoEmailSubject" style="width:300px"></td>
+        </tr>
+    </table>
+    <div id="redNaoEmailEditorComponent">
+    <?php wp_editor( "", "redNaoTinyMCEEditor"); ?>
 
 
+    <div id="redNaoAccordion" class="smartFormsSlider" style="float:right;">
+        <h3>Form Fields</h3>
+        <div>
+            <ul id="redNaoEmailFormFields">
+
+            </ul>
+        </div>
+
+    </div>
+    </div>
+    <div style="text-align: right;clear: both;">
+        <button onclick="RedNaoEmailEditorVar.CloseEmailEditor();">Close</button>
+        <button onclick="SmartFormsAddNewVar.SendTestEmail();">Send Test Email</button>
+    </div>
+</div>
 
 
 
@@ -91,9 +127,9 @@ var smartFormsRootPath="<?php echo SMART_FORMS_DIR_URL?>";
                 <br/>
 
 
-                <span><?php echo __("On submission notify to"); ?></span>
-                <input type="text"  id="smartFormsSubmissionNotifyTo"/>
-                <span class="description" style="margin-bottom:5px;"> <?php echo __("*When one form is submitted an email will be send to these addresses. Please separate each address with a semicolon (e.g. email1@hotmail.com;email2@hotmail.com)"); ?></span>
+                <span><?php echo __("On submission send notification email"); ?></span>
+                <input type="checkbox"  id="smartFormsSendNotificationEmail"/>
+                <button id="redNaoEditEmailButton" disabled="disabled"><?php echo __("Edit Email"); ?></button>
                 <br/>
             </div>
         </div>
@@ -288,8 +324,6 @@ var smartFormsRootPath="<?php echo SMART_FORMS_DIR_URL?>";
         </div>
     </div>
 </div>
-
-
 
 
 

@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: form,  forms,  contact form, contact forms,  form plugin, forms plugin, forms plugin, form builder,  form manager, multiple forms, custom  form, form maker, form with recaptcha,  form with google map, feedback form, feedback forms, contact us
 Requires at least: 3.1
 Tested up to: 3.5
-Stable tag: 0.1.2
+Stable tag: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,7 +41,13 @@ N/A
 4. Example of the same form seen in an iphone
 5. Adding form as a widget
 6. Adding form as a shortcode
+7. Advance email formatting
 == Changelog ==
+= 0.3 =
+* Added advanced customization for forms email.
+* Fixed bugs in the form builder
+* Fixed bug in the form checkbox
+* Added the option to purchase the Smart Forms full version
 = 0.1 =
 *First release of smart forms.
 = 0.1.1 =

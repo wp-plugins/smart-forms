@@ -19,7 +19,7 @@ class rednao_string_builder {
 
 
         $renderer=null;
-        switch($formElement->ClassName)
+        switch($formElement["ClassName"])
         {
             case "rednaotextinput":
             case "rednaoprependedtext":

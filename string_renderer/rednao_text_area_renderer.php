@@ -10,6 +10,6 @@ class rednao_text_area_renderer extends  rednao_base_elements_renderer{
 
     public function GetString($formElement,$entry)
     {
-        return "<td style='padding:2px'>".htmlspecialchars($formElement->Label)."</td><td style='padding:2px'>".htmlspecialchars($entry->value)."</td>";
+        return htmlspecialchars($entry["value"]);
     }
 } 

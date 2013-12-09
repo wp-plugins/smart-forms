@@ -9,6 +9,7 @@ function RedNaoFormBuilder(smartFormsOptions,formElementsOptions) {
     this.RedNaoFormElements = [];
     this.scrollTimeOut = null;
     this.propertiesPanel = rnJQuery("#rednaoPropertiesPanel");
+
     rnJQuery("#formBuilderButtonSet").buttonset();
 
 
@@ -44,6 +45,8 @@ function RedNaoFormBuilder(smartFormsOptions,formElementsOptions) {
         FormElementBase.IdCounter=0;
     this.DragManager = new RedNaoDragManager(this);
 };
+
+
 
 RedNaoFormBuilder.prototype.SmartDonationsPrepareDraggableItems = function () {
     rnJQuery(".rednaoformbuilder .component,#redNaoElementlist .rednao-control-group").unbind('mousedown');
@@ -259,9 +262,8 @@ RedNaoFormBuilder.prototype.ScrollSettings = function () {
 
 
 RedNaoFormBuilder.prototype.CloneFormElement=function(jQueryElement){
-    if(this.RedNaoFormElements.length>=7)
+    if(this.RedNaoFormElements.length>=7&&!RedNaoLicensingManagerVar.LicenseIsValid())
     {
-        alert('Sorry, this version support up to 7 fields only');
         return;
     }
     var formObject=this.RedNaoFormElements[jQueryElement.index()];

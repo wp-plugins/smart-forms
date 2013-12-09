@@ -2,6 +2,8 @@
 
 
 <?php
+include_once(SMART_FORMS_DIR.'smart-forms-license.php');
+
 if(!defined('ABSPATH'))
     die('Forbidden');
 
@@ -12,13 +14,9 @@ if (isset($_GET['action'])) {
 if($action==="add"){
     global $wpdb;
     $result=$wpdb->get_var("SELECT count(*) FROM ".SMART_FORMS_TABLE_NAME);
-    if($result>=3)
+    if($result>=3&&!smart_forms_check_license_with_options($error))
     {
-        ?>
-        <script type="text/javascript">
-            alert('Sorry, this version support up to three forms only');
-        </script>
-    <?php
+        smart_forms_load_license_manager("Sorry, this version support up to three forms only");
     }else{
         include(SMART_FORMS_DIR.'main_screens/smart-forms-add-new.php');
         return;

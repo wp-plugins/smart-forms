@@ -71,11 +71,11 @@ function FormElementBase(options)
         this.Options.IsRequired='n';
 
         FormElementBase.IdCounter++;
-        this.Id='redNaoFormElement'+FormElementBase.IdCounter;
+        this.Id='rnField'+FormElementBase.IdCounter;
         while(!SmartFormsFieldIsAvailable(this.Id))
         {
             FormElementBase.IdCounter++;
-            this.Id='redNaoFormElement'+FormElementBase.IdCounter;
+            this.Id='rnField'+FormElementBase.IdCounter;
         }
 
         this.Options.Id=this.Id;
@@ -225,7 +225,7 @@ FormElementBase.prototype.Clone=function()
 {
    var newObject=  jQuery.extend(true, {}, this);
     FormElementBase.IdCounter++;
-    newObject.Id='redNaoFormElement'+FormElementBase.IdCounter;
+    newObject.Id='rnField'+FormElementBase.IdCounter;
 
     newObject.Properties=[];
     newObject.CreateProperties();

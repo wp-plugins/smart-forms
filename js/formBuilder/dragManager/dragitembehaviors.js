@@ -62,9 +62,9 @@ DragItemBehaviorNewElement.prototype.HoverInAnything=function(target)
 
 DragItemBehaviorNewElement.prototype.DragDrop=function(target)
 {
-    if(this.FormBuilder.RedNaoFormElements.length>=7)
+    if(this.FormBuilder.RedNaoFormElements.length>=8&&!RedNaoLicensingManagerVar.LicenseIsValid())
     {
-        alert('This version support up to 7 fields only');
+        rnJQuery('#redNaoSmartFormsPlaceHolder').remove();
         return;
     }
     var newElement = this.FormBuilder.CreateNewInstanceOfElement(this.DraggedElement);

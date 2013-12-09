@@ -324,3 +324,57 @@
     opacity:0.6;
     filter:alpha(opacity=60);
 }
+
+#redNaoAccordion .ui-icon-triangle-1-s, #redNaoAccordion .ui-icon-triangle-1-e
+{
+    display: inline-block;
+    margin-top:1px;
+    vertical-align: middle;
+}
+
+#redNaoEmailEditor{
+    width:800px;
+    height: 500px;
+    margin: 0;
+    padding: 0;
+}
+
+
+#wp-redNaoTinyMCEEditor-wrap{
+    float:left;
+    width:600px;
+    margin:0;
+    padding: 0;
+}
+
+#redNaoAccordion{
+    width:200px;
+    margin:30px 0 0 0;
+}
+
+#redNaoAccordion ul, #redNaoAccordion li{
+    margin:0;
+    padding: 0;
+}
+
+#redNaoAccordion ul{
+    max-height: 440px;
+    overflow: scroll;
+}
+
+#redNaoAccordion button{
+    margin:0;
+    padding: 7px;
+    width:100%;
+}
+
+#redNaoEmailEditorComponent{
+    width:800px;
+    height:450px;
+    margin:0px;
+    padding:0px;
+}
+
+#redNaoTinyMCEEditor_ifr{
+    background-color: white;
+}

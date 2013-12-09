@@ -91,7 +91,7 @@ function rednao_smart_forms_save_form_values()
     $form_id=GetPostValue("form_id");
     $formString=GetPostValue("formString");
 
-    $entryData=json_decode($formString);
+    $entryData=json_decode($formString,true);
 
     global $wpdb;
     $result=$wpdb->get_results($wpdb->prepare("select form_options,element_options from ".SMART_FORMS_TABLE_NAME." where form_id=%d",$form_id));
@@ -100,8 +100,8 @@ function rednao_smart_forms_save_form_values()
     $elementOptions=null;
 
     if(count($result)>0){
-        $formOptions=json_decode($result[0]->form_options);
-        $elementOptions=json_decode($result[0]->element_options);
+        $formOptions=json_decode($result[0]->form_options,true);
+        $elementOptions=json_decode($result[0]->element_options,true);
     }
 
     $result=$wpdb->insert(SMART_FORMS_ENTRY,array(
@@ -111,7 +111,8 @@ function rednao_smart_forms_save_form_values()
         'ip'=>$_SERVER['REMOTE_ADDR'],
     ));
 
-    send_form_email($formOptions,$entryData,$elementOptions);
+    if($formOptions["SendNotificationEmail"]=="y")
+        send_form_email($formOptions["Emails"][0],$entryData,$elementOptions,false);
 
     if($result==true)
         echo '{"message":"'.__("Information submitted successfully.").'"}';
@@ -120,12 +121,41 @@ function rednao_smart_forms_save_form_values()
     die();
 }
 
-function send_form_email($formOptions,$entryData,$elementOptions)
+function send_form_email($formOptions,$entryData,$elementOptions,$useTestData)
 {
     include(SMART_FORMS_DIR.'string_renderer/rednao_string_builder.php');
 
+
+
     $stringBuilder=new rednao_string_builder();
-    $emailText='<table border="1" cellspacing="1">';
+    $EmailText=$formOptions["EmailText"];
+    $FromName=$formOptions["FromName"];
+    $FromEmail=$formOptions["FromEmail"];
+    $ToEmail=$formOptions["ToEmail"];
+    $EmailSubject=$formOptions["EmailSubject"];
+
+
+    if($FromName=="")
+        $FromName="Wordpress";
+
+    if($EmailSubject=="")
+        $EmailSubject="Form Submitted";
+
+    if($ToEmail=="")
+        $ToEmail=get_option("admin_email");
+
+    preg_match_all('/\\[field ([^\\]]+)/',$EmailText, $matches, PREG_PATTERN_ORDER);
+
+    foreach($matches[1] as $match)
+    {
+        $value=GetValueByField($stringBuilder,$match,$entryData,$elementOptions,$useTestData);
+        $EmailText=str_replace("[field $match]",$value,$EmailText);
+    }
+
+
+/*
+
+
     foreach($entryData as $key=>$value)
     {
 
@@ -141,18 +171,47 @@ function send_form_email($formOptions,$entryData,$elementOptions)
 
         $emailText.="<tr>". $stringBuilder->GetStringFromColumn($element,$value)."</tr>";
     }
-    $emailText.="</table>";
+    $emailText.="</table>";*/
 
     $headers = 'MIME-Version: 1.0' . "\r\n";
     $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-
-    $notifyEmail = str_replace(';', ',', $formOptions->NotifyTo);
-    if(trim($notifyEmail)!="")
+    $headers.= "$FromName <$FromEmail>";
+    if(trim($ToEmail)!="")
     {
-        wp_mail($notifyEmail, __("New form submitted"), $emailText, $headers);
+        return wp_mail($ToEmail, $EmailSubject, $EmailText, $headers);
     }
 
-    return;
+    return false;
+}
+
+function GetValueByField($stringBuilder,$match,$entryData,$elementOptions,$useTestData)
+{
+    foreach($entryData as $key=>$value)
+    {
+        $element=null;
+        if($key!=$match)
+            continue;
+
+        $element=null;
+        foreach($elementOptions as $item)
+        {
+            if($item["Id"]==$key)
+            {
+                $element=$item;
+                break;
+            }
+        }
+        if($element==null)
+            continue;
+
+        $value= $stringBuilder->GetStringFromColumn($element,$value);
+        if($value==""&&$useTestData)
+            $value="sample text";
+        return $value;
+    }
+
+    if($useTestData)
+        return "sample text";
 }
 
 function rednao_smart_forms_entries_list()
@@ -189,6 +248,63 @@ function rednao_smart_forms_entries_list()
     $elementOptions=$wpdb->get_var($query);
     echo $elementOptions.'}';
 
+
+    die();
+}
+
+function rednao_smart_form_send_test_email()
+{
+    $FromEmail=GetPostValue("FromEmail");
+    $FromName=GetPostValue("FromName");
+    $ToEmail=GetPostValue("ToEmail");
+    $EmailSubject=GetPostValue("EmailSubject");
+    $EmailText=GetPostValue("EmailText");
+    $elementOptions=GetPostValue("element_options");
+
+    $elementOptions=json_decode($elementOptions);
+
+
+    $valueArray=Array(
+        "FromEmail"=>$FromEmail,
+        "FromName"=>$FromName,
+        "ToEmail"=>$ToEmail,
+        "EmailSubject"=>$EmailSubject,
+        "EmailText"=>$EmailText
+    );
+    $entryData=Array();
+
+
+    if($EmailText=="")
+    {
+        echo '{"Message":"'.__("Email text can't be empty").'"}';
+        die();
+    }
+
+    if(send_form_email($valueArray,$entryData,$elementOptions,true))
+        echo '{"Message":"'.__("Email sent successfully").'"}';
+    else
+        echo '{"Message":"'.__("There was an error sending the email, please check the configuration").'"}';
+    die();
+}
+
+function rednao_smart_forms_submit_license()
+{
+    include_once(SMART_FORMS_DIR.'smart-forms-license.php');
+
+    $email=GetPostValue("email");
+    $key=GetPostValue("key");
+
+    if(smart_forms_check_license($email,$key,$error))
+    {
+        echo '{"IsValid":"y","Message":"'.__("License submitted successfully, thank you!!").'"}';
+    }else
+    {
+        if($error==null)
+        {
+            echo '{"IsValid":"n",  "Message":"'.__("Invalid user or license").'"}';
+        }else
+            echo '{"IsValid":"n","Message":"'.__("An error occurred $error").'"}';
+    }
 
     die();
 }
