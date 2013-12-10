@@ -16,7 +16,7 @@ Build forms easily by dragging and dropping elements. The forms are responsive, 
 
 After a form is submitted you can receive an email, the email can have any format and any information that you want, also, you can check the information of all the forms submitted so far in the entries screen.
 
-Features:
+**Features:**
 
 *   Ability to create responsible forms
 *   Ability to add the form as a widget
