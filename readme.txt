@@ -17,6 +17,7 @@ Build forms easily by dragging and dropping elements. The forms are responsive, 
 After a form is submitted you can receive an email, the email can have any format and any information that you want, also, you can check the information of all the forms submitted so far in the entries screen.
 
 **Features:**
+
 *   **Responsive Forms**.- The forms adjust automatically to the available space making them usable in a pc or phone.
 *   **Form Widget**.- You can easily add a form to a widget.
 *   **Shortcode Forms**.- The forms can also be easily added to any post or page using a shortcode.
