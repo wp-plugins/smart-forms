@@ -12,14 +12,17 @@ Build forms easily by dragging and dropping elements. The forms are responsive a
 == Description ==
 If you have question or suggestion please let me know in the smart form official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601
 
-Build forms easily by dragging and dropping elements. The forms are responsive and you can receive an email after a form was submitted and also check all the form entries.
+Build forms easily by dragging and dropping elements. The forms are responsive, they adjust to the available space.
+
+After a form is submitted you can receive an email, the email can have any format and any information that you want, also, you can check the information of all the forms submitted so far in the entries screen.
 
 Features
-1. Ability to create responsible forms
-2. Ability to add the form as a widget
-3. Ability to add the form as a shortcode
-4. Entry screen to show all the forms submitted
-5. Forms that adjust depending on the available size (responsible forms)
+* Ability to create responsible forms
+* Ability to add the form as a widget
+* Ability to add the form as a shortcode
+* Entry screen to show all the forms submitted
+* Forms that adjust depending on the available size (responsible forms)
+* After a form is submitted you can send an email with any information and format that you want.
 == Installation ==
 1. Upload smart forms to the `/wp-content/plugins/` directory
 2. Activate the item named  'smart forms' in the 'Plugins' menu in WordPress
