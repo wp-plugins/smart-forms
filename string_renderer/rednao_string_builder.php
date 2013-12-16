@@ -24,6 +24,7 @@ class rednao_string_builder {
             case "rednaotextinput":
             case "rednaoprependedtext":
             case "rednaoappendedtext":
+            case "rednaodatepicker":
                 $renderer=$this->GetRenderer("rednao_text_input_renderer");
                 break;
 

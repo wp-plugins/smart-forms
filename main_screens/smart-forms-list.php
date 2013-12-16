@@ -55,18 +55,28 @@ if($action!=null&&$form_id!=null)
         {
             $result=$result[0];
 
-            $formOptions="jQuery.parseJSON('".$result->form_options."')";
-            $elementOptions="jQuery.parseJSON('".$result->element_options."')";
+            $formOptions=$result->form_options;
+            //$formOptions=str_replace("\\r","", str_replace("\\r","",$formOptions));
+            $elementOptions=$result->element_options;
+            //$elementOptions=str_replace("\\r","", str_replace("\\","\\\\",$elementOptions));
 
+            $formClientOptions=$result->client_form_options;
+
+            if($formClientOptions=="")
+                $formClientOptions="{}";
+
+            $formClientOptions=$formClientOptions;
+           // $formClientOptions=str_replace("\\r","", str_replace("\\","\\\\",$formClientOptions));
 
             $script=<<<EOF
                         <script type="text/javascript" language="javascript">
                             var smartFormId="%s";
                             var smartFormsOptions=%s;
                             var smartFormsElementOptions=%s;
+                            var smartFormClientOptions=%s
                         </script>
 EOF;
-            echo sprintf($script,$result->form_id,$formOptions,$elementOptions);
+            echo sprintf($script,$result->form_id,$formOptions,$elementOptions,$formClientOptions);
             include(SMART_FORMS_DIR.'main_screens/smart-forms-add-new.php');
             return;
 

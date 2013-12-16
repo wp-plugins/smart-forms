@@ -16,13 +16,15 @@ wp_enqueue_script('jquery');
 wp_enqueue_script('isolated-slider',SMART_FORMS_DIR_URL.'js/rednao-isolated-jq.js',array('jquery'));
 
 
-wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-event-manager',SMART_FORMS_DIR_URL.'js/formBuilder/eventmanager.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-formelements',SMART_FORMS_DIR_URL.'js/formBuilder/formelements.js',array('isolated-slider'));
-wp_enqueue_script('smart-forms-elementsProperties',SMART_FORMS_DIR_URL.'js/formBuilder/elementsproperties.js',array('smart-forms-formelements'));
-wp_enqueue_script('smart-forms-formBuilder',SMART_FORMS_DIR_URL.'js/formBuilder/formbuilder.js',array('smart-forms-elementsProperties'));
+wp_enqueue_script('smart-forms-formula-window',SMART_FORMS_DIR_URL.'js/formBuilder/formula/formulawindow.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-elements-manipulators',SMART_FORMS_DIR_URL.'js/formBuilder/properties/manipulators.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-elements-properties',SMART_FORMS_DIR_URL.'js/formBuilder/properties/elementsproperties.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-formBuilder',SMART_FORMS_DIR_URL.'js/formBuilder/formbuilder.js',array('smart-forms-elements-properties'));
 wp_enqueue_script('smart-forms-dragmanager',SMART_FORMS_DIR_URL.'js/formBuilder/dragManager/dragmanager.js');
 wp_enqueue_script('smart-forms-dragitembehaviors',SMART_FORMS_DIR_URL.'js/formBuilder/dragManager/dragitembehaviors.js');
+wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',array('isolated-slider','smart-forms-formula-window','smart-forms-formBuilder'));
 
 
 
@@ -55,9 +57,12 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
 
 </script>
 
-
-
-
+<h2 class="nav-tab-wrapper" id="smartFormsTopTab">
+    <a class='nav-tab nav-tab-active' id="smartFormsGeneralTab"  onclick="SmartFormsAddNewVar.GoToGeneral();">General Info</a>
+    <a class='nav-tab' id="smartFormsJavascriptTab" onclick="SmartFormsAddNewVar.GoToJavascript();">Javascript</a>
+    <a class='nav-tab' style="display: none;" id="smartFormsCSSTab" onclick="SmartFormsAddNewVar.GoToCSS();">CSS</a>
+</h2>
+<div id="redNaoGeneralInfo">
 <div id="redNaoEmailEditor" title="Email" style="display: none;">
     <table>
         <tr>
@@ -76,6 +81,26 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
             <td style="text-align: right">Email subject</td><td> <input placeholder="Default (Form Submitted)" type="text" id="redNaoEmailSubject" style="width:300px"></td>
         </tr>
     </table>
+
+    <div id="redNaoFormulaComponent" style="padding:0" title="Formula Editor">
+        <textarea style="width:510px;height:300px;float:left;padding: 5px;" id="redNaoFormulaTextArea"></textarea>
+
+
+        <div id="redNaoFormulaAccordion" class="smartFormsSlider" style="float:right;">
+            <h3>Form Fields</h3>
+            <div>
+                <ul id="redNaoFormulaFormFields">
+
+                </ul>
+            </div>
+
+        </div>
+
+        <div style="clear: both;"><button  onclick="RedNaoFormulaWindowVar.Validate();">Validate</button></div>
+    </div>
+
+
+
     <div id="redNaoEmailEditorComponent">
     <?php wp_editor( "", "redNaoTinyMCEEditor"); ?>
 
@@ -98,10 +123,21 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
 
 
 
+<div id="smartFormsJavascriptDiv" style="display: none;margin: 0 20px 0 0;">
+    <textarea id="smartFormsJavascriptText"></textarea>
+    <div style="text-align: right;">
+        <button onclick="SmartFormsAddNewVar.RestoreDefault()">Restore default</button>
+        <button onclick="SmartFormsAddNewVar.Validate()">Validate</button>
+    </div>
+</div>
+
+<div id="smartFormsCSSDiv" style="display: none">
+    <textarea id="smartFormsCSSText"></textarea>
+</div>
 
 
-
-<form id='smart_forms_general_options'>
+<div id="smartFormsGeneralDiv">
+<form >
     <div id="rednaoSmartForms">
 
         <input type="hidden" id="smartFormsId" value=""/>
@@ -136,7 +172,7 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
 
 
         <br/>
-
+    </div>
 <!--
 
         <div class="treeDiv" id="smartDonationsAdvanced">
@@ -162,7 +198,7 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
 
         </div>-->
 
-<hr style="margin:20px -17px 0px -17px;"/>
+<hr style="margin:20px 0 0px -17px;"/>
 
        <div id="redNaoFormBackground" style="background-color: #efefef;">
             <div class="rednaoformbuilder container rednaoFormContainer">
@@ -247,6 +283,11 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
                                                         </div>
 
                                                         <div class="component">
+                                                            <div class="control-group rednaodatepicker">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="component">
                                                             <div class="control-group rednaosubmissionbutton">
                                                             </div>
                                                         </div>
@@ -303,8 +344,12 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
             </div>
        </div>
 </form>
-<hr />
+<hr style="margin:0px 0 0px -17px;"/>
+</div>
+</div>
 
+
+<!--
 <div  id="rednaoPropertiesPanel" style="top: 74px; left: 711px; display: none;">
     <div class="arrow" ></div>
     <h3 class="rednaopopover-title">Form Name</h3>
@@ -325,5 +370,5 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
     </div>
 </div>
 
-
+-->
 

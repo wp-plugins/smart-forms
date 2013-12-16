@@ -320,12 +320,12 @@
     text-align: right;
 }
 
-#rednaoSmartForms .tempForm{
-    opacity:0.6;
-    filter:alpha(opacity=60);
+#smartFormsGeneralDiv .tempForm{
+    opacity:0.6 !important;
+    filter:alpha(opacity=60) !important;
 }
 
-#redNaoAccordion .ui-icon-triangle-1-s, #redNaoAccordion .ui-icon-triangle-1-e
+#redNaoAccordion .ui-icon-triangle-1-s, #redNaoAccordion .ui-icon-triangle-1-e,#redNaoFormulaAccordion .ui-icon-triangle-1-s,#redNaoFormulaAccordion .ui-icon-triangle-1-e
 {
     display: inline-block;
     margin-top:1px;
@@ -352,17 +352,21 @@
     margin:30px 0 0 0;
 }
 
-#redNaoAccordion ul, #redNaoAccordion li{
+#redNaoFormulaAccordion{
+    width:200px;
+}
+
+#redNaoAccordion ul,#redNaoFormulaAccordion ul, #redNaoAccordion li,#redNaoFormulaAccordion li{
     margin:0;
     padding: 0;
 }
 
-#redNaoAccordion ul{
+#redNaoAccordion ul,#redNaoFormulaAccordion ul{
     max-height: 440px;
     overflow: scroll;
 }
 
-#redNaoAccordion button{
+#redNaoAccordion button,#redNaoFormulaAccordion button{
     margin:0;
     padding: 7px;
     width:100%;
@@ -377,4 +381,10 @@
 
 #redNaoTinyMCEEditor_ifr{
     background-color: white;
+}
+
+#smartFormsJavascriptText,#smartFormsCSSText{
+    width:100%;
+    height:500px;
+    padding:5px;
 }

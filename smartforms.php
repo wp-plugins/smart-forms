@@ -5,7 +5,7 @@
  * Description: Place diferent form of donations on your blog...
  * Author: RedNao
  * Author URI: http://rednao.com
- * Version: 0.3
+ * Version: 0.5
  * Text Domain: SmartDonations
  * Domain Path: /languages/
  * Network: true
@@ -84,6 +84,7 @@ function rednao_smart_forms_plugin_was_activated()
         form_id int AUTO_INCREMENT,
         form_name VARCHAR(200) NOT NULL,
         element_options MEDIUMTEXT NOT NULL,
+        client_form_options MEDIUMTEXT NOT NULL,
         form_options MEDIUMTEXT NOT NULL,
         PRIMARY KEY  (form_id)
         );";

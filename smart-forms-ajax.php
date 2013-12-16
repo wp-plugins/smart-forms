@@ -13,7 +13,7 @@ function rednao_smart_forms_save()
     $form_id=GetPostValue("id");
     $element_options=GetPostValue("element_options");
     $form_options=GetPostValue("form_options");
-
+    $client_form_options=GetPostValue("client_form_options");
 
     //$form_options=str_replace("\\\"","\"",$form_options);
     $formParsedValues=json_decode($form_options);
@@ -37,7 +37,8 @@ function rednao_smart_forms_save()
                 {
                     $values=array('form_name'=>$formParsedValues->Name,
                         'element_options'=>$element_options,
-                        'form_options'=>$form_options
+                        'form_options'=>$form_options,
+                        'client_form_options'=>$client_form_options
                     );
 
                     $wpdb->insert(SMART_FORMS_TABLE_NAME,$values);
@@ -50,7 +51,8 @@ function rednao_smart_forms_save()
                 $wpdb->update(SMART_FORMS_TABLE_NAME,array(
                     'form_name'=>$formParsedValues->Name,
                     'element_options'=>$element_options,
-                    'form_options'=>$form_options
+                    'form_options'=>$form_options,
+                    'client_form_options'=>$client_form_options
                 ),array("form_id"=>$form_id));
                 $message="saved";
                 delete_transient("rednao_smart_forms_$form_id");

@@ -62,7 +62,7 @@ DragItemBehaviorNewElement.prototype.HoverInAnything=function(target)
 
 DragItemBehaviorNewElement.prototype.DragDrop=function(target)
 {
-    if(this.FormBuilder.RedNaoFormElements.length>=8&&!RedNaoLicensingManagerVar.LicenseIsValid())
+    if(this.FormBuilder.RedNaoFormElements.length>=8&&!RedNaoLicensingManagerVar.LicenseIsValid('Sorry, this version only support up to 8 fields'))
     {
         rnJQuery('#redNaoSmartFormsPlaceHolder').remove();
         return;

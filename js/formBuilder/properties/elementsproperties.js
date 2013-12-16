@@ -1,79 +1,12 @@
 "use strict;"
 
 
-/************************************************************************************* Manipulstors ***************************************************************************************************/
-function RedNaoBasicManipulator()
-{
-
-}
-
-RedNaoBasicManipulator.prototype.GetValue=function(propertiesObject,propertyName,additionalInformation)
-{
-    return propertiesObject[propertyName];
-}
-
-RedNaoBasicManipulator.prototype.SetValue=function(propertiesObject,propertyName,value,additionalInformation)
-{
-    propertiesObject[propertyName]=value;
-}
-
-
-
-
-
-function RedNaoStyleManipulator()
-{
-
-}
-
-RedNaoStyleManipulator.prototype.GetValue=function(propertiesObject,propertyName,additionalInformation)
-{
-    var re = new RegExp(propertyName+":[^;]*;", "");
-    var styleObject=propertiesObject[additionalInformation.class];
-    if(typeof styleObject=='undefined')
-    {
-        return '';
-    }
-    var result=propertiesObject[additionalInformation.class].match(re);
-
-    if(result.length>0)
-    {
-        var splittedResult=result[0].split(':');
-        if(splittedResult.length==2)
-            return splittedResult[1].replace(';','');
-    }
-    return '';
-}
-
-RedNaoStyleManipulator.prototype.SetValue=function(propertiesObject,propertyName,value,additionalInformation)
-{
-    var classObject=propertiesObject[additionalInformation.class];
-    if(typeof classObject=='undefined')
-        if(value)
-        {
-            propertiesObject[additionalInformation.class]="";
-        }
-        else
-            return;
-
-    var re = new RegExp(propertyName+":[^;]*;", "g");
-    classObject=classObject.replace(re,'');
-    if(value)
-        classObject+=propertyName+":"+value+";";
-
-    propertiesObject[additionalInformation.class]=classObject;
-}
-
-var RedNaoStyleManipulatorInstance=new RedNaoStyleManipulator();
-var RedNaoBasicManipulatorInstance=new RedNaoBasicManipulator();
-
 /************************************************************************************* Base  ***************************************************************************************************/
 
 function ElementPropertiesBase(formelement,propertiesObject,propertyName,propertyTitle,additionalInformation)
 {
-    if(additionalInformation=='basic')
+    if(additionalInformation.ManipulatorType=='basic')
         this.Manipulator=RedNaoBasicManipulatorInstance;
-
     else
         this.Manipulator=RedNaoStyleManipulatorInstance;
     this.FormElement=formelement;
@@ -129,7 +62,8 @@ SimpleTextProperty.prototype.GenerateHtml=function()
 {
     var value=this.GetPropertyCurrentValue().trim();
     var newProperty=rnJQuery( '<td style="text-align: right"><label class="rednao-properties-control-label"> '+this.PropertyTitle+' </label></td>\
-            <td style="text-align: left"><input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="Default"/></td>');
+            <td style="text-align: left"><input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="Default"/>\
+            <img style="width:15px;height: 20px; vertical-align: middle;cursor:pointer;cursor:hand;" title="Formula" src="'+smartFormsRootPath+'images/formula.png'+'"/> </td>');
 
     var self=this;
     newProperty.keyup(function(){
@@ -137,6 +71,8 @@ SimpleTextProperty.prototype.GenerateHtml=function()
         self.RefreshElement();
 
     });
+
+    newProperty.find('img').click(function(){RedNaoEventManager.Publish('FormulaButtonClicked',{"FormElement":self.FormElement,"PropertyName":self.PropertyName,AdditionalInformation:self.AdditionalInformation})});
     return newProperty;
 }
 
@@ -190,11 +126,10 @@ ArrayProperty.prototype.GenerateHtml=function()
     var valuesText="";
     for(var i=0;i<currentValues.length;i++)
     {
-        if(typeof currentValues[i]=='string')
-            valuesText+='\n'+currentValues[i];
-        else{
-            valuesText+='\n'+currentValues[i].label;
-
+        valuesText+='\n'+currentValues[i].label;
+        if(typeof currentValues[i].value!='undefined')
+        {
+            valuesText+=';'+currentValues[i].value;
         }
     }
 
@@ -222,8 +157,23 @@ ArrayProperty.prototype.UpdateProperty=function()
         if(!valueArray[i])
             break;
 
+        var text=valueArray[i];
+        var splittedValue=valueArray[i].split(';');
+        var amount=0;
 
-        processedValueArray.push({label:valueArray[i]});
+        if(splittedValue.length==2)
+        {
+
+            try
+            {
+                amount=parseFloat(splittedValue[1]);
+            }catch(exception)
+            {
+                amount=0;
+            }
+        }
+
+        processedValueArray.push({label:splittedValue[0],value:amount});
     }
 
 
@@ -239,7 +189,7 @@ ArrayProperty.prototype.UpdateProperty=function()
 
 function IdProperty(formelement,propertiesObject)
 {
-    ElementPropertiesBase.call(this,formelement,propertiesObject,"Id","Id");
+    ElementPropertiesBase.call(this,formelement,propertiesObject,"Id","Id",{ManipulatorType:'basic'});
 }
 
 IdProperty.prototype=Object.create(ElementPropertiesBase.prototype);

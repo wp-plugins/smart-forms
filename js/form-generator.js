@@ -1,5 +1,13 @@
 
 function smartFormGenerator(options){
+    this.client_form_options=options.client_form_options;
+    try{
+        this.JavaScriptCode=eval(this.client_form_options.JavascriptCode)();
+
+    }catch(exception)
+    {
+
+    }
     this.form_id=options.form_id;
     this.options=options;
     this.RedNaoFormElements=[];
@@ -13,20 +21,32 @@ function smartFormGenerator(options){
     }
 
 
-    this.JQueryForm=rnJQuery('<form></form>')
-    for(var i=0;i<this.RedNaoFormElements.length;i++)
-    {
-        this.RedNaoFormElements[i].AppendElementToContainer(this.JQueryForm);
-    }
+    this.JQueryForm=rnJQuery('<form ></form>');
 
     this.containerName=options.container;
     var container=this.GetRootContainer();
     container.empty();
     container.append(this.JQueryForm);
+    for(var i=0;i<this.RedNaoFormElements.length;i++)
+    {
+        var formElement=this.RedNaoFormElements[i];
+        formElement.AppendElementToContainer(this.JQueryForm);
+
+        if(formElement.StoresInformation())
+            RedNaoFormulaManagerVar.Data[formElement.Id]=formElement.GetValueString();
+    }
 
     var self=this;
     this.JQueryForm.submit(function(e){e.preventDefault();e.stopPropagation();self.SaveForm();})
     this.AdjustLayout();
+    RedNaoFormulaManagerVar.RefreshAllFormulas();
+
+    try{
+        this.JavaScriptCode.AfterFormLoaded();
+    }catch(exception)
+    {
+
+    }
 }
 
 
@@ -100,11 +120,13 @@ smartFormGenerator.prototype.GenerationCompleted=function()
         this.FormElements[i].AppendElementToContainer(form);
     }
 
-    var me=this;
+    var self=this;
     form.find('.redNaoDonationButton').click(function()
         {
+
             try{
-                me.SaveForm();
+
+                self.SaveForm();
 
             }catch(error)
             {
@@ -174,15 +196,21 @@ smartFormGenerator.prototype.SaveForm=function()
         formString:JSON.stringify(formValues)
     };
 
-    var me=this;
 
+    try{
+        this.JavaScriptCode.BeforeFormSubmit();
+    }catch(exception)
+    {
 
+    }
+
+    var self=this;
     rnJQuery.ajax({
         type:'POST',
         url:ajaxurl,
         dataType:"json",
         data:data,
-        success:function(result){me.SaveCompleted(result)},
+        success:function(result){self.SaveCompleted(result)},
         error:function(result){
             alert('An error occurred, please try again later');}
     });

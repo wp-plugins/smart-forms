@@ -23,6 +23,8 @@ function RedNaoCreateColumn(options)
         return RedNaoTextInputColumn(options);
     if(elementName=='rednaomultipleradios')
         return RedNaoTextInputColumn(options);
+    if(elementName=='rednaodatepicker')
+        return RedNaoDatePicker(options);
 
 
 }
@@ -40,10 +42,10 @@ function GetObjectOrNull(rowObject,options)
 
 function RedNaoTextInputColumn(options)
 {
-    return {"name":options.Label,"index":options.Id,formatter: function (cellvalue, options, rowObject)
+    return {"name":options.Label,"index":options.Id,formatter: function (cellvalue, cellOptions, rowObject)
     {
         try{
-        var data=GetObjectOrNull(rowObject,options);
+        var data=GetObjectOrNull(rowObject,cellOptions);
         if(data==null)
             return '';
         return data.value;
@@ -57,10 +59,10 @@ function RedNaoTextInputColumn(options)
 
 function RedNaoCheckboxInputColumn(options)
 {
-    return {"name":options.Label,"index":options.Id,formatter: function (cellvalue, options, rowObject)
+    return {"name":options.Label,"index":options.Id,formatter: function (cellvalue, cellOptions, rowObject)
     {
         try{
-        var data=GetObjectOrNull(rowObject,options);
+        var data=GetObjectOrNull(rowObject,cellOptions);
         if(data==null)
             return '';
         return data.checked+". "+data.value;
@@ -73,10 +75,10 @@ function RedNaoCheckboxInputColumn(options)
 
 function RedNaoMultipleCheckBoxesColumn(options)
 {
-    return {"name":options.Label,"index":options.Id,formatter: function (cellvalue, options, rowObject)
+    return {"name":options.Label,"index":options.Id,formatter: function (cellvalue, cellOptions, rowObject)
     {
         try{
-        var data=GetObjectOrNull(rowObject,options);
+        var data=GetObjectOrNull(rowObject,cellOptions);
         if(data==null)
             return '';
         var values="";
@@ -84,6 +86,28 @@ function RedNaoMultipleCheckBoxesColumn(options)
         for(var i=0;i<data.selectedValues.length;i++)
             values+=data.selectedValues[i].value.trim()+";";
         return values;
+        }catch(exception)
+        {
+            return '';
+        }
+    }};
+}
+
+function RedNaoDatePicker(options)
+{
+    return {"name":options.Label,"index":options.Id,formatter: function (cellvalue, cellOptions, rowObject)
+    {
+        try{
+            var data=GetObjectOrNull(rowObject,cellOptions);
+            if(data==null||data.value=="")
+                return '';
+            var dateParts=data.value.split("-");
+            if(dateParts.length!=3)
+                return '';
+
+            var date=new Date(dateParts[0],parseInt(dateParts[1])-1,dateParts[2]);
+
+            return rnJQuery.datepicker.formatDate( options.DateFormat, date );
         }catch(exception)
         {
             return '';

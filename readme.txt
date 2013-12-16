@@ -4,17 +4,17 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: form,  forms,  contact form, contact forms,  form plugin, forms plugin, forms plugin, form builder,  form manager, multiple forms, custom  form, form maker, form with recaptcha,  form with google map, feedback form, feedback forms, contact us
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 0.3
+Stable tag: 0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Build forms easily by dragging and dropping elements. The forms are responsive and you can receive an email after a form was submitted and also check all the form entries.
+Build forms easily by dragging and dropping elements. Calculated fields, customizable emails and much more!!.
 == Description ==
 If you have question or suggestion please let me know in the smart form official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601
 
 Build forms easily by dragging and dropping elements. The forms are responsive, they adjust to the available space.
 
-After a form is submitted you can receive an email, the email can have any format and any information that you want, also, you can check the information of all the forms submitted so far in the entries screen.
+You can create calculated fields and also after a form is submitted you can receive an email, the email can have any format and any information that you want, also, you can check the information of all the forms submitted so far in the entries screen.
 
 **Features:**
 
@@ -23,7 +23,7 @@ After a form is submitted you can receive an email, the email can have any forma
 *   **Shortcode Forms**.- The forms can also be easily added to any post or page using a shortcode.
 *   **Forms Entry Screen**.- Easily check the information that have been submitted so far in the entries screen.
 *   **Customizable form emails**.- After a form is submitted send an email with any information and format that you need.
-
+*   **Calculated fields.- You can use fields in a formulas to fill fields automatically (up to three fields per formula in the free version)
 == Installation ==
 1. Upload smart forms to the `/wp-content/plugins/` directory
 2. Activate the item named  'smart forms' in the 'Plugins' menu in WordPress
@@ -46,7 +46,15 @@ N/A
 5. Adding form as a widget
 6. Adding form as a shortcode
 7. Advance email formatting
+8. Example of a form with a calculated field
+9. Calculated field interface
+10. Example of date field
 == Changelog ==
+= 0.5 =
+* Fixed issues with form width
+* Added calculated fields to certain forms
+* Fixed issues in form builder
+* Added a new form element, date picker
 = 0.3 =
 * Added advanced customization for forms email.
 * Fixed bugs in the form builder

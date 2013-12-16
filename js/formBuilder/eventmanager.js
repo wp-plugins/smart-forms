@@ -33,4 +33,4 @@ RedNaoInternalEventManager.prototype.Publish=function(eventName,args)
 }
 
 
-RedNaoEventManager=new RedNaoInternalEventManager();
+var RedNaoEventManager=new RedNaoInternalEventManager();

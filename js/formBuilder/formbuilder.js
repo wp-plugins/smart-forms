@@ -180,6 +180,8 @@ RedNaoFormBuilder.prototype.GetComponentType = function (element) {
         return 'rednaodonationrecurrence';
     if (rnJQuery(element).children().first().hasClass('rednaosubmissionbutton'))
         return 'rednaosubmissionbutton';
+    if (rnJQuery(element).children().first().hasClass('rednaodatepicker'))
+        return 'rednaodatepicker';
 
 
 }
@@ -221,6 +223,7 @@ RedNaoFormBuilder.prototype.InitializeComponents = function () {
     RedNaoCreateFormElementByName('rednaodonationbutton', null).GenerateHtml(rnJQuery("#components .rednaodonationbutton"));
     RedNaoCreateFormElementByName('rednaodonationrecurrence', null).GenerateHtml(rnJQuery("#components .rednaodonationrecurrence"));
     RedNaoCreateFormElementByName('rednaosubmissionbutton', null).GenerateHtml(rnJQuery("#components .rednaosubmissionbutton"));
+    RedNaoCreateFormElementByName('rednaodatepicker', null).GenerateHtml(rnJQuery("#components .rednaodatepicker"));
 
 
     var self=this;
@@ -262,7 +265,7 @@ RedNaoFormBuilder.prototype.ScrollSettings = function () {
 
 
 RedNaoFormBuilder.prototype.CloneFormElement=function(jQueryElement){
-    if(this.RedNaoFormElements.length>=7&&!RedNaoLicensingManagerVar.LicenseIsValid())
+    if(this.RedNaoFormElements.length>=7&&!RedNaoLicensingManagerVar.LicenseIsValid('Sorry, this version only support up to 8 fields'))
     {
         return;
     }
