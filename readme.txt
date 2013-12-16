@@ -23,7 +23,7 @@ You can create calculated fields and also after a form is submitted you can rece
 *   **Shortcode Forms**.- The forms can also be easily added to any post or page using a shortcode.
 *   **Forms Entry Screen**.- Easily check the information that have been submitted so far in the entries screen.
 *   **Customizable form emails**.- After a form is submitted send an email with any information and format that you need.
-*   **Calculated fields.- You can use fields in a formulas to fill fields automatically (up to three fields per formula in the free version)
+*   **Calculated fields**.- You can use fields in a formulas to fill fields automatically (up to three fields per formula in the free version)
 == Installation ==
 1. Upload smart forms to the `/wp-content/plugins/` directory
 2. Activate the item named  'smart forms' in the 'Plugins' menu in WordPress
