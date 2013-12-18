@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: form,  forms,  contact form, contact forms,  form plugin, forms plugin, forms plugin, form builder,  form manager, multiple forms, custom  form, form maker, form with recaptcha,  form with google map, feedback form, feedback forms, contact us
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 0.5
+Stable tag: 0.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,7 +24,7 @@ You can create calculated fields and also after a form is submitted you can rece
 *   **Forms Entry Screen**.- Easily check the information that have been submitted so far in the entries screen.
 *   **Customizable form emails**.- After a form is submitted send an email with any information and format that you need.
 *   **Calculated fields**.- You can use fields in a formulas to fill fields automatically (up to three fields per formula in the free version)
-*   **Custom form fields**.- Currently it supports the name element, more are coming soon!
+*   **Custom form fields**.- Currently it supports the name element, more are coming soon!! (phone, email, address, number,captcha)
 
 == Installation ==
 1. Upload smart forms to the `/wp-content/plugins/` directory
