@@ -182,6 +182,8 @@ RedNaoFormBuilder.prototype.GetComponentType = function (element) {
         return 'rednaosubmissionbutton';
     if (rnJQuery(element).children().first().hasClass('rednaodatepicker'))
         return 'rednaodatepicker';
+    if (rnJQuery(element).children().first().hasClass('rednaoname'))
+        return 'rednaoname';
 
 
 }
@@ -224,6 +226,7 @@ RedNaoFormBuilder.prototype.InitializeComponents = function () {
     RedNaoCreateFormElementByName('rednaodonationrecurrence', null).GenerateHtml(rnJQuery("#components .rednaodonationrecurrence"));
     RedNaoCreateFormElementByName('rednaosubmissionbutton', null).GenerateHtml(rnJQuery("#components .rednaosubmissionbutton"));
     RedNaoCreateFormElementByName('rednaodatepicker', null).GenerateHtml(rnJQuery("#components .rednaodatepicker"));
+    RedNaoCreateFormElementByName('rednaoname', null).GenerateHtml(rnJQuery("#components .rednaoname"));
 
 
     var self=this;

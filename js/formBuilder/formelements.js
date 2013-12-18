@@ -76,6 +76,9 @@ function RedNaoCreateFormElementByName(elementName,options)
 
     if(elementName=='rednaodatepicker')
         return new RedNaoDatePicker(options);
+    if(elementName=='rednaoname')
+        return new RedNaoName(options);
+
 
 }
 
@@ -161,6 +164,7 @@ FormElementBase.prototype.RefreshElement=function()
     var labelWidth=element.find('.rednao_label_container').width();
     var controlWidth=element.find('.redNaoControls').width();
     element.find(".rednao_label_container, .redNaoControls").remove();
+    element.find(".redNaoOneColumn").remove();
     element.append(this.GenerateInlineElement());
     this.GenerationCompleted();
     element.find('.rednao_label_container').width(labelWidth);
@@ -244,6 +248,11 @@ FormElementBase.prototype.ApplyStyle=function()
     }
 }
 
+FormElementBase.prototype.MarkAsInvalid=function()
+{
+    rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+}
+
 
 FormElementBase.prototype.GeneratePropertiesHtml=function(jQueryObject)
 {
@@ -310,12 +319,12 @@ TitleElement.prototype=Object.create(FormElementBase.prototype);
 TitleElement.prototype.CreateProperties=function()
 {
 
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"Title","Title",'basic'));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Title","Title",{ManipulatorType:'basic'}));
 }
 
 TitleElement.prototype.GenerateInlineElement=function()
 {
-    return '<legend class="redNaoLegend">'+this.Options.Title+'</legend>';
+    return '<legend class="redNaoLegend redNaoOneColumn">'+this.Options.Title+'</legend>';
 }
 
 
@@ -350,7 +359,6 @@ function TextInputElement(options)
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('ReadOnly','n');
         this.SetDefaultIfUndefined('Width','');
-
     }
 
 
@@ -1468,3 +1476,102 @@ RedNaoDatePicker.prototype.GenerationCompleted=function()
 
 }
 
+/************************************************************************************* Name ***************************************************************************************************/
+
+function RedNaoName(options)
+{
+    FormElementBase.call(this,options);
+    this.Title="Text Input";
+    if(this.IsNew)
+    {
+        this.Options.ClassName="rednaoname";
+        this.Options.Label="Name";
+        this.Options.FirstNamePlaceholder="First Name";
+        this.Options.LastNamePlaceholder="Last Name";
+        this.Options.FirstNameValue="";
+        this.Options.LastNameValue="";
+        this.Options.ReadOnly='n'
+    }
+
+
+
+
+
+}
+
+RedNaoName.prototype=Object.create(FormElementBase.prototype);
+
+RedNaoName.prototype.CreateProperties=function()
+{
+    this.Properties.push(new IdProperty(this,this.Options));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"FirstNamePlaceholder","First name place holder",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"LastNamePlaceholder","Last name place holder",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"ReadOnly","Read Only",{ManipulatorType:'basic'}));
+
+}
+
+RedNaoName.prototype.GenerateInlineElement=function()
+{
+    var firstNameLabel='';
+    var lastNameLabel='';
+
+    if(this.Options.FirstNamePlaceholder!='')
+        firstNameLabel='<label class="redNaoHelper">'+this.Options.FirstNamePlaceholder+'</label>';
+    if(this.Options.LastNamePlaceholder!='')
+        lastNameLabel='<label class="redNaoHelper">'+this.Options.LastNamePlaceholder+'</label>';
+
+    return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
+                <div class="redNaoControls">\
+                    <div class="redNaoFirstNameDiv">\
+                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_firstname" type="text" placeholder="'+this.Options.FirstNamePlaceholder+'" class="redNaoInputText redNaoInputFirstName '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
+                        '+firstNameLabel+'\
+                    </div>    \
+                    <div class="redNaoLastNameDiv">\
+                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_lastname" type="text" placeholder="'+this.Options.LastNamePlaceholder+'" class="redNaoInputText redNaoInputLastName '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">\
+                        '+lastNameLabel+'\
+                    </div>\
+    </div>';
+}
+
+
+RedNaoName.prototype.GetValueString=function()
+{
+    return {
+        firstName:rnJQuery('#'+this.Id+ ' .redNaoInputFirstName').val(),
+        lastName:rnJQuery('#'+this.Id+ ' .redNaoInputLastName').val()
+
+    };
+
+
+}
+
+RedNaoName.prototype.MarkAsInvalid=function()
+{
+    var firstNameJQuery=rnJQuery('#'+this.Id+ ' .redNaoInputFirstName');
+    var lastNameJQuery=rnJQuery('#'+this.Id+ ' .redNaoInputLastName');
+
+    if(firstNameJQuery.val()=="")
+        firstNameJQuery.addClass('redNaoInvalid');
+
+    if(lastNameJQuery.val()=="")
+        lastNameJQuery.addClass('redNaoInvalid');
+}
+
+RedNaoName.prototype.GetValuePath=function()
+{
+    return 'formData.'+this.Id+'.firstName+" "'+'formData.'+this.Id+'.lastName';
+}
+
+
+RedNaoName.prototype.IsValid=function()
+{
+    return rnJQuery('#'+this.Id+ ' .redNaoInputFirstName').val()!=""&&rnJQuery('#'+this.Id+ ' .redNaoInputLastName').val()!="";
+}
+
+RedNaoName.prototype.GenerationCompleted=function()
+{
+    var self=this;
+    rnJQuery('#'+this.Id+ ' .redNaoInputFirstName,#'+this.Id+ ' .redNaoInputLastName').change(function(){self.FirePropertyChanged(self.GetValueString());});
+}

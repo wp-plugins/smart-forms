@@ -242,9 +242,10 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
                                     <div class="tabbable" >
                                         <ul class="nav nav-tabs" id="navtab">
                                             <li><a id="alayout" class="formtab" >Layout</a></li>
-                                            <li><a id="atabinput" class="formtab selectedTab" >Input</a></li>
-                                            <li><a id="atabradioscheckboxes" class="formtab">Radios / Checkboxes</a></li>
-                                            <li><a id="atabselect" class="formtab">Select</a></li>
+                                            <li><a id="atabinput" class="formtab selectedTab" >Basic Input</a></li>
+                                            <li><a id="atabselect" class="formtab">Advanced</a></li>
+                                            <li><a id="atabradioscheckboxes" class="formtab">Multiple Choices</a></li>
+
                                          <!--   <li><a id="atabbuttons" class="formtab">Paypal</a></li>-->
                                         </ul>
                                         <div class="form-horizontal" id="components">
@@ -292,6 +293,13 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="tab-pane rednaotablist" id="tabselect"  style="display: none;">
+                                                        <div class="component">
+                                                            <div class="control-group rednaoname">
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="tab-pane rednaotablist" id="tabradioscheckboxes" style="display: none;">
                                                         <div class="component">
                                                             <div class="control-group rednaomultipleradios"></div>
@@ -302,14 +310,13 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
                                                             </div>
                                                         </div>
 
-                                                    </div>
-                                                    <div class="tab-pane rednaotablist" id="tabselect"  style="display: none;">
                                                         <div class="component">
                                                             <div class="control-group rednaoselectbasic">
                                                             </div>
                                                         </div>
 
                                                     </div>
+
                                               <!--      <div class="tab-pane rednaotablist" id="tabbuttons"  style="display: none;">
                                                         <div class="component">
                                                             <div class="control-group rednaodonationrecurrence">

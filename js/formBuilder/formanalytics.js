@@ -25,6 +25,8 @@ function RedNaoCreateColumn(options)
         return RedNaoTextInputColumn(options);
     if(elementName=='rednaodatepicker')
         return RedNaoDatePicker(options);
+    if(elementName=='rednaoname')
+        return RedNaoName(options);
 
 
 }
@@ -108,6 +110,22 @@ function RedNaoDatePicker(options)
             var date=new Date(dateParts[0],parseInt(dateParts[1])-1,dateParts[2]);
 
             return rnJQuery.datepicker.formatDate( options.DateFormat, date );
+        }catch(exception)
+        {
+            return '';
+        }
+    }};
+}
+
+function RedNaoName(options)
+{
+    return {"name":options.Label,"index":options.Id,formatter: function (cellvalue, cellOptions, rowObject)
+    {
+        try{
+            var data=GetObjectOrNull(rowObject,cellOptions);
+            if(data==null)
+                return '';
+            return data.firstName+' '+data.lastName;
         }catch(exception)
         {
             return '';

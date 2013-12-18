@@ -161,7 +161,7 @@ smartFormGenerator.prototype.SaveForm=function()
         if((this.FormElements[i].Options.IsRequired==1||this.FormElements[i].Options.IsRequired=='y')&&!this.FormElements[i].IsValid())
         {
             formIsValid=false;
-            rnJQuery('#'+this.FormElements[i].Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+            this.FormElements[i].MarkAsInvalid();
             continue;
         }
         if(this.FormElements[i].StoresInformation())

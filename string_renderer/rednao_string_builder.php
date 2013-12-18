@@ -48,6 +48,10 @@ class rednao_string_builder {
             case "rednaoselectbasic":
                 $renderer=$this->GetRenderer("rednao_select_renderer");
                 break;
+
+            case "rednaoname":
+                $renderer=$this->GetRenderer("rednao_name_renderer");
+                break;
         }
 
       return $renderer->GetString($formElement,$entry);

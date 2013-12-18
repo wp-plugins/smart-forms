@@ -232,3 +232,45 @@ IdProperty.prototype.GenerateHtml=function()
 }
 
 
+
+
+/************************************************************************************* Combo Property ***************************************************************************************************/
+
+
+function ComboBoxProperty(formelement,propertiesObject,propertyName,propertyTitle,additionalInformation)
+{
+    ElementPropertiesBase.call(this,formelement,propertiesObject,propertyName,propertyTitle,additionalInformation);
+}
+
+ComboBoxProperty.prototype=Object.create(ElementPropertiesBase.prototype);
+
+ComboBoxProperty.prototype.GenerateHtml=function()
+{
+    var value=this.GetPropertyCurrentValue().trim();
+    var selectText='<select id="'+this.PropertyId+'">'
+    for(var i=0;i<this.AdditionalInformation.Values.length;i++)
+    {
+        var selected="";
+        if(this.AdditionalInformation.Values[i].value==value)
+            selected='selected="selected"';
+
+        selectText+='<option value="'+this.AdditionalInformation.Values[i].value+'" '+selected+'>'+this.AdditionalInformation.Values[i].label+'</option>'
+    }
+    selectText+='</select>'
+
+    var newProperty=rnJQuery( '<td style="text-align: right"><label class="rednao-properties-control-label"> '+this.PropertyTitle+' </label></td>\
+            <td style="text-align: left">'+selectText+' </td>');
+
+    var self=this;
+    newProperty.find('select').change(function(){
+        self.Manipulator.SetValue(self.PropertiesObject,self.PropertyName, (rnJQuery("#"+self.PropertyId).val()),self.AdditionalInformation);
+        self.RefreshElement();
+
+    });
+
+    newProperty.find('img').click(function(){RedNaoEventManager.Publish('FormulaButtonClicked',{"FormElement":self.FormElement,"PropertyName":self.PropertyName,AdditionalInformation:self.AdditionalInformation})});
+    return newProperty;
+}
+
+
+
