@@ -299,6 +299,32 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
                                                             <div class="control-group rednaoname">
                                                             </div>
                                                         </div>
+                                                        <div class="component">
+                                                            <div class="control-group rednaophone">
+                                                            </div>
+                                                        </div>
+                                                        <div class="component">
+                                                            <div class="control-group rednaoemail">
+                                                            </div>
+                                                        </div>
+                                                        <div class="component">
+                                                            <div class="control-group rednaonumber">
+                                                            </div>
+                                                        </div>
+                                                        <div class="component">
+                                                            <div class="control-group rednaocaptcha">
+                                                                <div class="rednao_label_container"><label class="rednao_control_label">Captcha</label></div>
+                                                                <div class="control-group redNaoControls rednaocaptcha">
+                                                                    <img style="width:300px;height:116px;" src="<?php echo SMART_FORMS_DIR_URL?>images/captcha.png"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="component">
+                                                            <div class="control-group rednaoaddress">
+                                                            </div>
+                                                        </div>
+
+
                                                     </div>
                                                     <div class="tab-pane rednaotablist" id="tabradioscheckboxes" style="display: none;">
                                                         <div class="component">

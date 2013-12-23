@@ -52,20 +52,26 @@ N/A
 9. Calculated field interface
 10. Example of date field
 == Changelog ==
-= 0.5.5 =
+
+= Smart forms 0.6 =
+* Added new forms elements (email,phone, address, captcha,number)
+* Fixing issues with form email
+* Fixing issue with forms formulas
+* Added a wait cursor when the form is being submitted
+= Smart forms 0.5.5 =
 * Fixed issue with form title element
 * Added Name form element
-= 0.5 =
+= Smart forms 0.5 =
 * Fixed issues with form width
 * Added calculated fields to certain forms
 * Fixed issues in form builder
 * Added a new form element, date picker
-= 0.3 =
+= Smart forms 0.3 =
 * Added advanced customization for forms email.
 * Fixed bugs in the form builder
 * Fixed bug in the form checkbox
 * Added the option to purchase the Smart Forms full version
-= 0.1 =
+= Smart forms 0.1 =
 *First release of smart forms.
 = 0.1.1 =
 * Fixing issues with the form entries screen

@@ -106,6 +106,38 @@ function rednao_smart_forms_save_form_values()
         $elementOptions=json_decode($result[0]->element_options,true);
     }
 
+    if($formOptions["UsesCaptcha"]=="y")
+    {
+        if(!isset($_POST["captcha"]))
+        {
+            echo '{"message":"'.__("Invalid captcha.").'"}';
+            die();
+        }
+        $captchaPost=$_POST["captcha"];
+        $captcha=ARRAY();
+        $captcha["challenge"]=stripslashes($captchaPost["challenge"]);
+        $captcha["response"]=stripslashes($captchaPost["response"]);
+        $captcha["remoteip"]=$_SERVER['REMOTE_ADDR'];
+        $captcha["privatekey"]="6Lf2J-wSAAAAAOH6uSmSdx75ZLRpDIfvSeAdx9ST";
+
+        $args=Array();
+
+        $args['headers']=Array
+        (
+            'Content-Type'=>'application/x-www-form-urlencoded;',
+            'Method'=>'Post'
+        );
+        $args['body']=$captcha;
+        $res=wp_remote_post('http://www.google.com/recaptcha/api/verify',$args);
+        if(strpos($res["body"],"true")!==0)
+        {
+            echo '{"message":"'.__("Invalid captcha.").'","refreshCaptcha":"y"}';
+            die();
+        }
+
+
+    }
+
     $result=$wpdb->insert(SMART_FORMS_ENTRY,array(
         'form_id'=>$form_id,
         'date'=>date('Y-m-d H:i:s'),

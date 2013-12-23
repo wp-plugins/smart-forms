@@ -25,6 +25,8 @@ class rednao_string_builder {
             case "rednaoprependedtext":
             case "rednaoappendedtext":
             case "rednaodatepicker":
+            case "rednaoemail":
+            case "rednaonumber":
                 $renderer=$this->GetRenderer("rednao_text_input_renderer");
                 break;
 
@@ -51,6 +53,12 @@ class rednao_string_builder {
 
             case "rednaoname":
                 $renderer=$this->GetRenderer("rednao_name_renderer");
+                break;
+            case "rednaoaddress":
+                $renderer=$this->GetRenderer("rednao_address_renderer");
+                break;
+            case "rednaophone":
+                $renderer=$this->GetRenderer("rednao_phone_renderer");
                 break;
         }
 

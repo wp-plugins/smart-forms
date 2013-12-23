@@ -158,10 +158,9 @@ smartFormGenerator.prototype.SaveForm=function()
     for(var i=0;i<this.FormElements.length;i++)
     {
 
-        if((this.FormElements[i].Options.IsRequired==1||this.FormElements[i].Options.IsRequired=='y')&&!this.FormElements[i].IsValid())
+        if(!this.FormElements[i].IsValid())
         {
             formIsValid=false;
-            this.FormElements[i].MarkAsInvalid();
             continue;
         }
         if(this.FormElements[i].StoresInformation())
@@ -171,6 +170,9 @@ smartFormGenerator.prototype.SaveForm=function()
             formValues[this.FormElements[i].Id]=value;
         }
     }
+
+
+
     if(!formIsValid)
     {
         this.GetRootContainer().prepend('<p class="redNaoValidationMessage" style="margin:0;padding: 0; font-style: italic; color:red;font-family:Arial;font-size:12px;">*Please fill all the required fields</p>')
@@ -190,6 +192,9 @@ smartFormGenerator.prototype.SaveForm=function()
     if(formValues.length>0)
         formValues=formValues.substr(1);
 
+
+
+
     var data={
         form_id:this.form_id,
         action:"rednao_smart_forms_save_form_values",
@@ -197,7 +202,18 @@ smartFormGenerator.prototype.SaveForm=function()
     };
 
 
+    if(this.client_form_options.UsesCaptcha=='y')
+    {
+        data.captcha={
+            challenge:this.JQueryForm.find('[name="recaptcha_challenge_field"]').val(),
+            response:this.JQueryForm.find('[name="recaptcha_response_field"]').val()
+        }
+
+    }
+
     try{
+        rnJQuery('body, input[type="submit"]').addClass('redNaoWait');
+        this.JQueryForm.find('input[type="submit"]').attr('disabled','disabled');
         this.JavaScriptCode.BeforeFormSubmit();
     }catch(exception)
     {
@@ -212,12 +228,18 @@ smartFormGenerator.prototype.SaveForm=function()
         data:data,
         success:function(result){self.SaveCompleted(result)},
         error:function(result){
+            rnJQuery('body, input[type="submit"]').removeClass('redNaoWait');
+            this.JQueryForm.find('input[type="submit"]').removeAttr('disabled');
             alert('An error occurred, please try again later');}
     });
 }
 
 smartFormGenerator.prototype.SaveCompleted=function(result){
+    rnJQuery('body, input[type="submit"]').removeClass('redNaoWait');
+    this.JQueryForm.find('input[type="submit"]').removeAttr('disabled');
     alert(result.message);
+    if(typeof result.refreshCaptcha!='undefined'&&result.refreshCaptcha=='y')
+        Recaptcha.reload();
 }
 
 smartFormGenerator.prototype.SubmitForm=function(data,amount)

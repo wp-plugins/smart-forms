@@ -78,6 +78,16 @@ function RedNaoCreateFormElementByName(elementName,options)
         return new RedNaoDatePicker(options);
     if(elementName=='rednaoname')
         return new RedNaoName(options);
+    if(elementName=='rednaoaddress')
+        return new RedNaoAddress(options);
+    if(elementName=='rednaophone')
+        return new RedNaoPhone(options);
+    if(elementName=='rednaoemail')
+        return new RedNaoEmail(options);
+    if(elementName=='rednaonumber')
+        return new RedNaoNumber(options);
+    if(elementName=='rednaocaptcha')
+        return new RedNaoCaptcha(options);
 
 
 }
@@ -248,12 +258,6 @@ FormElementBase.prototype.ApplyStyle=function()
     }
 }
 
-FormElementBase.prototype.MarkAsInvalid=function()
-{
-    rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
-}
-
-
 FormElementBase.prototype.GeneratePropertiesHtml=function(jQueryObject)
 {
     var properties=this.GetProperties();
@@ -407,7 +411,13 @@ TextInputElement.prototype.GetValuePath=function()
 
 TextInputElement.prototype.IsValid=function()
 {
-    return rnJQuery('#'+this.Id+ ' .redNaoInputText').val()!="";
+     if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
+     {
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        return false;
+     }
+
+    return true;
 }
 
 TextInputElement.prototype.GenerationCompleted=function()
@@ -572,7 +582,12 @@ PrependTexElement.prototype.GetValuePath=function()
 
 PrependTexElement.prototype.IsValid=function()
 {
-    return rnJQuery('#'+this.Id+ ' .redNaoInputText').val()!="";
+    if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
+    {
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        return false;
+    }
+    return true;
 }
 
 PrependTexElement.prototype.GenerationCompleted=function()
@@ -654,7 +669,12 @@ AppendedTexElement.prototype.GetValuePath=function()
 
 AppendedTexElement.prototype.IsValid=function()
 {
-    return rnJQuery('#'+this.Id+ ' .redNaoInputText').val()!="";
+    if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
+    {
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        return false;
+    }
+    return true;
 }
 
 PrependTexElement.prototype.GenerationCompleted=function()
@@ -740,7 +760,12 @@ PrependCheckBoxElement.prototype.GetValuePath=function()
 
 PrependCheckBoxElement.prototype.IsValid=function()
 {
-    return rnJQuery('#'+this.Id+ ' .redNaoInputText').val()!="";
+    if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
+    {
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        return false;
+    }
+    return true;
 }
 
 PrependCheckBoxElement.prototype.GenerationCompleted=function()
@@ -821,7 +846,12 @@ AppendCheckBoxElement.prototype.GetValuePath=function()
 
 AppendCheckBoxElement.prototype.IsValid=function()
 {
-    return rnJQuery('#'+this.Id+ ' .redNaoInputText').val()!="";
+    if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
+    {
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        return false;
+    }
+    return true;
 }
 
 AppendCheckBoxElement.prototype.GenerationCompleted=function()
@@ -900,7 +930,12 @@ TextAreaElement.prototype.GetValuePath=function()
 
 TextAreaElement.prototype.IsValid=function()
 {
-    return rnJQuery('#'+this.Id+ ' .redNaoTextArea').val()!=this.Options.DefaultText;
+    if(rnJQuery('#'+this.Id+ ' .redNaoTextArea').val()==this.Options.DefaultText&&this.Options.IsRequired=='y')
+    {
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        return false;
+    }
+    return true;
 }
 
 TextAreaElement.prototype.GenerationCompleted=function()
@@ -995,7 +1030,13 @@ MultipleRadioElement.prototype.GetValuePath=function()
 
 MultipleRadioElement.prototype.IsValid=function()
 {
-    return rnJQuery('#'+this.Id).find(':checked').length>0;
+    if(rnJQuery('#'+this.Id).find(':checked').length>0&&this.Options.IsRequired=='y')
+    {
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        return false;
+    }
+
+    return true;
 }
 
 MultipleRadioElement.prototype.GenerationCompleted=function()
@@ -1104,7 +1145,12 @@ MultipleCheckBoxElement.prototype.GetValuePath=function()
 
 MultipleCheckBoxElement.prototype.IsValid=function()
 {
-    return rnJQuery('#'+this.Id).find(':checked').length>0;
+    if(rnJQuery('#'+this.Id).find(':checked').length>0&&this.Options.IsRequired=='y')
+    {
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        return false;
+    }
+    return true;
 }
 
 MultipleCheckBoxElement.prototype.GenerationCompleted=function()
@@ -1204,7 +1250,12 @@ SelectBasicElement.prototype.GetValuePath=function()
 
 SelectBasicElement.prototype.IsValid=function()
 {
-    return rnJQuery('#'+this.Id+ ' .redNaoSelect option:selected').length>0;
+    if(rnJQuery('#'+this.Id+ ' .redNaoSelect option:selected').length>0&&this.Options.IsRequired=='y')
+    {
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        return false;
+    }
+    return true;
 }
 
 
@@ -1476,6 +1527,11 @@ RedNaoDatePicker.prototype.GenerationCompleted=function()
 
 }
 
+RedNaoDatePicker.prototype.IsValid=function()
+{
+    return true;
+}
+
 /************************************************************************************* Name ***************************************************************************************************/
 
 function RedNaoName(options)
@@ -1505,8 +1561,8 @@ RedNaoName.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"FirstNamePlaceholder","First name place holder",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"LastNamePlaceholder","Last name place holder",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"FirstNamePlaceholder","First name placeholder",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"LastNamePlaceholder","Last name placeholder",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ReadOnly","Read Only",{ManipulatorType:'basic'}));
 
@@ -1524,14 +1580,15 @@ RedNaoName.prototype.GenerateInlineElement=function()
 
     return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
                 <div class="redNaoControls">\
-                    <div class="redNaoFirstNameDiv">\
-                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_firstname" type="text" placeholder="'+this.Options.FirstNamePlaceholder+'" class="redNaoInputText redNaoInputFirstName '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
+                    <div class="redNaoFirstNameDiv redNaoTwoColumnsDiv">\
+                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_firstname" type="text" placeholder="'+this.Options.FirstNamePlaceholder+'" class="redNaoInputText redNaoTwoColumns redNaoInputFirstName '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
                         '+firstNameLabel+'\
                     </div>    \
-                    <div class="redNaoLastNameDiv">\
-                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_lastname" type="text" placeholder="'+this.Options.LastNamePlaceholder+'" class="redNaoInputText redNaoInputLastName '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">\
+                    <div class="redNaoLastNameDiv redNaoTwoColumnsDiv">\
+                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_lastname" type="text" placeholder="'+this.Options.LastNamePlaceholder+'" class="redNaoInputText redNaoTwoColumns redNaoInputLastName '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">\
                         '+lastNameLabel+'\
                     </div>\
+               <div>     \
     </div>';
 }
 
@@ -1547,17 +1604,6 @@ RedNaoName.prototype.GetValueString=function()
 
 }
 
-RedNaoName.prototype.MarkAsInvalid=function()
-{
-    var firstNameJQuery=rnJQuery('#'+this.Id+ ' .redNaoInputFirstName');
-    var lastNameJQuery=rnJQuery('#'+this.Id+ ' .redNaoInputLastName');
-
-    if(firstNameJQuery.val()=="")
-        firstNameJQuery.addClass('redNaoInvalid');
-
-    if(lastNameJQuery.val()=="")
-        lastNameJQuery.addClass('redNaoInvalid');
-}
 
 RedNaoName.prototype.GetValuePath=function()
 {
@@ -1567,11 +1613,641 @@ RedNaoName.prototype.GetValuePath=function()
 
 RedNaoName.prototype.IsValid=function()
 {
-    return rnJQuery('#'+this.Id+ ' .redNaoInputFirstName').val()!=""&&rnJQuery('#'+this.Id+ ' .redNaoInputLastName').val()!="";
+    if(this.Options.IsRequired=='y'&&(rnJQuery('#'+this.Id+ ' .redNaoInputFirstName').val()==""||rnJQuery('#'+this.Id+ ' .redNaoInputLastName').val()==""))
+    {
+        var firstNameJQuery=rnJQuery('#'+this.Id+ ' .redNaoInputFirstName');
+        var lastNameJQuery=rnJQuery('#'+this.Id+ ' .redNaoInputLastName');
+
+        if(firstNameJQuery.val()=="")
+            firstNameJQuery.addClass('redNaoInvalid');
+
+        if(lastNameJQuery.val()=="")
+            lastNameJQuery.addClass('redNaoInvalid');
+
+        return false;
+    }
+
+    return true;
 }
 
 RedNaoName.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputFirstName,#'+this.Id+ ' .redNaoInputLastName').change(function(){self.FirePropertyChanged(self.GetValueString());});
+}
+
+
+
+/************************************************************************************* Address ***************************************************************************************************/
+
+function RedNaoAddress(options)
+{
+    FormElementBase.call(this,options);
+    this.Title="Text Input";
+    this.Countries=new Array("Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burma", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo, Democratic Republic", "Congo, Republic of the", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Greenland", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Mongolia", "Morocco", "Monaco", "Mozambique", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Samoa", "San Marino", " Sao Tome", "Saudi Arabia", "Senegal", "Serbia and Montenegro", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe");
+    if(this.IsNew)
+    {
+        this.Options.ClassName="rednaoaddress";
+        this.Options.Label="Address";
+        this.Options.StreetAddress1Label="Street Address";
+        this.Options.StreetAddress2Label="Street Address 2";
+        this.Options.CityLabel="City";
+        this.Options.StateLabel="State";
+        this.Options.ZipLabel='Zip';
+        this.Options.CountryLabel='Country';
+
+        this.Options.ShowStreetAddress1="y";
+        this.Options.ShowStreetAddress2="y";
+        this.Options.ShowCity="y";
+        this.Options.ShowState="y";
+        this.Options.ShowZip='y';
+        this.Options.ShowCountry='y';
+    }
+
+
+
+
+
+}
+
+RedNaoAddress.prototype=Object.create(FormElementBase.prototype);
+
+RedNaoAddress.prototype.CreateProperties=function()
+{
+    this.Properties.push(new IdProperty(this,this.Options));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"StreetAddress1Label","Street Address Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"StreetAddress2Label","Street Address 2 Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"CityLabel","City Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"StateLabel","State Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"ZipLabel","Zip Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"CountryLabel","Country Label",{ManipulatorType:'basic'}));
+
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowStreetAddress1","Show Street Address",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowStreetAddress2","Show Street Address 2",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowCity","Show City",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowState","Show State",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowZip","Show Zip",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowCountry","Show Country",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+
+}
+
+RedNaoAddress.prototype.GenerateInlineElement=function()
+{
+    var StreetAddress1Label='';
+    var StreetAddress2Label='';
+    var CityLabel='';
+    var StateLabel='';
+    var ZipLabel='';
+    var CountryLabel='';
+    var isFirstElement=true;
+
+    if(this.Options.StreetAddress1Label!='')
+        StreetAddress1Label='<label class="redNaoHelper">'+this.Options.StreetAddress1Label+'</label>';
+
+    if(this.Options.StreetAddress2Label!='')
+        StreetAddress2Label='<label class="redNaoHelper">'+this.Options.StreetAddress2Label+'</label>';
+
+    if(this.Options.CityLabel!='')
+        CityLabel='<label class="redNaoHelper">'+this.Options.CityLabel+'</label>';
+
+    if(this.Options.StateLabel!='')
+        StateLabel='<label class="redNaoHelper">'+this.Options.StateLabel+'</label>';
+
+    if(this.Options.ZipLabel!='')
+        ZipLabel='<label class="redNaoHelper">'+this.Options.ZipLabel+'</label>';
+
+    if(this.Options.CountryLabel!='')
+        CountryLabel='<label class="redNaoHelper">'+this.Options.CountryLabel+'</label>';
+
+
+
+
+    var html= '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
+                <div class="redNaoControls">';
+                if(this.Options.ShowStreetAddress1=='y')
+                    html+='<div class="redNaoStreetAddress1Div">\
+                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_streetaddress1" type="text" placeholder="'+this.Options.StreetAddress1Label+'" class="redNaoInputText redNaoOneColumn redNaoStreetAddress1 '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
+                        '+StreetAddress1Label+'\
+                    </div>';
+                if(this.Options.ShowStreetAddress2=='y')
+                    html+='<div class="redNaoStreetAddress2Div">\
+                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_streetaddress2" type="text" placeholder="'+this.Options.StreetAddress2Label+'" class="redNaoInputText redNaoOneColumn redNaoStreetAddress2 '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
+                        '+StreetAddress2Label+'\
+                    </div>';
+
+                if(this.Options.ShowCity=='y')
+                    html+='<div class="redNaoCityDiv redNaoTwoColumnsDiv">\
+                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_city" type="text" placeholder="'+this.Options.CityLabel+'" class="redNaoInputText redNaoTwoColumns redNaoCity '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
+                        '+CityLabel+'\
+                    </div>';
+                if(this.Options.ShowState=='y')
+                    html+='<div class="redNaoStateDiv redNaoTwoColumnsDiv">\
+                          <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'state" type="text" placeholder="'+this.Options.StateLabel+'" class="redNaoInputText redNaoTwoColumns redNaoState '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
+                        '+StateLabel+'\
+                    </div>';
+                    html+='<div class="redNaoClearDiv"></div>';
+
+                if(this.Options.ShowZip=='y')
+                    html+='<div class="redNaoZipDiv redNaoTwoColumnsDiv">\
+                                    <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'zip" type="text" placeholder="'+this.Options.ZipLabel+'" class="redNaoInputText redNaoTwoColumns redNaoZip '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
+                                    '+ZipLabel+'\
+                                </div>';
+
+                if(this.Options.ShowCountry=='y')
+                    html+='<div class="redNaoCountryDiv redNaoTwoColumnsDiv">\
+                        <select '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_country"  class="redNaoTwoColumns redNaoSelect redNaoCountry '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">';
+                        for(var i=0;i<this.Countries.length;i++)
+                        {
+                            html+='<option '+(isFirstElement?'selected="selected"':'')+'  value="'+this.Countries[i]+'">'+this.Countries[i]+'</option>';
+                            isFirstElement=false;
+                        }
+                html+="</select>"+CountryLabel+'\
+                    </div>';
+    html+='</div>';
+    return html;
+}
+
+
+RedNaoAddress.prototype.GetValueString=function()
+{
+    return {
+        streetAddress1:rnJQuery('#'+this.Id+ ' .redNaoStreetAddress1').val(),
+        streetAddress2:rnJQuery('#'+this.Id+ ' .redNaoStreetAddress2').val(),
+        city:rnJQuery('#'+this.Id+ ' .redNaoCity').val(),
+        state:rnJQuery('#'+this.Id+ ' .redNaoState').val(),
+        zip:rnJQuery('#'+this.Id+ ' .redNaoZip').val(),
+        country:rnJQuery('#'+this.Id+ ' .redNaoCountry').val()
+
+    };
+
+
+}
+
+
+RedNaoAddress.prototype.GetValuePath=function()
+{
+    return  "formData."+this.Id+'.streetAddress1'
+            " "+'formData.'+this.Id+'.streetAddress2'+
+            " "+'formData.'+this.Id+'.city'+
+            " "+'formData.'+this.Id+'.state'+
+            " "+'formData.'+this.Id+'.zip'+
+            " "+'formData.'+this.Id+'.country';
+}
+
+
+RedNaoAddress.prototype.IsValid=function()
+{
+    if(this.Options.IsRequired=='n')
+        return true;
+
+
+
+    var streetAddress1JQuery=rnJQuery('#'+this.Id+ ' .redNaoStreetAddress1');
+    var streetAddress2JQuery=rnJQuery('#'+this.Id+ ' .redNaoStreetAddress2');
+    var cityJQuery=rnJQuery('#'+this.Id+ ' .redNaoCity');
+    var stateJQuery=rnJQuery('#'+this.Id+ ' .redNaoState');
+    var zipJQuery=rnJQuery('#'+this.Id+ ' .redNaoZip');
+    var countryJQuery=rnJQuery('#'+this.Id+ ' .redNaoCountry');
+
+    var isValid=true;
+    if(this.Options.ShowStreetAddress1&&streetAddress1JQuery.val()=='')
+    {
+        isValid=false;
+        streetAddress1JQuery.addClass('redNaoInvalid');
+    }
+
+    if(this.Options.ShowStreetAddress2&&streetAddress2JQuery.val()=='')
+    {
+        isValid=false;
+        streetAddress2JQuery.addClass('redNaoInvalid');
+    }
+
+    if(this.Options.ShowCity&&cityJQuery.val()=='')
+    {
+        isValid=false;
+        cityJQuery.addClass('redNaoInvalid');
+    }
+
+    if(this.Options.ShowState&&stateJQuery.val()=='')
+    {
+        isValid=false;
+        stateJQuery.addClass('redNaoInvalid');
+    }
+
+    if(this.Options.ShowZip&&zipJQuery.val()=='')
+    {
+        isValid=false;
+        zipJQuery.addClass('redNaoInvalid');
+    }
+
+    if(this.Options.ShowCountry&&countryJQuery.val()=='')
+    {
+        isValid=false;
+        countryJQuery.addClass('redNaoInvalid');
+    }
+
+    return isValid;
+
+}
+
+RedNaoAddress.prototype.GenerationCompleted=function()
+{
+    var self=this;
+    rnJQuery('#'+this.Id+ ' .redNaoStreetAddress1,#'+this.Id+ ' .redNaoStreetAddress2,#'+this.Id+ ' .redNaoCity,#'+this.Id+ ' .redNaoState,#'+this.Id+ ' .redNaoZip,#'+this.Id+ ' .redNaoCountry').change(function(){self.FirePropertyChanged(self.GetValueString());});
+}
+
+
+/************************************************************************************* Phone ***************************************************************************************************/
+
+function RedNaoPhone(options)
+{
+    FormElementBase.call(this,options);
+    this.Title="Phone";
+    if(this.IsNew)
+    {
+        this.Options.ClassName="rednaophone";
+        this.Options.Label="Phone";
+        this.Options.AreaLabel="Area";
+        this.Options.PhoneLabel="Phone";
+    }
+
+
+
+
+
+}
+
+RedNaoPhone.prototype=Object.create(FormElementBase.prototype);
+
+RedNaoPhone.prototype.CreateProperties=function()
+{
+    this.Properties.push(new IdProperty(this,this.Options));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"AreaLabel","Area",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"PhoneLabel","Phone",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+
+}
+
+RedNaoPhone.prototype.GenerateInlineElement=function()
+{
+    var areaLabel='';
+    var phoneLabel='';
+
+    if(this.Options.FirstNamePlaceholder!='')
+        areaLabel='<label class="redNaoHelper">'+this.Options.AreaLabel+'</label>';
+    if(this.Options.LastNamePlaceholder!='')
+        phoneLabel='<label class="redNaoHelper">'+this.Options.PhoneLabel+'</label>';
+
+    return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
+                <div class="redNaoControls">\
+                    <div class="redNaoFirstNameDiv redNaoTwoColumnsDiv">\
+                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_area" type="text" placeholder="'+this.Options.AreaLabel+'" class="redNaoInputText redNaoTwoColumns redNaoInputArea '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
+                        '+areaLabel+'\
+                    </div>    \
+                    <div class="redNaoLastNameDiv redNaoTwoColumnsDiv">\
+                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_phone" type="text" placeholder="'+this.Options.PhoneLabel+'" class="redNaoInputText redNaoTwoColumns redNaoInputPhone '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">\
+                        '+phoneLabel+'\
+                    </div>\
+               <div>     \
+    </div>';
+}
+
+
+RedNaoPhone.prototype.GetValueString=function()
+{
+    return {
+        area:rnJQuery('#'+this.Id+ ' .redNaoInputArea').val(),
+        phone:rnJQuery('#'+this.Id+ ' .redNaoInputPhone').val()
+
+    };
+
+
+}
+
+
+
+RedNaoPhone.prototype.GetValuePath=function()
+{
+    return 'formData.'+this.Id+'.area+" "'+'formData.'+this.Id+'.phone';
+}
+
+
+RedNaoPhone.prototype.IsValid=function()
+{
+    if(this.Options.IsRequired=='n')
+        return true;
+
+    if(rnJQuery('#'+this.Id+ ' .redNaoInputArea').val()==""||rnJQuery('#'+this.Id+ ' .redNaoInputPhone').val()=="")
+    {
+        var areaJQuery=rnJQuery('#'+this.Id+ ' .redNaoInputArea');
+        var phoneJQuery=rnJQuery('#'+this.Id+ ' .redNaoInputPhone');
+
+        if(areaJQuery.val()=="")
+            areaJQuery.addClass('redNaoInvalid');
+
+        if(phoneJQuery.val()=="")
+            phoneJQuery.addClass('redNaoInvalid');
+
+        return false;
+    }
+
+    return true;
+}
+
+RedNaoPhone.prototype.GenerationCompleted=function()
+{
+    var self=this;
+    rnJQuery('#'+this.Id+ ' .redNaoInputArea,#'+this.Id+ ' .redNaoInputPhone').change(function(){self.FirePropertyChanged(self.GetValueString());});
+}
+
+RedNaoPhone.prototype.GenerationCompleted=function()
+{
+    rnJQuery('#'+this.Id+ ' .redNaoInputArea,#'+this.Id+ ' .redNaoInputPhone').change(function(){self.FirePropertyChanged(self.GetValueString());});
+
+    rnJQuery('#'+this.Id+ ' .redNaoInputArea,#'+this.Id+ ' .redNaoInputPhone').ForceNumericOnly();
+
+}
+
+
+/************************************************************************************* Email Element ***************************************************************************************************/
+
+function RedNaoEmail(options)
+{
+    FormElementBase.call(this,options);
+    this.Title="Text Input";
+    if(this.IsNew)
+    {
+        this.Options.ClassName="rednaoemail";
+        this.Options.Label="Email";
+        this.Options.Placeholder="Placeholder"
+    }
+
+
+
+
+
+}
+
+RedNaoEmail.prototype=Object.create(FormElementBase.prototype);
+
+RedNaoEmail.prototype.CreateProperties=function()
+{
+    this.Properties.push(new IdProperty(this,this.Options));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+
+}
+
+RedNaoEmail.prototype.GenerateInlineElement=function()
+{
+
+    return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
+                <div class="redNaoControls">\
+                    <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText redNaoEmail'+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'
+    '</div>';
+}
+
+
+RedNaoEmail.prototype.GetValueString=function()
+{
+    return {value:rnJQuery('#'+this.Id+ ' .redNaoEmail').val()};
+}
+
+RedNaoEmail.prototype.GetValuePath=function()
+{
+    return 'formData.'+this.Id+'.value';
+}
+
+
+RedNaoEmail.prototype.IsValid=function()
+{
+    var email=rnJQuery('#'+this.Id+ ' .redNaoEmail').val();
+    if(email==""&&this.Options.IsRequired=='y')
+    {
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        return false;
+    }
+
+    var reg=/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    if(email!=''&&!reg.test(email))
+    {
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        return false;
+    }
+
+    return true;
+}
+
+RedNaoEmail.prototype.GenerationCompleted=function()
+{
+    var self=this;
+    rnJQuery('#'+this.Id+ ' .redNaoEmail').change(function(){self.FirePropertyChanged(self.GetValueString());});
+}
+
+
+/************************************************************************************* Email Element ***************************************************************************************************/
+
+function RedNaoEmail(options)
+{
+    FormElementBase.call(this,options);
+    this.Title="Text Input";
+    if(this.IsNew)
+    {
+        this.Options.ClassName="rednaoemail";
+        this.Options.Label="Email";
+        this.Options.Placeholder="Placeholder"
+    }
+
+
+
+
+
+}
+
+RedNaoEmail.prototype=Object.create(FormElementBase.prototype);
+
+RedNaoEmail.prototype.CreateProperties=function()
+{
+    this.Properties.push(new IdProperty(this,this.Options));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+
+}
+
+RedNaoEmail.prototype.GenerateInlineElement=function()
+{
+
+    return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
+                <div class="redNaoControls">\
+                    <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText redNaoEmail'+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'
+    '</div>';
+}
+
+
+RedNaoEmail.prototype.GetValueString=function()
+{
+    return {value:rnJQuery('#'+this.Id+ ' .redNaoEmail').val()};
+}
+
+RedNaoEmail.prototype.GetValuePath=function()
+{
+    return 'formData.'+this.Id+'.value';
+}
+
+
+RedNaoEmail.prototype.IsValid=function()
+{
+    var email=rnJQuery('#'+this.Id+ ' .redNaoEmail').val();
+    if(email==""&&this.Options.IsRequired=='y')
+    {
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        return false;
+    }
+
+    var reg=/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    if(email!=''&&!reg.test(email))
+    {
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        return false;
+    }
+
+    return true;
+}
+
+RedNaoEmail.prototype.GenerationCompleted=function()
+{
+    var self=this;
+    rnJQuery('#'+this.Id+ ' .redNaoEmail').change(function(){self.FirePropertyChanged(self.GetValueString());});
+}
+
+
+/************************************************************************************* Number Element ***************************************************************************************************/
+
+function RedNaoNumber(options)
+{
+    FormElementBase.call(this,options);
+    this.Title="Text Input";
+    if(this.IsNew)
+    {
+        this.Options.ClassName="rednaonumber";
+        this.Options.Label="Number";
+        this.Options.Placeholder="Placeholder"
+        this.Options.NumberOfDecimals=0;
+    }
+
+
+
+
+
+}
+
+RedNaoNumber.prototype=Object.create(FormElementBase.prototype);
+
+RedNaoNumber.prototype.CreateProperties=function()
+{
+    this.Properties.push(new IdProperty(this,this.Options));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
+    //this.Properties.push(new SimpleTextProperty(this,this.Options,"NumberOfDecimals","Number of decimals",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+
+}
+
+RedNaoNumber.prototype.GenerateInlineElement=function()
+{
+
+    return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
+                <div class="redNaoControls">\
+                    <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText redNaoNumber'+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'
+    '</div>';
+}
+
+
+RedNaoNumber.prototype.GetValueString=function()
+{
+    return {value:rnJQuery('#'+this.Id+ ' .redNaoNumber').val()};
+}
+
+RedNaoNumber.prototype.GetValuePath=function()
+{
+    return 'formData.'+this.Id+'.value';
+}
+
+
+RedNaoNumber.prototype.IsValid=function()
+{
+    var number=rnJQuery('#'+this.Id+ ' .redNaoNumber').val();
+    if(number==""&&this.Options.IsRequired=='y')
+    {
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        return false;
+    }
+    return true;
+}
+
+RedNaoNumber.prototype.GenerationCompleted=function()
+{
+    var self=this;
+    rnJQuery('#'+this.Id+ ' .redNaoNumber').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    rnJQuery('#'+this.Id+ ' .redNaoNumber').ForceNumericOnly();
+}
+
+
+/************************************************************************************* Recaptcha Element ***************************************************************************************************/
+
+function RedNaoCaptcha(options)
+{
+    FormElementBase.call(this,options);
+    this.Title="captcha";
+    if(this.IsNew)
+    {
+        this.Options.ClassName="rednaocaptcha";
+        this.Options.Label="Captcha";
+        this.Options.Theme="red";
+    }
+
+    this.Options.Id="captcha";
+
+
+
+}
+
+RedNaoCaptcha.prototype=Object.create(FormElementBase.prototype);
+
+RedNaoCaptcha.prototype.CreateProperties=function()
+{
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
+
+}
+
+RedNaoCaptcha.prototype.GenerateInlineElement=function()
+{
+
+    return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
+                <div class="redNaoControls redNaoCaptcha" id="captchaComponent">\
+    </div>';
+}
+RedNaoCaptcha.prototype.StoresInformation=function()
+{
+    return false;
+}
+
+
+RedNaoCaptcha.prototype.GenerationCompleted=function()
+{
+    var self=this;
+    rnJQuery.getScript("http://www.google.com/recaptcha/api/js/recaptcha_ajax.js", function(){
+        Recaptcha.create("6Lf2J-wSAAAAACCijq50oACQRuvrsmNt9DeUsE-7",
+            'captchaComponent',
+            {
+                theme: "red",
+                callback: Recaptcha.focus_response_field
+            }
+        );
+    });
 }

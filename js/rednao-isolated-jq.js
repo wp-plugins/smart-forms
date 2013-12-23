@@ -39,3 +39,32 @@ Object.isNullOrEmpty=function(object){
      return value;
 
  }
+
+ rnJQuery.fn.ForceNumericOnly = function() {
+     return this.each(function()
+     {
+         rnJQuery(this).keydown(function(e)
+         {
+             var isShift;
+             if (window.event) {
+                 key = window.event.keyCode;
+                 isShift = window.event.shiftKey ? true : false;
+             } else {
+                 key = ev.which;
+                 isShift = ev.shiftKey ? true : false;
+             }
+             if(isShift)
+                return false;
+             var key = e.charCode || e.keyCode || 0;
+             // allow backspace, tab, delete, arrows, numbers
+             // and keypad numbers ONLY
+             return (
+                 key == 8 ||
+                     key == 9 ||
+                     key == 46 ||
+                     (key >= 37 && key <= 40) ||
+                     (key >= 48 && key <= 57) ||
+                     (key >= 96 && key <= 105));
+         });
+     });
+ };

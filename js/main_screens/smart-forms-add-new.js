@@ -94,8 +94,10 @@ SmartFormsAddNew.prototype.FillEmailData=function(formOptions)
     formOptions.FromName=rnJQuery('#redNaoFromName').val();
     formOptions.ToEmail= rnJQuery('#redNaoToEmail').val();
     formOptions.EmailSubject=rnJQuery('#redNaoEmailSubject').val();
-    formOptions.EmailText=tinymce.get('redNaoTinyMCEEditor').getContent();
-
+    if(this.EmailTextLoaded)
+        formOptions.EmailText=tinymce.get('redNaoTinyMCEEditor').getContent();
+    else
+        formOptions.EmailText=this.EmailText;
 }
 
 SmartFormsAddNew.prototype.SaveForm=function(e)
@@ -113,13 +115,24 @@ SmartFormsAddNew.prototype.SaveForm=function(e)
     formOptions.Emails=[{}];
     this.FillEmailData(formOptions.Emails[0]);
 
+    var usesCaptcha='n';
+    var formElements=this.FormBuilder.RedNaoFormElements;
+    for(var i=0;i<formElements.length;i++)
+    {
+        if(formElements[i].Id=="captcha")
+        {
+            usesCaptcha='y';
+            break;
+        }
+    }
+    formOptions.UsesCaptcha=usesCaptcha;
 
     var data={};
     data.id=this.id;
     data.action="rednao_smart_forms_save";
     data.form_options=JSON.stringify(formOptions);
     data.element_options=JSON.stringify(this.FormBuilder.GetFormInformation());
-    data.client_form_options=JSON.stringify({JavascriptCode:this.GetJavascriptCode()})
+    data.client_form_options=JSON.stringify({JavascriptCode:this.GetJavascriptCode(),UsesCaptcha:usesCaptcha});
     var self=this;
     rnJQuery.post(ajaxurl,data,function(result){
         var result=rnJQuery.parseJSON(result);

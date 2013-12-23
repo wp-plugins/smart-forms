@@ -28,6 +28,12 @@ function RedNaoCreateColumn(options)
     if(elementName=='rednaoname')
         return RedNaoName(options);
 
+    if(elementName=='rednaoaddress')
+        return RedNaoAddress(options);
+    if(elementName=='rednaophone')
+        return RedNaoPhone(options);
+    if(elementName=="rednaonumber")
+        return RedNaoTextInputColumn(options);
 
 }
 
@@ -126,6 +132,62 @@ function RedNaoName(options)
             if(data==null)
                 return '';
             return data.firstName+' '+data.lastName;
+        }catch(exception)
+        {
+            return '';
+        }
+    }};
+}
+
+
+function RedNaoPhone(options)
+{
+    return {"name":options.Label,"index":options.Id,formatter: function (cellvalue, cellOptions, rowObject)
+    {
+        try{
+            var data=GetObjectOrNull(rowObject,cellOptions);
+            if(data==null)
+                return '';
+            return data.area+'-'+data.phone;
+        }catch(exception)
+        {
+            return '';
+        }
+    }};
+}
+
+
+function RedNaoAddress(options)
+{
+    return {"name":options.Label,"index":options.Id,formatter: function (cellvalue, cellOptions, rowObject)
+    {
+        try{
+            var data=GetObjectOrNull(rowObject,cellOptions);
+            if(data==null)
+                return '';
+
+            var appendAddressElement=function(address,element){
+                if(element=="")
+                    return address;
+
+                if(address=="")
+                    address=element;
+                else
+                    address+=", "+element;
+
+                return address;
+
+            }
+
+            var address="";
+            address=appendAddressElement(address,data.streetAddress1);
+            address=appendAddressElement(address,data.streetAddress2);
+            address=appendAddressElement(address,data.city);
+            address=appendAddressElement(address,data.state);
+            address=appendAddressElement(address,data.zip);
+            address=appendAddressElement(address,data.country);
+
+            return address;
         }catch(exception)
         {
             return '';
