@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: form,  forms,  contact form, contact forms,  form plugin, forms plugin, forms plugin, form builder,  form manager, multiple forms, custom  form, form maker, form with recaptcha,  form with google map, feedback form, feedback forms, contact us
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 0.5.5
+Stable tag: 0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -81,4 +81,6 @@ N/A
 = 0.1.2 =
 * Fixed form issue with required fields and form submission.
 == Upgrade Notice ==
-N/A
+
+= 0.6 =
+I fixed an issue with formulas in ie8, please after updating recreate your formulas (entering and exiting the formula screen) if you have any.

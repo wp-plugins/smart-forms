@@ -43,7 +43,7 @@ function RedNaoFormulaWindow()
 RedNaoFormulaWindow.prototype.GetCompiledData=function(data,formula)
 {
     var myArray = formula.match(/field ([^\]]+)/g);
-    var compiledFormula='(function(formData){return ';
+    var compiledFormula='';
     var fieldsUsed=[];
     for(var i=0;i<myArray.length;i++)
     {
@@ -53,7 +53,7 @@ RedNaoFormulaWindow.prototype.GetCompiledData=function(data,formula)
         formula=formula.replace('['+myArray[i]+']',field);
     }
 
-    compiledFormula+=formula+'})';
+    compiledFormula+=formula;
     data.RefreshFormData=(typeof this.AdditionalInformation.RefreshFormData=='undefined'?'n':'y');
     data.CompiledFormula=compiledFormula;
     data.FieldsUsed=fieldsUsed;

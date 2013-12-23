@@ -17,7 +17,9 @@ RedNaoFormula.prototype.FieldUsedInFormula=function(fieldName)
 
 RedNaoFormula.prototype.UpdateFieldWithValue=function(value)
 {
-    var calculatedValue=eval(this.Formula.CompiledFormula)(value);
+    var formula=new Function('formData','return '+this.Formula.CompiledFormula);
+
+    var calculatedValue=formula(value);
     if(typeof calculatedValue=='number'&&isNaN(calculatedValue))
         calculatedValue=0;
     RedNaoBasicManipulatorInstance.SetValue(this.FormElement.Options,this.Formula.PropertyName,calculatedValue,this.Formula.additionalInformation);
