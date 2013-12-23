@@ -2212,6 +2212,7 @@ function RedNaoCaptcha(options)
     }
 
     this.Options.Id="captcha";
+    this.Id="captcha";
 
 
 
