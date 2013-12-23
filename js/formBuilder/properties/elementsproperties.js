@@ -7,8 +7,6 @@ function ElementPropertiesBase(formelement,propertiesObject,propertyName,propert
 {
     if(additionalInformation.ManipulatorType=='basic')
         this.Manipulator=RedNaoBasicManipulatorInstance;
-    else
-        this.Manipulator=RedNaoStyleManipulatorInstance;
     this.FormElement=formelement;
     this.AdditionalInformation=additionalInformation;
     this.PropertiesObject=propertiesObject;

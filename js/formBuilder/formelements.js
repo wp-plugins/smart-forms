@@ -109,7 +109,6 @@ function FormElementBase(options)
     if(options==null)
     {
         this.Options=new Object();
-        this.Options.Styles=new Object();
         this.Options.ClassName="";
         this.Options.IsRequired='n';
         this.Options.Formulas={};
@@ -185,7 +184,6 @@ FormElementBase.prototype.GenerateHtml=function(jqueryElement)
 {
     var newElement=rnJQuery('<div class="rednao-control-group '+this.Options.ClassName+'" id="'+this.Id+'" style="margin-bottom:15px;clear:both;">'+this.GenerateInlineElement()+'</div>')
     jqueryElement.replaceWith(newElement );
-    this.ApplyStyle();
     this.GenerationCompleted();
     return newElement;
 
@@ -195,7 +193,6 @@ FormElementBase.prototype.AppendElementToContainer=function(jqueryElement)
 {
     this.JQueryElement=rnJQuery( '<div class="rednao-control-group '+this.Options.ClassName+'" id="'+this.Id+'" style="margin-bottom:15px;">'+this.GenerateInlineElement()+'</div>');
     jqueryElement.append(this.JQueryElement);
-    this.ApplyStyle();
     this.GenerationCompleted();
 
 }
@@ -244,19 +241,6 @@ FormElementBase.prototype.GetPropertyName=function()
     return RedNaoFormElementEscape(this.Options.Label);
 }
 
-
-
-FormElementBase.prototype.ApplyStyle=function()
-{
-    if(this.Options.Styles==null)
-        return;
-
-    for(var property in this.Options.Styles)
-    {
-
-        rnJQuery('#'+this.Id + ' .'+property).attr("style",this.Options.Styles[property]);
-    }
-}
 
 FormElementBase.prototype.GeneratePropertiesHtml=function(jQueryObject)
 {
@@ -459,7 +443,6 @@ DonationAmountElement.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"DefaultValue","Default Value",{ManipulatorType:'basic'}));
 
-    this.Properties.push(new SimpleTextProperty(this,this.Options.Styles,"width","Width",{ManipulatorType:'style',class:'redNaoInputText'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"Disabled","Read Only",{ManipulatorType:'basic'}));
 
@@ -1294,9 +1277,6 @@ DonationButtonElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options.Styles,"margin-left","Spacing",{ManipulatorType:'style',class:'redNaoDonationButton'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options.Styles,"width","Width",{ManipulatorType:'style',class:'redNaoDonationButton',default:'auto'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options.Styles,"height","Height",{ManipulatorType:'style',class:'redNaoDonationButton',default:'auto'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Image","Image Url",{ManipulatorType:'basic'}));
 }
 
