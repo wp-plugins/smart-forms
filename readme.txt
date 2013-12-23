@@ -24,7 +24,7 @@ You can create calculated fields and also after a form is submitted you can rece
 *   **Forms Entry Screen**.- Easily check the information that have been submitted so far in the entries screen.
 *   **Customizable form emails**.- After a form is submitted send an email with any information and format that you need.
 *   **Calculated fields**.- You can use fields in a formulas to fill fields automatically (up to three fields per formula in the free version)
-*   **Custom form fields**.- Currently it supports the name element, more are coming soon!! (phone, email, address, number,captcha)
+*   **Custom form fields**.- Currently the plugin supports these custom form elements: name, phone, email, address, number,captcha.
 
 == Installation ==
 1. Upload smart forms to the `/wp-content/plugins/` directory
