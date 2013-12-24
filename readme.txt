@@ -1,7 +1,7 @@
 === Smart Forms ===
 Contributors: EDGARROJAS
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edseventeen%40gmail.com
-Tags: web forms, forms, input, validation,calculated fields
+Tags: contact form, contact, form, forms, contact form plugin, contact form builder, contact form with recaptcha, feedback form, contact us, request form, contact button, drag and drop contact form, file upload contact form, contact form to email, contact form payments, contact for paypal, form solution, form builder, feedback, easy contact form, helpdesk
 Requires at least: 3.3
 Tested up to: 3.5
 Stable tag: 0.6
