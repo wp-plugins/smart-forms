@@ -40,6 +40,15 @@ Object.isNullOrEmpty=function(object){
 
  }
 
+ function RedNaoGetValueOrEmpty(value)
+ {
+     if(typeof value=='undefined')
+         return '';
+
+     return value;
+
+ }
+
  rnJQuery.fn.ForceNumericOnly = function() {
      return this.each(function()
      {

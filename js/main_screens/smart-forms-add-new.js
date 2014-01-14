@@ -13,6 +13,7 @@ function SmartFormsAddNew()
         options=smartFormsOptions;
         rnJQuery('#smartFormName').val(smartFormsOptions.Name);
         rnJQuery('#smartFormDescription').val(smartFormsOptions.Description);
+
         if(RedNaoGetValueOrNull(smartFormsOptions.SendNotificationEmail)=='y')
             rnJQuery('#smartFormsSendNotificationEmail').attr('checked','checked')
 
@@ -32,6 +33,12 @@ function SmartFormsAddNew()
     if(typeof smartFormClientOptions!='undefined')
     {
         rnJQuery('#smartFormsJavascriptText').val(smartFormClientOptions.JavascriptCode);
+        rnJQuery('#redirectToInput').val(RedNaoGetValueOrEmpty(smartFormClientOptions.redirect_to));
+        rnJQuery('#alertMessageInput').val(RedNaoGetValueOrEmpty(smartFormClientOptions.alert_message));
+        if(RedNaoGetValueOrEmpty(smartFormClientOptions.redirect_to_cb)=='y')
+            rnJQuery('#redNaoRedirectToCB').attr('checked','checked');
+        if(RedNaoGetValueOrEmpty(smartFormClientOptions.alert_message_cb)=='y')
+            rnJQuery('#redNaoAlertMessageCB').attr('checked','checked');
 
     }
 
@@ -50,12 +57,32 @@ function SmartFormsAddNew()
     rnJQuery('#smartFormsSendNotificationEmail').change(function(){self.NotifyToChanged()});
     rnJQuery('#smartFormsSendNotificationEmail').change();
     rnJQuery('#redNaoEditEmailButton').click(function(e){e.preventDefault();self.EditEmailClicked();});
+    rnJQuery('#redNaoRedirectToCB').change(function(){self.DisableOnEmpty(rnJQuery(this),rnJQuery('#redirectToInput'))});
+    rnJQuery('#redNaoAlertMessageCB').change(function(){self.DisableOnEmpty(rnJQuery(this),rnJQuery('#alertMessageInput'))});
+
+    rnJQuery('#redNaoRedirectToCB').change();
+    rnJQuery('#redNaoAlertMessageCB').change();
+
 
     var self=this;
     RedNaoEventManager.Subscribe('FormulaButtonClicked',function(data){self.OpenFormulaBuilder(data.FormElement,data.PropertyName,data.AdditionalInformation)});
 
 
 }
+SmartFormsAddNew.prototype.DisableOnEmpty=function(checkbox,elementToDisable)
+{
+    if(checkbox.is(':checked'))
+    {
+        elementToDisable.removeAttr('disabled');
+        elementToDisable.removeClass('redNaoDisabled');
+    }else
+    {
+        elementToDisable.attr('disabled','disabled');
+        elementToDisable.addClass('redNaoDisabled');
+    }
+}
+
+
 SmartFormsAddNew.prototype.OpenFormulaBuilder=function(formElement,propertyName,additionalInformation)
 {
     RedNaoFormulaWindowVar.OpenFormulaEditor(this.FormBuilder.RedNaoFormElements,formElement,propertyName,additionalInformation);
@@ -132,14 +159,33 @@ SmartFormsAddNew.prototype.SaveForm=function(e)
     data.action="rednao_smart_forms_save";
     data.form_options=JSON.stringify(formOptions);
     data.element_options=JSON.stringify(this.FormBuilder.GetFormInformation());
-    data.client_form_options=JSON.stringify({JavascriptCode:this.GetJavascriptCode(),UsesCaptcha:usesCaptcha});
+
+
+
+    data.client_form_options=JSON.stringify(this.GetClientFormOptions(usesCaptcha));
     var self=this;
+    rnJQuery('#smartFormsSaveButton').text('Saving...');
+    rnJQuery('#smartFormsSaveButton').attr('disabled','disabled');
     rnJQuery.post(ajaxurl,data,function(result){
+        rnJQuery('#smartFormsSaveButton').text('Save');
+        rnJQuery('#smartFormsSaveButton').removeAttr('disabled');
         var result=rnJQuery.parseJSON(result);
         alert(result.Message);
         if(result.Message=="saved")
             self.id=result.FormId;
     });
+}
+
+SmartFormsAddNew.prototype.GetClientFormOptions=function(usesCaptcha)
+{
+    return {
+        JavascriptCode:this.GetJavascriptCode(),
+        UsesCaptcha:usesCaptcha,
+        alert_message:rnJQuery('#alertMessageInput').val(),
+        alert_message_cb:(rnJQuery('#redNaoAlertMessageCB').is(':checked')?'y':'n'),
+        redirect_to:rnJQuery('#redirectToInput').val(),
+        redirect_to_cb:(rnJQuery('#redNaoRedirectToCB').is(':checked')?'y':'n')
+    };
 }
 
 SmartFormsAddNew.prototype.CloseTag=function()
@@ -178,7 +224,7 @@ SmartFormsAddNew.prototype.OpenTag=function()
 SmartFormsAddNew.prototype.ActivateTab=function(activationName)
 {
     rnJQuery('#smartFormsTopTab a').removeClass("nav-tab-active");
-    rnJQuery('#smartFormsGeneralDiv,#smartFormsJavascriptDiv,#smartFormsCSSDiv').css('display','none');
+    rnJQuery('#smartFormsGeneralDiv,#smartFormsJavascriptDiv,#smartFormsCSSDiv,#smartFormsAfterSubmitDiv').css('display','none');
 
     rnJQuery('#'+activationName+'Tab').addClass('nav-tab-active');
     rnJQuery('#'+activationName+'Div').css('display','block');
@@ -192,6 +238,11 @@ SmartFormsAddNew.prototype.GoToGeneral=function()
 SmartFormsAddNew.prototype.GoToJavascript=function()
 {
     this.ActivateTab('smartFormsJavascript');
+}
+
+SmartFormsAddNew.prototype.GoToAfterSubmit=function()
+{
+    this.ActivateTab('smartFormsAfterSubmit');
 }
 
 

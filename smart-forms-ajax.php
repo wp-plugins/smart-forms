@@ -89,7 +89,6 @@ function rednao_smart_form_list()
 
 function rednao_smart_forms_save_form_values()
 {
-
     $form_id=GetPostValue("form_id");
     $formString=GetPostValue("formString");
 

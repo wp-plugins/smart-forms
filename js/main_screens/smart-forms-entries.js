@@ -239,7 +239,7 @@ rnJQuery(function () {
             }
         }, "pager": "#pager"});
 
-        rnJQuery('#grid').jqGrid('navGrid', '#pager', {"edit":false,"del":false,"search":false,"refresh":false,"view":false,"excel":false,"pdf":false,"csv":false, addtext:"", addtitle:"Add new row" ,"errorTextFormat": function(r) {
+        rnJQuery('#grid').jqGrid('navGrid', '#pager', {"edit":false,"del":false,"search":false,"refresh":false,"view":false,"excel":false,"pdf":false,"csv":true, addtext:"", addtitle:"Add new row" ,"errorTextFormat": function(r) {
             return r.responseText;
         }});
 

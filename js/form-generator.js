@@ -237,7 +237,14 @@ smartFormGenerator.prototype.SaveForm=function()
 smartFormGenerator.prototype.SaveCompleted=function(result){
     rnJQuery('body, input[type="submit"]').removeClass('redNaoWait');
     this.JQueryForm.find('input[type="submit"]').removeAttr('disabled');
-    alert(result.message);
+    if(RedNaoGetValueOrEmpty(this.client_form_options.alert_message_cb)!='y'&&RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)!='y')
+        alert(result.message);
+
+    if(RedNaoGetValueOrEmpty(this.client_form_options.alert_message_cb)=='y')
+        alert(this.client_form_options.alert_message);
+
+    if(RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)=="y")
+        window.location=this.client_form_options.redirect_to;
     if(typeof result.refreshCaptcha!='undefined'&&result.refreshCaptcha=='y')
         Recaptcha.reload();
 }

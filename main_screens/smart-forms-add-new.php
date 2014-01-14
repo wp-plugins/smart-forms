@@ -60,6 +60,7 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
 <h2 class="nav-tab-wrapper" id="smartFormsTopTab">
     <a class='nav-tab nav-tab-active' id="smartFormsGeneralTab"  onclick="SmartFormsAddNewVar.GoToGeneral();">General Info</a>
     <a class='nav-tab' id="smartFormsJavascriptTab" onclick="SmartFormsAddNewVar.GoToJavascript();">Javascript</a>
+    <a class='nav-tab' id="smartFormsAfterSubmitTab" onclick="SmartFormsAddNewVar.GoToAfterSubmit();">After Submit</a>
     <a class='nav-tab' style="display: none;" id="smartFormsCSSTab" onclick="SmartFormsAddNewVar.GoToCSS();">CSS</a>
 </h2>
 <div id="redNaoGeneralInfo">
@@ -135,6 +136,28 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
     <textarea id="smartFormsCSSText"></textarea>
 </div>
 
+<div id="smartFormsAfterSubmitDiv" style="display: none;padding: 10px">
+
+    <input type="checkbox"  id="smartFormsSendNotificationEmail"/>
+    <span><?php echo __("Send notification email"); ?></span>
+    <button id="redNaoEditEmailButton" disabled="disabled"><?php echo __("Edit Email"); ?></button>
+    <br/>
+
+    <div style="margin-top:10px;">
+    <input  type="checkbox"  id="redNaoRedirectToCB"/>
+    <span ><?php echo __("Redirect to"); ?></span>
+    <input type="text" style="width: 600px;" id="redirectToInput" disabled="disabled" class="redNaoDisabled"/>
+    </div>
+
+    <div style="margin-top:10px;">
+    <input style="vertical-align: top" type="checkbox"  id="redNaoAlertMessageCB"/>
+    <span style="vertical-align: top"><?php echo __("Show alert message"); ?></span>
+    <textarea style="width:250px;height: 70px;" id="alertMessageInput" disabled="disabled" class="redNaoDisabled"></textarea>
+    </div>
+
+
+</div>
+
 
 <div id="smartFormsGeneralDiv">
 <form >
@@ -163,10 +186,7 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
                 <br/>
 
 
-                <span><?php echo __("On submission send notification email"); ?></span>
-                <input type="checkbox"  id="smartFormsSendNotificationEmail"/>
-                <button id="redNaoEditEmailButton" disabled="disabled"><?php echo __("Edit Email"); ?></button>
-                <br/>
+
             </div>
         </div>
 

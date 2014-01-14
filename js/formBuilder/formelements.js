@@ -894,7 +894,7 @@ TextAreaElement.prototype.GenerateInlineElement=function()
 
     return  '<div class="rednao_label_container"><label class="rednao_control_label" for="textarea">'+this.Options.Label+'</label></div>\
                 <div class="redNaoControls">\
-                <textarea style="'+additionalStyle+'" name="textarea" class="redNaoTextArea">'+this.Options.DefaultText+'</textarea>\
+                <textarea style="'+additionalStyle+'" name="textarea" class="redNaoTextAreaInput">'+this.Options.DefaultText+'</textarea>\
             </div>';
 }
 

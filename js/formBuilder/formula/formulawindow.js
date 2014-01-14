@@ -3,8 +3,8 @@ function RedNaoFormulaWindow()
     rnJQuery( "#redNaoFormulaAccordion" ).accordion();
     var self=this;
     this.Dialog=rnJQuery("#redNaoFormulaComponent").dialog(
-        {   width:"713",
-            height:"365",
+        {   width:"714",
+            height:"368",
             modal:true,
             autoOpen:false,
             create: function(event, ui){
