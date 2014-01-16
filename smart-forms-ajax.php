@@ -109,7 +109,7 @@ function rednao_smart_forms_save_form_values()
     {
         if(!isset($_POST["captcha"]))
         {
-            echo '{"message":"'.__("Invalid captcha.").'"}';
+            echo '{"message":"'.__("Invalid captcha.").'", "success":"n"}';
             die();
         }
         $captchaPost=$_POST["captcha"];
@@ -130,7 +130,7 @@ function rednao_smart_forms_save_form_values()
         $res=wp_remote_post('http://www.google.com/recaptcha/api/verify',$args);
         if(strpos($res["body"],"true")!==0)
         {
-            echo '{"message":"'.__("Invalid captcha.").'","refreshCaptcha":"y"}';
+            echo '{"message":"'.__("Invalid captcha.").'","refreshCaptcha":"y","success":"n"}';
             die();
         }
 
@@ -148,9 +148,9 @@ function rednao_smart_forms_save_form_values()
         send_form_email($formOptions["Emails"][0],$entryData,$elementOptions,false);
 
     if($result==true)
-        echo '{"message":"'.__("Information submitted successfully.").'"}';
+        echo '{"message":"'.__("Information submitted successfully.").'","success":"y"}';
     else
-        echo '{"message":"'.__("An error occurred, please try again later.").'"}';
+        echo '{"message":"'.__("An error occurred, please try again later.").'","success":"n"}';
     die();
 }
 

@@ -229,7 +229,7 @@ smartFormGenerator.prototype.SaveForm=function()
         success:function(result){self.SaveCompleted(result)},
         error:function(result){
             rnJQuery('body, input[type="submit"]').removeClass('redNaoWait');
-            this.JQueryForm.find('input[type="submit"]').removeAttr('disabled');
+            self.JQueryForm.find('input[type="submit"]').removeAttr('disabled');
             alert('An error occurred, please try again later');}
     });
 }
@@ -237,16 +237,26 @@ smartFormGenerator.prototype.SaveForm=function()
 smartFormGenerator.prototype.SaveCompleted=function(result){
     rnJQuery('body, input[type="submit"]').removeClass('redNaoWait');
     this.JQueryForm.find('input[type="submit"]').removeAttr('disabled');
-    if(RedNaoGetValueOrEmpty(this.client_form_options.alert_message_cb)!='y'&&RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)!='y')
+
+    if(typeof result.refreshCaptcha!='undefined'&&result.refreshCaptcha=='y')
+    {
         alert(result.message);
+        Recaptcha.reload();
+        return;
+    }
+
+    if((RedNaoGetValueOrEmpty(this.client_form_options.alert_message_cb)!='y'&&RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)!='y')||result.success=='n')
+    {
+        alert(result.message);
+        return;
+    }
 
     if(RedNaoGetValueOrEmpty(this.client_form_options.alert_message_cb)=='y')
         alert(this.client_form_options.alert_message);
 
     if(RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)=="y")
         window.location=this.client_form_options.redirect_to;
-    if(typeof result.refreshCaptcha!='undefined'&&result.refreshCaptcha=='y')
-        Recaptcha.reload();
+
 }
 
 smartFormGenerator.prototype.SubmitForm=function(data,amount)

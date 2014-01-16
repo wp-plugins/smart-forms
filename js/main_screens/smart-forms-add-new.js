@@ -8,6 +8,7 @@ function SmartFormsAddNew()
     var options=null;
     this.EmailTextLoaded=false;
     this.EmailText="";
+    this.RestoreDefault();
     if(typeof smartFormsOptions!='undefined')
     {
         options=smartFormsOptions;
