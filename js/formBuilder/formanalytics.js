@@ -8,10 +8,15 @@ function RedNaoCreateColumn(options)
         return RedNaoTextInputColumn(options);
     if(elementName=='rednaoappendedtext')
         return RedNaoTextInputColumn(options);
+    if(elementName=='rednaoemail')
+        return RedNaoTextInputColumn(options);
+
+
     if(elementName=='rednaoprependedcheckbox')
         return RedNaoCheckboxInputColumn(options);
     if(elementName=='rednaoappendedcheckbox')
         return RedNaoCheckboxInputColumn(options);
+
 
 
     if(elementName=='rednaomultiplecheckboxes')
@@ -167,7 +172,7 @@ function RedNaoAddress(options)
                 return '';
 
             var appendAddressElement=function(address,element){
-                if(element=="")
+                if(element==""||typeof element=='undefined')
                     return address;
 
                 if(address=="")

@@ -1736,6 +1736,7 @@ RedNaoAddress.prototype.GenerateInlineElement=function()
                                 </div>';
 
                 if(this.Options.ShowCountry=='y')
+                {
                     html+='<div class="redNaoCountryDiv redNaoTwoColumnsDiv">\
                         <select '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_country"  class="redNaoTwoColumns redNaoSelect redNaoCountry '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">';
                         for(var i=0;i<this.Countries.length;i++)
@@ -1745,6 +1746,7 @@ RedNaoAddress.prototype.GenerateInlineElement=function()
                         }
                 html+="</select>"+CountryLabel+'\
                     </div>';
+                }
     html+='</div>';
     return html;
 }
@@ -2089,7 +2091,7 @@ RedNaoEmail.prototype.IsValid=function()
         return false;
     }
 
-    var reg=/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+    var reg=/^[\w\.]+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
     if(email!=''&&!reg.test(email))
     {
         rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');

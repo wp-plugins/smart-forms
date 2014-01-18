@@ -20,12 +20,16 @@ function smartFormGenerator(options){
         this.FormElements.push(element);
     }
 
-
-    this.JQueryForm=rnJQuery('<form ></form>');
-
     this.containerName=options.container;
+    this.CreateForm();
+
+}
+
+
+smartFormGenerator.prototype.CreateForm=function(){
     var container=this.GetRootContainer();
     container.empty();
+    this.JQueryForm=rnJQuery('<form ></form>');
     container.append(this.JQueryForm);
     for(var i=0;i<this.RedNaoFormElements.length;i++)
     {
@@ -48,7 +52,6 @@ function smartFormGenerator(options){
 
     }
 }
-
 
 smartFormGenerator.prototype.AdjustLayout=function()
 {
@@ -248,6 +251,7 @@ smartFormGenerator.prototype.SaveCompleted=function(result){
     if((RedNaoGetValueOrEmpty(this.client_form_options.alert_message_cb)!='y'&&RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)!='y')||result.success=='n')
     {
         alert(result.message);
+        this.CreateForm();
         return;
     }
 
@@ -256,6 +260,8 @@ smartFormGenerator.prototype.SaveCompleted=function(result){
 
     if(RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)=="y")
         window.location=this.client_form_options.redirect_to;
+
+    this.CreateForm();
 
 }
 

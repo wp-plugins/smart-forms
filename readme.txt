@@ -10,7 +10,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Build forms easily by dragging and dropping elements. Calculated fields, customizable emails and much more!!.
 == Description ==
-If you have question or suggestion please let me know in the smart form official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601
+If you have questions or suggestions please let me know in the smart form official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601
 
 Build forms easily by dragging and dropping elements. The forms are responsive, they adjust to the available space.
 
@@ -52,6 +52,13 @@ N/A
 9. Calculated field interface
 10. Example of date field
 == Changelog ==
+= Smart Forms 0.7 =
+* Fixing issue with the form submission
+* Adding  the posibility to redirect to another page after the form was submitted
+* Adding the posibility to customize the submission successfull message
+* Fixing a css issue with the form text boxes.
+* Fixed issues with forms
+* Fixed issue en the forms entries screen
 
 = Smart forms 0.6 =
 * Added new forms elements (email,phone, address, captcha,number)
@@ -73,14 +80,14 @@ N/A
 * Added the option to purchase the Smart Forms full version
 = Smart forms 0.1 =
 *First release of smart forms.
-= 0.1.1 =
+= Smart Forms 0.1.1 =
 * Fixing issues with the form entries screen
 * Allow the grid of the form entries to expand based on entries
 * Fixing responsive forms
 
-= 0.1.2 =
+= Smart Forms 0.1.2 =
 * Fixed form issue with required fields and form submission.
 == Upgrade Notice ==
 
-= 0.6 =
+= Smart Forms 0.6 =
 I fixed an issue with formulas in ie8, please after updating recreate your formulas (entering and exiting the formula screen) if you have any.
