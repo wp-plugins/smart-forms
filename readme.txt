@@ -4,13 +4,15 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: contact form, contact, form, forms, contact form plugin, contact form builder, contact form with recaptcha, feedback form, contact us, request form, contact button, drag and drop contact form, file upload contact form, contact form to email, contact form payments, contact for paypal, form solution, form builder, feedback, easy contact form, helpdesk
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 0.6
+Stable tag: 0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Build forms easily by dragging and dropping elements. Calculated fields, customizable emails and much more!!.
 == Description ==
+For more information check: http://rednao.com/smartforms.html
 If you have questions or suggestions please let me know in the smart form official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601
+
 
 Build forms easily by dragging and dropping elements. The forms are responsive, they adjust to the available space.
 

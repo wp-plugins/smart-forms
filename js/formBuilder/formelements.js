@@ -979,7 +979,7 @@ MultipleRadioElement.prototype.GenerateInlineElement=function()
     for(var i=0;i<this.Options.Options.length;i++)
     {
         html+='<label class="redNaoRadio" for="radios-0">\
-                    <input class="redNaoInputRadio" type="radio" name="'+this.GetPropertyName()+'"  value="'+this.Options.Options[i].value+'" '+checked+'>'+rnJQuery.trim(this.Options.Options[i].label)+'</input>\
+                    <input '+checked+' class="redNaoInputRadio" type="radio" name="'+this.GetPropertyName()+'"  value="'+this.Options.Options[i].value+'" '+checked+'>'+rnJQuery.trim(this.Options.Options[i].label)+'</input>\
                 </label>';
 
         checked="";
