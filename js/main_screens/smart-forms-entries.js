@@ -243,7 +243,25 @@ rnJQuery(function () {
             return r.responseText;
         }});
 
-        rnJQuery('#grid').jqGrid('editGridRow')
+        rnJQuery("#grid").jqGrid('navButtonAdd','#pager',{
+            caption:"Export to csv (pro)",
+            onClickButton : function () {
+                if(!RedNaoLicensingManagerVar.LicenseIsValid('Sorry, exporting to csv is only supported in the pro version'))
+                {
+                    return;
+                }
+
+                var startDate = rnJQuery.datepicker.formatDate('yy-mm-dd', rnJQuery('#dpStartDate').datepicker('getDate'));
+                var endDate = rnJQuery.datepicker.formatDate('yy-mm-dd', rnJQuery('#dpEndDate').datepicker('getDate'));
+                var form = rnJQuery('#cbForm').val();
+
+                //window.location=smartFormsRootPath+"smart-forms-exporter.php?startdate="+startDate+"&enddate="+endDate+"&formid="+form;
+                var data=JSON.stringify(rnJQuery("#grid").jqGrid('getRowData'));
+                rnJQuery('#smartFormsExportData').val(data);
+                rnJQuery('#exporterForm').submit();
+
+            }
+        });
 
 
     /*    Grid.on('jqGridAddEditAfterSubmit',function(a,b,c)

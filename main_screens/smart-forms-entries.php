@@ -6,6 +6,10 @@
  * Time: 8:04 PM
  * To change this template use File | Settings | File Templates.
  */
+
+if(!defined('ABSPATH'))
+    die('Forbidden');
+
 wp_enqueue_script('isolated-slider',SMART_FORMS_DIR_URL.'js/rednao-isolated-jq.js');
 wp_enqueue_script('exCanvas',SMART_FORMS_DIR_URL.'js/grid_chart/excanvas.min.js',array('isolated-slider'));
 wp_enqueue_script('jqPlot',SMART_FORMS_DIR_URL.'js/grid_chart/jquery.jqplot.min.js',array('exCanvas'));
@@ -26,12 +30,12 @@ wp_enqueue_style('jqgrid',SMART_FORMS_DIR_URL.'css/grid_chart/ui.jqgrid.css');
 wp_enqueue_style('jqplot',SMART_FORMS_DIR_URL.'css/grid_chart/jquery.jqplot.css');
 wp_enqueue_style('smart-donations-Slider',SMART_FORMS_DIR_URL.'css/smartFormsSlider/jquery-ui-1.10.2.custom.min.css');
 
+include_once(SMART_FORMS_DIR.'smart-forms-license.php');
+smart_forms_load_license_manager("");
 
 
 
 
-if(!defined('ABSPATH'))
-    die('Forbidden');
 
 ?>
 
@@ -62,6 +66,7 @@ if(!defined('ABSPATH'))
     </select>
 
     <script type="text/javascript" language="javascript">
+        var smartFormsRootPath="<?php echo SMART_FORMS_DIR_URL?>";
         var RedNaoCampaignList="";
         <?php
             echo "RedNaoCampaignList='";
@@ -91,3 +96,7 @@ if(!defined('ABSPATH'))
     <div class="smartFormsSlider" style="margin-right:10px;">
         <table id='grid' class="ui-jqdialogasdf" style="width:100%;height:100%;"></table><div id='pager'></div>
     </div>
+
+    <form method="post" action="<?php echo SMART_FORMS_DIR_URL?>smart-forms-exporter.php" id="exporterForm" target="_blank">
+        <input type="hidden" id="smartFormsExportData" name="exportdata"/>
+    </form>
