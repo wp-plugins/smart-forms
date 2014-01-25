@@ -121,66 +121,121 @@ ArrayProperty.prototype=Object.create(ElementPropertiesBase.prototype);
 ArrayProperty.prototype.GenerateHtml=function()
 {
     var currentValues=this.GetPropertyCurrentValue();
-    var valuesText="";
-    for(var i=0;i<currentValues.length;i++)
-    {
-        valuesText+='\n'+currentValues[i].label;
-        if(typeof currentValues[i].value!='undefined')
-        {
-            valuesText+=';'+currentValues[i].value;
-        }
-    }
 
-    if(valuesText.length>0)
-        valuesText=valuesText.substr(1);
-
-    var newProperty=rnJQuery('<td style="vertical-align: top;text-align: right;"><label class="checkbox control-group" style="display: block;vertical-align: top;">'+this.PropertyTitle+'</label></td><td style="text-align: left"><textarea class="field" data-type="textarea-split" style="min-height: 200px;width: 206px;" id="'+this.PropertyId+'">'+valuesText+'</textarea></td>');
+    var newProperty=rnJQuery('<td style="vertical-align: top;text-align: right;"><label class="checkbox control-group" style="display: block;vertical-align: top;">'+this.PropertyTitle+'</label></td><td style="text-align: left">'+this.GetItemList(currentValues)+'</td>');
 
     var self=this;
-    newProperty.find('#'+this.PropertyId).change(function(){self.UpdateProperty();});
+    newProperty.find('.cloneArrayItem').click(function(){self.CloneItem(rnJQuery(this))});
+    newProperty.find('.deleteArrayItem').click(function(){self.DeleteItem(rnJQuery(this))});
+    newProperty.find('input[type=text],input[type=radio],input[type=checkbox]').change(function(){self.UpdateProperty();});
+    newProperty.find('input[type=text]').keyup(function(){self.UpdateProperty();});
 
+
+    this.ItemsList=newProperty.find('.listOfItems');
     return newProperty;
+}
+
+ArrayProperty.prototype.GetItemList=function(items)
+{
+    var list= '<table class="listOfItems"><tr><th>Sel</th><th>Label</th><th>Amount</th></tr>';
+
+    var isFirst=true;
+    for(var i=0;i<items.length;i++)
+    {
+        list+=this.CreateListRow(isFirst,items[i]);
+        isFirst=false;
+    }
+    list+='</table>'
+    return list;
+
+}
+
+ArrayProperty.prototype.DeleteItem=function(jQueryElement)
+{
+    var array=this.GetPropertyCurrentValue();
+    var index=jQueryElement.parent().parent().index();
+
+    array.splice(index,1);
+    jQueryElement.parent().parent().remove();
+    this.UpdateProperty();
+}
+
+ArrayProperty.prototype.CloneItem=function(jQueryElement)
+{
+    var array=this.GetPropertyCurrentValue();
+    var index=jQueryElement.parent().parent().index();
+    var jQueryToClone=jQueryElement.parent().parent();
+    var data=this.GetRowData(jQueryToClone);
+
+    if(this.AdditionalInformation.SelectorType=='radio')
+        data.sel='n';
+
+    var jQueryNewRow=rnJQuery(this.CreateListRow(false,data));
+    jQueryToClone.after(jQueryNewRow);
+
+    var self=this;
+    jQueryNewRow.find('.cloneArrayItem').click(function(){self.CloneItem(rnJQuery(this))});
+    jQueryNewRow.find('.deleteArrayItem').click(function(){self.DeleteItem(rnJQuery(this))});
+    jQueryNewRow.find('input[type=text],input[type=radio],input[type=checkbox]').change(function(){self.UpdateProperty();});
+
+    this.UpdateProperty();
+
+}
+
+
+ArrayProperty.prototype.CreateListRow=function(isFirst,item)
+{
+    var row= '<tr>' +
+            '       <td style="text-align: center;">'+this.GetSelector(item)+'</td>' +
+            '       <td><input type="text" class="itemText" value="'+item.label+'"/></td>' +
+            '       <td><input type="text" class="itemValue" style="text-align: right; width: 50px;" value="'+item.value+'"/></td>' +
+            '       <td style="text-align: center;vertical-align: middle;"><img style="cursor: hand;cursor: pointer; width:15px;height:15px;" class="cloneArrayItem" src="http://localhost/rednao/wp-content/plugins/smart-forms/images/clone.png" title="Clone"></td>';
+            if(!isFirst)
+                row+=' <td style="text-align: center;vertical-align: middle;"><img style="cursor: hand; cursor: pointer;width:15px;height:15px;" class="deleteArrayItem" src="http://localhost/rednao/wp-content/plugins/smart-forms/images/delete.png" title="Delete"></td>';
+            row+='</tr>';
+    return row;
+}
+
+ArrayProperty.prototype.GetSelector=function(item)
+{
+    var selected='';
+    if(RedNaoGetValueOrEmpty(item.sel)=='y')
+        selected='checked="checked"';
+    if(this.AdditionalInformation.SelectorType=='radio')
+        return '<input class="itemSel" type="radio" '+selected+' name="propertySelector"/>';
+    else
+        return '<input class="itemSel" type="checkbox" '+selected+'/>';
 }
 
 ArrayProperty.prototype.UpdateProperty=function()
 {
-    var newValue=rnJQuery("#"+this.PropertyId).val();;
-
-    var valueArray=newValue.split(/\r\n|\r|\n/g);
-
     var processedValueArray=new Array();
-
-    for(var i=0;i<valueArray.length;i++)
-    {
-        if(!valueArray[i])
-            break;
-
-        var text=valueArray[i];
-        var splittedValue=valueArray[i].split(';');
-        var amount=0;
-
-        if(splittedValue.length==2)
+    var headerRow=true;
+    var self=this;
+    var rows=this.ItemsList.find('tr').each(
+        function()
         {
-
-            try
+            if(headerRow)
             {
-                amount=parseFloat(splittedValue[1]);
-            }catch(exception)
-            {
-                amount=0;
+                headerRow=false;
+                return;
             }
+
+            var jQueryRow=rnJQuery(this);
+            var row=self.GetRowData(jQueryRow);
+            processedValueArray.push(row);
         }
-
-        processedValueArray.push({label:splittedValue[0],value:amount});
-    }
-
+    );
 
     this.Manipulator.SetValue(this.PropertiesObject,this.PropertyName, processedValueArray,this.AdditionalInformation);
     this.RefreshElement();
 }
 
 
-
+ArrayProperty.prototype.GetRowData=function(jQueryRow)
+{
+    return {label:jQueryRow.find('.itemText').val(),value:jQueryRow.find('.itemValue').val(),sel:(jQueryRow.find('.itemSel').is(':checked')?'y':'n')};
+}
 
 /************************************************************************************* Id Property ***************************************************************************************************/
 

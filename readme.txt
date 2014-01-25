@@ -54,6 +54,9 @@ N/A
 9. Calculated field interface
 10. Example of date field
 == Changelog ==
+= Smart Forms 0.8.5 =
+* Improving selection of options in the checkbox, radio buttons and select boxes
+
 = Smart Forms 0.8 =
 * Adding css export of submitted forms to entries screen
 = Smart Forms 0.7 =

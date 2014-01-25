@@ -938,9 +938,15 @@ function MultipleRadioElement(options)
     {
         this.Options.Label="Multiple Radio";
         this.Options.ClassName="rednaomultipleradios";
-        this.Options.Options=new Array({label:'Option 1',value:0},{label:'Option 2',value:0},{label:'Option 3',value:0});
+        this.Options.Options=new Array({label:'Option 1',value:0,sel:'y'},{label:'Option 2',value:0,sel:'n'},{label:'Option 3',value:0,sel:'n'});
     }else
     {
+        if(this.Options.Options.length>0&&typeof this.Options.Options[0].sel=='undefined')
+        {
+            this.Options.Options[0].sel='y';
+            for(var i=1;i<this.Options.Options.length;i++)
+                this.Options.Options[i].sel='n';
+        }
         if(this.Options.Options.length>0&&typeof this.Options.Options[i]=='string')
         {
             var aux=new Array();
@@ -962,7 +968,7 @@ MultipleRadioElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new ArrayProperty(this,this.Options,"Options","Options",{ManipulatorType:'basic'}));
+    this.Properties.push(new ArrayProperty(this,this.Options,"Options","Options",{ManipulatorType:'basic',SelectorType:'radio'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
 
 
@@ -975,9 +981,14 @@ MultipleRadioElement.prototype.GenerateInlineElement=function()
     var html=  '<div class="rednao_label_container"><label class="rednao_control_label">'+this.Options.Label+'</label></div>\
         <div class="redNaoControls">';
 
-    var checked='checked="checked"';
+    var checked='';
     for(var i=0;i<this.Options.Options.length;i++)
     {
+        if(this.Options.Options[i].sel=='y')
+            checked='checked="checked"';
+        else
+            checked='';
+
         html+='<label class="redNaoRadio" for="radios-0">\
                     <input '+checked+' class="redNaoInputRadio" type="radio" name="'+this.GetPropertyName()+'"  value="'+this.Options.Options[i].value+'" '+checked+'>'+rnJQuery.trim(this.Options.Options[i].label)+'</input>\
                 </label>';
@@ -1039,9 +1050,15 @@ function MultipleCheckBoxElement(options)
     {
         this.Options.Label="Multiple Checkbox";
         this.Options.ClassName="rednaomultiplecheckboxes";
-        this.Options.Options=new Array({label:'Check 1',value:0},{label:'Check 2',value:0},{label:'Check 3',value:0});
+        this.Options.Options=new Array({label:'Check 1',value:0,sel:'n'},{label:'Check 2',value:0,sel:'n'},{label:'Check 3',value:0,sel:'n'});
     }else
     {
+        if(this.Options.Options.length>0&&typeof this.Options.Options[0].sel=='undefined')
+        {
+            for(var i=0;i<this.Options.Options.length;i++)
+                this.Options.Options[i].sel='n';
+        }
+
         if(this.Options.Options.length>0&&typeof this.Options.Options[i]=='string')
         {
             var aux=new Array();
@@ -1075,9 +1092,14 @@ MultipleCheckBoxElement.prototype.GenerateInlineElement=function()
     var html=  '<div class="rednao_label_container"><label class="rednao_control_label">'+this.Options.Label+'</label></div>\
         <div class="redNaoControls">';
 
-    var checked='checked=checked';
+    var checked='';
     for(var i=0;i<this.Options.Options.length;i++)
     {
+        if(this.Options.Options[i].sel=='y')
+            checked='checked="checked"';
+        else
+            checked='';
+
         html+='<label class="redNaoCheckBox" for="radios-0">\
                     <input type="checkbox" class="redNaoInputCheckBox" name="'+this.GetPropertyName()+'"  value="'+this.Options.Options[i].value+'" '+checked+'/>'+this.Options.Options[i].label+'\
                 </label>';
@@ -1154,13 +1176,18 @@ function SelectBasicElement(options)
     {
         this.Options.Label="Select Basic";
         this.Options.ClassName="rednaoselectbasic";
-        this.Options.Options=new Array({label:'Option 1',value:0},{label:'Option 2',value:0},{label:'Option',value:0});
+        this.Options.Options=new Array({label:'Option 1',value:0,sel:'y'},{label:'Option 2',value:0,sel:'n'},{label:'Option',value:0,sel:'n'});
         this.SetDefaultIfUndefined('Width','');
 
     }else
     {
         this.SetDefaultIfUndefined('Width','');
-
+        if(this.Options.Options.length>0&&typeof this.Options.Options[0].sel=='undefined')
+        {
+            this.Options.Options[0].sel='y';
+            for(var i=1;i<this.Options.Options.length;i++)
+                this.Options.Options[i].sel='n';
+        }
         if(this.Options.Options.length>0&&typeof this.Options.Options[i]=='string')
         {
             var aux=new Array();
@@ -1182,7 +1209,7 @@ SelectBasicElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new ArrayProperty(this,this.Options,"Options","Options",{ManipulatorType:'basic'}));
+    this.Properties.push(new ArrayProperty(this,this.Options,"Options","Options",{ManipulatorType:'basic',SelectorType:'radio'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
 
@@ -1201,9 +1228,14 @@ SelectBasicElement.prototype.GenerateInlineElement=function()
         <div class="redNaoControls">\
         <select style="'+additionalStyle+'" name="'+this.GetPropertyName()+'" class="redNaoSelect">';
 
-    var selected='selected="selected"';
+    var selected='';
     for(var i=0;i<this.Options.Options.length;i++)
     {
+        if(this.Options.Options[i].sel=='y')
+            selected='selected="selected"';
+        else
+            selected='';
+
         html+='<option   value="'+this.Options.Options[i].value+'" '+selected+'>'+this.Options.Options[i].label+'</opton>'
 
         selected="";

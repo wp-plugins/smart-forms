@@ -5,7 +5,7 @@
  * Description: Place diferent form of donations on your blog...
  * Author: RedNao
  * Author URI: http://rednao.com
- * Version: 0.8
+ * Version: 0.8.5
  * Text Domain: SmartDonations
  * Domain Path: /languages/
  * Network: true
