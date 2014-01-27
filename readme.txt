@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: contact form, contact, form, forms, contact form plugin, contact form builder, contact form with recaptcha, feedback form, contact us, request form, contact button, drag and drop contact form, file upload contact form, contact form to email, contact form payments, contact for paypal, form solution, form builder, feedback, easy contact form, helpdesk
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 0.8.5
+Stable tag: 0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,10 @@ N/A
 9. Calculated field interface
 10. Example of date field
 == Changelog ==
+= Smart Forms 0.9 =
+* Added the ability to clone an existing form, so you don't have to do everything again if you want to create similar forms.
+* Added a wishlist/support page
+
 = Smart Forms 0.8.5 =
 * Improving selection of options in the checkbox, radio buttons and select boxes
 

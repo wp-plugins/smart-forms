@@ -11,15 +11,18 @@ if (isset($_GET['action'])) {
     $action=$_GET['action'];
 }else
     $action="";
-if($action==="add"){
+if($action==="add"||$action=="clone"){
     global $wpdb;
     $result=$wpdb->get_var("SELECT count(*) FROM ".SMART_FORMS_TABLE_NAME);
     if($result>=3&&!smart_forms_check_license_with_options($error))
     {
         smart_forms_load_license_manager("Sorry, this version support up to three forms only");
     }else{
-        include(SMART_FORMS_DIR.'main_screens/smart-forms-add-new.php');
-        return;
+        if($action==="add")
+        {
+            include(SMART_FORMS_DIR.'main_screens/smart-forms-add-new.php');
+            return;
+        }
     }
 
 }
@@ -47,7 +50,7 @@ if($action!=null&&$form_id!=null)
         delete_transient("rednao_smart_forms_$form_id");
     }
 
-    if($action==="edit")
+    if($action==="edit"||$action=="clone")
     {
         $result=$wpdb->get_results($wpdb->prepare("SELECT * FROM ".SMART_FORMS_TABLE_NAME." WHERE form_id=%d",$form_id));
 
@@ -76,7 +79,7 @@ if($action!=null&&$form_id!=null)
                             var smartFormClientOptions=%s
                         </script>
 EOF;
-            echo sprintf($script,$result->form_id,$formOptions,$elementOptions,$formClientOptions);
+            echo sprintf($script,($action=="clone"?"0":$result->form_id),$formOptions,$elementOptions,$formClientOptions);
             include(SMART_FORMS_DIR.'main_screens/smart-forms-add-new.php');
             return;
 
@@ -124,6 +127,7 @@ class RednaoForms extends WP_List_Table
         $actions = array(
             __('edit')      => sprintf('<a href="?page=%s&id=%s&action=%s">Edit</a>',$_REQUEST['page'],$item->form_id,'edit'),
             __('delete')    => sprintf('<a href="?page=%s&id=%s&action=%s">Delete</a>',$_REQUEST['page'],$item->form_id,'delete'),
+            __('clone')    => sprintf('<a href="?page=%s&id=%s&action=%s">Clone</a>',$_REQUEST['page'],$item->form_id,'clone'),
         );
 
         return sprintf('%1$s %2$s', $item->form_name, $this->row_actions($actions) );
