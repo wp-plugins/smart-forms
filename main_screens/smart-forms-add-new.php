@@ -10,6 +10,8 @@
 if(!defined('ABSPATH'))
     die('Forbidden');
 
+
+
 smart_forms_load_license_manager("");
 
 wp_enqueue_script('jquery');
@@ -62,6 +64,7 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
     <a class='nav-tab' id="smartFormsJavascriptTab" onclick="SmartFormsAddNewVar.GoToJavascript();">Javascript</a>
     <a class='nav-tab' id="smartFormsAfterSubmitTab" onclick="SmartFormsAddNewVar.GoToAfterSubmit();">After Submit</a>
     <a class='nav-tab' style="display: none;" id="smartFormsCSSTab" onclick="SmartFormsAddNewVar.GoToCSS();">CSS</a>
+
 </h2>
 <div id="redNaoGeneralInfo">
 <div id="redNaoEmailEditor" title="Email" style="display: none;">

@@ -902,7 +902,7 @@ TextAreaElement.prototype.GenerateInlineElement=function()
 
 TextAreaElement.prototype.GetValueString=function()
 {
-    return  {value:rnJQuery('#'+this.Id+ ' .redNaoTextArea').val()};
+    return  {value:rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').val()};
 }
 
 TextAreaElement.prototype.GetValuePath=function()
@@ -913,9 +913,9 @@ TextAreaElement.prototype.GetValuePath=function()
 
 TextAreaElement.prototype.IsValid=function()
 {
-    if(rnJQuery('#'+this.Id+ ' .redNaoTextArea').val()==this.Options.DefaultText&&this.Options.IsRequired=='y')
+    if(rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').val()==""&&this.Options.IsRequired=='y')
     {
-        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextAreaInput').addClass('redNaoInvalid');
         return false;
     }
     return true;
@@ -924,7 +924,7 @@ TextAreaElement.prototype.IsValid=function()
 TextAreaElement.prototype.GenerationCompleted=function()
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoTextArea').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').change(function(){self.FirePropertyChanged(self.GetValueString());});
 }
 
 /*************************************************************************************Multiple Radio Element ***************************************************************************************************/

@@ -5,7 +5,7 @@
  * Description: Place diferent form of donations on your blog...
  * Author: RedNao
  * Author URI: http://rednao.com
- * Version: 0.9
+ * Version: 0.9.1
  * Text Domain: SmartDonations
  * Domain Path: /languages/
  * Network: true
@@ -40,6 +40,7 @@
  */
 
 require_once('smart-forms-config.php');
+require_once(SMART_FORMS_DIR.'integration/smart-forms-integration-ajax.php');
 require_once('smart-forms-ajax.php');
 require_once(SMART_FORMS_DIR.'widgets/smart-form-widget.php');
 
@@ -54,6 +55,12 @@ add_action( 'wp_ajax_rednao_smart_forms_save_form_values','rednao_smart_forms_sa
 add_action( 'wp_ajax_nopriv_rednao_smart_forms_save_form_values','rednao_smart_forms_save_form_values');
 add_action( 'wp_ajax_rednao_smart_form_send_test_email','rednao_smart_form_send_test_email');
 add_action('wp_ajax_rednao_smart_forms_submit_license','rednao_smart_forms_submit_license');
+
+//integration
+
+add_action('wp_ajax_rednao_smart_forms_get_campaigns','rednao_smart_forms_get_campaigns');
+
+
 
 add_action('admin_init','rednao_smart_forms_plugin_was_activated');
 register_activation_hook(__FILE__,'rednao_smart_forms_plugin_was_activated');

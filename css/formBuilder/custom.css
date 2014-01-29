@@ -210,11 +210,12 @@
     width:100% !important;
 }
 
-.rednaoFormContainer .redNaoInputText.redNaoInvalid{
+.rednaoFormContainer .redNaoInputText.redNaoInvalid,.rednaoFormContainer .redNaoTextAreaInput.redNaoInvalid{
     border: 1px solid red !important;
 
 
 }
+
 
 .rednaoFormContainer .redNaoInputText.redNaoDisabledElement{
     background-color: #f5f5f5 !important;
