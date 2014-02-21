@@ -66,7 +66,7 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
     <a class='nav-tab' style="display: none;" id="smartFormsCSSTab" onclick="SmartFormsAddNewVar.GoToSmartDonations();">CSS</a>
 
     <?php
-        if(has_smart_donations_license())
+        if(has_smart_donations_license_and_is_active())
         {
             wp_enqueue_script('smart-forms-donation-elements',SMART_FORMS_DIR_URL.'js/integration/smart-donations-integration.js',array('smart-forms-formelements','smart-forms-add-new'));
             ?>
@@ -312,7 +312,7 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
                                             <li><a id="atabselect" class="formtab">Advanced</a></li>
                                             <li><a id="atabradioscheckboxes" class="formtab">Multiple Choices</a></li>
 
-                                            <li><a id="atabbuttons" class="formtab">Paypal</a></li>
+                                            <li><a id="atabbuttons" class="formtab" <?php echo (has_smart_donations_license_and_is_active()?"":'style="display: none"');?> >Paypal</a></li>
                                         </ul>
                                         <div class="form-horizontal" id="components">
                                             <fieldset  >

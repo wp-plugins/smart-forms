@@ -20,8 +20,12 @@ function sf_smart_donations_check_license($email,$key,&$error,$isNew)
     return false;
 }
 
-function has_smart_donations_license()
+function has_smart_donations_license_and_is_active()
 {
+	if(!is_plugin_active("smart-donations/smartdonations.php"))
+		return false;
+
+
     if(get_transient("smart_donations_check_again"))
         return true;
     $email=get_option('smart_donations_email');
