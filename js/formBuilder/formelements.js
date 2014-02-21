@@ -36,8 +36,6 @@ function RedNaoCreateFormElementByName(elementName,options)
 {
     if(elementName=='rednaotextinput')
         return new TextInputElement(options);
-    if(elementName=='rednaodonationamount')
-        return new DonationAmountElement(options);
     if(elementName=='rednaoprependedtext')
         return new PrependTexElement(options);
     if(elementName=='rednaoappendedtext')
@@ -54,6 +52,8 @@ function RedNaoCreateFormElementByName(elementName,options)
         return new MultipleCheckBoxElement(options);
     if(elementName=='rednaoselectbasic')
         return new SelectBasicElement(options);
+    if(elementName=='rednaodonationamount')
+        return new DonationAmountElement(options);
 
     if(elementName=='rednaofilebutton')
         return 'rednaofilebutton';
@@ -408,89 +408,6 @@ TextInputElement.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged(self.GetValueString());});
-}
-
-/************************************************************************************* Donation Amount ***************************************************************************************************/
-
-function DonationAmountElement(options)
-{
-    FormElementBase.call(this,options);
-    this.Title="Donation Amount";
-
-    if(this.IsNew)
-    {
-        this.Options.ClassName="rednaodonationamount";
-        this.Options.Label="Donation Amount";
-        this.Options.Placeholder="Amount";
-        this.Options.DefaultValue=0;
-        this.Options.Disabled='n';
-    }
-
-    if(typeof  this.Options.DefaultValue=='undefined')
-        this.Options.DefaultValue=0;
-
-
-
-
-
-}
-
-DonationAmountElement.prototype=Object.create(FormElementBase.prototype);
-
-DonationAmountElement.prototype.CreateProperties=function()
-{
-    this.Properties.push(new IdProperty(this,this.Options));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"DefaultValue","Default Value",{ManipulatorType:'basic'}));
-
-    this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
-    this.Properties.push(new CheckBoxProperty(this,this.Options,"Disabled","Read Only",{ManipulatorType:'basic'}));
-
-
-
-}
-
-DonationAmountElement.prototype.GenerateInlineElement=function()
-{
-
-    return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
-                <div class="redNaoControls">\
-                    <input   type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText" value="'+this.Options.DefaultValue+'"  >'+
-        '</div>';
-}
-
-
-
-DonationAmountElement.prototype.GetValueString=function()
-{
-    try
-    {
-        this.amount=parseFloat(rnJQuery('#'+this.Id+ ' .redNaoInputText').val());
-    }catch(exception)
-    {
-
-    }
-
-    return  encodeURI(this.Options.Label)+"="+encodeURI(rnJQuery('#'+this.Id+ ' .redNaoInputText').val());
-}
-
-DonationAmountElement.prototype.GenerationCompleted=function()
-{
-    if(this.Options.Disabled=='y')
-    {
-        rnJQuery('#'+this.Id).find('.redNaoInputText').attr('readonly','readonly').css('background-color','#eeeeee');
-    }
-}
-
-DonationAmountElement.prototype.IsValid=function()
-{
-    try{
-        var number=parseFloat(rnJQuery('#'+this.Id+ ' .redNaoInputText').val());
-        return number>0;
-    }catch(exception)
-    {
-        return false;
-    }
 }
 
 /************************************************************************************* Prepend Text Element ***************************************************************************************************/
@@ -1314,7 +1231,11 @@ DonationButtonElement.prototype.CreateProperties=function()
 
 DonationButtonElement.prototype.GenerateInlineElement=function()
 {
-    return '<div class="redNaoControls"><input type="image" class="redNaoDonationButton" src="'+this.Options.Image+'" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"></div>';
+    return '<div class="rednao_label_container"></div>\
+            <div class="redNaoControls">' +
+            '<div class="redNaoControls">' +
+                '<input type="image" class="redNaoDonationButton" src="'+this.Options.Image+'" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">' +
+           '</div>';
 }
 
 
@@ -1369,7 +1290,11 @@ RecurrenceElement.prototype.CreateProperties=function()
 
 RecurrenceElement.prototype.GenerateInlineElement=function()
 {
-    var html= '<div class="rednao_label_container"><label class="rednao_control_label">'+this.Options.Label+'</label></div>\<div class="redNaoControls"><select class="redNaoSelect redNaoRecurrence">';
+    var html= '<div class="rednao_label_container">' +
+                    '<label class="rednao_control_label">'+this.Options.Label+'</label>' +
+                    '</div>' +
+              '<div class="redNaoControls">' +
+              '<select class="redNaoSelect redNaoRecurrence">';
     var selected='selected="selected"';
 
     if(this.Options.ShowOneTime=='y')
@@ -1412,10 +1337,15 @@ RecurrenceElement.prototype.GenerateInlineElement=function()
 RecurrenceElement.prototype.GetValueString=function()
 {
     var jQueryElement=rnJQuery('#'+this.Id+ ' .redNaoSelect option:selected');
-    return  encodeURI(this.Options.Label)+"="+encodeURI(jQueryElement.text());
+    return {value:jQueryElement.val()};
 
 }
 
+
+RecurrenceElement.prototype.GetValuePath=function()
+{
+    return 'formData.'+this.Id+'.value';
+}
 
 
 
@@ -2265,4 +2195,89 @@ RedNaoCaptcha.prototype.GenerationCompleted=function()
             }
         );
     });
+}
+
+
+
+/************************************************************************************* Donation Amount ***************************************************************************************************/
+
+function DonationAmountElement(options)
+{
+    FormElementBase.call(this,options);
+    this.Title="Donation Amount";
+
+    if(this.IsNew)
+    {
+        this.Options.ClassName="rednaodonationamount";
+        this.Options.Label="Donation Amount";
+        this.Options.Placeholder="Amount";
+        this.Options.DefaultValue="0";
+        this.Options.Disabled='n';
+    }
+
+    if(typeof  this.Options.DefaultValue=='undefined')
+        this.Options.DefaultValue=0;
+
+
+
+
+
+}
+
+DonationAmountElement.prototype=Object.create(FormElementBase.prototype);
+
+DonationAmountElement.prototype.CreateProperties=function()
+{
+    this.Properties.push(new IdProperty(this,this.Options));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"DefaultValue","Default Value",{ManipulatorType:'basic'}));
+
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"Disabled","Read Only",{ManipulatorType:'basic'}));
+
+
+
+}
+
+DonationAmountElement.prototype.GenerateInlineElement=function()
+{
+
+    return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
+                <div class="redNaoControls">\
+                    <input  class="redNaoInputText redNaoNumber" type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText" value="'+this.Options.DefaultValue+'"  >'+
+        '</div>';
+}
+
+
+
+DonationAmountElement.prototype.GetValueString=function()
+{
+    try
+    {
+        this.amount=parseFloat(rnJQuery('#'+this.Id+ ' .redNaoInputText').val());
+    }catch(exception)
+    {
+
+    }
+
+    return  encodeURI(this.Options.Label)+"="+encodeURI(rnJQuery('#'+this.Id+ ' .redNaoInputText').val());
+}
+
+DonationAmountElement.prototype.GenerationCompleted=function()
+{
+    if(this.Options.Disabled=='y')
+    {
+        rnJQuery('#'+this.Id).find('.redNaoInputText').attr('readonly','readonly').css('background-color','#eeeeee');
+    }
+}
+
+DonationAmountElement.prototype.IsValid=function()
+{
+    try{
+        var number=parseFloat(rnJQuery('#'+this.Id+ ' .redNaoInputText').val());
+        return number>0;
+    }catch(exception)
+    {
+        return false;
+    }
 }

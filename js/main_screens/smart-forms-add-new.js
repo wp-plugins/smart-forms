@@ -1,3 +1,6 @@
+var smartFormsIntegrationFormula={};
+smartFormsIntegrationFormula.Formulas={};
+
 function SmartFormsAddNew()
 {
     if(typeof smartFormId!='undefined')
@@ -40,7 +43,8 @@ function SmartFormsAddNew()
             rnJQuery('#redNaoRedirectToCB').attr('checked','checked');
         if(RedNaoGetValueOrEmpty(smartFormClientOptions.alert_message_cb)=='y')
             rnJQuery('#redNaoAlertMessageCB').attr('checked','checked');
-
+        if(RedNaoGetValueOrNull(smartFormClientOptions.Formulas)!=null)
+            smartFormsIntegrationFormula.Formulas=smartFormClientOptions.Formulas;
     }
 
 
@@ -128,11 +132,47 @@ SmartFormsAddNew.prototype.FillEmailData=function(formOptions)
         formOptions.EmailText=this.EmailText;
 }
 
+SmartFormsAddNew.prototype.ValidateFormBeforeSaving=function()
+{
+    var formElements=this.FormBuilder.RedNaoFormElements;
+    for(var i=0;i<formElements.length;i++)
+    {
+        if(formElements[i].Options.ClassName=="rednaodonationbutton")
+        {
+            if(rnJQuery('#redNaoCampaign').val()=='')
+            {
+                alert('If you are going to use a donation button, please select a campaign before saving');
+                this.GoToSmartDonations();
+                return false;
+            }
+
+            if(rnJQuery('#smartDonationsEmail').val()=='')
+            {
+                alert('Please select a paypal donation email before saving');
+                this.GoToSmartDonations();
+                return false;
+            }
+
+            if(typeof smartFormsIntegrationFormula.Formulas.DonationFormula=='undefined'||smartFormsIntegrationFormula.Formulas.DonationFormula=='')
+            {
+                alert('Please setup a donation formula before saving');
+                this.GoToSmartDonations();
+                return false;
+            }
+        }
+
+    }
+
+    return true;
+}
+
 SmartFormsAddNew.prototype.SaveForm=function(e)
 {
     e.preventDefault();
     e.stopPropagation();
 
+    if(!this.ValidateFormBeforeSaving())
+        return;
 
     var formOptions={};
     formOptions.Name=rnJQuery('#smartFormName').val();
@@ -154,13 +194,14 @@ SmartFormsAddNew.prototype.SaveForm=function(e)
         }
     }
     formOptions.UsesCaptcha=usesCaptcha;
+    formOptions.RedNaoSendThankYouEmail=(rnJQuery('#redNaoSendThankYouEmail').is(':checked')?'y':'n');
 
     var data={};
     data.id=this.id;
     data.action="rednao_smart_forms_save";
     data.form_options=JSON.stringify(formOptions);
     data.element_options=JSON.stringify(this.FormBuilder.GetFormInformation());
-
+    data.donation_email=rnJQuery('#smartDonationsEmail').val();
 
 
     data.client_form_options=JSON.stringify(this.GetClientFormOptions(usesCaptcha));
@@ -185,8 +226,15 @@ SmartFormsAddNew.prototype.GetClientFormOptions=function(usesCaptcha)
         alert_message:rnJQuery('#alertMessageInput').val(),
         alert_message_cb:(rnJQuery('#redNaoAlertMessageCB').is(':checked')?'y':'n'),
         redirect_to:rnJQuery('#redirectToInput').val(),
-        redirect_to_cb:(rnJQuery('#redNaoRedirectToCB').is(':checked')?'y':'n')
+        redirect_to_cb:(rnJQuery('#redNaoRedirectToCB').is(':checked')?'y':'n'),
+        Campaign:rnJQuery('#redNaoCampaign').val(),
+        PayPalEmail:rnJQuery('#smartDonationsEmail').val(),
+        PayPalDescription:rnJQuery('#smartDonationsDescription').val(),
+        PayPalCurrency:rnJQuery('#smartDonationsCurrencyDropDown').val(),
+        Formulas:smartFormsIntegrationFormula.Formulas
     };
+
+
 }
 
 SmartFormsAddNew.prototype.CloseTag=function()
@@ -225,7 +273,7 @@ SmartFormsAddNew.prototype.OpenTag=function()
 SmartFormsAddNew.prototype.ActivateTab=function(activationName)
 {
     rnJQuery('#smartFormsTopTab a').removeClass("nav-tab-active");
-    rnJQuery('#smartFormsGeneralDiv,#smartFormsJavascriptDiv,#smartFormsCSSDiv,#smartFormsAfterSubmitDiv').css('display','none');
+    rnJQuery('#smartFormsGeneralDiv,#smartFormsJavascriptDiv,#smartFormsCSSDiv,#smartFormsAfterSubmitDiv,#smartDonationsDiv').css('display','none');
 
     rnJQuery('#'+activationName+'Tab').addClass('nav-tab-active');
     rnJQuery('#'+activationName+'Div').css('display','block');

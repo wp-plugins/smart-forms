@@ -10,7 +10,7 @@
 if(!defined('ABSPATH'))
     die('Forbidden');
 
-
+require_once(SMART_FORMS_DIR.'integration/smart-donations-integration-license-helper.php');
 
 smart_forms_load_license_manager("");
 
@@ -33,7 +33,7 @@ wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/sma
 
 
 
-//wp_enqueue_script('smart-forms-mce',SMART_FORMS_DIR_URL.'js/tn_mce/tinymce.min.js',array('smart-forms-add-new'));
+
 wp_enqueue_script('email-editor',SMART_FORMS_DIR_URL.'js/editors/email-editor.js',array('isolated-slider'));
 
 wp_enqueue_script('json2');
@@ -63,8 +63,17 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
     <a class='nav-tab nav-tab-active' id="smartFormsGeneralTab"  onclick="SmartFormsAddNewVar.GoToGeneral();">General Info</a>
     <a class='nav-tab' id="smartFormsJavascriptTab" onclick="SmartFormsAddNewVar.GoToJavascript();">Javascript</a>
     <a class='nav-tab' id="smartFormsAfterSubmitTab" onclick="SmartFormsAddNewVar.GoToAfterSubmit();">After Submit</a>
-    <a class='nav-tab' style="display: none;" id="smartFormsCSSTab" onclick="SmartFormsAddNewVar.GoToCSS();">CSS</a>
+    <a class='nav-tab' style="display: none;" id="smartFormsCSSTab" onclick="SmartFormsAddNewVar.GoToSmartDonations();">CSS</a>
 
+    <?php
+        if(has_smart_donations_license())
+        {
+            wp_enqueue_script('smart-forms-donation-elements',SMART_FORMS_DIR_URL.'js/integration/smart-donations-integration.js',array('smart-forms-formelements','smart-forms-add-new'));
+            ?>
+            <a class='nav-tab' id="smartDonationsTab" onclick="SmartFormsAddNewVar.GoToSmartDonations();">Smart Donations</a>
+        <?php
+        }
+    ?>
 </h2>
 <div id="redNaoGeneralInfo">
 <div id="redNaoEmailEditor" title="Email" style="display: none;">
@@ -100,7 +109,7 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
 
         </div>
 
-        <div style="clear: both;"><button  onclick="RedNaoFormulaWindowVar.Validate();">Validate</button></div>
+        <div style="clear: both;"><button  onclick="RedNaoFormulaWindowVar.Validate();">Validate</button> <input type="checkbox" id="smartFormsHumanReadableCheck" style="vertical-align: middle;display: none;"/> <span style="display: none">Show field id</span></div>
     </div>
 
 
@@ -137,6 +146,40 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
 
 <div id="smartFormsCSSDiv" style="display: none">
     <textarea id="smartFormsCSSText"></textarea>
+</div>
+
+<div id="smartDonationsDiv" style="display: none">
+    <table style="width: 100%">
+        <tr>
+            <td style="text-align: right;width: 200px;">Campaign</td><td> <select id="redNaoCampaign"/></td>
+        </tr>
+        <tr >
+            <td style="text-align: right" ><span class="smartDonationsConfigurationInfo">PayPal email</span></td><td class="smartDonationsConfigurationInfo"> <input type="text" id="smartDonationsEmail" />  <span  class="description smartDonationsConfigurationInfoDesc" style="margin-bottom:5px;display: inline;"> <?php echo __("*The email of your paypal account"); ?></span></td>
+        </tr>
+        <tr >
+            <td style="text-align: right"><span class="smartDonationsConfigurationInfo">Donation description</span></td><td class="smartDonationsConfigurationInfo"> <input type="text" id="smartDonationsDescription"/><span class="description smartDonationsConfigurationInfoDesc" style="margin-bottom:5px;display: inline;"> <?php echo __("*This description is going to be shown in the Paypal transaction page "); ?><a href="<?php echo SMART_FORMS_DIR_URL?>images/paypal_transaction_page.png" target="_blank"><?php echo __("(Screenshot)")?></a></span></td>
+        </tr>
+
+
+
+        <tr >
+            <td style="text-align: right"><span class="smartDonationsConfigurationInfo">Currency</span></td><td> <select class="smartDonationsConfigurationInfo" id="smartDonationsCurrencyDropDown" name="donation_currency"></select></td>
+        </tr>
+
+
+        <tr >
+       <?php /*     <td style="text-align: right"><span class="smartDonationsConfigurationInfo">Send thank you email</span></td><td class="smartDonationsConfigurationInfo"> <input  type="checkbox" id="redNaoSendThankYouEmail" ><span  class="description smartDonationsConfigurationInfoDesc" style="margin-bottom:5px;display: inline;"> <?php echo __("*If you check this box the thank you email is going to be send to the donators "); ?> <a href="<?php echo SMART_FORMS_DIR_URL?>images/campaign.png" target="_blank"><?php echo __("(Screenshot)")?></a></span></td> */?>
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+                <button class="smartDonationsConfigurationInfo" id="setUpDonationFormulaButton">Setup donation formula</button>
+            </td>
+        </tr>
+
+
+    </table>
 </div>
 
 <div id="smartFormsAfterSubmitDiv" style="display: none;padding: 10px">
@@ -269,7 +312,7 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
                                             <li><a id="atabselect" class="formtab">Advanced</a></li>
                                             <li><a id="atabradioscheckboxes" class="formtab">Multiple Choices</a></li>
 
-                                         <!--   <li><a id="atabbuttons" class="formtab">Paypal</a></li>-->
+                                            <li><a id="atabbuttons" class="formtab">Paypal</a></li>
                                         </ul>
                                         <div class="form-horizontal" id="components">
                                             <fieldset  >
@@ -366,21 +409,18 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
 
                                                     </div>
 
-                                              <!--      <div class="tab-pane rednaotablist" id="tabbuttons"  style="display: none;">
+                                                   <div class="tab-pane rednaotablist" id="tabbuttons"  style="display: none;">
                                                         <div class="component">
                                                             <div class="control-group rednaodonationrecurrence">
                                                             </div>
                                                         </div>
-                                                        <div class="component">
-                                                            <div class="control-group rednaodonationamount">
-                                                            </div>
-                                                        </div>
+                                                       
                                                         <div class="component">
                                                             <div class="control-group rednaodonationbutton">
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>-->
+                                                </div>
                                             </fieldset>
                                         </div>
                                     </div>

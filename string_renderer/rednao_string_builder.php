@@ -60,6 +60,9 @@ class rednao_string_builder {
             case "rednaophone":
                 $renderer=$this->GetRenderer("rednao_phone_renderer");
                 break;
+			case "rednaodonationrecurrence":
+				$renderer=$this->GetRenderer("rednao_donation_recurrence");
+				break;
         }
 
       return $renderer->GetString($formElement,$entry);

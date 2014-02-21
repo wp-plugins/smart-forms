@@ -403,3 +403,8 @@ ul#redNaoFormulaFormFields{
 .redNaoDisabled{
     background-color: #f0f0f0 !important;
 }
+
+.smartDonationsConfigurationInfo
+{
+    display: none;
+}

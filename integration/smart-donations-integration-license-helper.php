@@ -1,12 +1,12 @@
 <?php
 
-function smart_donations_check_license($email,$key,&$error,$isNew)
+function sf_smart_donations_check_license($email,$key,&$error,$isNew)
 {
     if($email!=null||$key!=null)
     {
         if(get_transient("smart_donations_check_again"))
             return true;
-        if(smart_donations_license_is_valid($email,$key,$error))
+        if(sf_smart_donations_license_is_valid($email,$key,$error))
         {
             update_option('smart_donations_email',$email);
             update_option('smart_donations_key',$key);
@@ -26,10 +26,10 @@ function has_smart_donations_license()
         return true;
     $email=get_option('smart_donations_email');
     $key=get_option('smart_donations_key');
-    return smart_donations_check_license(($email?$email:""), ($key?$key:""),$error,false);
+    return sf_smart_donations_check_license(($email?$email:""), ($key?$key:""),$error,false);
 }
 
-function smart_donations_license_is_valid($email,$key,&$error)
+function sf_smart_donations_license_is_valid($email,$key,&$error)
 {
     $email=trim($email);
     $key=trim($key);

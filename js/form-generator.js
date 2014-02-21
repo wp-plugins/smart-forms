@@ -41,7 +41,11 @@ smartFormGenerator.prototype.CreateForm=function(){
     }
 
     var self=this;
-    this.JQueryForm.submit(function(e){e.preventDefault();e.stopPropagation();self.SaveForm();})
+    if(RedNaoGetValueOrNull(this.client_form_options.Campaign))
+        this.CreatePayPalHiddenFields();
+
+    this.SubmittingRedNaoDonationForm='n';
+    this.JQueryForm.submit(function(e){if(self.SubmittingRedNaoDonationForm=='y')return;  e.preventDefault();e.stopPropagation();self.SaveForm();})
     this.AdjustLayout();
     RedNaoFormulaManagerVar.RefreshAllFormulas();
 
@@ -51,6 +55,30 @@ smartFormGenerator.prototype.CreateForm=function(){
     {
 
     }
+}
+
+smartFormGenerator.prototype.CreatePayPalHiddenFields=function()
+{
+    if(smartDonationsSandbox=='y')
+        this.JQueryForm.attr('action','https://www.sandbox.paypal.com/cgi-bin/webscr');
+    else
+        this.JQueryForm.attr('action','https://www.paypal.com/cgi-bin/webscr');
+    this.JQueryForm.attr('method','POST');
+    this.JQueryForm.attr('target','_self');
+
+    var options=this.client_form_options;
+    this.JQueryForm.append(' <input type="hidden" name="cmd" class="smartDonationsPaypalCommand" value="_donations">\
+                <input type="hidden" name="item_name" value="'+options.PayPalDescription+'">\
+                <input type="hidden" name="business" value="'+options.PayPalEmail+'">\
+                <input type="hidden" name="lc" value="US">                       \
+                <input type="hidden" name="no_note" value="0">                    \
+                <input type="hidden" name="currency_code" value="'+options.PayPalCurrency+'">             \
+                <input type="hidden" name="bn" value="PP-DonationsBF:btn_donateCC_LG.gif:NonHostedGuest">\
+                <input type="hidden" name="custom" value=type=form&campaign_id='+options.Campaign+'&formId='+this.options.form_id+'>\
+                <input type="hidden" name="amount" class="amountToDonate" value="0">\
+                <input type="hidden" name="notify_url" value="'+smartDonationsRootPath+'ipn/rednao_paypal_ipn.php">'
+        );
+
 }
 
 smartFormGenerator.prototype.AdjustLayout=function()
@@ -182,15 +210,6 @@ smartFormGenerator.prototype.SaveForm=function()
         return;
     }
 
-    if(this.IsRecurrentPayment(this.GetRootContainer().find('form')))
-    {
-        if(amount<=0)
-        {
-            alert('Please set a donation amount before proceeding');
-            return;
-        }
-    }
-
 
     if(formValues.length>0)
         formValues=formValues.substr(1);
@@ -198,6 +217,27 @@ smartFormGenerator.prototype.SaveForm=function()
 
 
 
+
+
+    if(RedNaoGetValueOrNull(this.client_form_options.Campaign))
+        this.SendToSmartDonations(formValues);
+    else
+        this.SendToSmartForms(formValues);
+
+    try{
+        rnJQuery('body, input[type="submit"]').addClass('redNaoWait');
+        this.JQueryForm.find('input[type="submit"]').attr('disabled','disabled');
+        this.JavaScriptCode.BeforeFormSubmit();
+    }catch(exception)
+    {
+
+    }
+
+
+}
+
+smartFormGenerator.prototype.SendToSmartForms=function(formValues)
+{
     var data={
         form_id:this.form_id,
         action:"rednao_smart_forms_save_form_values",
@@ -214,15 +254,6 @@ smartFormGenerator.prototype.SaveForm=function()
 
     }
 
-    try{
-        rnJQuery('body, input[type="submit"]').addClass('redNaoWait');
-        this.JQueryForm.find('input[type="submit"]').attr('disabled','disabled');
-        this.JavaScriptCode.BeforeFormSubmit();
-    }catch(exception)
-    {
-
-    }
-
     var self=this;
     rnJQuery.ajax({
         type:'POST',
@@ -235,6 +266,57 @@ smartFormGenerator.prototype.SaveForm=function()
             self.JQueryForm.find('input[type="submit"]').removeAttr('disabled');
             alert('An error occurred, please try again later');}
     });
+}
+
+smartFormGenerator.prototype.SendToSmartDonations=function(formValues)
+{
+    if(RedNaoPathExists(this.client_form_options,'Formulas.DonationFormula'))
+    {
+        var formula=new RedNaoFormula(null,this.client_form_options.Formulas.DonationFormula);
+        var donationAmount=formula.GetValueFromFormula(formValues);
+
+
+        if(donationAmount<=0)
+        {
+            this.GetRootContainer().prepend('<p class="redNaoValidationMessage" style="margin:0;padding: 0; font-style: italic; color:red;font-family:Arial;font-size:12px;">*The donation amount should be greater than zero</p>')
+            return;
+        }
+
+    }
+
+
+
+    var self=this;
+
+
+    var data={
+        action:"rednao_smart_donations_save_form_values",
+        emailToNotify:this.emailToNotify,
+        formString:JSON.stringify(formValues)
+    };
+
+    rnJQuery.post(ajaxurl,data,function(data){
+        if(data.status=="success")
+        {
+            self.JQueryForm.find('.amountToDonate').val(donationAmount);
+            self.JQueryForm.find('input[name=custom]').val(encodeURI('type=form&campaign_id='+self.client_form_options.Campaign+"&formId="+data.randomString+'&sformid='+self.form_id));
+            if(self.JQueryForm.find('.redNaoRecurrence').length>0&&self.JQueryForm.find('.redNaoRecurrence').find(':selected').val()!='OT')
+            {
+                self.JQueryForm.find('.amountToDonate').attr('name','a3');
+                self.JQueryForm.find('.smartDonationsPaypalCommand').val('_xclick-subscriptions');
+                self.JQueryForm.append('<input type="hidden" class="redNaoRecurrenceField" name="src" value="1"><input type="hidden" class="redNaoRecurrenceField"name="p3" value="1"><input type="hidden" name="t3" value="'+self.JQueryForm.find('.redNaoRecurrence').find(':selected').val()+'">');
+            }
+            self.SubmittingRedNaoDonationForm='y';
+            self.JQueryForm.submit();
+
+
+        }else
+        {
+            alert("An error occured, please try again");
+        }
+
+        },"json");
+
 }
 
 smartFormGenerator.prototype.SaveCompleted=function(result){

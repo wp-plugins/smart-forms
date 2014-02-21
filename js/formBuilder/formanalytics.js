@@ -10,6 +10,8 @@ function RedNaoCreateColumn(options)
         return RedNaoTextInputColumn(options);
     if(elementName=='rednaoemail')
         return RedNaoTextInputColumn(options);
+    if(elementName=='rednaodonationrecurrence')
+        return RedNaoRecurrenceColumn(options);
 
 
     if(elementName=='rednaoprependedcheckbox')
@@ -62,6 +64,38 @@ function RedNaoTextInputColumn(options)
         if(data==null)
             return '';
         return data.value;
+        }catch(exception)
+        {
+            return '';
+        }
+    }};
+}
+
+function RedNaoRecurrenceColumn(options)
+{
+    return {"name":options.Label,"index":options.Id,formatter: function (cellvalue, cellOptions, rowObject)
+    {
+        try{
+            var data=GetObjectOrNull(rowObject,cellOptions);
+            if(data==null)
+                return '';
+
+            switch (data.value)
+            {
+                case 'OT':
+                    return 'One time';
+                case 'D':
+                    return 'Daily';
+                case 'W':
+                    return 'Weekly';
+                case 'M':
+                    return 'Monthly';
+                case 'Y':
+                    return 'Yearly';
+
+
+            }
+            return data.value;
         }catch(exception)
         {
             return '';

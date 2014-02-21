@@ -14,6 +14,7 @@ function rednao_smart_forms_save()
     $element_options=GetPostValue("element_options");
     $form_options=GetPostValue("form_options");
     $client_form_options=GetPostValue("client_form_options");
+    $donation_email=GetPostValue("donation_email");
 
     //$form_options=str_replace("\\\"","\"",$form_options);
     $formParsedValues=json_decode($form_options);
@@ -38,7 +39,8 @@ function rednao_smart_forms_save()
                     $values=array('form_name'=>$formParsedValues->Name,
                         'element_options'=>$element_options,
                         'form_options'=>$form_options,
-                        'client_form_options'=>$client_form_options
+                        'client_form_options'=>$client_form_options,
+                        'donation_email'=>$donation_email
                     );
 
                     $wpdb->insert(SMART_FORMS_TABLE_NAME,$values);
@@ -52,7 +54,8 @@ function rednao_smart_forms_save()
                     'form_name'=>$formParsedValues->Name,
                     'element_options'=>$element_options,
                     'form_options'=>$form_options,
-                    'client_form_options'=>$client_form_options
+                    'client_form_options'=>$client_form_options,
+                    'donation_email'=>$donation_email
                 ),array("form_id"=>$form_id));
                 $message="saved";
                 delete_transient("rednao_smart_forms_$form_id");
@@ -89,8 +92,19 @@ function rednao_smart_form_list()
 
 function rednao_smart_forms_save_form_values()
 {
+    include_once(SMART_FORMS_DIR.'php_classes/save/php_entry_saver_base.php');
+
     $form_id=GetPostValue("form_id");
     $formString=GetPostValue("formString");
+    $captcha=GetPostValue("captcha");
+
+    $phpEntry=new php_entry_saver_base($form_id,$formString,$captcha);
+    $phpEntry->ProcessEntry();
+	die();
+
+   /* $form_id=GetPostValue("form_id");
+    $formString=GetPostValue("formString");
+    $captcha=$_POST["captcha"];
 
     $entryData=json_decode($formString,true);
 
@@ -151,71 +165,10 @@ function rednao_smart_forms_save_form_values()
         echo '{"message":"'.__("Information submitted successfully.").'","success":"y"}';
     else
         echo '{"message":"'.__("An error occurred, please try again later.").'","success":"n"}';
-    die();
+    die();*/
 }
 
-function send_form_email($formOptions,$entryData,$elementOptions,$useTestData)
-{
-    include(SMART_FORMS_DIR.'string_renderer/rednao_string_builder.php');
 
-
-
-    $stringBuilder=new rednao_string_builder();
-    $EmailText=$formOptions["EmailText"];
-    $FromName=$formOptions["FromName"];
-    $FromEmail=$formOptions["FromEmail"];
-    $ToEmail=$formOptions["ToEmail"];
-    $EmailSubject=$formOptions["EmailSubject"];
-
-
-    if($FromName=="")
-        $FromName="Wordpress";
-
-    if($EmailSubject=="")
-        $EmailSubject="Form Submitted";
-
-    if($ToEmail=="")
-        $ToEmail=get_option("admin_email");
-
-    preg_match_all('/\\[field ([^\\]]+)/',$EmailText, $matches, PREG_PATTERN_ORDER);
-
-    foreach($matches[1] as $match)
-    {
-        $value=GetValueByField($stringBuilder,$match,$entryData,$elementOptions,$useTestData);
-        $EmailText=str_replace("[field $match]",$value,$EmailText);
-    }
-
-
-/*
-
-
-    foreach($entryData as $key=>$value)
-    {
-
-        $element=null;
-        foreach($elementOptions as $item)
-        {
-            if($item->Id==$key)
-            {
-                $element=$item;
-                break;
-            }
-        }
-
-        $emailText.="<tr>". $stringBuilder->GetStringFromColumn($element,$value)."</tr>";
-    }
-    $emailText.="</table>";*/
-
-    $headers = 'MIME-Version: 1.0' . "\r\n";
-    $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-    $headers.= "$FromName <$FromEmail>";
-    if(trim($ToEmail)!="")
-    {
-        return wp_mail($ToEmail, $EmailSubject, $EmailText, $headers);
-    }
-
-    return false;
-}
 
 function GetValueByField($stringBuilder,$match,$entryData,$elementOptions,$useTestData)
 {
@@ -313,12 +266,14 @@ function rednao_smart_form_send_test_email()
         die();
     }
 
-    if(send_form_email($valueArray,$entryData,$elementOptions,true))
+	include_once(SMART_FORMS_DIR.'php_classes/save/php_entry_saver_base.php');
+    if(call_user_func(array('php_entry_saver_base','SendFormEmail'),  $valueArray,$entryData,$elementOptions,true))
         echo '{"Message":"'.__("Email sent successfully").'"}';
     else
         echo '{"Message":"'.__("There was an error sending the email, please check the configuration").'"}';
     die();
 }
+
 
 function rednao_smart_forms_submit_license()
 {

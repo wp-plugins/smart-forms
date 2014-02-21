@@ -40,6 +40,21 @@ Object.isNullOrEmpty=function(object){
 
  }
 
+
+ function RedNaoPathExists(object,path)
+ {
+     if(typeof object=="undefined")
+        return false;
+     var pathArray=path.split('.');
+     for(var i=0;i<pathArray.length;i++)
+         if(typeof object[pathArray[i]!="undefined"]){
+             object=object[pathArray[i]];
+         }else
+            return false;
+
+     return true;
+ }
+
  function RedNaoGetValueOrEmpty(value)
  {
      if(typeof value=='undefined')

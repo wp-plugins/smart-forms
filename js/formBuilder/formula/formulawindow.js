@@ -2,6 +2,9 @@ function RedNaoFormulaWindow()
 {
     rnJQuery( "#redNaoFormulaAccordion" ).accordion();
     var self=this;
+    rnJQuery('#smartFormsHumanReadableCheck').click(function(){
+        self.ToggleDisplayFormat();
+    })
     this.Dialog=rnJQuery("#redNaoFormulaComponent").dialog(
         {   width:"714",
             height:"368",
@@ -17,12 +20,12 @@ function RedNaoFormulaWindow()
             beforeClose:function(){
                 var formula=rnJQuery('#redNaoFormulaTextArea').val();
                 if(formula=="")
-                    delete self.SelectedFormElement.Options.Formulas[self.PropertyName];
+                    delete self.SelectedFormElementOptions.Formulas[self.PropertyName];
                 else{
                     var data={};
                     data.Value=formula;
                     self.GetCompiledData(data,formula);
-                    self.SelectedFormElement.Options.Formulas[self.PropertyName]=data;
+                    self.SelectedFormElementOptions.Formulas[self.PropertyName]=data;
 
                     if(data.FieldsUsed.length>3&&!RedNaoLicensingManagerVar.LicenseIsValid('Sorry, in this version you can add up to three fields in a formula'))
                         return false;
@@ -37,6 +40,25 @@ function RedNaoFormulaWindow()
 
         });
 
+
+}
+
+RedNaoFormulaWindow.prototype.ToggleDisplayFormat=function()
+{
+    alert('a');
+    if(rnJQuery(this).is(':checked'))
+        this.ShowFieldIDs();
+    else
+        this.ShowFieldLabel();
+}
+
+RedNaoFormulaWindow.prototype.ShowFieldIDs=function()
+{
+
+}
+
+RedNaoFormulaWindow.prototype.ShowFieldLabel=function()
+{
 
 }
 
@@ -62,30 +84,44 @@ RedNaoFormulaWindow.prototype.GetCompiledData=function(data,formula)
 
 }
 
-RedNaoFormulaWindow.prototype.GetValuePropertiesFromField=function(field)
+RedNaoFormulaWindow.prototype.GetValuePropertiesFromField=function(fieldId)
+{
+    var formulaElement=this.GetFormElementFromFormulaFieldId(fieldId);
+    if(formulaElement!=null)
+        return formulaElement.GetValuePath();
+
+    return '';
+}
+
+RedNaoFormulaWindow.prototype.GetFormElementFromFormulaFieldId=function(field)
 {
     for(var i=0;i<this.FormElements.length;i++)
     {
         if(this.FormElements[i].Id==field)
         {
-            return this.FormElements[i].GetValuePath();
+            return this.FormElements[i];
         }
     }
 
-    return '';
+    return null;
 }
 
-RedNaoFormulaWindow.prototype.OpenFormulaEditor=function(redNaoFormElements,selectedFormElement,propertyName,additionalInformation)
+RedNaoFormulaWindow.prototype.OpenFormulaEditor=function(redNaoFormElements,selectedFormElementOptions,propertyName,additionalInformation)
 {
-    var text=selectedFormElement.Options.Formulas[propertyName];
+    this.FormElements=redNaoFormElements;
+
+    var text=selectedFormElementOptions.Formulas[propertyName];
     if(typeof text=='undefined')
         text="";
     else
-        text=text.Value;
+        text=text.Value;//text=this.GetHumanRedeableFormula(text.Value);
+    this.DisplayFormat="human";
+
+    rnJQuery('#smartFormsHumanReadableCheck').removeAttr('checked');
     rnJQuery('#redNaoFormulaTextArea').val(text);
 
-    this.FormElements=redNaoFormElements;
-    this.SelectedFormElement=selectedFormElement;
+
+    this.SelectedFormElementOptions=selectedFormElementOptions;
     this.AdditionalInformation=additionalInformation;
     this.PropertyName=propertyName;
     this.Dialog.dialog('open');
@@ -101,6 +137,25 @@ RedNaoFormulaWindow.prototype.OpenFormulaEditor=function(redNaoFormElements,sele
 
         }
     }
+}
+
+RedNaoFormulaWindow.prototype.GetHumanRedeableFormula=function(formula)
+{
+    var myArray = formula.match(/field ([^\]]+)/g);
+    var humanRedeableFormula=formula;
+    for(var i=0;i<myArray.length;i++)
+    {
+        var fieldId=myArray[i].replace(' ','').replace('field','');
+        var formElement=this.GetFormElementFromFormulaFieldId(fieldId);
+        if(formElement==null)
+            var fieldToUse=fieldId;
+        else
+            var fieldToUse=formElement.Options.Label;
+        humanRedeableFormula=humanRedeableFormula.replace(myArray[i],'field '+fieldToUse);
+    }
+
+    return humanRedeableFormula;
+
 }
 
 RedNaoFormulaWindow.prototype.Validate=function()
