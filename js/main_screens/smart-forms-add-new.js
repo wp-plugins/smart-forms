@@ -1,6 +1,6 @@
 var smartFormsIntegrationFormula={};
 smartFormsIntegrationFormula.Formulas={};
-
+var smartFormsDesignMode=true;
 function SmartFormsAddNew()
 {
     if(typeof smartFormId!='undefined')

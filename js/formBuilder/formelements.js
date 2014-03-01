@@ -176,8 +176,11 @@ FormElementBase.prototype.RefreshElement=function()
     element.find(".redNaoOneColumn").remove();
     element.append(this.GenerateInlineElement());
     this.GenerationCompleted();
-    element.find('.rednao_label_container').width(labelWidth);
-    element.find('.redNaoControls').width(controlWidth);
+    if(!smartFormsDesignMode)
+    {
+        element.find('.rednao_label_container').width(labelWidth);
+        element.find('.redNaoControls').width(controlWidth);
+    }
     return element;
 }
 FormElementBase.prototype.GenerateHtml=function(jqueryElement)
@@ -769,16 +772,17 @@ function TextAreaElement(options)
     if(this.IsNew)
     {
         this.Options.Label="Text Area";
-        this.Options.DefaultText="Default Text";
+        this.Options.DefaultText="";
         this.Options.ClassName="rednaotextarea";
         this.Options.Value="";
         this.Options.Width='';
-        this.Options.Height=''
+        this.Options.Height='';
+        this.Options.Placeholder='Placeholder';
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
         this.SetDefaultIfUndefined('Height','');
-
+        this.SetDefaultIfUndefined('Placeholder','');
     }
 
 
@@ -791,6 +795,7 @@ TextAreaElement.prototype.CreateProperties=function()
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"DefaultText","Value",{ManipulatorType:'basic',RefreshFormData:true}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic',RefreshFormData:true}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Height","Height",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
@@ -811,7 +816,7 @@ TextAreaElement.prototype.GenerateInlineElement=function()
 
     return  '<div class="rednao_label_container"><label class="rednao_control_label" for="textarea">'+this.Options.Label+'</label></div>\
                 <div class="redNaoControls">\
-                <textarea style="'+additionalStyle+'" name="textarea" class="redNaoTextAreaInput">'+this.Options.DefaultText+'</textarea>\
+                <textarea placeholder="'+this.Options.Placeholder+'" style="'+additionalStyle+'" name="textarea" class="redNaoTextAreaInput">'+this.Options.DefaultText+'</textarea>\
             </div>';
 }
 
@@ -855,9 +860,12 @@ function MultipleRadioElement(options)
     {
         this.Options.Label="Multiple Radio";
         this.Options.ClassName="rednaomultipleradios";
+        this.Options.Orientation='v';
         this.Options.Options=new Array({label:'Option 1',value:0,sel:'y'},{label:'Option 2',value:0,sel:'n'},{label:'Option 3',value:0,sel:'n'});
     }else
     {
+        if(RedNaoGetValueOrNull(this.Options.Orientation)==null)
+            this.Options.Orientation='v';
         if(this.Options.Options.length>0&&typeof this.Options.Options[0].sel=='undefined')
         {
             this.Options.Options[0].sel='y';
@@ -887,6 +895,7 @@ MultipleRadioElement.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new ArrayProperty(this,this.Options,"Options","Options",{ManipulatorType:'basic',SelectorType:'radio'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+    this.Properties.push(new ComboBoxProperty(this,this.Options,"Orientation","Orientation",{ManipulatorType:'basic',Values:[{label:'Vertical',value:'v'},{label:'Horizontal',value:'h'}]}));
 
 
 
@@ -894,6 +903,9 @@ MultipleRadioElement.prototype.CreateProperties=function()
 
 MultipleRadioElement.prototype.GenerateInlineElement=function()
 {
+    var orientationClass='';
+    if(this.Options.Orientation=='h')
+        orientationClass='redNaoHorizontalElements'
 
     var html=  '<div class="rednao_label_container"><label class="rednao_control_label">'+this.Options.Label+'</label></div>\
         <div class="redNaoControls">';
@@ -906,7 +918,7 @@ MultipleRadioElement.prototype.GenerateInlineElement=function()
         else
             checked='';
 
-        html+='<label class="redNaoRadio" for="radios-0">\
+        html+='<label class="redNaoRadio '+orientationClass+'" for="radios-0">\
                     <input '+checked+' class="redNaoInputRadio" type="radio" name="'+this.GetPropertyName()+'"  value="'+this.Options.Options[i].value+'" '+checked+'>'+rnJQuery.trim(this.Options.Options[i].label)+'</input>\
                 </label>';
 
@@ -967,9 +979,12 @@ function MultipleCheckBoxElement(options)
     {
         this.Options.Label="Multiple Checkbox";
         this.Options.ClassName="rednaomultiplecheckboxes";
+        this.Options.Orientation='v';
         this.Options.Options=new Array({label:'Check 1',value:0,sel:'n'},{label:'Check 2',value:0,sel:'n'},{label:'Check 3',value:0,sel:'n'});
     }else
     {
+        if(RedNaoGetValueOrNull(this.Options.Orientation)==null)
+            this.Options.Orientation='v';
         if(this.Options.Options.length>0&&typeof this.Options.Options[0].sel=='undefined')
         {
             for(var i=0;i<this.Options.Options.length;i++)
@@ -999,12 +1014,14 @@ MultipleCheckBoxElement.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new ArrayProperty(this,this.Options,"Options","Options",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
-
-
+    this.Properties.push(new ComboBoxProperty(this,this.Options,"Orientation","Orientation",{ManipulatorType:'basic',Values:[{label:'Vertical',value:'v'},{label:'Horizontal',value:'h'}]}));
 }
 
 MultipleCheckBoxElement.prototype.GenerateInlineElement=function()
 {
+    var orientationClass='';
+    if(this.Options.Orientation=='h')
+        orientationClass='redNaoHorizontalElements'
 
     var html=  '<div class="rednao_label_container"><label class="rednao_control_label">'+this.Options.Label+'</label></div>\
         <div class="redNaoControls">';
@@ -1017,7 +1034,7 @@ MultipleCheckBoxElement.prototype.GenerateInlineElement=function()
         else
             checked='';
 
-        html+='<label class="redNaoCheckBox" for="radios-0">\
+        html+='<label class="redNaoCheckBox '+orientationClass+'" for="radios-0">\
                     <input type="checkbox" class="redNaoInputCheckBox" name="'+this.GetPropertyName()+'"  value="'+this.Options.Options[i].value+'" '+checked+'/>'+this.Options.Options[i].label+'\
                 </label>';
 
