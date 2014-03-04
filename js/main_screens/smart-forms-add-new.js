@@ -90,7 +90,7 @@ SmartFormsAddNew.prototype.DisableOnEmpty=function(checkbox,elementToDisable)
 
 SmartFormsAddNew.prototype.OpenFormulaBuilder=function(formElement,propertyName,additionalInformation)
 {
-    RedNaoFormulaWindowVar.OpenFormulaEditor(this.FormBuilder.RedNaoFormElements,formElement,propertyName,additionalInformation);
+    RedNaoFormulaWindowVar.OpenFormulaEditor(this.FormBuilder.RedNaoFormElements,formElement.Options,propertyName,additionalInformation);
 }
 
 SmartFormsAddNew.prototype.EditEmailClicked=function()
