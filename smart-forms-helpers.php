@@ -40,7 +40,7 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
             return;
 
         if($title)
-            echo "<div class='widget-wrapper'><h3 class='widgettitle'>$title</h3>"
+            echo "<div class='widget-wrapper'><h3 class='widgettitle widget-title'>$title</h3>"
 
         ?>
 
