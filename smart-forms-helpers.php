@@ -50,6 +50,7 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
             var smartFormsPath="<?php echo plugin_dir_url(__FILE__)?>";
             var smartDonationsRootPath="<?php echo SMART_DONATIONS_PLUGIN_URL ?>";
             var smartDonationsSandbox="<?php echo SMART_DONATIONS_SANDBOX ?>";
+			var smartFormsDesignMode=false;
             if(!window.smartFormsItemsToLoad)
                 window.smartFormsItemsToLoad=new Array();;
 
@@ -68,6 +69,7 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
                 var smartFormsPath=\"".plugin_dir_url(__FILE__)."\";
                 var smartDonationsRootPath=\"".SMART_DONATIONS_PLUGIN_URL."\";
                 var smartDonationsSandbox=\"".SMART_DONATIONS_SANDBOX."\";
+                var smartFormsDesignMode=false;
                 if(!window.smartFormsItemsToLoad)
                     window.smartFormsItemsToLoad=new Array();;
                 window.smartFormsItemsToLoad.push({ 'form_id':".$options['form_id'].",  'elements':".$options['elements'].",'client_form_options':".$options['client_form_options'].",'container':'formContainer$random'});

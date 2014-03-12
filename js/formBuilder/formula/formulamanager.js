@@ -9,8 +9,23 @@ function RedNaoFormulaManager()
 
 RedNaoFormulaManager.prototype.PropertyChanged=function(data)
 {
-    this.Data[data.FieldName]=data.Value;
+    this.SetFormulaValue(data.FieldName,data.Value);
     this.UpdateFormulaFieldsIfNeeded(data.FieldName,data.Value);
+}
+
+
+RedNaoFormulaManager.prototype.SetFormulaValue=function(fieldName,data)
+{
+    if(RedNaoPathExists(data,'value'))
+    {
+        if(data.value=='')
+            data.value=0;
+        else
+            if(!isNaN(data.value))
+                data.value=parseFloat(data.value);
+    }
+
+    this.Data[fieldName]=data;
 }
 
 RedNaoFormulaManager.prototype.UpdateFormulaFieldsIfNeeded=function(fieldName)

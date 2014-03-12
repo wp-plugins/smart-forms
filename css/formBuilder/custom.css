@@ -270,3 +270,7 @@
 .redNaoWait,input.redNaoWait[type="submit"]{
     cursor: wait;
 }
+
+.redNaoHorizontalElements{
+    float: left;
+}

@@ -37,7 +37,8 @@ smartFormGenerator.prototype.CreateForm=function(){
         formElement.AppendElementToContainer(this.JQueryForm);
 
         if(formElement.StoresInformation())
-            RedNaoFormulaManagerVar.Data[formElement.Id]=formElement.GetValueString();
+            RedNaoFormulaManagerVar.SetFormulaValue(formElement.Id,formElement.GetValueString())
+
     }
 
     var self=this;
