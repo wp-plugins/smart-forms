@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: contact form, contact, form, forms, contact form plugin, contact form builder, contact form with recaptcha, feedback form, contact us, request form, contact button, drag and drop contact form, file upload contact form, contact form to email, contact form payments, contact for paypal, form solution, form builder, feedback, easy contact form, helpdesk
 Requires at least: 3.3
 Tested up to: 3.5
-Stable tag: 1.2.2
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,9 @@ N/A
 9. Calculated field interface
 10. Example of date field
 == Changelog ==
+= Smart Forms 1.2.3 =
+* Improved formula window
+
 = Smart Forms 1.2.2 =
 * Fixed an issue with the form formulas
 = Smart Forms 1.2.1 =

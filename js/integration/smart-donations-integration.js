@@ -32,7 +32,7 @@ function SmartDonationsIntegration()
 SmartDonationsIntegration.prototype.SetUpDonationFormulaManager=function()
 {
     rnJQuery('#setUpDonationFormulaButton').click(function(){
-        RedNaoEventManager.Publish('FormulaButtonClicked',{"FormElement":{"Options":smartFormsIntegrationFormula},"PropertyName":"DonationFormula",AdditionalInformation:{}})
+        RedNaoEventManager.Publish('FormulaButtonClicked',{"FormElement":{"Options":smartFormsIntegrationFormula},"PropertyName":"DonationFormula",AdditionalInformation:{},Image:null})
     });
 }
 

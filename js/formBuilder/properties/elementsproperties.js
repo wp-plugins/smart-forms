@@ -16,6 +16,14 @@ function ElementPropertiesBase(formelement,propertiesObject,propertyName,propert
 
 }
 
+ElementPropertiesBase.prototype.FormulaExists=function(formElement,propertyName)
+{
+    if(RedNaoPathExists(formElement,'Options.Formulas.'+propertyName+'.Value')&&formElement.Options.Formulas[propertyName].Value!="")
+        return true;
+
+    return false;
+}
+
 ElementPropertiesBase.prototype.CreateProperty=function(jQueryObject)
 {
     var newRow=rnJQuery("<tr></tr>");
@@ -61,7 +69,7 @@ SimpleTextProperty.prototype.GenerateHtml=function()
     var value=this.GetPropertyCurrentValue().trim();
     var newProperty=rnJQuery( '<td style="text-align: right"><label class="rednao-properties-control-label"> '+this.PropertyTitle+' </label></td>\
             <td style="text-align: left"><input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="Default"/>\
-            <img style="width:15px;height: 20px; vertical-align: middle;cursor:pointer;cursor:hand;" title="Formula" src="'+smartFormsRootPath+'images/formula.png'+'"/> </td>');
+            <img style="width:15px;height: 20px; vertical-align: middle;cursor:pointer;cursor:hand;" title="Formula" src="'+ smartFormsRootPath+(this.FormulaExists(this.FormElement,this.PropertyName)?'images/formula_used.png' :'images/formula.png')+'"/> </td>');
 
     var self=this;
     newProperty.keyup(function(){
@@ -69,8 +77,7 @@ SimpleTextProperty.prototype.GenerateHtml=function()
         self.RefreshElement();
 
     });
-
-    newProperty.find('img').click(function(){RedNaoEventManager.Publish('FormulaButtonClicked',{"FormElement":self.FormElement,"PropertyName":self.PropertyName,AdditionalInformation:self.AdditionalInformation})});
+    newProperty.find('img').click(function(){RedNaoEventManager.Publish('FormulaButtonClicked',{"FormElement":self.FormElement,"PropertyName":self.PropertyName,AdditionalInformation:self.AdditionalInformation,Image:newProperty.find('img')})});
     return newProperty;
 }
 
@@ -321,7 +328,7 @@ ComboBoxProperty.prototype.GenerateHtml=function()
 
     });
 
-    newProperty.find('img').click(function(){RedNaoEventManager.Publish('FormulaButtonClicked',{"FormElement":self.FormElement,"PropertyName":self.PropertyName,AdditionalInformation:self.AdditionalInformation})});
+    newProperty.find('img').click(function(){RedNaoEventManager.Publish('FormulaButtonClicked',{"FormElement":self.FormElement,"PropertyName":self.PropertyName,AdditionalInformation:self.AdditionalInformation,Image:null})});
     return newProperty;
 }
 

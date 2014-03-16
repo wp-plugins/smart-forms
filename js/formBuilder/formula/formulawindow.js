@@ -7,6 +7,7 @@ function RedNaoFormulaWindow()
     })
     this.Dialog=rnJQuery("#redNaoFormulaComponent").dialog(
         {   width:"714",
+            resizable:false,
             height:"368",
             modal:true,
             autoOpen:false,
@@ -20,11 +21,17 @@ function RedNaoFormulaWindow()
             beforeClose:function(){
                 var formula=rnJQuery('#redNaoFormulaTextArea').val();
                 if(formula=="")
+                {
                     delete self.SelectedFormElementOptions.Formulas[self.PropertyName];
+                    if(self.Image!=null)
+                        self.Image.attr('src',smartFormsRootPath+'images/formula.png')
+                }
                 else{
                     var data={};
                     data.Value=formula;
                     self.GetCompiledData(data,formula);
+                    if(self.Image!=null)
+                        self.Image.attr('src',smartFormsRootPath+'images/formula_used.png')
                     self.SelectedFormElementOptions.Formulas[self.PropertyName]=data;
 
                     if(data.FieldsUsed.length>3&&!RedNaoLicensingManagerVar.LicenseIsValid('Sorry, in this version you can add up to three fields in a formula'))
@@ -42,6 +49,8 @@ function RedNaoFormulaWindow()
 
 
 }
+
+
 
 RedNaoFormulaWindow.prototype.ToggleDisplayFormat=function()
 {
@@ -65,6 +74,8 @@ RedNaoFormulaWindow.prototype.ShowFieldLabel=function()
 RedNaoFormulaWindow.prototype.GetCompiledData=function(data,formula)
 {
     var myArray = formula.match(/field ([^\]]+)/g);
+    if(myArray==null)
+        myArray=[];
     var compiledFormula='';
     var fieldsUsed=[];
     for(var i=0;i<myArray.length;i++)
@@ -106,9 +117,10 @@ RedNaoFormulaWindow.prototype.GetFormElementFromFormulaFieldId=function(field)
     return null;
 }
 
-RedNaoFormulaWindow.prototype.OpenFormulaEditor=function(redNaoFormElements,selectedFormElementOptions,propertyName,additionalInformation)
+RedNaoFormulaWindow.prototype.OpenFormulaEditor=function(redNaoFormElements,selectedFormElementOptions,propertyName,additionalInformation,image)
 {
     this.FormElements=redNaoFormElements;
+    this.Image=image;
 
     var text=selectedFormElementOptions.Formulas[propertyName];
     if(typeof text=='undefined')

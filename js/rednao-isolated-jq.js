@@ -47,7 +47,7 @@ Object.isNullOrEmpty=function(object){
         return false;
      var pathArray=path.split('.');
      for(var i=0;i<pathArray.length;i++)
-         if(typeof object[pathArray[i]!="undefined"]){
+         if(typeof object[pathArray[i]]!="undefined"){
              object=object[pathArray[i]];
          }else
             return false;

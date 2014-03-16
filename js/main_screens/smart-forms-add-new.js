@@ -70,7 +70,7 @@ function SmartFormsAddNew()
 
 
     var self=this;
-    RedNaoEventManager.Subscribe('FormulaButtonClicked',function(data){self.OpenFormulaBuilder(data.FormElement,data.PropertyName,data.AdditionalInformation)});
+    RedNaoEventManager.Subscribe('FormulaButtonClicked',function(data){self.OpenFormulaBuilder(data.FormElement,data.PropertyName,data.AdditionalInformation,data.Image)});
 
 
 }
@@ -88,9 +88,9 @@ SmartFormsAddNew.prototype.DisableOnEmpty=function(checkbox,elementToDisable)
 }
 
 
-SmartFormsAddNew.prototype.OpenFormulaBuilder=function(formElement,propertyName,additionalInformation)
+SmartFormsAddNew.prototype.OpenFormulaBuilder=function(formElement,propertyName,additionalInformation,image)
 {
-    RedNaoFormulaWindowVar.OpenFormulaEditor(this.FormBuilder.RedNaoFormElements,formElement.Options,propertyName,additionalInformation);
+    RedNaoFormulaWindowVar.OpenFormulaEditor(this.FormBuilder.RedNaoFormElements,formElement.Options,propertyName,additionalInformation,image);
 }
 
 SmartFormsAddNew.prototype.EditEmailClicked=function()
