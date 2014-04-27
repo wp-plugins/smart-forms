@@ -24,7 +24,7 @@ class php_entry_saver_base {
     {
         if($this->FormOptions["UsesCaptcha"]=="y")
         {
-            if($this->CaptchaIsValid())
+            if(!$this->CaptchaIsValid())
             {
                 echo '{"message":"'.__("Invalid captcha.").'","refreshCaptcha":"y","success":"n"}';
                 return;
@@ -104,7 +104,7 @@ class php_entry_saver_base {
     private function CaptchaIsValid()
     {
         $Message="";
-        if($this->Captcha=="")
+        if($this->Captcha==""||$this->Captcha==null||$this->Captcha["response"]=="")
             return false;
 
         $captchaPost=$this->Captcha;

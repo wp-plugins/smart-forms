@@ -96,7 +96,12 @@ function rednao_smart_forms_save_form_values()
 
     $form_id=GetPostValue("form_id");
     $formString=GetPostValue("formString");
-    $captcha=GetPostValue("captcha");
+	$captcha="";
+	if(isset($_POST["captcha"]))
+		if(is_array($_POST["captcha"]))
+			$captcha=$_POST["captcha"];
+		else
+			$captcha=stripslashes($_POST["captcha"]);
 
     $phpEntry=new php_entry_saver_base($form_id,$formString,$captcha);
     $phpEntry->ProcessEntry();
