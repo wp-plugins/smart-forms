@@ -54,7 +54,8 @@ N/A
 9. Calculated field interface
 10. Example of date field
 == Changelog ==
-
+= Smart Forms 1.2.5 =
+* Fixed issue with captcha
 = Smart Forms 1.2.4 =
 * Fixed issue with redirecting not working with donations.
 = Smart Forms 1.2.3 =
