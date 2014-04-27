@@ -80,6 +80,9 @@ smartFormGenerator.prototype.CreatePayPalHiddenFields=function()
                 <input type="hidden" name="notify_url" value="'+smartDonationsRootPath+'ipn/rednao_paypal_ipn.php">'
         );
 
+    if(RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)=="y")
+        this.JQueryForm.append('<input type="hidden" name="return" value="'+this.client_form_options.redirect_to+'">');
+
 }
 
 smartFormGenerator.prototype.AdjustLayout=function()
