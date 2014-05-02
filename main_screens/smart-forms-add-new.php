@@ -96,20 +96,30 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
     </table>
 
     <div id="redNaoFormulaComponent" style="padding:0" title="Formula Editor">
-        <textarea style="width:510px;height:300px;float:left;padding: 5px;" id="redNaoFormulaTextArea"></textarea>
+		<table>
+			<tr>
+				<td>
+					<textarea style="width:510px;height:300px;padding: 5px;" id="redNaoFormulaTextArea"></textarea>
+				</td>
+				<td style="vertical-align: top">
+					<div id="redNaoFormulaAccordion" class="smartFormsSlider" >
+						<h3>Form Fields</h3>
+						<div>
+							<ul id="redNaoFormulaFormFields">
 
+							</ul>
+						</div>
 
-        <div id="redNaoFormulaAccordion" class="smartFormsSlider" style="float:right;">
-            <h3>Form Fields</h3>
-            <div>
-                <ul id="redNaoFormulaFormFields">
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div ><button  onclick="RedNaoFormulaWindowVar.Validate();">Validate</button> <input type="checkbox" id="smartFormsHumanReadableCheck" style="vertical-align: middle;display: none;"/> <span style="display: none">Show field id</span></div>
+				</td>
+			</tr>
+		</table>
 
-                </ul>
-            </div>
-
-        </div>
-
-        <div style="clear: both;"><button  onclick="RedNaoFormulaWindowVar.Validate();">Validate</button> <input type="checkbox" id="smartFormsHumanReadableCheck" style="vertical-align: middle;display: none;"/> <span style="display: none">Show field id</span></div>
     </div>
 
 

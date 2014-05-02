@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: contact forms, contact, forms, forms, contact forms plugin, contact forms builder, contact forms with recaptcha, feedback forms, contact us, request forms, contact button, drag and drop contact forms, file upload contact forms, contact forms to email, contact forms payments, contact for paypal, forms solution, forms builder, feedback, easy contact forms, helpdesk
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,66 +53,70 @@ N/A
 9. Calculated field interface
 10. Example of date field
 == Changelog ==
+= Smart Forms 1.2.6 =
+* Fixed forms designer issue where imaes in the form radio button was not displayed
+* Fixed forms editor, the formula screen was not displayed correctly
+* Fixed forms designer, the image of the formula was not getting displayed
 = Smart Forms 1.2.5 =
-* Fixed issue with forms captcha
-* Fixed minor issue with forms submission
+* Fixed forms editor, Fixed issue with forms captcha
+* Fixed forms editor, Fixed minor issue with forms submission
 = Smart Forms 1.2.4 =
-* Fixed issue with redirecting not working with donations.
+* Fixed forms generator, Fixed issue with redirecting not working with donations.
 = Smart Forms 1.2.3 =
-* Improved formula window
+* Improving forms editor, Improved formula window
 
 = Smart Forms 1.2.2 =
-* Fixed an issue with the form formulas
+* Fixed forms editor, Fixed an issue with the form formulas
 = Smart Forms 1.2.1 =
-* Added main class to widget
+* Fixed forms editor, Added main class to widget
 = Smart Forms 1.2 =
-* Fixed issue with form formulas
+* Fixed forms editor, Fixed issue with form formulas
 = Smart Forms 0.9 =
-* Added the ability to clone an existing form, so you don't have to do everything again if you want to create similar forms.
-* Added a wishlist/support page
+* Fixed forms editor, Added the ability to clone an existing form, so you don't have to do everything again if you want to create similar forms.
+* Adding new feature, Added a wishlist/support page
 
 = Smart Forms 1.1 =
-* Fixed issue with the text area form element
-* Fixed problem with the form designer
-* Added the option to select if you want to use horizontal radio or checkboxes
+* Fixed forms editor, Fixed issue with the text area form element
+* Fixed forms editor, Fixed problem with the form designer
+* Improving forms editor, Added the option to select if you want to use horizontal radio or checkboxes
 
 = Smart Forms 0.8.5 =
-* Improving selection of options in the checkbox, radio buttons and select boxes
+* Improving forms editor, Improving selection of options in the checkbox, radio buttons and select boxes
 
 = Smart Forms 0.8 =
-* Adding css export of submitted forms to entries screen
+* Improving forms entry, Adding css export of submitted forms to entries screen
 = Smart Forms 0.7 =
-* Fixing issue with the form submission
-* Adding  the posibility to redirect to another page after the form was submitted
-* Adding the posibility to customize the submission successfull message
-* Fixing a css issue with the form text boxes.
-* Fixed issues with forms
-* Fixed issue en the forms entries screen
+* Fixed forms editor, Fixing issue with the form submission
+* Improving forms editor, Adding  the posibility to redirect to another page after the form was submitted
+* Improving forms editor, Adding the posibility to customize the submission successfull message
+* Fixed forms editor, Fixing a css issue with the form text boxes.
+* Fixed forms editor, Fixed issues with forms
+* Fixed forms editor, Fixed issue en the forms entries screen
 
 = Smart forms 0.6 =
-* Added new forms elements (email,phone, address, captcha,number)
-* Fixing issues with form email
-* Fixing issue with forms formulas
-* Added a wait cursor when the form is being submitted
+* Improving forms editor, Added new forms elements (email,phone, address, captcha,number)
+* Fixed forms editor, Fixing issues with form email
+* Fixed forms editor, Fixing issue with forms formulas
+* Improving form, Added a wait cursor when the form is being submitted
 = Smart forms 0.5.5 =
-* Fixed issue with form title element
-* Added Name form element
+* Fixed forms editor, Fixed issue with form title element
+* Improving form editor, Added Name form element
 = Smart forms 0.5 =
-* Fixed issues with form width
+* Fixed forms editor, Fixed issues with form width
 * Added calculated fields to certain forms
-* Fixed issues in form builder
-* Added a new form element, date picker
+* Fixed forms editor, Fixed issues in form builder
+* Improving form editor, Added a new form element, date picker
 = Smart forms 0.3 =
-* Added advanced customization for forms email.
-* Fixed bugs in the form builder
-* Fixed bug in the form checkbox
-* Added the option to purchase the Smart Forms full version
+* Improving forms editor, Added advanced customization for forms email.
+* Fixed forms editor, Fixed bugs in the form builder
+* Fixed forms editor, Fixed bug in the form checkbox
+* Fixed forms editor, Added the option to purchase the Smart Forms full version
 = Smart forms 0.1 =
-*First release of smart forms.
+* First release of smart forms.
 = Smart Forms 0.1.1 =
-* Fixing issues with the form entries screen
+* Fixed forms editor, Fixing issues with the form entries screen
 * Allow the grid of the form entries to expand based on entries
-* Fixing responsive forms
+* Fixed forms editor, Fixing responsive forms
 
 = Smart Forms 0.1.2 =
 * Fixed form issue with required fields and form submission.

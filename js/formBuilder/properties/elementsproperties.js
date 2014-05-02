@@ -196,9 +196,9 @@ ArrayProperty.prototype.CreateListRow=function(isFirst,item)
             '       <td style="text-align: center;">'+this.GetSelector(item)+'</td>' +
             '       <td><input type="text" class="itemText" value="'+item.label+'"/></td>' +
             '       <td><input type="text" class="itemValue" style="text-align: right; width: 50px;" value="'+item.value+'"/></td>' +
-            '       <td style="text-align: center;vertical-align: middle;"><img style="cursor: hand;cursor: pointer; width:15px;height:15px;" class="cloneArrayItem" src="http://localhost/rednao/wp-content/plugins/smart-forms/images/clone.png" title="Clone"></td>';
+            '       <td style="text-align: center;vertical-align: middle;"><img style="cursor: hand;cursor: pointer; width:15px;height:15px;" class="cloneArrayItem" src="'+smartFormsRootPath+'images/clone.png" title="Clone"></td>';
             if(!isFirst)
-                row+=' <td style="text-align: center;vertical-align: middle;"><img style="cursor: hand; cursor: pointer;width:15px;height:15px;" class="deleteArrayItem" src="http://localhost/rednao/wp-content/plugins/smart-forms/images/delete.png" title="Delete"></td>';
+                row+=' <td style="text-align: center;vertical-align: middle;"><img style="cursor: hand; cursor: pointer;width:15px;height:15px;" class="deleteArrayItem" src="'+smartFormsRootPath+'images/delete.png" title="Delete"></td>';
             row+='</tr>';
     return row;
 }

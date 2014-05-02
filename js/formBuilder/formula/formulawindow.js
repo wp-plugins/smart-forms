@@ -6,9 +6,9 @@ function RedNaoFormulaWindow()
         self.ToggleDisplayFormat();
     })
     this.Dialog=rnJQuery("#redNaoFormulaComponent").dialog(
-        {   width:"714",
+        {   width:"720",
             resizable:false,
-            height:"368",
+            height:"400",
             modal:true,
             autoOpen:false,
             create: function(event, ui){
