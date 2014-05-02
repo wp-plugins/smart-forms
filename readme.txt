@@ -8,10 +8,10 @@ Stable tag: 1.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Build forms easily by dragging and dropping elements. Calculated fields, customizable emails and much more!!.
+Build forms easily by dragging and dropping elements. Create contact forms or advanced forms that need fields calculations or send customizable emails!!.
 == Description ==
 For more information check: http://rednao.com/smartforms.html
-If you have questions or suggestions please let me know in the smart form official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601
+If you have questions or suggestions please let me know in the smart forms official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601
 
 
 Build forms easily by dragging and dropping elements. The forms are responsive, they adjust to the available space.
@@ -21,12 +21,11 @@ You can create calculated fields and also after a form is submitted you can rece
 **Features:**
 
 *   **Responsive Forms**.- The forms adjust automatically to the available space making them usable in a pc or phone.
-*   **Form Widget**.- You can easily add a form to a widget.
 *   **Shortcode Forms**.- The forms can also be easily added to any post or page using a shortcode.
 *   **Forms Entry Screen**.- Easily check the information that have been submitted so far in the entries screen.
-*   **Customizable form emails**.- After a form is submitted send an email with any information and format that you need.
-*   **Calculated fields**.- You can use fields in a formulas to fill fields automatically (up to three fields per formula in the free version)
-*   **Custom form fields**.- Currently the plugin supports these custom form elements: name, phone, email, address, number,captcha.
+*   **Customizable forms emails**.- After a form is submitted send an email with any information and format that you need.
+*   **Calculated forms fields**.- You can use fields in a formulas to fill fields automatically (up to three fields per formula in the free version)
+*   **Custom forms fields**.- Currently the plugin supports these custom forms elements: name, phone, email, address, number,captcha.
 
 == Installation ==
 1. Upload smart forms to the `/wp-content/plugins/` directory
@@ -55,7 +54,8 @@ N/A
 10. Example of date field
 == Changelog ==
 = Smart Forms 1.2.5 =
-* Fixed issue with captcha
+* Fixed issue with forms captcha
+* Fixed minor issue with forms submission
 = Smart Forms 1.2.4 =
 * Fixed issue with redirecting not working with donations.
 = Smart Forms 1.2.3 =
