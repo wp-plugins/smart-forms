@@ -1,7 +1,7 @@
 === Smart Forms ===
 Contributors: EDGARROJAS
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edseventeen%40gmail.com
-Tags: contact form, contact, form, forms, contact form plugin, contact form builder, contact form with recaptcha, feedback form, contact us, request form, contact button, drag and drop contact form, file upload contact form, contact form to email, contact form payments, contact for paypal, form solution, form builder, feedback, easy contact form, helpdesk
+Tags: contact forms, contact, forms, forms, contact forms plugin, contact forms builder, contact forms with recaptcha, feedback forms, contact us, request forms, contact button, drag and drop contact forms, file upload contact forms, contact forms to email, contact forms payments, contact for paypal, forms solution, forms builder, feedback, easy contact forms, helpdesk
 Requires at least: 3.3
 Tested up to: 3.9
 Stable tag: 1.2.5
