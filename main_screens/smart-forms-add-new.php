@@ -28,14 +28,14 @@ wp_enqueue_script('smart-forms-dragmanager',SMART_FORMS_DIR_URL.'js/formBuilder/
 wp_enqueue_script('smart-forms-dragitembehaviors',SMART_FORMS_DIR_URL.'js/formBuilder/dragManager/dragitembehaviors.js');
 wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',array('isolated-slider','smart-forms-formula-window','smart-forms-formBuilder'));
 
+wp_enqueue_script('smart-forms-icheck',SMART_FORMS_DIR_URL.'js/utilities/iCheck/icheck.js',array('isolated-slider'));
 
 
 
-
+echo "<h1>".__("Forms")."</h1>";
 
 
 wp_enqueue_script('email-editor',SMART_FORMS_DIR_URL.'js/editors/email-editor.js',array('isolated-slider'));
-
 wp_enqueue_script('json2');
 
 
@@ -44,6 +44,8 @@ wp_enqueue_style('smart-forms-main-style',SMART_FORMS_DIR_URL.'css/mainStyle.css
 wp_enqueue_style('smart-forms-Slider',SMART_FORMS_DIR_URL.'css/smartFormsSlider/jquery-ui-1.10.2.custom.min.css');
 wp_enqueue_style('form-builder-boot-strap',SMART_FORMS_DIR_URL.'css/formBuilder/bootstrap.min.css');
 wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/custom.css');
+wp_enqueue_style('form-builder-icheck-normal',SMART_FORMS_DIR_URL.'js/utilities/iCheck/skins/minimal/minimal.css');
+
 
 ?>
 
@@ -59,6 +61,9 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
 
 </script>
 
+<div style="text-align: left;" >
+	<button style="width:150px;cursor: hand;cursor: pointer;" id="smartFormsSaveButton" >Save</button>
+</div>
 <h2 class="nav-tab-wrapper" id="smartFormsTopTab">
     <a class='nav-tab nav-tab-active' id="smartFormsGeneralTab"  onclick="SmartFormsAddNewVar.GoToGeneral();">General Info</a>
     <a class='nav-tab' id="smartFormsJavascriptTab" onclick="SmartFormsAddNewVar.GoToJavascript();">Javascript</a>
@@ -226,7 +231,7 @@ wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/cust
                 <img class="treeButton" src="<?php echo SMART_FORMS_DIR_URL?>images/arrow_down.png" alt=""/>
                 <h2 class="treeTitle">Basic</h2>
             </div>
-            <button style="margin-left: 530px;width:100px;cursor: hand;cursor: pointer;" id="smartFormsSaveButton" >Save</button>
+
         </div>
         <div  id="smartFormsBasicDetail">
             <hr/>

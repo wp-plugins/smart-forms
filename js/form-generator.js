@@ -96,11 +96,11 @@ smartFormGenerator.prototype.AdjustLayout=function()
         var element=this.FormElements[i].JQueryElement;
 
         var label=element.find('.rednao_label_container');
-        maxWidth=Math.max(maxWidth,label.width());
+        maxWidth=Math.max(maxWidth,label[0].getBoundingClientRect().width);
         labelArray.push(label);
 
         var control=element.find('.redNaoControls');
-        maxControlWidth=Math.max(maxControlWidth,control.width());
+        maxControlWidth=Math.max(maxControlWidth,control[0].getBoundingClientRect().width);
         controlsArray.push(control);
     }
 
@@ -192,7 +192,7 @@ smartFormGenerator.prototype.SaveForm=function()
     this.GetRootContainer().find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').removeClass('redNaoInvalid');
     for(var i=0;i<this.FormElements.length;i++)
     {
-
+        this.FormElements[i].ClearInvalidStyle();
         if(!this.FormElements[i].IsValid())
         {
             formIsValid=false;

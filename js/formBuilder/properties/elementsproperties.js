@@ -128,10 +128,16 @@ ArrayProperty.prototype=Object.create(ElementPropertiesBase.prototype);
 ArrayProperty.prototype.GenerateHtml=function()
 {
     var currentValues=this.GetPropertyCurrentValue();
-
-    var newProperty=rnJQuery('<td style="vertical-align: top;text-align: right;"><label class="checkbox control-group" style="display: block;vertical-align: top;">'+this.PropertyTitle+'</label></td><td style="text-align: left">'+this.GetItemList(currentValues)+'</td>');
-
     var self=this;
+    var newProperty=rnJQuery('<td style="vertical-align: top;text-align: right;"><label class="checkbox control-group" style="display: block;vertical-align: top;">'+this.PropertyTitle+'</label></td><td style="text-align: left">'+this.GetItemList(currentValues)+'</td>');
+    newProperty.find('table').append("<tr><td style='border-bottom-style: none;'><button class='redNaoPropertyClearButton' value='None'>Clear</button></td></tr></table>");
+    newProperty.find('.redNaoPropertyClearButton').click(function(event)
+    {
+        event.preventDefault();
+        newProperty.find('.itemSel').removeAttr('checked');
+        self.UpdateProperty();
+    });
+
     newProperty.find('.cloneArrayItem').click(function(){self.CloneItem(rnJQuery(this))});
     newProperty.find('.deleteArrayItem').click(function(){self.DeleteItem(rnJQuery(this))});
     newProperty.find('input[type=text],input[type=radio],input[type=checkbox]').change(function(){self.UpdateProperty();});
@@ -144,7 +150,7 @@ ArrayProperty.prototype.GenerateHtml=function()
 
 ArrayProperty.prototype.GetItemList=function(items)
 {
-    var list= '<table class="listOfItems"><tr><th>Sel</th><th>Label</th><th>Amount</th></tr>';
+    var list= '<table class="listOfItems"><tr><th style="text-align: right">Sel</th><th>Label</th><th>Amount</th></tr>';
 
     var isFirst=true;
     for(var i=0;i<items.length;i++)
@@ -152,7 +158,6 @@ ArrayProperty.prototype.GetItemList=function(items)
         list+=this.CreateListRow(isFirst,items[i]);
         isFirst=false;
     }
-    list+='</table>'
     return list;
 
 }
@@ -192,8 +197,8 @@ ArrayProperty.prototype.CloneItem=function(jQueryElement)
 
 ArrayProperty.prototype.CreateListRow=function(isFirst,item)
 {
-    var row= '<tr>' +
-            '       <td style="text-align: center;">'+this.GetSelector(item)+'</td>' +
+    var row= '<tr class="redNaoRowOption">' +
+            '       <td style="text-align: right;">'+this.GetSelector(item)+'</td>' +
             '       <td><input type="text" class="itemText" value="'+item.label+'"/></td>' +
             '       <td><input type="text" class="itemValue" style="text-align: right; width: 50px;" value="'+item.value+'"/></td>' +
             '       <td style="text-align: center;vertical-align: middle;"><img style="cursor: hand;cursor: pointer; width:15px;height:15px;" class="cloneArrayItem" src="'+smartFormsRootPath+'images/clone.png" title="Clone"></td>';
@@ -217,17 +222,10 @@ ArrayProperty.prototype.GetSelector=function(item)
 ArrayProperty.prototype.UpdateProperty=function()
 {
     var processedValueArray=new Array();
-    var headerRow=true;
     var self=this;
-    var rows=this.ItemsList.find('tr').each(
+    var rows=this.ItemsList.find('tr.redNaoRowOption').each(
         function()
         {
-            if(headerRow)
-            {
-                headerRow=false;
-                return;
-            }
-
             var jQueryRow=rnJQuery(this);
             var row=self.GetRowData(jQueryRow);
             processedValueArray.push(row);

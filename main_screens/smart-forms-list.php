@@ -27,9 +27,11 @@ if($action==="add"||$action=="clone"){
 
 }
 
-
-echo "<h1>".__("Forms")."</h1>";
-echo sprintf('<h2 ><a style="color:blue; text-decoration: underline;" href="?page=%s&action=%s">'.__("Add New").'</a></h2>',$_REQUEST['page'],'add');
+if($action!=="edit")
+{
+	echo "<h1>".__("Forms")."</h1>";
+	echo sprintf('<h2 ><a style="color:blue; text-decoration: underline;" href="?page=%s&action=%s">'.__("Add New").'</a></h2>',$_REQUEST['page'],'add');
+}
 
 
 
