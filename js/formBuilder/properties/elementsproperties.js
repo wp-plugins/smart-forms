@@ -66,9 +66,19 @@ SimpleTextProperty.prototype=Object.create(ElementPropertiesBase.prototype);
 
 SimpleTextProperty.prototype.GenerateHtml=function()
 {
+    var input="";
+    var tdStyle="";
+    if(this.AdditionalInformation.MultipleLine==true)
+        input='<textarea style="width:206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="Default"/>';
+    else
+    {
+        input='<input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="Default"/>';
+        tdStyle='vertical-align:top;'
+    }
+
     var value=this.GetPropertyCurrentValue().trim();
-    var newProperty=rnJQuery( '<td style="text-align: right"><label class="rednao-properties-control-label"> '+this.PropertyTitle+' </label></td>\
-            <td style="text-align: left"><input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="Default"/>\
+    var newProperty=rnJQuery( '<td style="text-align: right;'+tdStyle+'"><label class="rednao-properties-control-label"> '+this.PropertyTitle+' </label></td>\
+            <td style="text-align: left">'+input+'\
             <img style="width:15px;height: 20px; vertical-align: middle;cursor:pointer;cursor:hand;" title="Formula" src="'+ smartFormsRootPath+(this.FormulaExists(this.FormElement,this.PropertyName)?'images/formula_used.png' :'images/formula.png')+'"/> </td>');
 
     var self=this;

@@ -783,11 +783,13 @@ function TextAreaElement(options)
         this.Options.Width='';
         this.Options.Height='';
         this.Options.Placeholder='Placeholder';
+        this.Options.Disabled="n";
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
         this.SetDefaultIfUndefined('Height','');
         this.SetDefaultIfUndefined('Placeholder','');
+        this.SetDefaultIfUndefined('Disabled','n');
     }
 
 
@@ -799,11 +801,12 @@ TextAreaElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"DefaultText","Value",{ManipulatorType:'basic',RefreshFormData:true}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"DefaultText","Value",{ManipulatorType:'basic',RefreshFormData:true,MultipleLine:true}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic',RefreshFormData:true}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Height","Height",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"Disabled","Disabled",{ManipulatorType:'basic'}));
 
 
 
@@ -818,10 +821,14 @@ TextAreaElement.prototype.GenerateInlineElement=function()
     if(!isNaN(parseFloat(this.Options.Height)))
         additionalStyle+='height:'+this.Options.Height+'px'+' !important;'
 
+    var disabled="";
+    if(this.Options.Disabled=='y')
+        disabled='disabled="disabled"'
+
 
     return  '<div class="rednao_label_container"><label class="rednao_control_label" for="textarea">'+this.Options.Label+'</label></div>\
                 <div class="redNaoControls">\
-                <textarea placeholder="'+this.Options.Placeholder+'" style="'+additionalStyle+'" name="textarea" class="redNaoTextAreaInput">'+this.Options.DefaultText+'</textarea>\
+                <textarea '+disabled+' placeholder="'+this.Options.Placeholder+'" style="'+additionalStyle+'" name="textarea" class="redNaoTextAreaInput">'+this.Options.DefaultText+'</textarea>\
             </div>';
 }
 
