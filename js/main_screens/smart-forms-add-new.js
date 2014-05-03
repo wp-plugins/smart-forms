@@ -45,6 +45,8 @@ function SmartFormsAddNew()
             rnJQuery('#redNaoAlertMessageCB').attr('checked','checked');
         if(RedNaoGetValueOrNull(smartFormClientOptions.Formulas)!=null)
             smartFormsIntegrationFormula.Formulas=smartFormClientOptions.Formulas;
+        if(RedNaoGetValueOrNull(smartFormClientOptions.InvalidInputMessage)!=null)
+            rnJQuery("#smartFormsInvalidFieldMessage").val(smartFormClientOptions.InvalidInputMessage);
     }
 
 
@@ -231,7 +233,8 @@ SmartFormsAddNew.prototype.GetClientFormOptions=function(usesCaptcha)
         PayPalEmail:rnJQuery('#smartDonationsEmail').val(),
         PayPalDescription:rnJQuery('#smartDonationsDescription').val(),
         PayPalCurrency:rnJQuery('#smartDonationsCurrencyDropDown').val(),
-        Formulas:smartFormsIntegrationFormula.Formulas
+        Formulas:smartFormsIntegrationFormula.Formulas,
+        InvalidInputMessage:rnJQuery("#smartFormsInvalidFieldMessage").val()
     };
 
 

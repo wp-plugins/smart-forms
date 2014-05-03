@@ -246,6 +246,11 @@ wp_enqueue_style('form-builder-icheck-normal',SMART_FORMS_DIR_URL.'js/utilities/
                 <span class="description" style="margin-bottom:5px;"> <?php echo __("*The form description, this is displayed in the form list"); ?></span>
                 <br/>
 
+				<span><?php echo __("Invalid field message"); ?></span>
+				<input style="width: 300px;" type="text"  id="smartFormsInvalidFieldMessage" value="*Please fill all the required fields"/>
+				<span class="description" style="margin-bottom:5px;" ><?php echo __("*The message that is displayed when a required field is empty"); ?></span>
+				<br/>
+
 
 
             </div>

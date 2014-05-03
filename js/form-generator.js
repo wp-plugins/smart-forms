@@ -1,6 +1,7 @@
 
 function smartFormGenerator(options){
     this.client_form_options=options.client_form_options;
+    this.SetDefaultIfUndefined('InvalidInputMessage','*Please fill all the required fields')
     try{
         this.JavaScriptCode=eval(this.client_form_options.JavascriptCode)();
 
@@ -25,6 +26,11 @@ function smartFormGenerator(options){
 
 }
 
+smartFormGenerator.prototype.SetDefaultIfUndefined=function(propertyName,defaultValue)
+{
+    if(typeof this.client_form_options[propertyName]=='undefined')
+        this.client_form_options[propertyName]=defaultValue;
+}
 
 smartFormGenerator.prototype.CreateForm=function(){
     var container=this.GetRootContainer();
@@ -210,7 +216,7 @@ smartFormGenerator.prototype.SaveForm=function()
 
     if(!formIsValid)
     {
-        this.GetRootContainer().prepend('<p class="redNaoValidationMessage" style="margin:0;padding: 0; font-style: italic; color:red;font-family:Arial;font-size:12px;">*Please fill all the required fields</p>')
+        this.GetRootContainer().prepend('<p class="redNaoValidationMessage" style="margin:0;padding: 0; font-style: italic; color:red;font-family:Arial;font-size:12px;">'+this.client_form_options.InvalidInputMessage+'</p>')
         return;
     }
 

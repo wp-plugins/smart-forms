@@ -2143,6 +2143,12 @@ function RedNaoNumber(options)
         this.Options.Label="Number";
         this.Options.Placeholder="Placeholder"
         this.Options.NumberOfDecimals=0;
+        this.Options.MaximumValue="";
+        this.Options.MinimumValue="";
+    }else
+    {
+        this.SetDefaultIfUndefined("MaximumValue","");
+        this.SetDefaultIfUndefined("MinimumValue","");
     }
 
 
@@ -2160,6 +2166,8 @@ RedNaoNumber.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
     //this.Properties.push(new SimpleTextProperty(this,this.Options,"NumberOfDecimals","Number of decimals",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"MinimumValue","Minimum Value",{ManipulatorType:'basic',Placeholder:'No Minimum'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"MaximumValue","Maximum Value",{ManipulatorType:'basic',Placeholder:'No Maximum'}));
 
 }
 
@@ -2195,10 +2203,38 @@ RedNaoNumber.prototype.IsValid=function()
     return true;
 }
 
+RedNaoNumber.prototype.InputIsValid=function()
+{
+    var inputText=rnJQuery('#'+this.Id+ ' .redNaoNumber').val();
+
+    if(isNaN(inputText))
+        return false;
+
+    var inputNumber=parseFloat(inputText);
+    if(!isNaN(this.Options.MaximumValue))
+    {
+        var maximumValue=parseFloat(this.Options.MaximumValue);
+        if(inputNumber>maximumValue)
+            return false;
+    }
+
+    if(!isNaN(this.Options.MinimumValue))
+    {
+        var minimumValue=parseFloat(this.Options.MinimumValue);
+        if(inputNumber<minimumValue)
+            return false;
+    }
+    return true;
+}
+
 RedNaoNumber.prototype.GenerationCompleted=function()
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoNumber').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    rnJQuery('#'+this.Id+ ' .redNaoNumber').change(function(){
+        if(!self.InputIsValid())
+            rnJQuery('#'+self.Id+ ' .redNaoNumber').val('');
+
+        self.FirePropertyChanged(self.GetValueString());});
     rnJQuery('#'+this.Id+ ' .redNaoNumber').ForceNumericOnly();
 }
 

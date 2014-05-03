@@ -59,6 +59,8 @@ ElementPropertiesBase.prototype.RefreshElement=function()
 
 function SimpleTextProperty(formelement,propertiesObject,propertyName,propertyTitle,additionalInformation)
 {
+    if(typeof additionalInformation.Placeholder=='undefined')
+        additionalInformation.Placeholder='Default';
     ElementPropertiesBase.call(this,formelement,propertiesObject,propertyName,propertyTitle,additionalInformation);
 }
 
@@ -70,12 +72,12 @@ SimpleTextProperty.prototype.GenerateHtml=function()
     var tdStyle="";
     if(this.AdditionalInformation.MultipleLine==true)
     {
-        input='<textarea style="width:206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="Default"/>';
+        input='<textarea style="width:206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="'+this.AdditionalInformation.Placeholder+'"/>';
         tdStyle='vertical-align:top;'
     }
     else
     {
-        input='<input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="Default"/>';
+        input='<input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="'+this.AdditionalInformation.Placeholder+'"/>';
     }
 
     var value=this.GetPropertyCurrentValue().trim();
