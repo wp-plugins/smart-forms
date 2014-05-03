@@ -69,11 +69,13 @@ SimpleTextProperty.prototype.GenerateHtml=function()
     var input="";
     var tdStyle="";
     if(this.AdditionalInformation.MultipleLine==true)
+    {
         input='<textarea style="width:206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="Default"/>';
+        tdStyle='vertical-align:top;'
+    }
     else
     {
         input='<input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="Default"/>';
-        tdStyle='vertical-align:top;'
     }
 
     var value=this.GetPropertyCurrentValue().trim();
