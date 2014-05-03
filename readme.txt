@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: contact forms, contact, forms, forms, contact forms plugin, contact forms builder, contact forms with recaptcha, feedback forms, contact us, request forms, contact button, drag and drop contact forms, file upload contact forms, contact forms to email, contact forms payments, contact for paypal, forms solution, forms builder, feedback, easy contact forms, helpdesk
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.2.7
+Stable tag: 1.2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,13 +53,15 @@ N/A
 9. Calculated field interface
 10. Example of date field
 == Changelog ==
+= Smart Forms 1.2.8 =
+* Smart Forms Improvements disabled the checkbox edition in the form builder.
 = Smart Forms 1.2.7 =
-*Improved forms designed, added validations to checkbox and dropdown
-*Fixed form designer, fixed issue of checkbox triming width
+*Improved forms/Form builder, added validations to checkbox and dropdown
+*Fixed forms/form builder, fixed issue of checkbox triming width
 = Smart Forms 1.2.6 =
-* Fixed forms designer issue where imaes in the form radio button was not displayed
+* Fixed forms form builder issue where imaes in the form radio button was not displayed
 * Fixed forms editor, the formula screen was not displayed correctly
-* Fixed forms designer, the image of the formula was not getting displayed
+* Fixed forms form builder, the image of the formula was not getting displayed
 = Smart Forms 1.2.5 =
 * Fixed forms editor, Fixed issue with forms captcha
 * Fixed forms editor, Fixed minor issue with forms submission
@@ -80,7 +82,7 @@ N/A
 
 = Smart Forms 1.1 =
 * Fixed forms editor, Fixed issue with the text area form element
-* Fixed forms editor, Fixed problem with the form designer
+* Fixed forms editor, Fixed problem with the form form builder
 * Improving forms editor, Added the option to select if you want to use horizontal radio or checkboxes
 
 = Smart Forms 0.8.5 =
