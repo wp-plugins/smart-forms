@@ -102,10 +102,12 @@ smartFormGenerator.prototype.AdjustLayout=function()
         var element=this.FormElements[i].JQueryElement;
 
         var label=element.find('.rednao_label_container');
-        maxWidth=Math.max(maxWidth,label[0].getBoundingClientRect().width);
+        if(label.length>0)
+            maxWidth=Math.max(maxWidth,label[0].getBoundingClientRect().width);
         labelArray.push(label);
 
         var control=element.find('.redNaoControls');
+        if(control.length>0)
         maxControlWidth=Math.max(maxControlWidth,control[0].getBoundingClientRect().width);
         controlsArray.push(control);
     }

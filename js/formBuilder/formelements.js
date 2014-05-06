@@ -1962,15 +1962,13 @@ RedNaoPhone.prototype.IsValid=function()
     return true;
 }
 
-RedNaoPhone.prototype.GenerationCompleted=function()
-{
-    var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoInputArea,#'+this.Id+ ' .redNaoInputPhone').change(function(){self.FirePropertyChanged(self.GetValueString());});
-}
 
 RedNaoPhone.prototype.GenerationCompleted=function()
 {
-    rnJQuery('#'+this.Id+ ' .redNaoInputArea,#'+this.Id+ ' .redNaoInputPhone').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    var self=this;
+    rnJQuery('#'+this.Id+ ' .redNaoInputArea,#'+this.Id+ ' .redNaoInputPhone').change(function(){
+        self.FirePropertyChanged(self.GetValueString());
+    });
 
     rnJQuery('#'+this.Id+ ' .redNaoInputArea,#'+this.Id+ ' .redNaoInputPhone').ForceNumericOnly();
 
