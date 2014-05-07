@@ -92,7 +92,7 @@ class php_entry_saver_base {
 
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-        $headers.= "$FromName <$FromEmail>";
+        $headers.= "From: $FromName <$FromEmail>";
         if(trim($ToEmail)!="")
         {
             return wp_mail($ToEmail, $EmailSubject, $EmailText, $headers);

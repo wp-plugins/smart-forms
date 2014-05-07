@@ -108,7 +108,7 @@ smartFormGenerator.prototype.AdjustLayout=function()
 
         var control=element.find('.redNaoControls');
         if(control.length>0)
-        maxControlWidth=Math.max(maxControlWidth,control[0].getBoundingClientRect().width);
+            maxControlWidth=Math.max(maxControlWidth,control[0].getBoundingClientRect().width);
         controlsArray.push(control);
     }
 
