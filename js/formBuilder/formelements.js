@@ -1,6 +1,4 @@
 "use strict";
-
-
 /************************************************************************************* Formula Methods ***************************************************************************************************/
 
 function RedNaoGetValueFromArray(array)
@@ -106,6 +104,7 @@ function RedNaoCreateFormElementByOptions(options)
 /************************************************************************************* Base Class  ***************************************************************************************************/
 function FormElementBase(options)
 {
+    this.Translations=SmartFormsElementsTranslation;
     if(options==null)
     {
         this.Options=new Object();
@@ -1658,6 +1657,7 @@ function RedNaoAddress(options)
         this.Options.StateLabel="State";
         this.Options.ZipLabel='Zip';
         this.Options.CountryLabel='Country';
+        this.Options.DefaultCountry="United States";
 
         this.Options.ShowStreetAddress1="y";
         this.Options.ShowStreetAddress2="y";
@@ -1665,7 +1665,8 @@ function RedNaoAddress(options)
         this.Options.ShowState="y";
         this.Options.ShowZip='y';
         this.Options.ShowCountry='y';
-    }
+    }else
+        this.SetDefaultIfUndefined("DefaultCountry","United States");
 
 
 
@@ -1675,6 +1676,15 @@ function RedNaoAddress(options)
 
 RedNaoAddress.prototype=Object.create(FormElementBase.prototype);
 
+RedNaoAddress.prototype.GetCountriesForPropertyConfiguration = function () {
+    var countriesToReturn=new Array(this.Countries.length);
+    for(var i=0;i<this.Countries.length;i++)
+    {
+        countriesToReturn[i]={value:this.Countries[i],label:this.Countries[i]};
+    }
+
+    return countriesToReturn;
+};
 RedNaoAddress.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
@@ -1685,6 +1695,7 @@ RedNaoAddress.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"StateLabel","State Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"ZipLabel","Zip Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"CountryLabel","Country Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new ComboBoxProperty(this,this.Options,"DefaultCountry",this.Translations.DefaultCountry,{ManipulatorType:'basic',Values:this.GetCountriesForPropertyConfiguration()}));
 
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowStreetAddress1","Show Street Address",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowStreetAddress2","Show Street Address 2",{ManipulatorType:'basic'}));
@@ -1764,7 +1775,7 @@ RedNaoAddress.prototype.GenerateInlineElement=function()
                         <select '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_country"  class="redNaoTwoColumns redNaoSelect redNaoCountry '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">';
                         for(var i=0;i<this.Countries.length;i++)
                         {
-                            html+='<option '+(isFirstElement?'selected="selected"':'')+'  value="'+this.Countries[i]+'">'+this.Countries[i]+'</option>';
+                            html+='<option '+((this.Countries[i]==this.Options.DefaultCountry)?'selected="selected"':'')+'  value="'+this.Countries[i]+'">'+this.Countries[i]+'</option>';
                             isFirstElement=false;
                         }
                 html+="</select>"+CountryLabel+'\

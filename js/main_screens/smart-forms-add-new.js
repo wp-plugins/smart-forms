@@ -388,3 +388,4 @@ SmartFormsAddNew.prototype.Validate=function()
 
 var SmartFormsAddNewVar=null;
 rnJQuery(function(){SmartFormsAddNewVar=new SmartFormsAddNew();})
+
