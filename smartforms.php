@@ -5,7 +5,7 @@
  * Description: Place diferent form of donations on your blog...
  * Author: RedNao
  * Author URI: http://rednao.com
- * Version: 1.2.12
+ * Version: 1.2.13
  * Text Domain: SmartDonations
  * Domain Path: /languages/
  * Network: true
@@ -72,7 +72,8 @@ function rednao_smart_forms_create_menu(){
 
     add_menu_page('Smart Forms','Smart Forms','manage_options',__FILE__,'rednao_forms',plugin_dir_url(__FILE__).'images/smartFormsIcon.png');
     add_submenu_page(__FILE__,'Entries','Entries','manage_options',__FILE__.'entries', 'rednao_smart_forms_entries');
-    add_submenu_page(__FILE__,'Wish List/Support','Wish List/Support','manage_options',__FILE__.'wish_list', 'rednao_smart_forms_wish_list');
+    add_submenu_page(__FILE__,'Support/Wish List','Support/Wish List','manage_options',__FILE__.'wish_list', 'rednao_smart_forms_wish_list');
+	add_submenu_page(__FILE__,'Tutorials','Tutorials','manage_options',__FILE__.'tutorials', 'rednao_smart_forms_tutorials');
 
 }
 
@@ -161,6 +162,11 @@ function rednao_smart_forms_entries()
 function rednao_smart_forms_wish_list()
 {
     include(SMART_FORMS_DIR.'main_screens/smart-forms-wishlist.php');
+}
+
+function rednao_smart_forms_tutorials()
+{
+	include(SMART_FORMS_DIR.'main_screens/smart-forms-tutorials.php');
 }
 
 ?>

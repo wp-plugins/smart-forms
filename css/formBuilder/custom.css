@@ -293,3 +293,8 @@
 .redNaoRadio{
     padding-bottom: 1px;
 }
+
+.redNaoInvalidInput{
+    background-color: #ff0000;
+    color:#ffffff;
+}

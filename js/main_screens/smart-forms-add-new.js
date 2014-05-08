@@ -122,19 +122,19 @@ SmartFormsAddNew.prototype.SmartFormsTagClicked=function(e)
         this.CloseTag(this);*/
 }
 
-SmartFormsAddNew.prototype.FillEmailData=function(formOptions)
+SmartFormsAddNew.prototype.FillEmailData=function(emailOption)
 {
-    formOptions.FromEmail=rnJQuery('#redNaoFromEmail').val();
-    formOptions.FromName=rnJQuery('#redNaoFromName').val();
-    formOptions.ToEmail= rnJQuery('#redNaoToEmail').val();
-    formOptions.EmailSubject=rnJQuery('#redNaoEmailSubject').val();
+    emailOption.FromEmail=rnJQuery('#redNaoFromEmail').val();
+    emailOption.FromName=rnJQuery('#redNaoFromName').val();
+    emailOption.ToEmail= rnJQuery('#redNaoToEmail').val();
+    emailOption.EmailSubject=rnJQuery('#redNaoEmailSubject').val();
     if(this.EmailTextLoaded)
-        formOptions.EmailText=tinymce.get('redNaoTinyMCEEditor').getContent();
+        emailOption.EmailText=tinymce.get('redNaoTinyMCEEditor').getContent();
     else
-        formOptions.EmailText=this.EmailText;
+        emailOption.EmailText=this.EmailText;
 }
 
-SmartFormsAddNew.prototype.ValidateFormBeforeSaving=function()
+SmartFormsAddNew.prototype.DonationConfigurationIsValid=function()
 {
     var formElements=this.FormBuilder.RedNaoFormElements;
     for(var i=0;i<formElements.length;i++)
@@ -168,14 +168,66 @@ SmartFormsAddNew.prototype.ValidateFormBeforeSaving=function()
     return true;
 }
 
+SmartFormsAddNew.prototype.FormOptionsAreValid = function (formOptions) {
+    rnJQuery("#redNaoEditEmailButton").removeClass('redNaoInvalidInput');
+    if(formOptions.SendNotificationEmail=='y')
+    {
+        if(formOptions.Emails[0].EmailText.trim()=="")
+        {
+            rnJQuery("#redNaoEditEmailButton").addClass('redNaoInvalidInput');
+            alert('Please configure the email that is going to sent before saving.');
+            this.GoToAfterSubmit();
+            return false;
+        }
+    }
+
+    return true;
+};
 SmartFormsAddNew.prototype.SaveForm=function(e)
 {
     e.preventDefault();
     e.stopPropagation();
 
-    if(!this.ValidateFormBeforeSaving())
+    var formOptions=this.GetFormOptions();
+    var clientFormOptions=this.GetClientFormOptions(formOptions.UsesCaptcha);
+    var elementsOptions=this.FormBuilder.GetFormInformation();
+
+    if(!this.DonationConfigurationIsValid())
         return;
 
+    if(!this.FormOptionsAreValid(formOptions))
+        return;
+
+    this.ExecuteSaveRequest(formOptions,clientFormOptions,elementsOptions);
+
+}
+
+SmartFormsAddNew.prototype.ExecuteSaveRequest=function(formOptions,clientFormOptions,elementOptions)
+{
+    var data={};
+    data.form_options=JSON.stringify(formOptions);
+    data.element_options=JSON.stringify(elementOptions);
+    data.donation_email=rnJQuery('#smartDonationsEmail').val();
+    data.client_form_options=JSON.stringify(clientFormOptions);
+
+
+    var self=this;
+    rnJQuery('#smartFormsSaveButton').text('Saving...');
+    rnJQuery('#smartFormsSaveButton').attr('disabled','disabled');
+    data.id=this.id;
+    data.action="rednao_smart_forms_save";
+    rnJQuery.post(ajaxurl,data,function(result){
+        rnJQuery('#smartFormsSaveButton').text('Save');
+        rnJQuery('#smartFormsSaveButton').removeAttr('disabled');
+        var result=rnJQuery.parseJSON(result);
+        alert(result.Message);
+        if(result.Message=="saved")
+            self.id=result.FormId;
+    });
+}
+
+SmartFormsAddNew.prototype.GetFormOptions=function()
+{
     var formOptions={};
     formOptions.Name=rnJQuery('#smartFormName').val();
     formOptions.Description=rnJQuery('#smartFormDescription').val();
@@ -197,27 +249,7 @@ SmartFormsAddNew.prototype.SaveForm=function(e)
     }
     formOptions.UsesCaptcha=usesCaptcha;
     formOptions.RedNaoSendThankYouEmail=(rnJQuery('#redNaoSendThankYouEmail').is(':checked')?'y':'n');
-
-    var data={};
-    data.id=this.id;
-    data.action="rednao_smart_forms_save";
-    data.form_options=JSON.stringify(formOptions);
-    data.element_options=JSON.stringify(this.FormBuilder.GetFormInformation());
-    data.donation_email=rnJQuery('#smartDonationsEmail').val();
-
-
-    data.client_form_options=JSON.stringify(this.GetClientFormOptions(usesCaptcha));
-    var self=this;
-    rnJQuery('#smartFormsSaveButton').text('Saving...');
-    rnJQuery('#smartFormsSaveButton').attr('disabled','disabled');
-    rnJQuery.post(ajaxurl,data,function(result){
-        rnJQuery('#smartFormsSaveButton').text('Save');
-        rnJQuery('#smartFormsSaveButton').removeAttr('disabled');
-        var result=rnJQuery.parseJSON(result);
-        alert(result.Message);
-        if(result.Message=="saved")
-            self.id=result.FormId;
-    });
+    return formOptions;
 }
 
 SmartFormsAddNew.prototype.GetClientFormOptions=function(usesCaptcha)
