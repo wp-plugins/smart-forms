@@ -966,8 +966,7 @@ MultipleRadioElement.prototype.IsValid=function()
 {
     if(rnJQuery('#'+this.Id).find(':checked').length<=0&&this.Options.IsRequired=='y')
     {
-        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
-        rnJQuery('#'+this.Id+ ' .redNaoInputRadio').iCheck({radioClass: 'iradio_minimal-red'});
+        this.SetUpICheck('iradio_minimal-red');
         return false;
     }
 
@@ -976,14 +975,25 @@ MultipleRadioElement.prototype.IsValid=function()
 
 MultipleRadioElement.prototype.ClearInvalidStyle=function()
 {
-    rnJQuery('#'+this.Id+ ' .redNaoInputRadio').iCheck({radioClass: 'iradio_minimal'});
+    this.SetUpICheck('iradio_minimal');
+}
+
+MultipleRadioElement.prototype.SetUpICheck=function(style)
+{
+    var self=this;
+    rnJQuery('#'+this.Id+ ' .redNaoInputRadio').iCheck({radioClass: style});
+    rnJQuery('#'+this.Id+ ' .redNaoInputRadio').on('ifChanged', function(event){
+        if(event.type ==="ifChanged"){
+            self.FirePropertyChanged(self.GetValueString());
+        }
+    });
 }
 
 MultipleRadioElement.prototype.GenerationCompleted=function()
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoInputRadio').change(function(){self.FirePropertyChanged(self.GetValueString());});
-    rnJQuery('#'+this.Id+ ' .redNaoInputRadio').iCheck({radioClass: 'iradio_minimal'});
+    //rnJQuery('#'+this.Id+ ' .redNaoInputRadio').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    this.SetUpICheck('iradio_minimal');
 }
 
 /*************************************************************************************Multiple Checkbox Element ***************************************************************************************************/
@@ -1104,8 +1114,7 @@ MultipleCheckBoxElement.prototype.IsValid=function()
 {
     if(rnJQuery('#'+this.Id).find(':checked').length<=0&&this.Options.IsRequired=='y')
     {
-        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
-        rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').iCheck({checkboxClass: 'icheckbox_minimal-red'});
+        this.SetUpICheck('icheckbox_minimal-red');
         return false;
     }
     return true;
@@ -1113,14 +1122,28 @@ MultipleCheckBoxElement.prototype.IsValid=function()
 
 MultipleCheckBoxElement.prototype.ClearInvalidStyle=function()
 {
-    rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').iCheck({checkboxClass: 'icheckbox_minimal'});
+    this.SetUpICheck('icheckbox_minimal');
 }
+
+MultipleCheckBoxElement.prototype.SetUpICheck=function(style)
+{
+    var self=this;
+    rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').iCheck({checkboxClass: style});
+    rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').on('ifChanged', function(event){
+        if(event.type ==="ifChanged"){
+            self.FirePropertyChanged(self.GetValueString());
+        }
+    });
+}
+
+
 
 MultipleCheckBoxElement.prototype.GenerationCompleted=function()
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').change(function(){self.FirePropertyChanged(self.GetValueString());});
-    rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').iCheck({checkboxClass: 'icheckbox_minimal'});
+    //rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    this.SetUpICheck('icheckbox_minimal');
+    //rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').iCheck({checkboxClass: 'icheckbox_minimal'});
 }
 
 
