@@ -82,7 +82,9 @@ class php_entry_saver_base {
         if($ToEmail=="")
             $ToEmail=get_option("admin_email");
 
-        preg_match_all('/\\[field ([^\\]]+)/',$EmailText, $matches, PREG_PATTERN_ORDER);
+
+		$fieldPattern='/\\[field ([^\\]]+)/';
+        preg_match_all($fieldPattern,$EmailText, $matches, PREG_PATTERN_ORDER);
 
         foreach($matches[1] as $match)
         {
@@ -95,7 +97,24 @@ class php_entry_saver_base {
         $headers.= "From: $FromName <$FromEmail>";
         if(trim($ToEmail)!="")
         {
-            return wp_mail($ToEmail, $EmailSubject, $EmailText, $headers);
+
+			$toEmailArray=explode(",",$ToEmail);
+			for($i=0;$i<count($toEmailArray);$i++)
+			{
+				if(strpos($toEmailArray[$i],"[field")===0)
+				{
+					preg_match_all($fieldPattern,$toEmailArray[$i], $matches, PREG_PATTERN_ORDER);
+					if(count($matches[1])>0)
+					{
+						$field=$matches[1][0];
+						$value=GetValueByField($stringBuilder,$field,$entryData,$elementOptions,$useTestData);
+						$toEmailArray[$i]=$value;
+					}else
+						$toEmailArray[$i]="";
+				}
+			}
+			$toEmailArray=array_filter($toEmailArray);
+            return wp_mail($toEmailArray, $EmailSubject, $EmailText, $headers);
         }
 
         return false;

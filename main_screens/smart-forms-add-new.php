@@ -26,8 +26,9 @@ wp_enqueue_script('smart-forms-elements-properties',SMART_FORMS_DIR_URL.'js/form
 wp_enqueue_script('smart-forms-formBuilder',SMART_FORMS_DIR_URL.'js/formBuilder/formbuilder.js',array('smart-forms-elements-properties'));
 wp_enqueue_script('smart-forms-dragmanager',SMART_FORMS_DIR_URL.'js/formBuilder/dragManager/dragmanager.js');
 wp_enqueue_script('smart-forms-dragitembehaviors',SMART_FORMS_DIR_URL.'js/formBuilder/dragManager/dragitembehaviors.js');
-wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',array('isolated-slider','smart-forms-formula-window','smart-forms-formBuilder'));
+wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',array('isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2'));
 wp_enqueue_script('smart-forms-icheck',SMART_FORMS_DIR_URL.'js/utilities/iCheck/icheck.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-select2',SMART_FORMS_DIR_URL.'js/utilities/select2/select2.js',array('isolated-slider'));
 require_once(SMART_FORMS_DIR.'translations/smart-forms-add-new-translation.php');
 require_once(SMART_FORMS_DIR.'translations/form-elements-translation.php');
 
@@ -45,7 +46,7 @@ wp_enqueue_style('smart-forms-Slider',SMART_FORMS_DIR_URL.'css/smartFormsSlider/
 wp_enqueue_style('form-builder-boot-strap',SMART_FORMS_DIR_URL.'css/formBuilder/bootstrap.min.css');
 wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/custom.css');
 wp_enqueue_style('form-builder-icheck-normal',SMART_FORMS_DIR_URL.'js/utilities/iCheck/skins/minimal/minimal.css');
-
+wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select2/select2.css');
 
 ?>
 
@@ -73,7 +74,7 @@ wp_enqueue_style('form-builder-icheck-normal',SMART_FORMS_DIR_URL.'js/utilities/
     <?php
         if(has_smart_donations_license_and_is_active())
         {
-            wp_enqueue_script('smart-forms-donation-elements',SMART_FORMS_DIR_URL.'js/integration/smart-donations-integration.js',array('smart-forms-formelements','smart-forms-add-new'));
+            wp_enqueue_script('smart-forms-donation-elements',SMART_FORMS_DIR_URL.'js/integration/smart-donations-integration.js',array('smart-forms-form-elements','smart-forms-add-new'));
             ?>
             <a class='nav-tab' id="smartDonationsTab" onclick="SmartFormsAddNewVar.GoToSmartDonations();">Smart Donations</a>
         <?php
@@ -92,7 +93,7 @@ wp_enqueue_style('form-builder-icheck-normal',SMART_FORMS_DIR_URL.'js/utilities/
         </tr>
 
         <tr>
-            <td style="text-align: right">To email address(es)</td><td> <input placeholder="Default (Blog Administrator)" type="text" id="redNaoToEmail" style="width:300px"></td>
+            <td style="text-align: right">To email address(es)</td><td> <select multiple="multiple" id="redNaoToEmail" style="width:300px"/></td>
         </tr>
 
         <tr>

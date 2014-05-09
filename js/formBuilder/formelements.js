@@ -2046,14 +2046,20 @@ RedNaoEmail.prototype.IsValid=function()
         return false;
     }
 
-    var reg=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if(email!=''&&!reg.test(email))
+
+    if(email!=''&&!this.EmailIsValid(email))
     {
         rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
         return false;
     }
 
     return true;
+}
+
+RedNaoEmail.prototype.EmailIsValid=function(email)
+{
+    var reg=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return reg.test(email);
 }
 
 RedNaoEmail.prototype.GenerationCompleted=function()

@@ -12,6 +12,7 @@ function SmartFormsAddNew()
     this.EmailTextLoaded=false;
     this.EmailText="";
     this.RestoreDefault();
+    this.Emails=[{ToEmail:""}];
     if(typeof smartFormsOptions!='undefined')
     {
         options=smartFormsOptions;
@@ -27,7 +28,7 @@ function SmartFormsAddNew()
             {
                 rnJQuery('#redNaoFromEmail').val(smartFormsOptions.Emails[0].FromEmail);
                 rnJQuery('#redNaoFromName').val(smartFormsOptions.Emails[0].FromName);
-                rnJQuery('#redNaoToEmail').val(smartFormsOptions.Emails[0].ToEmail);
+                this.Emails[0].ToEmail=smartFormsOptions.Emails[0].ToEmail||"";
                 rnJQuery('#redNaoEmailSubject').val(smartFormsOptions.Emails[0].EmailSubject);
                 this.EmailText=smartFormsOptions.Emails[0].EmailText;
             }
@@ -102,7 +103,7 @@ SmartFormsAddNew.prototype.EditEmailClicked=function()
         this.EmailTextLoaded=true;
         tinymce.get('redNaoTinyMCEEditor').setContent(this.EmailText);
     }
-    RedNaoEmailEditorVar.OpenEmailEditor(this.FormBuilder.RedNaoFormElements);
+    RedNaoEmailEditorVar.OpenEmailEditor(this.FormBuilder.RedNaoFormElements,this.Emails);
 }
 
 SmartFormsAddNew.prototype.NotifyToChanged=function()
@@ -126,7 +127,7 @@ SmartFormsAddNew.prototype.FillEmailData=function(emailOption)
 {
     emailOption.FromEmail=rnJQuery('#redNaoFromEmail').val();
     emailOption.FromName=rnJQuery('#redNaoFromName').val();
-    emailOption.ToEmail= rnJQuery('#redNaoToEmail').val();
+    emailOption.ToEmail= this.Emails[0].ToEmail;
     emailOption.EmailSubject=rnJQuery('#redNaoEmailSubject').val();
     if(this.EmailTextLoaded)
         emailOption.EmailText=tinymce.get('redNaoTinyMCEEditor').getContent();
