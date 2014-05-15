@@ -26,6 +26,10 @@ function RedNaoStyleEditor()
 
 RedNaoStyleEditor.prototype.OpenStyleEditor=function(formElement,formElementJQuery)
 {
+    if(!RedNaoLicensingManagerVar.LicenseIsValid('Sorry, the style editor is a licensed feature'))
+    {
+        return false;
+    }
     this.Dialog.dialog('open');
     this.PreviewScreen.empty();
     var div=rnJQuery("<div></div>");
