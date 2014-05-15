@@ -40,9 +40,9 @@ function RedNaoFormBuilder(smartFormsOptions,formElementsOptions) {
     this.InitializeComponents();
 
     if(smartFormsOptions!=null)
-        FormElementBase.IdCounter=smartFormsOptions.LatestId;
+        sfFormElementBase.IdCounter=smartFormsOptions.LatestId;
     else
-        FormElementBase.IdCounter=0;
+        sfFormElementBase.IdCounter=0;
     this.DragManager = new RedNaoDragManager(this);
 };
 
@@ -63,7 +63,7 @@ RedNaoFormBuilder.prototype.RecreateExistingFormIfAny=function(elementOptions)
 {
     for(var i=0;i<elementOptions.length;i++)
     {
-        var element=RedNaoCreateFormElementByName(elementOptions[i].ClassName,elementOptions[i]);
+        var element=sfRedNaoCreateFormElementByName(elementOptions[i].ClassName,elementOptions[i]);
         this.RedNaoFormElements.push(element);
     }
 
@@ -134,7 +134,7 @@ RedNaoFormBuilder.prototype.GetJavascriptObjectOfElement = function (element) {
 
 RedNaoFormBuilder.prototype.CreateNewInstanceOfElement = function (element) {
     var componentType = this.GetComponentType(element);
-    return RedNaoCreateFormElementByName(componentType);
+    return sfRedNaoCreateFormElementByName(componentType);
 }
 
 RedNaoFormBuilder.prototype.GetComponentType = function (element) {
@@ -221,27 +221,27 @@ RedNaoFormBuilder.prototype.InitializeTabs = function () {
 }
 
 RedNaoFormBuilder.prototype.InitializeComponents = function () {
-    RedNaoCreateFormElementByName('rednaotitle', null).GenerateHtml(rnJQuery("#components .rednaotitle"));
-    RedNaoCreateFormElementByName('rednaotextinput', null).GenerateHtml(rnJQuery("#components .rednaotextinput"));
-    RedNaoCreateFormElementByName('rednaoprependedtext', null).GenerateHtml(rnJQuery("#components .rednaoprependedtext"));
-    RedNaoCreateFormElementByName('rednaoappendedtext', null).GenerateHtml(rnJQuery("#components .rednaoappendedtext"));
-    RedNaoCreateFormElementByName('rednaoprependedcheckbox', null).GenerateHtml(rnJQuery("#components .rednaoprependedcheckbox"));
-    RedNaoCreateFormElementByName('rednaoappendedcheckbox', null).GenerateHtml(rnJQuery("#components .rednaoappendedcheckbox"));
-    RedNaoCreateFormElementByName('rednaotextarea', null).GenerateHtml(rnJQuery("#components .rednaotextarea"));
-    RedNaoCreateFormElementByName('rednaomultipleradios', null).GenerateHtml(rnJQuery("#components .rednaomultipleradios"));
-    RedNaoCreateFormElementByName('rednaomultiplecheckboxes', null).GenerateHtml(rnJQuery("#components .rednaomultiplecheckboxes"));
-    RedNaoCreateFormElementByName('rednaoselectbasic', null).GenerateHtml(rnJQuery("#components .rednaoselectbasic"));
-    RedNaoCreateFormElementByName('rednaodonationamount', null).GenerateHtml(rnJQuery("#components .rednaodonationamount"));
-    RedNaoCreateFormElementByName('rednaodonationbutton', null).GenerateHtml(rnJQuery("#components .rednaodonationbutton"));
-    RedNaoCreateFormElementByName('rednaodonationrecurrence', null).GenerateHtml(rnJQuery("#components .rednaodonationrecurrence"));
-    RedNaoCreateFormElementByName('rednaosubmissionbutton', null).GenerateHtml(rnJQuery("#components .rednaosubmissionbutton"));
-    RedNaoCreateFormElementByName('rednaodatepicker', null).GenerateHtml(rnJQuery("#components .rednaodatepicker"));
-    RedNaoCreateFormElementByName('rednaoname', null).GenerateHtml(rnJQuery("#components .rednaoname"));
-    RedNaoCreateFormElementByName('rednaoaddress', null).GenerateHtml(rnJQuery("#components .rednaoaddress"));
-    RedNaoCreateFormElementByName('rednaophone', null).GenerateHtml(rnJQuery("#components .rednaophone"));
-    RedNaoCreateFormElementByName('rednaoemail', null).GenerateHtml(rnJQuery("#components .rednaoemail"));
-    RedNaoCreateFormElementByName('rednaonumber', null).GenerateHtml(rnJQuery("#components .rednaonumber"));
-   // RedNaoCreateFormElementByName('rednaocaptcha', null).GenerateHtml(rnJQuery("#components .rednaocaptcha"));
+    sfRedNaoCreateFormElementByName('rednaotitle', null).GenerateHtml(rnJQuery("#components .rednaotitle"));
+    sfRedNaoCreateFormElementByName('rednaotextinput', null).GenerateHtml(rnJQuery("#components .rednaotextinput"));
+    sfRedNaoCreateFormElementByName('rednaoprependedtext', null).GenerateHtml(rnJQuery("#components .rednaoprependedtext"));
+    sfRedNaoCreateFormElementByName('rednaoappendedtext', null).GenerateHtml(rnJQuery("#components .rednaoappendedtext"));
+    sfRedNaoCreateFormElementByName('rednaoprependedcheckbox', null).GenerateHtml(rnJQuery("#components .rednaoprependedcheckbox"));
+    sfRedNaoCreateFormElementByName('rednaoappendedcheckbox', null).GenerateHtml(rnJQuery("#components .rednaoappendedcheckbox"));
+    sfRedNaoCreateFormElementByName('rednaotextarea', null).GenerateHtml(rnJQuery("#components .rednaotextarea"));
+    sfRedNaoCreateFormElementByName('rednaomultipleradios', null).GenerateHtml(rnJQuery("#components .rednaomultipleradios"));
+    sfRedNaoCreateFormElementByName('rednaomultiplecheckboxes', null).GenerateHtml(rnJQuery("#components .rednaomultiplecheckboxes"));
+    sfRedNaoCreateFormElementByName('rednaoselectbasic', null).GenerateHtml(rnJQuery("#components .rednaoselectbasic"));
+    sfRedNaoCreateFormElementByName('rednaodonationamount', null).GenerateHtml(rnJQuery("#components .rednaodonationamount"));
+    sfRedNaoCreateFormElementByName('rednaodonationbutton', null).GenerateHtml(rnJQuery("#components .rednaodonationbutton"));
+    sfRedNaoCreateFormElementByName('rednaodonationrecurrence', null).GenerateHtml(rnJQuery("#components .rednaodonationrecurrence"));
+    sfRedNaoCreateFormElementByName('rednaosubmissionbutton', null).GenerateHtml(rnJQuery("#components .rednaosubmissionbutton"));
+    sfRedNaoCreateFormElementByName('rednaodatepicker', null).GenerateHtml(rnJQuery("#components .rednaodatepicker"));
+    sfRedNaoCreateFormElementByName('rednaoname', null).GenerateHtml(rnJQuery("#components .rednaoname"));
+    sfRedNaoCreateFormElementByName('rednaoaddress', null).GenerateHtml(rnJQuery("#components .rednaoaddress"));
+    sfRedNaoCreateFormElementByName('rednaophone', null).GenerateHtml(rnJQuery("#components .rednaophone"));
+    sfRedNaoCreateFormElementByName('rednaoemail', null).GenerateHtml(rnJQuery("#components .rednaoemail"));
+    sfRedNaoCreateFormElementByName('rednaonumber', null).GenerateHtml(rnJQuery("#components .rednaonumber"));
+   // sfRedNaoCreateFormElementByName('rednaocaptcha', null).GenerateHtml(rnJQuery("#components .rednaocaptcha"));
 
 
     var self=this;
@@ -311,7 +311,7 @@ RedNaoFormBuilder.prototype.ElementClicked=function(jQueryElement)
     jQueryElement.addClass('SmartFormsElementSelected');
     this.OpenProperties(jQueryElement);
 
-    var actionElement=rnJQuery('<div class="smartFormsActionMenu" ><img id="cloneFormElement" src="'+smartFormsRootPath+'images/clone.png" title="Clone" /><img id="deleteFormElement" src="'+smartFormsRootPath+'images/delete.png" title="Delete"/></div>');
+    var actionElement=rnJQuery('<div class="smartFormsActionMenu" ><img id="editStyleElement" src="'+smartFormsRootPath+'images/edit_style.png" title="Edit Style" /><img id="cloneFormElement" src="'+smartFormsRootPath+'images/clone.png" title="Clone" /><img id="deleteFormElement" src="'+smartFormsRootPath+'images/delete.png" title="Delete"/></div>');
     var self=this;
 
 
@@ -319,6 +319,12 @@ RedNaoFormBuilder.prototype.ElementClicked=function(jQueryElement)
 
     actionElement.find('#cloneFormElement').mousedown(function(e){e.preventDefault();e.stopPropagation(); self.CloneFormElement(jQueryElement);});
     actionElement.find('#deleteFormElement').mousedown(function(e){e.preventDefault();e.stopPropagation(); self.DeleteFormElement(jQueryElement);});
+    actionElement.find('#editStyleElement').mousedown(function(e){e.preventDefault();e.stopPropagation();self.EditStyle(jQueryElement)});
+}
+
+RedNaoFormBuilder.prototype.EditStyle=function(jQueryElement){
+    var formElement=this.RedNaoFormElements[jQueryElement.index()];
+    RedNaoStyleEditorVar.OpenStyleEditor(formElement,jQueryElement);
 }
 
 RedNaoFormBuilder.prototype.DeleteFormElement=function(jQueryElement){

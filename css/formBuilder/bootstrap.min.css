@@ -409,3 +409,21 @@ ul#redNaoFormulaFormFields{
     display: none;
 }
 
+
+
+#styleEditorPreview{
+    width: 550px;
+    background-color: white;
+    border-radius: 10px;
+    border-style: dotted;
+    border-width: 1px;
+}
+
+.rednaoFormContainer #smartFormStyleEditorContainer .redNaoStylerHighlight{
+    border-style: dashed !important;
+    border-color:#ff0000 !important;
+    border-width: 1px !important;
+    cursor: hand;
+    cursor:pointer;
+
+}

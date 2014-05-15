@@ -233,7 +233,7 @@ SmartFormsAddNew.prototype.GetFormOptions=function()
     formOptions.Name=rnJQuery('#smartFormName').val();
     formOptions.Description=rnJQuery('#smartFormDescription').val();
     formOptions.NotifyTo=rnJQuery('#smartFormsSubmissionNotifyTo').val();
-    formOptions.LatestId=FormElementBase.IdCounter;
+    formOptions.LatestId=sfFormElementBase.IdCounter;
     formOptions.SendNotificationEmail=(rnJQuery('#smartFormsSendNotificationEmail').is(':checked')?'y':'n');
     formOptions.Emails=[{}];
     this.FillEmailData(formOptions.Emails[0]);
@@ -284,6 +284,7 @@ SmartFormsAddNew.prototype.CloseTag=function()
 
 SmartFormsAddNew.prototype.SendTestEmail=function()
 {
+    RedNaoEmailEditorVar.UpdateToEmails();
     var emailData={};
     emailData.action="rednao_smart_form_send_test_email";
     emailData.element_options=JSON.stringify(this.FormBuilder.GetFormInformation());

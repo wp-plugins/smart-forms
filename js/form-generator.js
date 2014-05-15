@@ -16,7 +16,7 @@ function smartFormGenerator(options){
     var elementOptions=options.elements;
     for(var i=0;i<elementOptions.length;i++)
     {
-        var element=RedNaoCreateFormElementByName(elementOptions[i].ClassName,elementOptions[i]);
+        var element=sfRedNaoCreateFormElementByName(elementOptions[i].ClassName,elementOptions[i]);
         this.RedNaoFormElements.push(element);
         this.FormElements.push(element);
     }
@@ -131,7 +131,7 @@ smartFormGenerator.prototype.AdjustLayout=function()
         this.maxWidth=Math.max(this.maxWidth,width);
     }*/
 
-    if(this.JQueryForm.width()<this.maxWidth)
+    if(this.JQueryForm.width()<(this.maxWidth+5))//5px is the margin size between the label and the control
         this.JQueryForm.parent().addClass('redNaoCompactForm');
 }
 
@@ -142,7 +142,7 @@ smartFormGenerator.prototype.GenerateFormElements=function(formElementsOptions)
 
     for(var i=0;i<formElementsOptions.length;i++)
     {
-        this.FormElements.push(RedNaoCreateFormElementByOptions(formElementsOptions[i]));
+        this.FormElements.push(sfRedNaoCreateFormElementByOptions(formElementsOptions[i]));
     }
 }
 

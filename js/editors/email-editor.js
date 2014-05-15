@@ -4,7 +4,7 @@ function RedNaoEmailEditor()
     var self=this;
     this.Dialog=rnJQuery("#redNaoEmailEditor").dialog(
         {   width:"800",
-            height:"680",
+            height:"715",
             modal:true,
             autoOpen:false,
             create: function(event, ui){
@@ -82,7 +82,7 @@ RedNaoEmailEditor.prototype.SetupEmailTo=function(emailToOptions,alreadySelected
             var text=rnJQuery(this).val();
             if(text=="")
                 return;
-            if(RedNaoEmail.prototype.EmailIsValid(text))
+            if(sfRedNaoEmail.prototype.EmailIsValid(text))
                 self.AddEmail(text);
             else
                 alert('Please type a valid email');

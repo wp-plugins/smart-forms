@@ -1,6 +1,8 @@
 "use strict";
 /************************************************************************************* Formula Methods ***************************************************************************************************/
-
+var SmartFormsStyleScopeField=1;
+var SmartFormsStyleScopeAllFieldsOfSameTime=2;
+var SmartFormsStyleScopeAllFields=3;
 function RedNaoGetValueFromArray(array)
 {
     var value=0;
@@ -30,28 +32,28 @@ function RedNaoFormElementEscape(property)
     return property.replace(' ','_');
 }
 
-function RedNaoCreateFormElementByName(elementName,options)
+function sfRedNaoCreateFormElementByName(elementName,options)
 {
     if(elementName=='rednaotextinput')
-        return new TextInputElement(options);
+        return new sfTextInputElement(options);
     if(elementName=='rednaoprependedtext')
-        return new PrependTexElement(options);
+        return new sfPrependTexElement(options);
     if(elementName=='rednaoappendedtext')
-        return new AppendedTexElement(options);
+        return new sfAppendedTexElement(options);
     if(elementName=='rednaoprependedcheckbox')
-        return new PrependCheckBoxElement(options);
+        return new sfPrependCheckBoxElement(options);
     if(elementName=='rednaoappendedcheckbox')
-        return new AppendCheckBoxElement(options);
+        return new sfAppendCheckBoxElement(options);
     if(elementName=='rednaobuttondropdown')
         return 'rednaobuttondropdown';
     if(elementName=='tabradioscheckboxes')
         return 'tabradioscheckboxes';
     if(elementName=='rednaomultiplecheckboxes')
-        return new MultipleCheckBoxElement(options);
+        return new sfMultipleCheckBoxElement(options);
     if(elementName=='rednaoselectbasic')
-        return new SelectBasicElement(options);
+        return new sfSelectBasicElement(options);
     if(elementName=='rednaodonationamount')
-        return new DonationAmountElement(options);
+        return new sfDonationAmountElement(options);
 
     if(elementName=='rednaofilebutton')
         return 'rednaofilebutton';
@@ -60,41 +62,41 @@ function RedNaoCreateFormElementByName(elementName,options)
     if(elementName=='rednaodoublebutton')
         return 'rednaodoublebutton';
     if(elementName=='rednaotitle')
-        return new TitleElement(options);
+        return new sfTitleElement(options);
     if(elementName=='rednaotextarea')
-        return  new TextAreaElement(options);
+        return  new sfTextAreaElement(options);
     if(elementName=='rednaomultipleradios')
-        return new MultipleRadioElement(options);
+        return new sfMultipleRadioElement(options);
     if(elementName=='rednaodonationbutton')
-        return new DonationButtonElement(options);
+        return new sfDonationButtonElement(options);
     if(elementName=='rednaodonationrecurrence')
-        return new RecurrenceElement(options);
+        return new sfRecurrenceElement(options);
     if(elementName=='rednaosubmissionbutton')
-        return new RedNaoSubmissionButton(options);
+        return new sfRedNaoSubmissionButton(options);
 
     if(elementName=='rednaodatepicker')
-        return new RedNaoDatePicker(options);
+        return new sfRedNaoDatePicker(options);
     if(elementName=='rednaoname')
-        return new RedNaoName(options);
+        return new sfRedNaoName(options);
     if(elementName=='rednaoaddress')
-        return new RedNaoAddress(options);
+        return new sfRedNaoAddress(options);
     if(elementName=='rednaophone')
-        return new RedNaoPhone(options);
+        return new sfRedNaoPhone(options);
     if(elementName=='rednaoemail')
-        return new RedNaoEmail(options);
+        return new sfRedNaoEmail(options);
     if(elementName=='rednaonumber')
-        return new RedNaoNumber(options);
+        return new sfRedNaoNumber(options);
     if(elementName=='rednaocaptcha')
-        return new RedNaoCaptcha(options);
+        return new sfRedNaoCaptcha(options);
 
 
 }
 
 
 
-function RedNaoCreateFormElementByOptions(options)
+function sfRedNaoCreateFormElementByOptions(options)
 {
-    var element=RedNaoCreateFormElementByName(options.ClassName,options);
+    var element=sfRedNaoCreateFormElementByName(options.ClassName,options);
     return element;
 
 }
@@ -102,22 +104,24 @@ function RedNaoCreateFormElementByOptions(options)
 
 
 /************************************************************************************* Base Class  ***************************************************************************************************/
-function FormElementBase(options)
+function sfFormElementBase(options)
 {
     this.Translations=SmartFormsElementsTranslation;
+    this.StyleTags={};
     if(options==null)
     {
         this.Options=new Object();
         this.Options.ClassName="";
         this.Options.IsRequired='n';
         this.Options.Formulas={};
+        this.Options.Styles={};
 
-        FormElementBase.IdCounter++;
-        this.Id='rnField'+FormElementBase.IdCounter;
+        sfFormElementBase.IdCounter++;
+        this.Id='rnField'+sfFormElementBase.IdCounter;
         while(!SmartFormsFieldIsAvailable(this.Id))
         {
-            FormElementBase.IdCounter++;
-            this.Id='rnField'+FormElementBase.IdCounter;
+            sfFormElementBase.IdCounter++;
+            this.Id='rnField'+sfFormElementBase.IdCounter;
         }
 
         this.Options.Id=this.Id;
@@ -131,6 +135,8 @@ function FormElementBase(options)
         if(typeof options.IsRequired=='undefined')
             options.IsRequired='n';
         this.Options=options;
+        if(typeof this.Options.Styles=='undefined')
+            this.Options.Styles={};
         if(typeof this.Options.Formulas=='undefined')
             this.Options.Formulas={};
         else{
@@ -147,26 +153,26 @@ function FormElementBase(options)
     this.amount=0;
 }
 
-FormElementBase.IdCounter=0;
+sfFormElementBase.IdCounter=0;
 
-FormElementBase.prototype.FirePropertyChanged=function(val){
+sfFormElementBase.prototype.FirePropertyChanged=function(val){
 
     RedNaoEventManager.Publish('formPropertyChanged',{FieldName:this.Id, Value:val});
 
 }
 
-FormElementBase.prototype.SetDefaultIfUndefined=function(propertyName,defaultValue)
+sfFormElementBase.prototype.SetDefaultIfUndefined=function(propertyName,defaultValue)
 {
     if(typeof this.Options[propertyName]=='undefined')
         this.Options[propertyName]=defaultValue;
 }
 
 
-FormElementBase.prototype.GenerateDefaultStyle=function()
+sfFormElementBase.prototype.GenerateDefaultStyle=function()
 {
 }
 
-FormElementBase.prototype.RefreshElement=function()
+sfFormElementBase.prototype.RefreshElement=function()
 {
     var element=rnJQuery("#"+this.Id);
     var labelWidth=element.find('.rednao_label_container').width();
@@ -182,40 +188,42 @@ FormElementBase.prototype.RefreshElement=function()
     }
     return element;
 }
-FormElementBase.prototype.GenerateHtml=function(jqueryElement)
+sfFormElementBase.prototype.GenerateHtml=function(jqueryElement)
 {
     var newElement=rnJQuery('<div class="rednao-control-group '+this.Options.ClassName+'" id="'+this.Id+'" style="margin-bottom:15px;clear:both;">'+this.GenerateInlineElement()+'</div>')
     jqueryElement.replaceWith(newElement );
     this.GenerationCompleted();
+    this.ApplyAllStyles();
     return newElement;
 
 }
 
-FormElementBase.prototype.AppendElementToContainer=function(jqueryElement)
+sfFormElementBase.prototype.AppendElementToContainer=function(jqueryElement)
 {
     this.JQueryElement=rnJQuery( '<div class="rednao-control-group '+this.Options.ClassName+'" id="'+this.Id+'" style="margin-bottom:15px;">'+this.GenerateInlineElement()+'</div>');
     jqueryElement.append(this.JQueryElement);
     this.GenerationCompleted();
+    this.ApplyAllStyles();
 
 }
 
-FormElementBase.prototype.StoresInformation=function()
+sfFormElementBase.prototype.StoresInformation=function()
 {
     return true;
 }
 
 
-FormElementBase.prototype.CreateProperties=function()
+sfFormElementBase.prototype.CreateProperties=function()
 {
     throw 'Abstract method';
 }
 
-FormElementBase.prototype.GenerateInlineElement=function()
+sfFormElementBase.prototype.GenerateInlineElement=function()
 {
     throw 'Abstract method';
 }
 
-FormElementBase.prototype.GetProperties=function()
+sfFormElementBase.prototype.GetProperties=function()
 {
     if(this.Properties==null)
     {
@@ -227,7 +235,7 @@ FormElementBase.prototype.GetProperties=function()
 }
 
 
-FormElementBase.prototype.UpdateProperties=function()
+sfFormElementBase.prototype.UpdateProperties=function()
 {
     if(this.Properties!=null)
     {
@@ -238,13 +246,13 @@ FormElementBase.prototype.UpdateProperties=function()
     }
 }
 
-FormElementBase.prototype.GetPropertyName=function()
+sfFormElementBase.prototype.GetPropertyName=function()
 {
     return RedNaoFormElementEscape(this.Options.Label);
 }
 
 
-FormElementBase.prototype.GeneratePropertiesHtml=function(jQueryObject)
+sfFormElementBase.prototype.GeneratePropertiesHtml=function(jQueryObject)
 {
     var properties=this.GetProperties();
 
@@ -255,31 +263,31 @@ FormElementBase.prototype.GeneratePropertiesHtml=function(jQueryObject)
 }
 
 
-FormElementBase.prototype.GetValueString=function()
+sfFormElementBase.prototype.GetValueString=function()
 {
 
 }
 
-FormElementBase.prototype.GenerationCompleted=function()
+sfFormElementBase.prototype.GenerationCompleted=function()
 {
 
 }
 
-FormElementBase.prototype.IsValid=function()
+sfFormElementBase.prototype.IsValid=function()
 {
     return true;
 }
 
-FormElementBase.prototype.ClearInvalidStyle=function()
+sfFormElementBase.prototype.ClearInvalidStyle=function()
 {
 
 }
 
-FormElementBase.prototype.Clone=function()
+sfFormElementBase.prototype.Clone=function()
 {
    var newObject=  jQuery.extend(true, {}, this);
-    FormElementBase.IdCounter++;
-    newObject.Id='rnField'+FormElementBase.IdCounter;
+    sfFormElementBase.IdCounter++;
+    newObject.Id='rnField'+sfFormElementBase.IdCounter;
 
     newObject.Properties=[];
     newObject.CreateProperties();
@@ -287,16 +295,69 @@ FormElementBase.prototype.Clone=function()
     return newObject;
 }
 
-FormElementBase.prototype.GetValuePath=function()
+sfFormElementBase.prototype.GetValuePath=function()
 {
     return '';
 }
 
+sfFormElementBase.prototype.GetStyleTagForElement=function(elementName)
+{
+    if(typeof this.StyleTags[elementName]=='undefined')
+    {
+        this.StyleTags[elementName]=rnJQuery("<style type='text/css'></style>")
+        rnJQuery("head").append(this.StyleTags[elementName]);
+    }
+
+    return this.StyleTags[elementName];
+}
+
+sfFormElementBase.prototype.ApplyAllStyles=function()
+{
+    for(var elements in this.Options.Styles)
+        this.ApplyTagStyleForElement(elements);
+}
+
+sfFormElementBase.prototype.ApplyTagStyleForElement=function(elementName)
+{
+    if(typeof this.Options.Styles[elementName]=='undefined')
+        return;
+
+    var style="";
+    var elementProperties=this.Options.Styles[elementName];
+    for(var styleName in elementProperties.Properties)
+    {
+        style+=styleName+":"+elementProperties.Properties[styleName]+" !important;"
+    }
+    var selector=this.GetSelectorByScope(elementProperties.Scope,elementName);
+
+    var tag=this.GetStyleTagForElement(elementName);
+    tag.empty();
+    tag.append( selector+' {'+style+'}')
+
+
+}
+
+sfFormElementBase.prototype.GetSelectorByScope=function(scope,elementName)
+{
+    if(scope==SmartFormsStyleScopeField)
+        return '#'+this.Id + " ."+elementName;
+}
+
+
+
+sfFormElementBase.prototype.ApplyStyleByElementName=function(elementName)
+{
+    if(typeof this.Options.Styles[elementName]=='undefined')
+        return;
+
+
+}
+
 /************************************************************************************* Title Element ***************************************************************************************************/
 
-function TitleElement(options)
+function sfTitleElement(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
 
 
 
@@ -309,15 +370,15 @@ function TitleElement(options)
     }
 }
 
-TitleElement.prototype=Object.create(FormElementBase.prototype);
+sfTitleElement.prototype=Object.create(sfFormElementBase.prototype);
 
-TitleElement.prototype.CreateProperties=function()
+sfTitleElement.prototype.CreateProperties=function()
 {
 
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Title","Title",{ManipulatorType:'basic'}));
 }
 
-TitleElement.prototype.GenerateInlineElement=function()
+sfTitleElement.prototype.GenerateInlineElement=function()
 {
     return '<legend class="redNaoLegend redNaoOneColumn">'+this.Options.Title+'</legend>';
 }
@@ -325,22 +386,22 @@ TitleElement.prototype.GenerateInlineElement=function()
 
 
 
-TitleElement.prototype.GetValueString=function()
+sfTitleElement.prototype.GetValueString=function()
 {
     return '';
 
 }
 
-TitleElement.prototype.StoresInformation=function()
+sfTitleElement.prototype.StoresInformation=function()
 {
     return false;
 }
 
 /************************************************************************************* Text Element ***************************************************************************************************/
 
-function TextInputElement(options)
+function sfTextInputElement(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Text Input";
     if(this.IsNew)
     {
@@ -362,9 +423,9 @@ function TextInputElement(options)
 
 }
 
-TextInputElement.prototype=Object.create(FormElementBase.prototype);
+sfTextInputElement.prototype=Object.create(sfFormElementBase.prototype);
 
-TextInputElement.prototype.CreateProperties=function()
+sfTextInputElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -376,7 +437,7 @@ TextInputElement.prototype.CreateProperties=function()
 
 }
 
-TextInputElement.prototype.GenerateInlineElement=function()
+sfTextInputElement.prototype.GenerateInlineElement=function()
 {
     var additionalStyle='';
     if(!isNaN(parseFloat(this.Options.Width)))
@@ -389,18 +450,18 @@ TextInputElement.prototype.GenerateInlineElement=function()
 }
 
 
-TextInputElement.prototype.GetValueString=function()
+sfTextInputElement.prototype.GetValueString=function()
 {
     return {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 }
 
-TextInputElement.prototype.GetValuePath=function()
+sfTextInputElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
 }
 
 
-TextInputElement.prototype.IsValid=function()
+sfTextInputElement.prototype.IsValid=function()
 {
      if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
      {
@@ -411,7 +472,7 @@ TextInputElement.prototype.IsValid=function()
     return true;
 }
 
-TextInputElement.prototype.GenerationCompleted=function()
+sfTextInputElement.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged(self.GetValueString());});
@@ -419,9 +480,9 @@ TextInputElement.prototype.GenerationCompleted=function()
 
 /************************************************************************************* Prepend Text Element ***************************************************************************************************/
 
-function PrependTexElement(options)
+function sfPrependTexElement(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Prepend Text";
 
     if(this.IsNew)
@@ -443,9 +504,9 @@ function PrependTexElement(options)
 
 }
 
-PrependTexElement.prototype=Object.create(FormElementBase.prototype);
+sfPrependTexElement.prototype=Object.create(sfFormElementBase.prototype);
 
-PrependTexElement.prototype.CreateProperties=function()
+sfPrependTexElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -457,7 +518,7 @@ PrependTexElement.prototype.CreateProperties=function()
 
 }
 
-PrependTexElement.prototype.GenerateInlineElement=function()
+sfPrependTexElement.prototype.GenerateInlineElement=function()
 {
     var additionalStyle='';
     if(!isNaN(parseFloat(this.Options.Width)))
@@ -476,18 +537,18 @@ PrependTexElement.prototype.GenerateInlineElement=function()
 
 
 
-PrependTexElement.prototype.GetValueString=function()
+sfPrependTexElement.prototype.GetValueString=function()
 {
     return {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 }
 
-PrependTexElement.prototype.GetValuePath=function()
+sfPrependTexElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
 }
 
 
-PrependTexElement.prototype.IsValid=function()
+sfPrependTexElement.prototype.IsValid=function()
 {
     if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
     {
@@ -497,7 +558,7 @@ PrependTexElement.prototype.IsValid=function()
     return true;
 }
 
-PrependTexElement.prototype.GenerationCompleted=function()
+sfPrependTexElement.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged(self.GetValueString());});
@@ -505,9 +566,9 @@ PrependTexElement.prototype.GenerationCompleted=function()
 
 /************************************************************************************* Appended Text Element ***************************************************************************************************/
 
-function AppendedTexElement(options)
+function sfAppendedTexElement(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Appended Text";
 
     if(this.IsNew)
@@ -529,9 +590,9 @@ function AppendedTexElement(options)
 
 }
 
-AppendedTexElement.prototype=Object.create(FormElementBase.prototype);
+sfAppendedTexElement.prototype=Object.create(sfFormElementBase.prototype);
 
-AppendedTexElement.prototype.CreateProperties=function()
+sfAppendedTexElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -543,7 +604,7 @@ AppendedTexElement.prototype.CreateProperties=function()
 
 }
 
-AppendedTexElement.prototype.GenerateInlineElement=function()
+sfAppendedTexElement.prototype.GenerateInlineElement=function()
 {
     var additionalStyle='';
     if(!isNaN(parseFloat(this.Options.Width)))
@@ -564,17 +625,17 @@ AppendedTexElement.prototype.GenerateInlineElement=function()
 
 
 
-AppendedTexElement.prototype.GetValueString=function()
+sfAppendedTexElement.prototype.GetValueString=function()
 {
     return  {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 }
 
-AppendedTexElement.prototype.GetValuePath=function()
+sfAppendedTexElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
 }
 
-AppendedTexElement.prototype.IsValid=function()
+sfAppendedTexElement.prototype.IsValid=function()
 {
     if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
     {
@@ -584,7 +645,7 @@ AppendedTexElement.prototype.IsValid=function()
     return true;
 }
 
-PrependTexElement.prototype.GenerationCompleted=function()
+sfPrependTexElement.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged(self.GetValueString());});
@@ -593,9 +654,9 @@ PrependTexElement.prototype.GenerationCompleted=function()
 
 /************************************************************************************* Prepend Checkbox Element ***************************************************************************************************/
 
-function PrependCheckBoxElement(options)
+function sfPrependCheckBoxElement(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Prepend Checkbox";
 
     if(this.IsNew)
@@ -616,9 +677,9 @@ function PrependCheckBoxElement(options)
 
 }
 
-PrependCheckBoxElement.prototype=Object.create(FormElementBase.prototype);
+sfPrependCheckBoxElement.prototype=Object.create(sfFormElementBase.prototype);
 
-PrependCheckBoxElement.prototype.CreateProperties=function()
+sfPrependCheckBoxElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -630,7 +691,7 @@ PrependCheckBoxElement.prototype.CreateProperties=function()
 
 }
 
-PrependCheckBoxElement.prototype.GenerateInlineElement=function()
+sfPrependCheckBoxElement.prototype.GenerateInlineElement=function()
 {
     var additionalStyle='';
     if(!isNaN(parseFloat(this.Options.Width)))
@@ -654,18 +715,18 @@ PrependCheckBoxElement.prototype.GenerateInlineElement=function()
 
 
 
-PrependCheckBoxElement.prototype.GetValueString=function()
+sfPrependCheckBoxElement.prototype.GetValueString=function()
 {
     return  {checked:(rnJQuery('#'+this.Id).find('.redNaoRealCheckBox').is(':checked')?'Yes':'No'),value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 }
 
-PrependCheckBoxElement.prototype.GetValuePath=function()
+sfPrependCheckBoxElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
 }
 
 
-PrependCheckBoxElement.prototype.IsValid=function()
+sfPrependCheckBoxElement.prototype.IsValid=function()
 {
     if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
     {
@@ -675,16 +736,16 @@ PrependCheckBoxElement.prototype.IsValid=function()
     return true;
 }
 
-PrependCheckBoxElement.prototype.GenerationCompleted=function()
+sfPrependCheckBoxElement.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText','#'+this.Id+' .redNaoRealCheckBox').change(function(){self.FirePropertyChanged(self.GetValueString());});
 }
 /************************************************************************************* Append Checkbox Element ***************************************************************************************************/
 
-function AppendCheckBoxElement(options)
+function sfAppendCheckBoxElement(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Append Checkbox";
 
     if(this.IsNew)
@@ -705,9 +766,9 @@ function AppendCheckBoxElement(options)
 
 }
 
-AppendCheckBoxElement.prototype=Object.create(FormElementBase.prototype);
+sfAppendCheckBoxElement.prototype=Object.create(sfFormElementBase.prototype);
 
-AppendCheckBoxElement.prototype.CreateProperties=function()
+sfAppendCheckBoxElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -719,7 +780,7 @@ AppendCheckBoxElement.prototype.CreateProperties=function()
 
 }
 
-AppendCheckBoxElement.prototype.GenerateInlineElement=function()
+sfAppendCheckBoxElement.prototype.GenerateInlineElement=function()
 {
     var additionalStyle='';
     if(!isNaN(parseFloat(this.Options.Width)))
@@ -741,17 +802,17 @@ AppendCheckBoxElement.prototype.GenerateInlineElement=function()
 
 
 
-AppendCheckBoxElement.prototype.GetValueString=function()
+sfAppendCheckBoxElement.prototype.GetValueString=function()
 {
     return  {checked:(rnJQuery('#'+this.Id).find('.redNaoRealCheckBox').is(':checked')?'Yes':'No'),value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 }
 
-AppendCheckBoxElement.prototype.GetValuePath=function()
+sfAppendCheckBoxElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
 }
 
-AppendCheckBoxElement.prototype.IsValid=function()
+sfAppendCheckBoxElement.prototype.IsValid=function()
 {
     if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
     {
@@ -761,16 +822,16 @@ AppendCheckBoxElement.prototype.IsValid=function()
     return true;
 }
 
-AppendCheckBoxElement.prototype.GenerationCompleted=function()
+sfAppendCheckBoxElement.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText','#'+this.Id+' .redNaoRealCheckBox').change(function(){self.FirePropertyChanged(self.GetValueString());});
 }
 /************************************************************************************* Text Area Element ***************************************************************************************************/
 
-function TextAreaElement(options)
+function sfTextAreaElement(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Text Area";
 
     if(this.IsNew)
@@ -794,9 +855,9 @@ function TextAreaElement(options)
 
 }
 
-TextAreaElement.prototype=Object.create(FormElementBase.prototype);
+sfTextAreaElement.prototype=Object.create(sfFormElementBase.prototype);
 
-TextAreaElement.prototype.CreateProperties=function()
+sfTextAreaElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -811,7 +872,7 @@ TextAreaElement.prototype.CreateProperties=function()
 
 }
 
-TextAreaElement.prototype.GenerateInlineElement=function()
+sfTextAreaElement.prototype.GenerateInlineElement=function()
 {
     var additionalStyle='';
     if(!isNaN(parseFloat(this.Options.Width)))
@@ -833,18 +894,18 @@ TextAreaElement.prototype.GenerateInlineElement=function()
 
 
 
-TextAreaElement.prototype.GetValueString=function()
+sfTextAreaElement.prototype.GetValueString=function()
 {
     return  {value:rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').val()};
 }
 
-TextAreaElement.prototype.GetValuePath=function()
+sfTextAreaElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
 }
 
 
-TextAreaElement.prototype.IsValid=function()
+sfTextAreaElement.prototype.IsValid=function()
 {
     if(rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').val()==""&&this.Options.IsRequired=='y')
     {
@@ -854,7 +915,7 @@ TextAreaElement.prototype.IsValid=function()
     return true;
 }
 
-TextAreaElement.prototype.GenerationCompleted=function()
+sfTextAreaElement.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').change(function(){self.FirePropertyChanged(self.GetValueString());});
@@ -862,9 +923,9 @@ TextAreaElement.prototype.GenerationCompleted=function()
 
 /*************************************************************************************Multiple Radio Element ***************************************************************************************************/
 
-function MultipleRadioElement(options)
+function sfMultipleRadioElement(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Multiple Radio";
 
     if(this.IsNew)
@@ -898,9 +959,9 @@ function MultipleRadioElement(options)
 
 }
 
-MultipleRadioElement.prototype=Object.create(FormElementBase.prototype);
+sfMultipleRadioElement.prototype=Object.create(sfFormElementBase.prototype);
 
-MultipleRadioElement.prototype.CreateProperties=function()
+sfMultipleRadioElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -912,7 +973,7 @@ MultipleRadioElement.prototype.CreateProperties=function()
 
 }
 
-MultipleRadioElement.prototype.GenerateInlineElement=function()
+sfMultipleRadioElement.prototype.GenerateInlineElement=function()
 {
     var orientationClass='';
     if(this.Options.Orientation=='h')
@@ -945,7 +1006,7 @@ MultipleRadioElement.prototype.GenerateInlineElement=function()
 
 
 
-MultipleRadioElement.prototype.GetValueString=function()
+sfMultipleRadioElement.prototype.GetValueString=function()
 {
     var jQueryElement=rnJQuery('#'+this.Id).find(':checked');
     if(jQueryElement.length>0)
@@ -956,13 +1017,13 @@ MultipleRadioElement.prototype.GetValueString=function()
 }
 
 
-MultipleRadioElement.prototype.GetValuePath=function()
+sfMultipleRadioElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.amount';
 }
 
 
-MultipleRadioElement.prototype.IsValid=function()
+sfMultipleRadioElement.prototype.IsValid=function()
 {
     if(rnJQuery('#'+this.Id).find(':checked').length<=0&&this.Options.IsRequired=='y')
     {
@@ -973,12 +1034,12 @@ MultipleRadioElement.prototype.IsValid=function()
     return true;
 }
 
-MultipleRadioElement.prototype.ClearInvalidStyle=function()
+sfMultipleRadioElement.prototype.ClearInvalidStyle=function()
 {
     this.SetUpICheck('iradio_minimal');
 }
 
-MultipleRadioElement.prototype.SetUpICheck=function(style)
+sfMultipleRadioElement.prototype.SetUpICheck=function(style)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputRadio').iCheck({radioClass: style});
@@ -989,7 +1050,7 @@ MultipleRadioElement.prototype.SetUpICheck=function(style)
     });
 }
 
-MultipleRadioElement.prototype.GenerationCompleted=function()
+sfMultipleRadioElement.prototype.GenerationCompleted=function()
 {
     var self=this;
     //rnJQuery('#'+this.Id+ ' .redNaoInputRadio').change(function(){self.FirePropertyChanged(self.GetValueString());});
@@ -998,9 +1059,9 @@ MultipleRadioElement.prototype.GenerationCompleted=function()
 
 /*************************************************************************************Multiple Checkbox Element ***************************************************************************************************/
 
-function MultipleCheckBoxElement(options)
+function sfMultipleCheckBoxElement(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Multiple Checkboxes";
 
     if(this.IsNew)
@@ -1034,9 +1095,9 @@ function MultipleCheckBoxElement(options)
 
 }
 
-MultipleCheckBoxElement.prototype=Object.create(FormElementBase.prototype);
+sfMultipleCheckBoxElement.prototype=Object.create(sfFormElementBase.prototype);
 
-MultipleCheckBoxElement.prototype.CreateProperties=function()
+sfMultipleCheckBoxElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -1045,7 +1106,7 @@ MultipleCheckBoxElement.prototype.CreateProperties=function()
     this.Properties.push(new ComboBoxProperty(this,this.Options,"Orientation","Orientation",{ManipulatorType:'basic',Values:[{label:'Vertical',value:'v'},{label:'Horizontal',value:'h'}]}));
 }
 
-MultipleCheckBoxElement.prototype.GenerateInlineElement=function()
+sfMultipleCheckBoxElement.prototype.GenerateInlineElement=function()
 {
     var orientationClass='';
     if(this.Options.Orientation=='h')
@@ -1079,7 +1140,7 @@ MultipleCheckBoxElement.prototype.GenerateInlineElement=function()
 
 
 
-MultipleCheckBoxElement.prototype.GetValueString=function()
+sfMultipleCheckBoxElement.prototype.GetValueString=function()
 {
     var valueString="";
     var me=this;
@@ -1104,13 +1165,13 @@ MultipleCheckBoxElement.prototype.GetValueString=function()
 }
 
 
-MultipleCheckBoxElement.prototype.GetValuePath=function()
+sfMultipleCheckBoxElement.prototype.GetValuePath=function()
 {
     return 'RedNaoGetValueFromArray(formData.'+this.Id+'.selectedValues)';
 }
 
 
-MultipleCheckBoxElement.prototype.IsValid=function()
+sfMultipleCheckBoxElement.prototype.IsValid=function()
 {
     if(rnJQuery('#'+this.Id).find(':checked').length<=0&&this.Options.IsRequired=='y')
     {
@@ -1120,12 +1181,12 @@ MultipleCheckBoxElement.prototype.IsValid=function()
     return true;
 }
 
-MultipleCheckBoxElement.prototype.ClearInvalidStyle=function()
+sfMultipleCheckBoxElement.prototype.ClearInvalidStyle=function()
 {
     this.SetUpICheck('icheckbox_minimal');
 }
 
-MultipleCheckBoxElement.prototype.SetUpICheck=function(style)
+sfMultipleCheckBoxElement.prototype.SetUpICheck=function(style)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').iCheck({checkboxClass: style});
@@ -1138,7 +1199,7 @@ MultipleCheckBoxElement.prototype.SetUpICheck=function(style)
 
 
 
-MultipleCheckBoxElement.prototype.GenerationCompleted=function()
+sfMultipleCheckBoxElement.prototype.GenerationCompleted=function()
 {
     var self=this;
     //rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').change(function(){self.FirePropertyChanged(self.GetValueString());});
@@ -1149,9 +1210,9 @@ MultipleCheckBoxElement.prototype.GenerationCompleted=function()
 
 /*************************************************************************************Select Basic Element ***************************************************************************************************/
 
-function SelectBasicElement(options)
+function sfSelectBasicElement(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Select Basic";
 
     if(this.IsNew)
@@ -1187,9 +1248,9 @@ function SelectBasicElement(options)
 
 }
 
-SelectBasicElement.prototype=Object.create(FormElementBase.prototype);
+sfSelectBasicElement.prototype=Object.create(sfFormElementBase.prototype);
 
-SelectBasicElement.prototype.CreateProperties=function()
+sfSelectBasicElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -1203,7 +1264,7 @@ SelectBasicElement.prototype.CreateProperties=function()
 
 }
 
-SelectBasicElement.prototype.GenerateInlineElement=function()
+sfSelectBasicElement.prototype.GenerateInlineElement=function()
 {
     var additionalStyle='';
     if(!isNaN(parseFloat(this.Options.Width)))
@@ -1247,7 +1308,7 @@ SelectBasicElement.prototype.GenerateInlineElement=function()
 
 
 
-SelectBasicElement.prototype.GetValueString=function()
+sfSelectBasicElement.prototype.GetValueString=function()
 {
     var jQueryElement=rnJQuery('#'+this.Id+ ' .redNaoSelect option:selected');
     if(jQueryElement.length>0)
@@ -1257,13 +1318,13 @@ SelectBasicElement.prototype.GetValueString=function()
     return  {value:jQueryElement.text(),amount:this.amount};
 }
 
-SelectBasicElement.prototype.GetValuePath=function()
+sfSelectBasicElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.amount';
 }
 
 
-SelectBasicElement.prototype.IsValid=function()
+sfSelectBasicElement.prototype.IsValid=function()
 {
     if(this.Options.IsRequired=='y'&&(this.GetValueString().value==this.Options.DefaultText||rnJQuery('#'+this.Id+ ' .redNaoSelect option:selected').length==0))
     {
@@ -1274,7 +1335,7 @@ SelectBasicElement.prototype.IsValid=function()
 }
 
 
-SelectBasicElement.prototype.GenerationCompleted=function()
+sfSelectBasicElement.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoSelect').change(function(){self.FirePropertyChanged(self.GetValueString());});
@@ -1284,9 +1345,9 @@ SelectBasicElement.prototype.GenerationCompleted=function()
 
 
 
-function DonationButtonElement(options)
+function sfDonationButtonElement(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Donation Button";
 
     if(this.IsNew)
@@ -1303,16 +1364,16 @@ function DonationButtonElement(options)
 
 }
 
-DonationButtonElement.prototype=Object.create(FormElementBase.prototype);
+sfDonationButtonElement.prototype=Object.create(sfFormElementBase.prototype);
 
-DonationButtonElement.prototype.CreateProperties=function()
+sfDonationButtonElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Image","Image Url",{ManipulatorType:'basic'}));
 }
 
-DonationButtonElement.prototype.GenerateInlineElement=function()
+sfDonationButtonElement.prototype.GenerateInlineElement=function()
 {
     return '<div class="rednao_label_container"></div>\
             <div class="redNaoControls">' +
@@ -1322,13 +1383,13 @@ DonationButtonElement.prototype.GenerateInlineElement=function()
 }
 
 
-DonationButtonElement.prototype.GetValueString=function()
+sfDonationButtonElement.prototype.GetValueString=function()
 {
     return '';
 
 }
 
-DonationButtonElement.prototype.StoresInformation=function()
+sfDonationButtonElement.prototype.StoresInformation=function()
 {
     return false;
 }
@@ -1338,9 +1399,9 @@ DonationButtonElement.prototype.StoresInformation=function()
 
 
 
-function RecurrenceElement(options)
+function sfRecurrenceElement(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Donation Button";
 
     if(this.IsNew)
@@ -1358,9 +1419,9 @@ function RecurrenceElement(options)
 
 }
 
-RecurrenceElement.prototype=Object.create(FormElementBase.prototype);
+sfRecurrenceElement.prototype=Object.create(sfFormElementBase.prototype);
 
-RecurrenceElement.prototype.CreateProperties=function()
+sfRecurrenceElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -1371,7 +1432,7 @@ RecurrenceElement.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowYearly","Show yearly option",{ManipulatorType:'basic'}));
 }
 
-RecurrenceElement.prototype.GenerateInlineElement=function()
+sfRecurrenceElement.prototype.GenerateInlineElement=function()
 {
     var html= '<div class="rednao_label_container">' +
                     '<label class="rednao_control_label">'+this.Options.Label+'</label>' +
@@ -1417,7 +1478,7 @@ RecurrenceElement.prototype.GenerateInlineElement=function()
 
 
 
-RecurrenceElement.prototype.GetValueString=function()
+sfRecurrenceElement.prototype.GetValueString=function()
 {
     var jQueryElement=rnJQuery('#'+this.Id+ ' .redNaoSelect option:selected');
     return {value:jQueryElement.val()};
@@ -1425,7 +1486,7 @@ RecurrenceElement.prototype.GetValueString=function()
 }
 
 
-RecurrenceElement.prototype.GetValuePath=function()
+sfRecurrenceElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
 }
@@ -1436,9 +1497,9 @@ RecurrenceElement.prototype.GetValuePath=function()
 
 
 
-function RedNaoSubmissionButton(options)
+function sfRedNaoSubmissionButton(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Submit Button";
 
     if(this.IsNew)
@@ -1450,26 +1511,26 @@ function RedNaoSubmissionButton(options)
     }
 }
 
-RedNaoSubmissionButton.prototype=Object.create(FormElementBase.prototype);
+sfRedNaoSubmissionButton.prototype=Object.create(sfFormElementBase.prototype);
 
-RedNaoSubmissionButton.prototype.CreateProperties=function()
+sfRedNaoSubmissionButton.prototype.CreateProperties=function()
 {
     this.Properties.push(new SimpleTextProperty(this,this.Options,"ButtonText","Button Text",{ManipulatorType:'basic'}));
 }
 
-RedNaoSubmissionButton.prototype.GenerateInlineElement=function()
+sfRedNaoSubmissionButton.prototype.GenerateInlineElement=function()
 {
     return '<div class="rednao_label_container"></div><div class="redNaoControls"><input type="submit" class="redNaoSubmitButton" value="'+this.Options.ButtonText+'" /></div>';
 }
 
 
-RedNaoSubmissionButton.prototype.GetValueString=function()
+sfRedNaoSubmissionButton.prototype.GetValueString=function()
 {
     return '';
 
 }
 
-RedNaoSubmissionButton.prototype.StoresInformation=function()
+sfRedNaoSubmissionButton.prototype.StoresInformation=function()
 {
     return false;
 }
@@ -1480,9 +1541,9 @@ RedNaoSubmissionButton.prototype.StoresInformation=function()
 
 
 
-function RedNaoDatePicker(options)
+function sfRedNaoDatePicker(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Date Picker";
 
     if(this.IsNew)
@@ -1495,23 +1556,23 @@ function RedNaoDatePicker(options)
 
 }
 
-RedNaoDatePicker.prototype=Object.create(FormElementBase.prototype);
+sfRedNaoDatePicker.prototype=Object.create(sfFormElementBase.prototype);
 
-RedNaoDatePicker.prototype.CreateProperties=function()
+sfRedNaoDatePicker.prototype.CreateProperties=function()
 {
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"DateFormat","Date Format",{ManipulatorType:'basic'}));
 
 }
 
-RedNaoDatePicker.prototype.GenerateInlineElement=function()
+sfRedNaoDatePicker.prototype.GenerateInlineElement=function()
 {
     return '<div class="rednao_label_container"><label class="rednao_control_label">'+this.Options.Label+'</label></div><div class="redNaoControls"><input type="text" class="redNaoDatePicker"  /></div>';
 
 }
 
 
-RedNaoDatePicker.prototype.GetValueString=function()
+sfRedNaoDatePicker.prototype.GetValueString=function()
 {
     var selectedDate= rnJQuery('#'+this.Id).find('.redNaoDatePicker').datepicker('getDate');
     if(selectedDate==null)
@@ -1522,19 +1583,19 @@ RedNaoDatePicker.prototype.GetValueString=function()
 
 }
 
-RedNaoDatePicker.prototype.GetValuePath=function()
+sfRedNaoDatePicker.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
 }
 
 
 
-RedNaoDatePicker.prototype.StoresInformation=function()
+sfRedNaoDatePicker.prototype.StoresInformation=function()
 {
     return true;
 }
 
-RedNaoDatePicker.prototype.GenerationCompleted=function()
+sfRedNaoDatePicker.prototype.GenerationCompleted=function()
 {
     rnJQuery('#'+this.Id).find('.redNaoDatePicker').datepicker({
         dateFormat:this.Options.DateFormat,
@@ -1552,16 +1613,16 @@ RedNaoDatePicker.prototype.GenerationCompleted=function()
 
 }
 
-RedNaoDatePicker.prototype.IsValid=function()
+sfRedNaoDatePicker.prototype.IsValid=function()
 {
     return true;
 }
 
 /************************************************************************************* Name ***************************************************************************************************/
 
-function RedNaoName(options)
+function sfRedNaoName(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Text Input";
     if(this.IsNew)
     {
@@ -1580,9 +1641,9 @@ function RedNaoName(options)
 
 }
 
-RedNaoName.prototype=Object.create(FormElementBase.prototype);
+sfRedNaoName.prototype=Object.create(sfFormElementBase.prototype);
 
-RedNaoName.prototype.CreateProperties=function()
+sfRedNaoName.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -1593,7 +1654,7 @@ RedNaoName.prototype.CreateProperties=function()
 
 }
 
-RedNaoName.prototype.GenerateInlineElement=function()
+sfRedNaoName.prototype.GenerateInlineElement=function()
 {
     var firstNameLabel='';
     var lastNameLabel='';
@@ -1618,7 +1679,7 @@ RedNaoName.prototype.GenerateInlineElement=function()
 }
 
 
-RedNaoName.prototype.GetValueString=function()
+sfRedNaoName.prototype.GetValueString=function()
 {
     return {
         firstName:rnJQuery('#'+this.Id+ ' .redNaoInputFirstName').val(),
@@ -1630,13 +1691,13 @@ RedNaoName.prototype.GetValueString=function()
 }
 
 
-RedNaoName.prototype.GetValuePath=function()
+sfRedNaoName.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.firstName+" "'+'formData.'+this.Id+'.lastName';
 }
 
 
-RedNaoName.prototype.IsValid=function()
+sfRedNaoName.prototype.IsValid=function()
 {
     if(this.Options.IsRequired=='y'&&(rnJQuery('#'+this.Id+ ' .redNaoInputFirstName').val()==""||rnJQuery('#'+this.Id+ ' .redNaoInputLastName').val()==""))
     {
@@ -1655,7 +1716,7 @@ RedNaoName.prototype.IsValid=function()
     return true;
 }
 
-RedNaoName.prototype.GenerationCompleted=function()
+sfRedNaoName.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputFirstName,#'+this.Id+ ' .redNaoInputLastName').change(function(){self.FirePropertyChanged(self.GetValueString());});
@@ -1665,9 +1726,9 @@ RedNaoName.prototype.GenerationCompleted=function()
 
 /************************************************************************************* Address ***************************************************************************************************/
 
-function RedNaoAddress(options)
+function sfRedNaoAddress(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Text Input";
     this.Countries=new Array("Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burma", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo, Democratic Republic", "Congo, Republic of the", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Greenland", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Mongolia", "Morocco", "Monaco", "Mozambique", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Samoa", "San Marino", " Sao Tome", "Saudi Arabia", "Senegal", "Serbia and Montenegro", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe");
     if(this.IsNew)
@@ -1697,9 +1758,9 @@ function RedNaoAddress(options)
 
 }
 
-RedNaoAddress.prototype=Object.create(FormElementBase.prototype);
+sfRedNaoAddress.prototype=Object.create(sfFormElementBase.prototype);
 
-RedNaoAddress.prototype.GetCountriesForPropertyConfiguration = function () {
+sfRedNaoAddress.prototype.GetCountriesForPropertyConfiguration = function () {
     var countriesToReturn=new Array(this.Countries.length);
     for(var i=0;i<this.Countries.length;i++)
     {
@@ -1708,7 +1769,7 @@ RedNaoAddress.prototype.GetCountriesForPropertyConfiguration = function () {
 
     return countriesToReturn;
 };
-RedNaoAddress.prototype.CreateProperties=function()
+sfRedNaoAddress.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -1730,7 +1791,7 @@ RedNaoAddress.prototype.CreateProperties=function()
 
 }
 
-RedNaoAddress.prototype.GenerateInlineElement=function()
+sfRedNaoAddress.prototype.GenerateInlineElement=function()
 {
     var StreetAddress1Label='';
     var StreetAddress2Label='';
@@ -1809,7 +1870,7 @@ RedNaoAddress.prototype.GenerateInlineElement=function()
 }
 
 
-RedNaoAddress.prototype.GetValueString=function()
+sfRedNaoAddress.prototype.GetValueString=function()
 {
     return {
         streetAddress1:rnJQuery('#'+this.Id+ ' .redNaoStreetAddress1').val(),
@@ -1825,7 +1886,7 @@ RedNaoAddress.prototype.GetValueString=function()
 }
 
 
-RedNaoAddress.prototype.GetValuePath=function()
+sfRedNaoAddress.prototype.GetValuePath=function()
 {
     return  "formData."+this.Id+'.streetAddress1'
             " "+'formData.'+this.Id+'.streetAddress2'+
@@ -1836,7 +1897,7 @@ RedNaoAddress.prototype.GetValuePath=function()
 }
 
 
-RedNaoAddress.prototype.IsValid=function()
+sfRedNaoAddress.prototype.IsValid=function()
 {
     if(this.Options.IsRequired=='n')
         return true;
@@ -1891,7 +1952,7 @@ RedNaoAddress.prototype.IsValid=function()
 
 }
 
-RedNaoAddress.prototype.GenerationCompleted=function()
+sfRedNaoAddress.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoStreetAddress1,#'+this.Id+ ' .redNaoStreetAddress2,#'+this.Id+ ' .redNaoCity,#'+this.Id+ ' .redNaoState,#'+this.Id+ ' .redNaoZip,#'+this.Id+ ' .redNaoCountry').change(function(){self.FirePropertyChanged(self.GetValueString());});
@@ -1900,9 +1961,9 @@ RedNaoAddress.prototype.GenerationCompleted=function()
 
 /************************************************************************************* Phone ***************************************************************************************************/
 
-function RedNaoPhone(options)
+function sfRedNaoPhone(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Phone";
     if(this.IsNew)
     {
@@ -1918,9 +1979,9 @@ function RedNaoPhone(options)
 
 }
 
-RedNaoPhone.prototype=Object.create(FormElementBase.prototype);
+sfRedNaoPhone.prototype=Object.create(sfFormElementBase.prototype);
 
-RedNaoPhone.prototype.CreateProperties=function()
+sfRedNaoPhone.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -1930,7 +1991,7 @@ RedNaoPhone.prototype.CreateProperties=function()
 
 }
 
-RedNaoPhone.prototype.GenerateInlineElement=function()
+sfRedNaoPhone.prototype.GenerateInlineElement=function()
 {
     var areaLabel='';
     var phoneLabel='';
@@ -1955,7 +2016,7 @@ RedNaoPhone.prototype.GenerateInlineElement=function()
 }
 
 
-RedNaoPhone.prototype.GetValueString=function()
+sfRedNaoPhone.prototype.GetValueString=function()
 {
     return {
         area:rnJQuery('#'+this.Id+ ' .redNaoInputArea').val(),
@@ -1968,13 +2029,13 @@ RedNaoPhone.prototype.GetValueString=function()
 
 
 
-RedNaoPhone.prototype.GetValuePath=function()
+sfRedNaoPhone.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.area+" "'+'formData.'+this.Id+'.phone';
 }
 
 
-RedNaoPhone.prototype.IsValid=function()
+sfRedNaoPhone.prototype.IsValid=function()
 {
     if(this.Options.IsRequired=='n')
         return true;
@@ -1997,7 +2058,7 @@ RedNaoPhone.prototype.IsValid=function()
 }
 
 
-RedNaoPhone.prototype.GenerationCompleted=function()
+sfRedNaoPhone.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputArea,#'+this.Id+ ' .redNaoInputPhone').change(function(){
@@ -2011,9 +2072,9 @@ RedNaoPhone.prototype.GenerationCompleted=function()
 
 /************************************************************************************* Email Element ***************************************************************************************************/
 
-function RedNaoEmail(options)
+function sfRedNaoEmail(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Text Input";
     if(this.IsNew)
     {
@@ -2028,9 +2089,9 @@ function RedNaoEmail(options)
 
 }
 
-RedNaoEmail.prototype=Object.create(FormElementBase.prototype);
+sfRedNaoEmail.prototype=Object.create(sfFormElementBase.prototype);
 
-RedNaoEmail.prototype.CreateProperties=function()
+sfRedNaoEmail.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -2039,7 +2100,7 @@ RedNaoEmail.prototype.CreateProperties=function()
 
 }
 
-RedNaoEmail.prototype.GenerateInlineElement=function()
+sfRedNaoEmail.prototype.GenerateInlineElement=function()
 {
 
     return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
@@ -2049,18 +2110,18 @@ RedNaoEmail.prototype.GenerateInlineElement=function()
 }
 
 
-RedNaoEmail.prototype.GetValueString=function()
+sfRedNaoEmail.prototype.GetValueString=function()
 {
     return {value:rnJQuery('#'+this.Id+ ' .redNaoEmail').val()};
 }
 
-RedNaoEmail.prototype.GetValuePath=function()
+sfRedNaoEmail.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
 }
 
 
-RedNaoEmail.prototype.IsValid=function()
+sfRedNaoEmail.prototype.IsValid=function()
 {
     var email=rnJQuery('#'+this.Id+ ' .redNaoEmail').val();
     if(email==""&&this.Options.IsRequired=='y')
@@ -2079,13 +2140,13 @@ RedNaoEmail.prototype.IsValid=function()
     return true;
 }
 
-RedNaoEmail.prototype.EmailIsValid=function(email)
+sfRedNaoEmail.prototype.EmailIsValid=function(email)
 {
     var reg=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return reg.test(email);
 }
 
-RedNaoEmail.prototype.GenerationCompleted=function()
+sfRedNaoEmail.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoEmail').change(function(){self.FirePropertyChanged(self.GetValueString());});
@@ -2094,9 +2155,9 @@ RedNaoEmail.prototype.GenerationCompleted=function()
 
 /************************************************************************************* Number Element ***************************************************************************************************/
 
-function RedNaoNumber(options)
+function sfRedNaoNumber(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Text Input";
     if(this.IsNew)
     {
@@ -2118,9 +2179,9 @@ function RedNaoNumber(options)
 
 }
 
-RedNaoNumber.prototype=Object.create(FormElementBase.prototype);
+sfRedNaoNumber.prototype=Object.create(sfFormElementBase.prototype);
 
-RedNaoNumber.prototype.CreateProperties=function()
+sfRedNaoNumber.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -2132,7 +2193,7 @@ RedNaoNumber.prototype.CreateProperties=function()
 
 }
 
-RedNaoNumber.prototype.GenerateInlineElement=function()
+sfRedNaoNumber.prototype.GenerateInlineElement=function()
 {
 
     return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
@@ -2142,18 +2203,18 @@ RedNaoNumber.prototype.GenerateInlineElement=function()
 }
 
 
-RedNaoNumber.prototype.GetValueString=function()
+sfRedNaoNumber.prototype.GetValueString=function()
 {
     return {value:rnJQuery('#'+this.Id+ ' .redNaoNumber').val()};
 }
 
-RedNaoNumber.prototype.GetValuePath=function()
+sfRedNaoNumber.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
 }
 
 
-RedNaoNumber.prototype.IsValid=function()
+sfRedNaoNumber.prototype.IsValid=function()
 {
     var number=rnJQuery('#'+this.Id+ ' .redNaoNumber').val();
     if(number==""&&this.Options.IsRequired=='y')
@@ -2164,7 +2225,7 @@ RedNaoNumber.prototype.IsValid=function()
     return true;
 }
 
-RedNaoNumber.prototype.InputIsValid=function()
+sfRedNaoNumber.prototype.InputIsValid=function()
 {
     var inputText=rnJQuery('#'+this.Id+ ' .redNaoNumber').val();
 
@@ -2188,7 +2249,7 @@ RedNaoNumber.prototype.InputIsValid=function()
     return true;
 }
 
-RedNaoNumber.prototype.GenerationCompleted=function()
+sfRedNaoNumber.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoNumber').change(function(){
@@ -2202,9 +2263,9 @@ RedNaoNumber.prototype.GenerationCompleted=function()
 
 /************************************************************************************* Recaptcha Element ***************************************************************************************************/
 
-function RedNaoCaptcha(options)
+function sfRedNaoCaptcha(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="captcha";
     if(this.IsNew)
     {
@@ -2220,28 +2281,28 @@ function RedNaoCaptcha(options)
 
 }
 
-RedNaoCaptcha.prototype=Object.create(FormElementBase.prototype);
+sfRedNaoCaptcha.prototype=Object.create(sfFormElementBase.prototype);
 
-RedNaoCaptcha.prototype.CreateProperties=function()
+sfRedNaoCaptcha.prototype.CreateProperties=function()
 {
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
 
 }
 
-RedNaoCaptcha.prototype.GenerateInlineElement=function()
+sfRedNaoCaptcha.prototype.GenerateInlineElement=function()
 {
 
     return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
                 <div class="redNaoControls redNaoCaptcha" id="captchaComponent">\
     </div>';
 }
-RedNaoCaptcha.prototype.StoresInformation=function()
+sfRedNaoCaptcha.prototype.StoresInformation=function()
 {
     return false;
 }
 
 
-RedNaoCaptcha.prototype.GenerationCompleted=function()
+sfRedNaoCaptcha.prototype.GenerationCompleted=function()
 {
     var self=this;
     rnJQuery.getScript("http://www.google.com/recaptcha/api/js/recaptcha_ajax.js", function(){
@@ -2259,9 +2320,9 @@ RedNaoCaptcha.prototype.GenerationCompleted=function()
 
 /************************************************************************************* Donation Amount ***************************************************************************************************/
 
-function DonationAmountElement(options)
+function sfDonationAmountElement(options)
 {
-    FormElementBase.call(this,options);
+    sfFormElementBase.call(this,options);
     this.Title="Donation Amount";
 
     if(this.IsNew)
@@ -2282,9 +2343,9 @@ function DonationAmountElement(options)
 
 }
 
-DonationAmountElement.prototype=Object.create(FormElementBase.prototype);
+sfDonationAmountElement.prototype=Object.create(sfFormElementBase.prototype);
 
-DonationAmountElement.prototype.CreateProperties=function()
+sfDonationAmountElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
@@ -2297,7 +2358,7 @@ DonationAmountElement.prototype.CreateProperties=function()
 
 }
 
-DonationAmountElement.prototype.GenerateInlineElement=function()
+sfDonationAmountElement.prototype.GenerateInlineElement=function()
 {
 
     return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
@@ -2308,7 +2369,7 @@ DonationAmountElement.prototype.GenerateInlineElement=function()
 
 
 
-DonationAmountElement.prototype.GetValueString=function()
+sfDonationAmountElement.prototype.GetValueString=function()
 {
     try
     {
@@ -2321,7 +2382,7 @@ DonationAmountElement.prototype.GetValueString=function()
     return  encodeURI(this.Options.Label)+"="+encodeURI(rnJQuery('#'+this.Id+ ' .redNaoInputText').val());
 }
 
-DonationAmountElement.prototype.GenerationCompleted=function()
+sfDonationAmountElement.prototype.GenerationCompleted=function()
 {
     if(this.Options.Disabled=='y')
     {
@@ -2329,7 +2390,7 @@ DonationAmountElement.prototype.GenerationCompleted=function()
     }
 }
 
-DonationAmountElement.prototype.IsValid=function()
+sfDonationAmountElement.prototype.IsValid=function()
 {
     try{
         var number=parseFloat(rnJQuery('#'+this.Id+ ' .redNaoInputText').val());

@@ -1,6 +1,10 @@
 <style type="text/css">
-	#wpbody-content{
+	#wpbody-content,#wpbody,#wpcontent{
 		height: 100% !important;
+	}
+
+	#wpbody-content{
+		height: 900px !important;
 	}
 </style>
 

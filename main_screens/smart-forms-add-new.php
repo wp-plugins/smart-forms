@@ -29,6 +29,7 @@ wp_enqueue_script('smart-forms-dragitembehaviors',SMART_FORMS_DIR_URL.'js/formBu
 wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',array('isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2'));
 wp_enqueue_script('smart-forms-icheck',SMART_FORMS_DIR_URL.'js/utilities/iCheck/icheck.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-select2',SMART_FORMS_DIR_URL.'js/utilities/select2/select2.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-jsColor',SMART_FORMS_DIR_URL.'js/utilities/jsColor/jscolor.js',array('isolated-slider'));
 require_once(SMART_FORMS_DIR.'translations/smart-forms-add-new-translation.php');
 require_once(SMART_FORMS_DIR.'translations/form-elements-translation.php');
 
@@ -36,7 +37,11 @@ require_once(SMART_FORMS_DIR.'translations/form-elements-translation.php');
 echo "<h1>".__("Forms")."</h1>";
 
 
-wp_enqueue_script('email-editor',SMART_FORMS_DIR_URL.'js/editors/email-editor.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-email-editor',SMART_FORMS_DIR_URL.'js/editors/email-editor.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-style-editor',SMART_FORMS_DIR_URL.'js/editors/style_editor/style-editor.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-style-elements',SMART_FORMS_DIR_URL.'js/editors/style_editor/element-styler.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-style-properties',SMART_FORMS_DIR_URL.'js/editors/style_editor/style-properties.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-styler-set',SMART_FORMS_DIR_URL.'js/editors/style_editor/styler-set.js',array('isolated-slider'));
 wp_enqueue_script('json2');
 
 
@@ -149,7 +154,27 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
         <button onclick="SmartFormsAddNewVar.SendTestEmail();">Send Test Email</button>
     </div>
 </div>
+<div id="redNaoStyleEditor" title="<?php echo __("Style Editor")?>" style="display: none;margin:0;padding:0;">
+	<table style="width: 100%;height: 100%;">
+		<tr>
+			<td style="width: 550px;">
+				<div id="styleEditorPreview" class="rednaoFormContainer" style="width: 100%;height: 100%;">
+					<table style="width: 100%;height: 100%;">
+						<tr>
+							<td style="vertical-align: middle;" id="smartFormStyleEditorContainer">
 
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+			<td>
+				<div id="styleEditorAttributes" style="width: 100%;height: 100%;"></div>
+			</td>
+		</tr>
+	</table>
+
+</div>
 
 
 <div id="smartFormsJavascriptDiv" style="display: none;margin: 0 20px 0 0;">
