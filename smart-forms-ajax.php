@@ -214,7 +214,7 @@ function rednao_smart_forms_entries_list()
     $startDate=date('Y-m-d H:i:s', strtotime($startDate));
     $endDate=date('Y-m-d H:i:s', strtotime($endDate .' +1 day'));
 
-    $query="select data from ".SMART_FORMS_ENTRY."
+    $query="select entry_id,data from ".SMART_FORMS_ENTRY."
         where date between '$startDate' and '$endDate' and form_id=$formId";
 
 
@@ -230,7 +230,7 @@ function rednao_smart_forms_entries_list()
         else
             echo ",";
 
-        echo $row->data;
+        echo '{"entry_id":"'.$row->entry_id.'","data":'.$row->data."}";
 
     }
     echo '],"formOptions":';
@@ -300,4 +300,22 @@ function rednao_smart_forms_submit_license()
     }
 
     die();
+}
+
+function rednao_smart_forms_execute_op()
+{
+	$id=$_POST["TransactionId"];
+	$oper=$_POST["oper"];
+
+
+	if($oper=="del")
+	{
+		global $wpdb;
+		if($wpdb->query($wpdb->prepare("delete from ".SMART_FORMS_ENTRY." WHERE entry_id=%d",$id))>0)
+			echo '{"success":"1"}';
+		else
+			echo '{"success":"0","message":"'.__("Could not delete row").'"}';
+		die();
+	}
+
 }

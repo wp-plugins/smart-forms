@@ -19,19 +19,29 @@ if(count($json)<=0)
     die();
 $keys=array_keys($json[0]);
 $firstColumn=true;
+$numberOfColumns=count($keys);
+$count=0;
 foreach($keys as $header)
 {
+	$count++;
+	if($numberOfColumns==$count)
+		break;
     if(!$firstColumn)
         echo ",";
     $firstColumn=false;
     echo '"'.$header.'"';
+
 }
 foreach($json as $row)
 {
     $firstColumn=true;
     echo "\r\n";
+	$count=0;
     foreach($row as $column)
     {
+		$count++;
+		if($numberOfColumns==$count)
+			break;
         if(!$firstColumn)
             echo ",";
         $firstColumn=false;

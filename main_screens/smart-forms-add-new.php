@@ -136,7 +136,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 
 
     <div id="redNaoEmailEditorComponent">
-    <?php wp_editor( "", "redNaoTinyMCEEditor"); ?>
+    <?php wp_editor( "", "redNaoTinyMCEEditor",array('default_editor'=>"rich")); ?>
 
 
     <div id="redNaoAccordion" class="smartFormsSlider" style="float:right;">

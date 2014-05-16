@@ -46,11 +46,10 @@ function RedNaoCreateColumn(options)
 
 function GetObjectOrNull(rowObject,options)
 {
-    var object=rowObject[options.colModel.index];
-    if(typeof object=='undefined')
+    if(!RedNaoPathExists(rowObject,'data.'+options.colModel.index))
         return null;
 
-    return object;
+    return rowObject.data[options.colModel.index];
 
 }
 

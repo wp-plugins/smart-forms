@@ -215,7 +215,7 @@ rnJQuery(function () {
 
     function LoadGrid(formOptions,entries) {
         var colmodel=[];
-
+        colmodel.push();
         for(var i=0;i<formOptions.length;i++)
         {
             var column=RedNaoCreateColumn(formOptions[i]);
@@ -223,10 +223,12 @@ rnJQuery(function () {
                 colmodel.push(column)
         }
 
+        colmodel.push({"name": "entry_id", "index": "entry_id", "sorttype": "int", "key": true, "editable": false,hidden:true})
+
         if(this.Grid!=null)
             rnJQuery('#grid').jqGrid('GridUnload');
 
-        this.Grid=rnJQuery('#grid').jqGrid({autowidth: true, "hoverrows": true,height:'100%',mtype:"POST",  "viewrecords": true, "jsonReader": {"repeatitems": false, "subgrid": {"repeatitems": false}}, "gridview": true,  "editurl": ajaxurl+"?action=rednao_smart_donations_execute_analytics_op", "cellurl": ajaxurl+"?action=rednao_smart_donations_execute_analytics_op",  "rowList": [10, 20, 30], "sortname": "TransactionId", "datatype": "json",
+        this.Grid=rnJQuery('#grid').jqGrid({autowidth: true, "hoverrows": true,height:'100%',mtype:"POST",  "viewrecords": true, "jsonReader": {"repeatitems": false, "subgrid": {"repeatitems": false}}, "gridview": true,  "editurl": ajaxurl+"?action=rednao_smart_forms_execute_op", "cellurl": ajaxurl+"?action=rednao_smart_donations_execute_analytics_op",  "rowList": [10, 20, 30], "sortname": "TransactionId", "datatype": "json",
             "colModel": colmodel,
             "datatype": "local",
             "data":entries,"postData": {"oper": "grid"}, "prmNames": {"page": "page", "rows": "rows", "sort": "sidx", "order": "sord", "search": "_search", "nd": "nd", "id": "TransactionId", "filter": "filters", "searchField": "searchField", "searchOper": "searchOper", "searchString": "searchString", "oper": "oper", "query": "grid", "addoper": "add", "editoper": "edit", "deloper": "del", "excel": "excel", "subgrid": "subgrid", "totalrows": "totalrows", "autocomplete": "autocmpl"}
@@ -239,9 +241,36 @@ rnJQuery(function () {
             }
         }, "pager": "#pager"});
 
-        rnJQuery('#grid').jqGrid('navGrid', '#pager', {"edit":false,"del":false,"search":false,"refresh":false,"view":false,"excel":false,"pdf":false,"csv":true, addtext:"", addtitle:"Add new row" ,"errorTextFormat": function(r) {
+        rnJQuery('#grid').jqGrid('navGrid', '#pager', {"edit":false,"del":true,"search":false,"refresh":false,"view":false,"excel":false,"pdf":false,"csv":true, addtext:"", addtitle:"Add new row" ,"errorTextFormat": function(r) {
             return r.responseText;
-        }});
+        }},
+            {beforeSubmit:function(){alert('eaea')}},
+            {beforeSubmit:function(){alert('eaea1')}},
+            {beforeSubmit:function(){
+                if(!RedNaoLicensingManagerVar.LicenseIsValid("Sorry, you need a license to delete a record"))
+                {
+                    return [false,'aa'];
+                }{
+                    return [true];
+                }
+                },
+                afterSubmit:function(response,postData){
+                    try
+                    {
+                        var result=JSON.parse(response.responseText);
+                        if(result.success=="0")
+                            return [false,result.message];
+                    }catch (exception)
+                    {
+                        return [false,"An error occurred, please refresh and try again"];
+                    }
+
+                    return [true];
+
+                }
+
+            }
+        );
 
         rnJQuery("#grid").jqGrid('navButtonAdd','#pager',{
             caption:"Export to csv (pro)",
@@ -256,11 +285,22 @@ rnJQuery(function () {
                 var form = rnJQuery('#cbForm').val();
 
                 //window.location=smartFormsRootPath+"smart-forms-exporter.php?startdate="+startDate+"&enddate="+endDate+"&formid="+form;
+                var totalOfRecords=rnJQuery("#grid").jqGrid('getGridParam', 'records');
+                if(totalOfRecords>1000000)
+                    alert('Warning the export funcion can export up to 1,0000,000 records. Please export the data directly though the database');
+                var rowNum= rnJQuery('#grid').getGridParam('rowNum');
+                rnJQuery('#grid').setGridParam({ rowNum: 1000000 }).trigger("reloadGrid");
                 var data=JSON.stringify(rnJQuery("#grid").jqGrid('getRowData'));
                 rnJQuery('#smartFormsExportData').val(data);
                 rnJQuery('#exporterForm').submit();
+                rnJQuery('#grid').setGridParam({ rowNum: rowNum }).trigger("reloadGrid");
 
             }
+        });
+
+        this.Grid.on('jqGridAddEditAfterSubmit',function(a,b,c)
+        {
+
         });
 
 

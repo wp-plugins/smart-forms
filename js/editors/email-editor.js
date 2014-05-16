@@ -4,7 +4,7 @@ function RedNaoEmailEditor()
     var self=this;
     this.Dialog=rnJQuery("#redNaoEmailEditor").dialog(
         {   width:"800",
-            height:"715",
+            height:"750",
             modal:true,
             autoOpen:false,
             create: function(event, ui){

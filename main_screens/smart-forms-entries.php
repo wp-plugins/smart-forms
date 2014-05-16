@@ -29,7 +29,7 @@ wp_enqueue_script('jqGrid',SMART_FORMS_DIR_URL.'js/grid_chart/jquery.jqGrid.min.
 wp_enqueue_style('jqgrid',SMART_FORMS_DIR_URL.'css/grid_chart/ui.jqgrid.css');
 wp_enqueue_style('jqplot',SMART_FORMS_DIR_URL.'css/grid_chart/jquery.jqplot.css');
 wp_enqueue_style('smart-donations-Slider',SMART_FORMS_DIR_URL.'css/smartFormsSlider/jquery-ui-1.10.2.custom.min.css');
-
+wp_enqueue_script('json2');
 include_once(SMART_FORMS_DIR.'smart-forms-license.php');
 smart_forms_load_license_manager("");
 

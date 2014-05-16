@@ -54,8 +54,8 @@ $.extend($.jgrid,{
 	},
 	del : {
 		caption: "Delete",
-		msg: "Delete selected record(s)?",
-		bSubmit: "Delete",
+		msg: "Delete selected record(s) <strong>(Pro)</strong>?",
+		bSubmit: "Delete (Pro)",
 		bCancel: "Cancel"
 	},
 	nav : {
