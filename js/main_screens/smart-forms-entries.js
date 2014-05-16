@@ -249,7 +249,7 @@ rnJQuery(function () {
             {beforeSubmit:function(){
                 if(!RedNaoLicensingManagerVar.LicenseIsValid("Sorry, you need a license to delete a record"))
                 {
-                    return [false,'aa'];
+                    return [false,'A license is required'];
                 }{
                     return [true];
                 }
