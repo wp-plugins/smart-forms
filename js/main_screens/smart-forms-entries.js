@@ -241,7 +241,7 @@ rnJQuery(function () {
             }
         }, "pager": "#pager"});
 
-        rnJQuery('#grid').jqGrid('navGrid', '#pager', {"edit":false,"del":true,"search":false,"refresh":false,"view":false,"excel":false,"pdf":false,"csv":true, addtext:"", addtitle:"Add new row" ,"errorTextFormat": function(r) {
+        rnJQuery('#grid').jqGrid('navGrid', '#pager', {"add":false,"edit":false,"del":true,"search":false,"refresh":false,"view":false,"excel":false,"pdf":false,"csv":true, addtext:"", addtitle:"Add new row" ,"errorTextFormat": function(r) {
             return r.responseText;
         }},
             {beforeSubmit:function(){alert('eaea')}},
