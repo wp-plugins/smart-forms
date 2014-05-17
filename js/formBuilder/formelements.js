@@ -288,7 +288,7 @@ sfFormElementBase.prototype.Clone=function()
    var newObject=  jQuery.extend(true, {}, this);
     sfFormElementBase.IdCounter++;
     newObject.Id='rnField'+sfFormElementBase.IdCounter;
-
+    newObject.Options.Id=newObject.Id;
     newObject.Properties=[];
     newObject.CreateProperties();
 
