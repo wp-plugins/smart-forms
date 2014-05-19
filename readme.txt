@@ -11,7 +11,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Build forms easily by dragging and dropping elements. Create multiple forms like contact forms or advanced forms that need fields calculations or send customizable emails!!.
 == Description ==
 For more information check: http://rednao.com/smartforms.html
-If you have questions or suggestions please let me know in the smart forms official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601
+**If you have questions or suggestions please let me know in the smart forms official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601**
 
 
 Build forms easily by dragging and dropping elements. The forms are responsive, they adjust to the available space.
@@ -62,7 +62,8 @@ N/A
 
 * Added ability to delete entries(pro)
 = Smart Forms 1.2.19 =
-* Making style editor a free feature, sorry this was supposed to be free from the beginning.
+* Form builder modification. Making style editor a free feature, sorry this was supposed to be free from the beginning.
+* Forms fix, fixed issue with the email to field, in the form builder under the email editor
 = Smart Forms 1.2.18 =
 * Forms improvement, created style designer
 = Smart Forms 1.2.17 =
