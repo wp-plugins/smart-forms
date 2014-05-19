@@ -12,11 +12,14 @@ Build forms easily by dragging and dropping elements. Create multiple forms like
 == Description ==
 For more information check: http://rednao.com/smartforms.html
 **If you have questions or suggestions please let me know in the smart forms official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601**
+Also if you have issues or need support please submit a ticket in the smart forms support site: https://smartforms.uservoice.com
 
+Smart Forms is a very powerful and easy to use Form Build plugin,the form builde lets you create forms by just dragging and dropping elements. The forms are responsive, they adjust to the available space. You can style each form element individually.
 
-Build forms easily by dragging and dropping elements. The forms are responsive, they adjust to the available space.
+You can easily create contact forms, feedback forms, contact us forms or any kind of form, complex or not. 
 
-You can create calculated fields and also after a form is submitted you can receive an email, the email can have any format and any information that you want, also, you can check the information of all the forms submitted so far in the entries screen.
+If you require a form that display values depending of an operation with other forms (for example a form that display the total) you can do that with the Smart Forms calculated fields.
+You can also customize the form to do an additional action abter the form is submitted, you could customize the form to send an email, show an alert or redirect to another page. This again is very easy to configure in the forms after submit tab.  The forms email can have any format and any information that you want, also, you can check the information of all the forms submitted so far in the forms entries screen.
 
 **Features:**
 
@@ -35,8 +38,14 @@ You can create calculated fields and also after a form is submitted you can rece
 5. To add the form to a post type [sform]formid[/sform] (example:[sform]1[/sform]), you can find the formid of your form on the form list
 
 == Frequently Asked Questions ==
-N/A
+**How can i receive an email with the information of the form?**
+You can configure this in the form builder. Go to the email configuration screen (in the forms after submit tab->edit email) and add the email that you want to receive the form information in the field "Send email to". For a video demostration pelase check the smart forms tutorials, specially this video: http://www.youtube.com/watch?v=kpRWqrYYPVY
 
+**I get an error message when i try to "Send a test email"**
+Your server should be able to send emails in order for this to work. Please check the configuration
+
+**How can i send an email to the person that submitted the form?**
+Please check the smart forms tutorial: https://www.youtube.com/watch?v=EH_eT9_67nQ 
 
 
 
@@ -165,3 +174,56 @@ N/A
 
 = Smart Forms 0.6 =
 I fixed an issue with formulas in ie8, please after updating recreate your formulas (entering and exiting the formula screen) if you have any.
+
+==Smart forms quick tutorials== 
+**Installing Smart Forms**
+1. Upload smart forms to the `/wp-content/plugins/` directory
+2. Activate the item named  'smart forms' in the 'Plugins' menu in WordPress
+3. Go to Smart Forms /Add new and create a new form
+4. To add the form to a widget go to widgets and drag the smart form widget
+5. To add the form to a post type [sform]formid[/sform] (example:[sform]1[/sform]), you can find the formid of your form on the form list
+
+**Creating a new Forms**
+1. Follow "Installing Smart Forms"
+2. Click in smart forms
+3. Click in add new
+4. Drag the forms elements that you want to display 
+3. (Optional) If you want to do an additional action after a form is submitted. Go to the forms after submit tab, you can:
+		a)Send a notification email with the form information
+		b)Show an alert with the text that you want. This alert is shown after the form was successfully saved.
+		c)Redireect the user that submitted the form to another page.
+4. Save the form.
+5. After the form is saved you might want to add the form to a post (Follow "Add form to a post")  or add the form to a widget (Follow "Add form to a widget")
+6. For a video tutorial please visit the smart forms tutorial screen
+
+**Add the form to a post**
+1. Follow "Installing Smart Forms"
+2. Follow "Creating a new Form" to have your new form.
+3. Go to a page or post
+4. Click in the smart forms button
+5. A pop up will show with the list of forms that you have created in Smart Forms. Select the form that you want.
+6. Save the post.
+7. When you visit the post the form will show up
+8. For a video tutorial please visit the smart forms tutorial screen
+
+**Add the form as a widget**
+1. Follow "Installing Smart Forms"
+2. Follow "Creating a new Form" to have your new form.
+3. Go to the widget configuration
+4. You will see an Smart Forms widget, drag it to wherever you want to display the form
+5. The widget will contain the list of all the forms that you have created with Smart Forms.
+6. Select the form that you want
+7. The widget will display the form
+8. For a video tutorial please visit the smart forms tutorial screen
+
+**Configuring forms notification email**
+1. Follow "Installing Smart Forms"
+2. Click in smart forms
+3. Click in add new
+4. Drag the forms elements that you want
+5. Go to edit email (in the forms after submit tab)
+6. Configure the email as you want it. You can click in the field buttons to add form values
+7. Put the emails that you want to be notified of a form submission in the  "Send email to" box, you can also define a form field.
+8. Save the form
+9. For a video tutorial please visit the smart forms tutorial screen
+
