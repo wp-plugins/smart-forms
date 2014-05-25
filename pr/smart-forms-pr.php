@@ -6,7 +6,8 @@ add_action('smart_forms_pr_add_new_extension','smart_forms_pr_add_new_extension'
 add_filter('smart_forms_pr_add_new_js_extension','smart_forms_pr_add_new_js_extension');
 function smart_forms_pr_add_new_extension()
 {
-	if(smart_forms_lc_is_valid_with_options(array())["is_valid"]==true)
+	$result=smart_forms_lc_is_valid_with_options(array());
+	if($result["is_valid"]==true)
 	{
 		wp_enqueue_script('smart-forms-pr-add-new-extension',SMART_FORMS_PR_DIR_URL.'js/main_screens/add-new-extensions.js',array('isolated-slider','rednao-smart-forms-licensing-manager','smart-forms-form-elements'));
 	}
