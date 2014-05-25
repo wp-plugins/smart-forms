@@ -143,3 +143,20 @@ SmartFormsButtonStyleSet.prototype.GetSetProperties=function()
     return properties;
 }
 
+/************************************************************************************* File Button Style Set ***************************************************************************************************/
+function SmartFormsFileButtonStyleSet(formElement,jQueryElementToStyle,attributesCointainer,elementName)
+{
+    SmartFormsBaseStyleSet.call(this,formElement,jQueryElementToStyle,attributesCointainer,elementName);
+}
+SmartFormsFileButtonStyleSet.prototype=Object.create(SmartFormsBaseStyleSet.prototype);
+
+SmartFormsFileButtonStyleSet.prototype.GetSetProperties=function()
+{
+    var properties=[];
+    properties.push(new RedNaoFontFamilyStyleProperty(this.FormElement,this.ElementName,"Font-Family","Font Family"));
+    properties.push(new RedNaoColorStyleProperty(this.FormElement,this.ElementName,"Color","Color"));
+    properties.push(new RedNaoColorStyleProperty(this.FormElement,this.ElementName,"background-color","Background Color"));
+
+    return properties;
+}
+

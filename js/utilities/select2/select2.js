@@ -1425,10 +1425,12 @@ the specific language governing permissions and limitations under the Apache Lic
             this.container.removeClass("select2-dropdown-open").removeClass("select2-container-active");
             this.results.empty();
 
-
+            var searchVal=this.search.val();
             this.clearSearch();
             this.search.removeClass("select2-active");
             this.opts.element.trigger($.Event("select2-close"));
+            this.opts.element.trigger($.Event({ type: "dropdown-closed"  },{val:searchVal} ));
+
         },
 
         /**

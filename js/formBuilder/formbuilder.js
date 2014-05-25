@@ -9,12 +9,13 @@ function RedNaoFormBuilder(smartFormsOptions,formElementsOptions) {
     this.RedNaoFormElements = [];
     this.scrollTimeOut = null;
     this.propertiesPanel = rnJQuery("#rednaoPropertiesPanel");
-
+    this.extensions=[];
+    RedNaoEventManager.Publish('AddExtendedElements',this.extensions);
     rnJQuery("#formBuilderButtonSet").buttonset();
 
 
     var self = this;
-    $(window).scroll(function (data) {
+    rnJQuery(window).scroll(function (data) {
         if (self.scrollTimeOut != null)
             clearTimeout(self.scrollTimeOut);
 
@@ -196,6 +197,10 @@ RedNaoFormBuilder.prototype.GetComponentType = function (element) {
         return 'rednaocaptcha';
 
 
+    for(var i=0;i<this.extensions.length;i++)
+        if(rnJQuery(element).children().first().hasClass(this.extensions[i]))
+            return this.extensions[i];
+
 }
 
 
@@ -241,8 +246,9 @@ RedNaoFormBuilder.prototype.InitializeComponents = function () {
     sfRedNaoCreateFormElementByName('rednaophone', null).GenerateHtml(rnJQuery("#components .rednaophone"));
     sfRedNaoCreateFormElementByName('rednaoemail', null).GenerateHtml(rnJQuery("#components .rednaoemail"));
     sfRedNaoCreateFormElementByName('rednaonumber', null).GenerateHtml(rnJQuery("#components .rednaonumber"));
-   // sfRedNaoCreateFormElementByName('rednaocaptcha', null).GenerateHtml(rnJQuery("#components .rednaocaptcha"));
 
+    for(var i=0;i<this.extensions.length;i++)
+        sfRedNaoCreateFormElementByName(this.extensions[i], null).GenerateHtml(rnJQuery("#components .sfFileUpload"));
 
     var self=this;
     SmartFormsFieldIsAvailable=function(fieldName)

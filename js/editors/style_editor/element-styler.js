@@ -34,6 +34,8 @@ function GetElementStyler(formElement,elementToStyle,attributesCointainer)
         return new RedNaoSelectBasicStyler(formElement,elementToStyle,attributesCointainer);
     if(formElement.Options.ClassName=="rednaosubmissionbutton")
         return new RedNaoSubmissionButtonStyler(formElement,elementToStyle,attributesCointainer);
+    if(formElement.Options.ClassName=="sfFileUpload")
+        return new RedNaoFileUploadStyler(formElement,elementToStyle,attributesCointainer);
 
 }
 
@@ -278,4 +280,21 @@ RedNaoSubmissionButtonStyler.prototype=Object.create(RedNaoBaseElementStyler.pro
 RedNaoSubmissionButtonStyler.prototype.SetupSelectableElements=function()
 {
     this.StyleSets.Label=new SmartFormsButtonStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoSubmitButton");
+}
+
+/************************************************************************************* File Upload Styler ***************************************************************************************************/
+function RedNaoFileUploadStyler(formElement,elementToStyle,attributesCointainer)
+{
+    RedNaoBaseElementStyler.call(this,formElement,elementToStyle,attributesCointainer);
+}
+RedNaoFileUploadStyler.prototype=Object.create(RedNaoBaseElementStyler.prototype);
+
+
+RedNaoFileUploadStyler.prototype.SetupSelectableElements=function()
+{
+    this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
+    this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"sfUploadFilePath");
+    this.StyleSets.Button=new SmartFormsFileButtonStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"sfUploadFileContainer");
+
+
 }

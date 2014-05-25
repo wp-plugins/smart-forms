@@ -63,13 +63,12 @@ class rednao_string_builder {
 			case "rednaodonationrecurrence":
 				$renderer=$this->GetRenderer("rednao_donation_recurrence");
 				break;
+			case "sfFileUpload":
+				$renderer=$this->GetRenderer("rednao_file_upload");
+				break;
         }
 
       return $renderer->GetString($formElement,$entry);
-
-
-
-
     }
 
     public function GetRenderer($rendererName)

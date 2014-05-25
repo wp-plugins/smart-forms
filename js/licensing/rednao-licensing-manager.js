@@ -87,6 +87,22 @@ RedNaoLicensingManager.prototype.LicenseIsValid=function(errorMessage)
 
     this.Popup.find('p').text(errorMessage);
     this.Popup.dialog('open');
+    return false;
+}
+
+RedNaoLicensingManager.prototype.ActivateLicense=function()
+{
+    this.Popup.find('p').text('');
+    this.Popup.dialog('open');
+    this.ValidateLicense();
+}
+
+RedNaoLicensingManager.prototype.LicenseIsValidNoPopUp=function()
+{
+    if(RedNaoSmartFormLicenseIsValid)
+        return true;
+
+    return false;
 }
 
 var RedNaoLicensingManagerVar=null;

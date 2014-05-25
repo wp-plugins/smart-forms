@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: contact forms, contact, forms, forms, contact forms plugin, contact forms builder, contact forms with recaptcha, feedback forms, contact us, request forms, contact button, drag and drop contact forms, file upload contact forms, contact forms to email, contact forms payments, contact for paypal, forms solution, forms builder, feedback, easy contact forms, helpdesk
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.2.21
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,6 +62,8 @@ Please check the smart forms tutorial: https://www.youtube.com/watch?v=EH_eT9_67
 9. Calculated field interface
 10. Example of date field
 == Changelog ==
+= Smart Forms 1.5 =
+* Improved form builder, added file uploader.
 = Smart Forms 1.2.21 =
 * Fixed form builder issue with clone button.
 = Smart Forms 1.2.20 =
@@ -175,7 +177,9 @@ Please check the smart forms tutorial: https://www.youtube.com/watch?v=EH_eT9_67
 = Smart Forms 0.6 =
 I fixed an issue with formulas in ie8, please after updating recreate your formulas (entering and exiting the formula screen) if you have any.
 
-==Smart forms quick tutorials== 
+==Smart forms quick tutorials==
+**Special thanks to**
+Designmodo - https://www.iconfinder.com/icons/115789/trash_icon#size=16
 **Installing Smart Forms**
 1. Upload smart forms to the `/wp-content/plugins/` directory
 2. Activate the item named  'smart forms' in the 'Plugins' menu in WordPress

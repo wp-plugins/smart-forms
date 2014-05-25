@@ -26,7 +26,7 @@ wp_enqueue_script('smart-forms-elements-properties',SMART_FORMS_DIR_URL.'js/form
 wp_enqueue_script('smart-forms-formBuilder',SMART_FORMS_DIR_URL.'js/formBuilder/formbuilder.js',array('smart-forms-elements-properties'));
 wp_enqueue_script('smart-forms-dragmanager',SMART_FORMS_DIR_URL.'js/formBuilder/dragManager/dragmanager.js');
 wp_enqueue_script('smart-forms-dragitembehaviors',SMART_FORMS_DIR_URL.'js/formBuilder/dragManager/dragitembehaviors.js');
-wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',array('isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2'));
+wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',apply_filters('smart_forms_pr_add_new_js_extension',array('isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2','smart-forms-event-manager')));
 wp_enqueue_script('smart-forms-icheck',SMART_FORMS_DIR_URL.'js/utilities/iCheck/icheck.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-select2',SMART_FORMS_DIR_URL.'js/utilities/select2/select2.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-jsColor',SMART_FORMS_DIR_URL.'js/utilities/jsColor/jscolor.js',array('isolated-slider'));
@@ -359,6 +359,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
                                             <li><a id="atabradioscheckboxes" class="formtab">Multiple Choices</a></li>
 
                                             <li><a id="atabbuttons" class="formtab" <?php echo (has_smart_donations_license_and_is_active()?"":'style="display: none"');?> >Paypal</a></li>
+											<li><a id="atabpro" class="formtab" >Pro</a></li>
                                         </ul>
                                         <div class="form-horizontal" id="components">
                                             <fieldset  >
@@ -466,6 +467,14 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
                                                             </div>
                                                         </div>
                                                     </div>
+
+													<div class="tab-pane rednaotablist" id="tabpro"  style="display: none;">
+														<h4 id="smartFormsProWarning" style="margin-top: 0;"><span style="color: red;">Warning</span> This field require a license of smart forms, you can get one <a target="_blank" href="http://rednao.com/smartforms.html">here.</a> If you already have a license please <a href="javascript:RedNaoLicensingManagerVar.ActivateLicense();">activate it here</a> </h4>
+
+														<div >
+															<img src="<?php echo SMART_FORMS_DIR_URL?>images/file_upload.png"/>
+														</div>
+													</div>
                                                 </div>
                                             </fieldset>
                                         </div>
@@ -489,28 +498,6 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 <hr style="margin:0px 0 0px -17px;"/>
 </div>
 </div>
-
-
-<!--
-<div  id="rednaoPropertiesPanel" style="top: 74px; left: 711px; display: none;">
-    <div class="arrow" ></div>
-    <h3 class="rednaopopover-title">Form Name</h3>
-
-    <div class="rednaopopover-content">
-        <div class="rednaopropertiesform">
-            <div id="rednaoPropertiesList" style="margin:0;padding:0;">
-                <label class="control-label" id="rednaoFormTitle">Form Name</label>
-                <input class="input-large field" data-type="input" type="text" name="name" id="name" value="Form Name">
-            </div>
-            <div>
-                <hr>
-                <button id="rednaoPropertySave" class="rednaoBtn rednaoBtnSave" onclick="return false;">Save</button>
-                <button id="rednaoPropertyCancel" class="rednaoBtn rednaoBtnCancel" onclick="return false;">Cancel</button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
--->
+<?php
+do_action('smart_forms_pr_add_new_extension');
 

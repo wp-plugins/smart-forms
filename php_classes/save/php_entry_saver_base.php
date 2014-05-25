@@ -7,6 +7,8 @@ class php_entry_saver_base {
     private $ElementOptions;
     private $Captcha;
     private $ReferenceId;
+	private $EntryId="";
+	private $FormString="";
 
 
     function __construct($formId,$formString,$captcha,$referenceId="")
@@ -31,8 +33,15 @@ class php_entry_saver_base {
             }
         }
 
-       $result=$this->ExecuteInsertions();
-
+		if(isset($_FILES)&&count($_FILES)>0)
+		{
+			if(!$this->SaveFiles())
+			{
+				echo '{"message":"'.__("An error occurred, please try again later.").'","success":"n"}';
+				return;
+			}
+		}
+       	$result=$this->ExecuteInsertions();
         if($this->FormOptions["SendNotificationEmail"]=="y")
             $this->SendFormEmail($this->FormOptions["Emails"][0],$this->FormEntryData,$this->ElementOptions,false);
 
@@ -50,13 +59,18 @@ class php_entry_saver_base {
 
     private function InsertEntryData(){
         global $wpdb;
-        return $wpdb->insert(SMART_FORMS_ENTRY,array(
+        $result= $wpdb->insert(SMART_FORMS_ENTRY,array(
             'form_id'=>$this->FormId,
             'date'=>date('Y-m-d H:i:s'),
             'data'=>$this->FormString,
             'ip'=>$_SERVER['REMOTE_ADDR'],
             'reference_id'=>$this->ReferenceId
         ));
+
+		$this->EntryId=$wpdb->insert_id;
+		return $result;
+
+
     }
 
     public static function SendFormEmail($formOptions,$entryData,$elementOptions,$useTestData)
@@ -160,5 +174,30 @@ class php_entry_saver_base {
         }
     }
 
+	private function SaveFiles()
+	{
+		require_once(SMART_FORMS_DIR . "php_classes/file_upload/physical_file_uploader.php");
+		$fileUploader=new physical_file_uploader();
+		$result= $fileUploader->UploadFiles($this->FormEntryData);
+		if($result["success"]==true)
+		{
+			$this->FormEntryData=$result["entryData"];
+			$this->FormString=json_encode($result["entryData"]);
+			return true;
+		}
+		return false;
+	}
 
-} 
+	private function DeleteInsertedEntry()
+	{
+		global $wpdb;
+		$wpdb->query($wpdb->prepare("delete from ".SMART_FORMS_ENTRY." WHERE entry_id=%d",$this->EntryId));
+	}
+
+
+}
+
+function SmartFormsOverwriteHandleUpload($upload)
+{
+
+}

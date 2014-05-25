@@ -21,33 +21,22 @@ function smart_forms_check_license($email,$key,&$error)
 
 function smart_forms_check_license_with_options(&$error)
 {
-    if(get_transient("smart_forms_check_again"))
-        return true;
-    $email=get_option('smart_forms_email');
-    $key=get_option('smart_forms_key');
-
-    if($email==false||$key==false)
-        return false;
-    return smart_forms_check_license(($email?$email:""), ($key?$key:""),$error,false);
+    $result=apply_filters("smart_forms_lc_is_valid_with_options",array());
+	$error=$result["error"];
+	return $result["is_valid"];
 }
 
 function smart_forms_license_is_valid($email,$key,&$error)
 {
-    $email=trim($email);
-    $key=trim($key);
-    delete_transient("smart_forms_check_again");
-    $response=wp_remote_post(SMART_FORMS_REDNAO_URL.'smart_donations_license_validation.php',array('body'=> array( 'email'=>$email,'key'=>$key,'product'=>'sf'),'timeout'=>10));
-    if($response instanceof WP_Error)
-    {
-        $error= $response->get_error_message();
-        return false;
-    }
+	$result = apply_filters( "smart_forms_lc_is_valid", array(
+		email=>$email,
+		key=>$key,
+		is_valid=>false,
+		error=>""
+	) );
 
-    if(strcmp ($response['body'], "valid") == 0)
-        return true;
-    else{
-        return false;
-    }
+	$error=$result["error"];
+	return $result["is_valid"];
 
 }
 

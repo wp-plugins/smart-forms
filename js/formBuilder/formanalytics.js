@@ -41,6 +41,8 @@ function RedNaoCreateColumn(options)
         return RedNaoPhone(options);
     if(elementName=="rednaonumber")
         return RedNaoTextInputColumn(options);
+    if(elementName=="sfFileUpload")
+        return RedNaoFileUploadColumn(options);
 
 }
 
@@ -226,6 +228,33 @@ function RedNaoAddress(options)
             address=appendAddressElement(address,data.country);
 
             return address;
+        }catch(exception)
+        {
+            return '';
+        }
+    }};
+}
+
+function RedNaoFileUploadColumn(options)
+{
+    return {"name":options.Label,"index":options.Id,formatter: function (cellvalue, cellOptions, rowObject)
+    {
+        try{
+            var data=GetObjectOrNull(rowObject,cellOptions);
+            if(data==null)
+                return '';
+
+            var firstRow=true;
+            var html="";
+            for(var i=0;i<data.length;i++)
+            {
+                if(firstRow)
+                    firstRow=false
+                else
+                    html+="<br/>";
+                html+='<a target="_blank" href="'+data[i].path+'">'+data[i].path+'</a>';
+            }
+            return html;
         }catch(exception)
         {
             return '';
