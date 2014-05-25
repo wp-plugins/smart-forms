@@ -15,7 +15,8 @@ function smart_forms_pr_add_new_extension()
 }
 function smart_forms_pr_add_new_js_extension($val)
 {
-	if(smart_forms_lc_is_valid_with_options(array())["is_valid"]==true)
+	$result=smart_forms_lc_is_valid_with_options(array());
+	if($result["is_valid"]==true)
 	{
 		array_push($val,'smart-forms-pr-add-new-extension');
 	}
