@@ -2321,8 +2321,8 @@ sfRedNaoCaptcha.prototype.GenerationCompleted=function(jQueryElement)
         Recaptcha.create("6Lf2J-wSAAAAACCijq50oACQRuvrsmNt9DeUsE-7",
             'captchaComponent',
             {
-                theme: "red",
-                callback: Recaptcha.focus_response_field
+                theme: "red"
+               // callback: Recaptcha.focus_response_field
             }
         );
     });
