@@ -47,7 +47,8 @@ Your server should be able to send emails in order for this to work. Please chec
 **How can i send an email to the person that submitted the form?**
 Please check the smart forms tutorial: https://www.youtube.com/watch?v=EH_eT9_67nQ 
 
-
+**How can i make my form to support japanese characters**
+This generally happens when your database doesn't support UTF-8 characters, so the form elements can not be stores properly. Please change your database to support UTF-8 characters and then try to submit a form to see if that worked.
 
 
 == Screenshots ==
@@ -64,8 +65,10 @@ Please check the smart forms tutorial: https://www.youtube.com/watch?v=EH_eT9_67
 == Changelog ==
 = Smart Forms 1.5.12 =
 * Fixing form element captcha to not focus when form loads.
+* Form improvement, fixing "Send email to" in the form's email configuration.
 = Smart Forms 1.5 =
 * Improved form builder, added file uploader.
+* Fixing issue in form builder, color designer was not styiling the labels correctly when the form was loaded.
 = Smart Forms 1.2.21 =
 * Fixed form builder issue with clone button.
 = Smart Forms 1.2.20 =
