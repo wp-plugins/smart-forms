@@ -30,6 +30,7 @@ You can also customize the form to do an additional action abter the form is sub
 *   **Calculated forms fields**.- You can use fields in a formulas to fill fields automatically (up to three fields per formula in the free version)
 *   **Custom forms fields**.- Currently the plugin supports these custom forms elements: name, phone, email, address, number,captcha.
 *   **File Uploader (pro)**.- Allow you to upload files in a form, you can configure the form to accept only one file or multiple.
+*   **Forms Compatible with Smart donations**.- You can create paypal forms with this plugin and also enjoy all the power of smart donations (https://wordpress.org/plugins/smart-donations/, an smart donation license is required) 
 == Installation ==
 1. Upload smart forms to the `/wp-content/plugins/` directory
 2. Activate the item named  'smart forms' in the 'Plugins' menu in WordPress
