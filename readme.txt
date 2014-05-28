@@ -70,6 +70,8 @@ This generally happens when your database doesn't support UTF-8 characters, so t
 = Smart Forms 1.5.12 =
 * Fixing form element captcha to not focus when form loads.
 * Form improvement, fixing "Send email to" in the form's email configuration.
+= Smart Forms 1.5.11 =
+* Fixed an issue when the forms when activating the plugin.
 = Smart Forms 1.5 =
 * Improved form builder, added file uploader.
 * Fixing issue in form builder, color designer was not styiling the labels correctly when the form was loaded.
