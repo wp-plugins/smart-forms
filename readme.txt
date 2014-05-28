@@ -1,4 +1,4 @@
-=== Smart Forms ===
+=== Smart Forms - Build powerful forms easily ===
 Contributors: EDGARROJAS
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edseventeen%40gmail.com
 Tags: contact forms, contact, forms, forms, contact forms plugin, contact forms builder, contact forms with recaptcha, feedback forms, contact us, request forms, contact button, drag and drop contact forms, file upload contact forms, contact forms to email, contact forms payments, contact for paypal, forms solution, forms builder, feedback, easy contact forms, helpdesk
