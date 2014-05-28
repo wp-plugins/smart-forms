@@ -50,6 +50,10 @@ Please check the smart forms tutorial: https://www.youtube.com/watch?v=EH_eT9_67
 **How can i make my form to support japanese characters**
 This generally happens when your database doesn't support UTF-8 characters, so the form elements can not be stores properly. Please change your database to support UTF-8 characters and then try to submit a form to see if that worked.
 
+**How can i style the elements of the form**
+1. Select the form element that you want to style
+2. Click in the paint icon (to the right of the form element)
+3. Style it and save the form
 
 == Screenshots ==
 1. Dragging a form element
