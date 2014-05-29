@@ -68,7 +68,7 @@ This generally happens when your database doesn't support UTF-8 characters, so t
 9. Calculated field interface
 10. Example of date field
 == Changelog ==
-= Smart Forms 1.5.14 =
+= Smart Forms 1.5.15 =
 * Added fix for tinymce.
 = Smart Forms 1.5.13 =
 * Improving form builder, adding before form submit ability to stop form submission.

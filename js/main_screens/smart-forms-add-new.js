@@ -75,15 +75,7 @@ function SmartFormsAddNew()
     var self=this;
     RedNaoEventManager.Subscribe('FormulaButtonClicked',function(data){self.OpenFormulaBuilder(data.FormElement,data.PropertyName,data.AdditionalInformation,data.Image)});
 
-    if(typeof tinymce.get('redNaoTinyMCEEditor')=='undefined')
-    {
-        try{
-            tinymce.init(tinyMCEPreInit.mceInit["redNaoTinyMCEEditor"]);
-        }catch(exception)
-        {
 
-        }
-    }
 
 
 }
@@ -108,6 +100,16 @@ SmartFormsAddNew.prototype.OpenFormulaBuilder=function(formElement,propertyName,
 
 SmartFormsAddNew.prototype.EditEmailClicked=function()
 {
+    if(typeof tinymce.get('redNaoTinyMCEEditor')=='undefined')
+    {
+        try{
+            tinymce.init(tinyMCEPreInit.mceInit["redNaoTinyMCEEditor"]);
+        }catch(exception)
+        {
+
+        }
+    }
+
     if(!this.EmailTextLoaded)
     {
         this.EmailTextLoaded=true;
