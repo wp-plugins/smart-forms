@@ -242,6 +242,15 @@ smartFormGenerator.prototype.SaveForm=function()
     if(formValues.length>0)
         formValues=formValues.substr(1);
 
+    try{
+
+        if(typeof this.JavaScriptCode.BeforeFormSubmit!='undefined'&&(this.JavaScriptCode.BeforeFormSubmit(formValues,this.FormElements)==false))
+            return;
+    }catch(exception)
+    {
+
+    }
+
     if(RedNaoGetValueOrNull(this.client_form_options.Campaign))
         this.SendToSmartDonations(formValues,isUsingAFileUploader);
     else
@@ -250,7 +259,6 @@ smartFormGenerator.prototype.SaveForm=function()
     try{
         rnJQuery('body, input[type="submit"]').addClass('redNaoWait');
         this.JQueryForm.find('input[type="submit"]').attr('disabled','disabled');
-        this.JavaScriptCode.BeforeFormSubmit();
     }catch(exception)
     {
 

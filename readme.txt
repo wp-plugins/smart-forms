@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: contact forms, contact, forms, forms, contact forms plugin, contact forms builder, contact forms with recaptcha, feedback forms, contact us, request forms, contact button, drag and drop contact forms, file upload contact forms, contact forms to email, contact forms payments, contact for paypal, forms solution, forms builder, feedback, easy contact forms, helpdesk
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.5.12
+Stable tag: 1.5.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,8 @@ This generally happens when your database doesn't support UTF-8 characters, so t
 9. Calculated field interface
 10. Example of date field
 == Changelog ==
+= Smart Forms 1.5.13 =
+* Improving form builder, adding before form submit ability to stop form submission.
 = Smart Forms 1.5.12 =
 * Fixing form element captcha to not focus when form loads.
 * Form improvement, fixing "Send email to" in the form's email configuration.
