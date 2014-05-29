@@ -112,6 +112,7 @@ SmartFormsAddNew.prototype.EditEmailClicked=function()
         }
 
     }
+    this.EmailTextLoaded=true;
     RedNaoEmailEditorVar.OpenEmailEditor(this.FormBuilder.RedNaoFormElements,this.Emails);
 }
 
