@@ -100,12 +100,14 @@ SmartFormsAddNew.prototype.OpenFormulaBuilder=function(formElement,propertyName,
 
 SmartFormsAddNew.prototype.EditEmailClicked=function()
 {
+
     if(!this.EmailTextLoaded)
     {
         try{
             tinymce.get('redNaoTinyMCEEditor').setContent(this.EmailText);
         }catch(exception)
         {
+            tinymce.init(tinyMCEPreInit.mceInit["redNaoTinyMCEEditor"]);
             return;
         }
 
