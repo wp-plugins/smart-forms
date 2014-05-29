@@ -100,20 +100,15 @@ SmartFormsAddNew.prototype.OpenFormulaBuilder=function(formElement,propertyName,
 
 SmartFormsAddNew.prototype.EditEmailClicked=function()
 {
-    if(typeof tinymce.get('redNaoTinyMCEEditor')=='undefined')
-    {
-        try{
-            tinymce.init(tinyMCEPreInit.mceInit["redNaoTinyMCEEditor"]);
-        }catch(exception)
-        {
-
-        }
-    }
-
     if(!this.EmailTextLoaded)
     {
-        this.EmailTextLoaded=true;
-        tinymce.get('redNaoTinyMCEEditor').setContent(this.EmailText);
+        try{
+            tinymce.get('redNaoTinyMCEEditor').setContent(this.EmailText);
+        }catch(exception)
+        {
+            return;
+        }
+
     }
     RedNaoEmailEditorVar.OpenEmailEditor(this.FormBuilder.RedNaoFormElements,this.Emails);
 }
