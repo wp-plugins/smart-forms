@@ -1,7 +1,7 @@
 === Smart Forms - Build powerful forms easily ===
 Contributors: EDGARROJAS
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edseventeen%40gmail.com
-Tags: form, forms, form builder, form maker, form creator, form generator, contact form, form widget, form plugin, bootstrap forms, jquery forms, form manager, ajax forms
+Tags: form, forms, form builder, form maker, form creator, form generator,forms, contact form, form widget, form plugin, bootstrap forms, jquery forms, form manager, ajax forms,forms
 Requires at least: 3.3
 Tested up to: 3.9
 Stable tag: 1.5.18
@@ -68,8 +68,10 @@ This generally happens when your database doesn't support UTF-8 characters, so t
 9. Calculated field interface
 10. Example of date field
 == Changelog ==
+= Smart Forms 1.5.16 =
+* Fixed form builder bug in the email editor.
 = Smart Forms 1.5.15 =
-* Added fix for tinymce.
+* Added fix in the form builder for tinymce.
 = Smart Forms 1.5.13 =
 * Improving form builder, adding before form submit ability to stop form submission.
 = Smart Forms 1.5.12 =
