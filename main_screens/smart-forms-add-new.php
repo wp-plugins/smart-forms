@@ -110,7 +110,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 		<table>
 			<tr>
 				<td>
-					<textarea style="width:510px;height:300px;padding: 5px;" id="redNaoFormulaTextArea"></textarea>
+					<textarea style="width:510px;height:300px;padding: 5px;" id="redNaoFormulaTextArea" PLACEHOLDER="Here you can add arithmetical operations between fields.                    Example: [field rnfield1]+[field rnfield2]"></textarea>
 				</td>
 				<td style="vertical-align: top">
 					<div id="redNaoFormulaAccordion" class="smartFormsSlider" >
