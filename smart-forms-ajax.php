@@ -214,7 +214,7 @@ function rednao_smart_forms_entries_list()
     $startDate=date('Y-m-d H:i:s', strtotime($startDate));
     $endDate=date('Y-m-d H:i:s', strtotime($endDate .' +1 day'));
 
-    $query="select entry_id,data from ".SMART_FORMS_ENTRY."
+    $query="select concat(year(date),'-',month(date),'-' ,day(date)) date,date,entry_id,data from ".SMART_FORMS_ENTRY."
         where date between '$startDate' and '$endDate' and form_id=$formId";
 
 
@@ -230,7 +230,7 @@ function rednao_smart_forms_entries_list()
         else
             echo ",";
 
-        echo '{"entry_id":"'.$row->entry_id.'","data":'.$row->data."}";
+        echo '{"date":"'.$row->date.'","entry_id":"'.$row->entry_id.'","data":'.$row->data."}";
 
     }
     echo '],"formOptions":';

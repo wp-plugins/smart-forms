@@ -216,6 +216,7 @@ rnJQuery(function () {
     function LoadGrid(formOptions,entries) {
         var colmodel=[];
         colmodel.push();
+        colmodel.push({"name": "date", "index": "date", "sorttype": "string", "key": false, "editable": false,hidden:false,width:100});
         for(var i=0;i<formOptions.length;i++)
         {
             var column=RedNaoCreateColumn(formOptions[i]);
@@ -223,12 +224,16 @@ rnJQuery(function () {
                 colmodel.push(column)
         }
 
+        var max=500;
+        if(entries.length>500)
+            max=entries.length;
+
         colmodel.push({"name": "entry_id", "index": "entry_id", "sorttype": "int", "key": true, "editable": false,hidden:true})
 
         if(this.Grid!=null)
             rnJQuery('#grid').jqGrid('GridUnload');
 
-        this.Grid=rnJQuery('#grid').jqGrid({autowidth: true, "hoverrows": true,height:'100%',mtype:"POST",  "viewrecords": true, "jsonReader": {"repeatitems": false, "subgrid": {"repeatitems": false}}, "gridview": true,  "editurl": ajaxurl+"?action=rednao_smart_forms_execute_op", "cellurl": ajaxurl+"?action=rednao_smart_donations_execute_analytics_op",  "rowList": [10, 20, 30], "sortname": "TransactionId", "datatype": "json",
+        this.Grid=rnJQuery('#grid').jqGrid({autowidth: true, "hoverrows": true,height:'100%',mtype:"POST",  "viewrecords": true, "jsonReader": {"repeatitems": false, "subgrid": {"repeatitems": false}}, "gridview": true,  "editurl": ajaxurl+"?action=rednao_smart_forms_execute_op", "cellurl": ajaxurl+"?action=rednao_smart_donations_execute_analytics_op",  "rowList": [50, 150, 300,max], "sortname": "TransactionId", "datatype": "json",
             "colModel": colmodel,
             "datatype": "local",
             "data":entries,"postData": {"oper": "grid"}, "prmNames": {"page": "page", "rows": "rows", "sort": "sidx", "order": "sord", "search": "_search", "nd": "nd", "id": "TransactionId", "filter": "filters", "searchField": "searchField", "searchOper": "searchOper", "searchString": "searchString", "oper": "oper", "query": "grid", "addoper": "add", "editoper": "edit", "deloper": "del", "excel": "excel", "subgrid": "subgrid", "totalrows": "totalrows", "autocomplete": "autocmpl"}
