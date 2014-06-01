@@ -69,6 +69,7 @@ This generally happens when your database doesn't support UTF-8 characters, so t
 10. Example of date field
 == Changelog ==
 = Smart Forms 1.5.21 =
+* Forms Entries improvement, Increased the entries page size.
 * Forms Entries improvement, added date in grid.
 = Smart Forms 1.5.20 =
 * Form builder improvements, Added instructions to formula screen to make it more understandable
