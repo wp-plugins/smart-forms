@@ -428,3 +428,7 @@ ul#redNaoFormulaFormFields{
 
 }
 
+#redNaoAccordion .ui-accordion-content
+{
+	overflow:visible !important;
+}

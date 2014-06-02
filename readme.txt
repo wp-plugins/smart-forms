@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: form, forms, form builder, form maker, form creator, form generator,forms, contact form, form widget, form plugin, bootstrap forms, jquery forms, form manager, ajax forms,forms
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.5.21
+Stable tag: 1.5.22
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,8 @@ This generally happens when your database doesn't support UTF-8 characters, so t
 9. Calculated field interface
 10. Example of date field
 == Changelog ==
+= Smart Forms 1.5.22 =
+* Forms builder improvement, added css to fix issue with email editor.
 = Smart Forms 1.5.21 =
 * Forms Entries improvement, Increased the entries page size.
 * Forms Entries improvement, added date in grid.
