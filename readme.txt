@@ -8,6 +8,10 @@ Stable tag: 1.5.21
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
+For more information check: http://rednao.com/smartforms.html
+**If you have questions or suggestions please let me know in the smart forms official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601**
+Also if you have issues or need support please submit a ticket in the smart forms support site: https://smartforms.uservoice.com
+
 With Smart Forms build forms easily by dragging and dropping elements. Create multiple forms like contact forms or advanced forms that need fields calculations or send customizable emails!!.
 == Description ==
 Smart Forms is a very powerful and easy to use Form Build plugin,the form builde lets you create forms by just dragging and dropping elements. The forms are responsive, they adjust to the available space. You can style each form element individually.
