@@ -1,4 +1,4 @@
-=== Smart Forms - Build powerful forms easily ===
+=== Forms - Build powerful forms easily with Smart Forms ===
 Contributors: EDGARROJAS
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edseventeen%40gmail.com
 Tags: form, forms, form builder, form maker, form creator, form generator,forms, contact form, form widget, form plugin, bootstrap forms, jquery forms, form manager, ajax forms,forms
