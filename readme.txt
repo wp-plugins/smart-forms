@@ -1,7 +1,7 @@
-=== Smart Forms - Forms Made Easy ===
+=== Smart Forms ===
 Contributors: EDGARROJAS
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edseventeen%40gmail.com
-Tags: form, forms, form builder, form maker, form creator, form generator,forms, contact form, form widget, form plugin, bootstrap forms, jquery forms, form manager, ajax forms,forms
+Tags: form, forms, contact form, custom form, form builder, form creator, form manager, form creation, contact forms, custom forms, forms builder, forms creator, forms manager, forms creation, form administration
 Requires at least: 3.3
 Tested up to: 3.9
 Stable tag: 1.5.22
