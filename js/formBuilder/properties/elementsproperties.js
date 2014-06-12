@@ -96,6 +96,55 @@ SimpleTextProperty.prototype.GenerateHtml=function()
 }
 
 
+/************************************************************************************* Simple Numeric Property ***************************************************************************************************/
+
+
+function SimpleNumericProperty(formelement,propertiesObject,propertyName,propertyTitle,additionalInformation)
+{
+    if(typeof additionalInformation.Placeholder=='undefined')
+        additionalInformation.Placeholder='Default';
+    ElementPropertiesBase.call(this,formelement,propertiesObject,propertyName,propertyTitle,additionalInformation);
+}
+
+SimpleNumericProperty.prototype=Object.create(ElementPropertiesBase.prototype);
+
+SimpleNumericProperty.prototype.GenerateHtml=function()
+{
+    var input="";
+    var tdStyle="";
+    if(this.AdditionalInformation.MultipleLine==true)
+    {
+        input='<textarea style="width:206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="'+this.AdditionalInformation.Placeholder+'"/>';
+        tdStyle='vertical-align:top;'
+    }
+    else
+    {
+        input='<input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="'+this.AdditionalInformation.Placeholder+'"/>';
+    }
+
+    var value=this.GetPropertyCurrentValue().trim();
+    var newProperty=rnJQuery( '<td style="text-align: right;'+tdStyle+'"><label class="rednao-properties-control-label"> '+this.PropertyTitle+' </label></td>\
+            <td style="text-align: left">'+input+'\
+            <img style="width:15px;height: 20px; vertical-align: middle;cursor:pointer;cursor:hand;" title="Formula" src="'+ smartFormsRootPath+(this.FormulaExists(this.FormElement,this.PropertyName)?'images/formula_used.png' :'images/formula.png')+'"/> </td>');
+    newProperty.find('input').ForceNumericOnly();
+    var self=this;
+    newProperty.keyup(function(){
+        var value=parseFloat(rnJQuery("#"+self.PropertyId).val());
+        if(isNaN(value))
+            value='';
+        else
+            value=value.toString();
+        self.Manipulator.SetValue(self.PropertiesObject,self.PropertyName, value,self.AdditionalInformation);
+        self.RefreshElement();
+
+    });
+    newProperty.find('img').click(function(){RedNaoEventManager.Publish('FormulaButtonClicked',{"FormElement":self.FormElement,"PropertyName":self.PropertyName,AdditionalInformation:self.AdditionalInformation,Image:newProperty.find('img')})});
+    return newProperty;
+}
+
+
+
+
 
 
 

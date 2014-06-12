@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: form, forms, contact form, custom form, form builder, form creator, form manager, form creation, contact forms, custom forms, forms builder, forms creator, forms manager, forms creation, form administration
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 1.5.22
+Stable tag: 1.5.23
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,8 @@ This generally happens when your database doesn't support UTF-8 characters, so t
 9. Calculated field interface
 10. Example of date field
 == Changelog ==
+= Smart Forms 1.5.23 =
+Form builder improvement, added word count to text area
 = Smart Forms 1.5.22 =
 * Forms builder improvement, added css to fix issue with email editor.
 = Smart Forms 1.5.21 =

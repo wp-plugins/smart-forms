@@ -856,13 +856,17 @@ function sfTextAreaElement(options)
         this.Options.Height='';
         this.Options.Placeholder='Placeholder';
         this.Options.Disabled="n";
+        this.Options.MaxLength=''
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
         this.SetDefaultIfUndefined('Height','');
         this.SetDefaultIfUndefined('Placeholder','');
         this.SetDefaultIfUndefined('Disabled','n');
+        this.SetDefaultIfUndefined('MaxLength','');
     }
+
+    this.MaxLength=parseFloat(this.Options.MaxLength);
 
 
 }
@@ -875,6 +879,7 @@ sfTextAreaElement.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"DefaultText","Value",{ManipulatorType:'basic',RefreshFormData:true,MultipleLine:true}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic',RefreshFormData:true}));
+    this.Properties.push(new SimpleNumericProperty(this,this.Options,"MaxLength","Max Character",{ManipulatorType:'basic',Placeholder:"No Limit"}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Height","Height",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
@@ -898,10 +903,14 @@ sfTextAreaElement.prototype.GenerateInlineElement=function()
         disabled='disabled="disabled"'
 
 
-    return  '<div class="rednao_label_container"><label class="rednao_control_label" for="textarea">'+this.Options.Label+'</label></div>\
+    var html=  '<div class="rednao_label_container"><label class="rednao_control_label" for="textarea">'+this.Options.Label+'</label></div>\
                 <div class="redNaoControls">\
-                <textarea '+disabled+' placeholder="'+this.Options.Placeholder+'" style="'+additionalStyle+'" name="textarea" class="redNaoTextAreaInput">'+this.Options.DefaultText+'</textarea>\
-            </div>';
+                <textarea '+(!isNaN(this.MaxLength)?'maxlength="'+this.MaxLength.toString()+'"':'')+'  '+disabled+' placeholder="'+this.Options.Placeholder+'" style="'+additionalStyle+'" name="textarea" class="redNaoTextAreaInput '+(!isNaN(this.MaxLength)?'redNaoTextAreaInputWordCount':'')+'">'+this.Options.DefaultText+'</textarea>';
+    if(!isNaN(this.MaxLength))
+        html+='<span class="smartFormsCharacterCount">'+this.MaxLength.toString()+'</span>'
+    html+='</div>';
+
+    return html;
 }
 
 
@@ -931,6 +940,19 @@ sfTextAreaElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    if(!isNaN(this.MaxLength))
+        rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').bind('keyup keydown',function(){
+            var length=rnJQuery(this).val().length;
+            var charactersRemaining=self.MaxLength-length;
+            var wordCounter=self.GetElementByClassName('smartFormsCharacterCount');
+            wordCounter.text(charactersRemaining.toString());
+
+            if(charactersRemaining<=20)
+                wordCounter.addClass("smartFormsAlmostFull");
+            else
+                wordCounter.removeClass("smartFormsAlmostFull");
+
+        });
 }
 
 /*************************************************************************************Multiple Radio Element ***************************************************************************************************/

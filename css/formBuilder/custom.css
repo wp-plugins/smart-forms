@@ -130,6 +130,23 @@
     padding: 4px 6px !important;
 }
 
+.rednaoFormContainer .redNaoTextAreaInput.redNaoTextAreaInputWordCount{
+    padding: 4px 6px 0px 4px !important;
+}
+
+.rednaoFormContainer .smartFormsCharacterCount{
+    display: block !important;
+    font-size: 13px !important;
+    line-height: 14px !important;
+    text-align: right;
+    color: #afafaf;
+}
+
+.rednaoFormContainer .smartFormsCharacterCount.smartFormsAlmostFull{
+    color:#5c0002;
+}
+
+
 .rednaoFormContainer .redNaoInputRadio{
     margin-right: 5px !important;
     width:auto !important;
