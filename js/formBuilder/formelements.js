@@ -459,7 +459,7 @@ sfTextInputElement.prototype.GenerateInlineElement=function()
 
     return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
                 <div class="redNaoControls">\
-                    <input style="'+additionalStyle+'" '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'" value="'+this.Options.Value+'">'
+                    <input style="'+additionalStyle+'" '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'" value="'+this.Options.Value+'">'+
                 '</div>';
 };
 
@@ -883,21 +883,21 @@ sfTextAreaElement.prototype.GenerateInlineElement=function()
 {
     var additionalStyle='';
     if(!isNaN(parseFloat(this.Options.Width)))
-        additionalStyle='width:'+this.Options.Width+'px'+' !important;'
+        additionalStyle='width:'+this.Options.Width+'px'+' !important;';
 
     if(!isNaN(parseFloat(this.Options.Height)))
-        additionalStyle+='height:'+this.Options.Height+'px'+' !important;'
+        additionalStyle+='height:'+this.Options.Height+'px'+' !important;';
 
     var disabled="";
     if(this.Options.Disabled=='y')
-        disabled='disabled="disabled"'
+        disabled='disabled="disabled"';
 
 
     var html=  '<div class="rednao_label_container"><label class="rednao_control_label" for="textarea">'+this.Options.Label+'</label></div>\
                 <div class="redNaoControls">\
                 <textarea '+(!isNaN(this.MaxLength)?'maxlength="'+this.MaxLength.toString()+'"':'')+'  '+disabled+' placeholder="'+this.Options.Placeholder+'" style="'+additionalStyle+'" name="textarea" class="redNaoTextAreaInput '+(!isNaN(this.MaxLength)?'redNaoTextAreaInputWordCount':'')+'">'+this.Options.DefaultText+'</textarea>';
     if(!isNaN(this.MaxLength))
-        html+='<span class="smartFormsCharacterCount">'+this.MaxLength.toString()+'</span>'
+        html+='<span class="smartFormsCharacterCount">'+this.MaxLength.toString()+'</span>';
     html+='</div>';
 
     return html;
@@ -1001,7 +1001,7 @@ sfMultipleRadioElement.prototype.GenerateInlineElement=function()
 {
     var orientationClass='';
     if(this.Options.Orientation=='h')
-        orientationClass='redNaoHorizontalElements'
+        orientationClass='redNaoHorizontalElements';
 
     var html=  '<div class="rednao_label_container"><label class="rednao_control_label">'+this.Options.Label+'</label></div>\
         <div class="redNaoControls">';
@@ -1134,7 +1134,7 @@ sfMultipleCheckBoxElement.prototype.GenerateInlineElement=function()
 {
     var orientationClass='';
     if(this.Options.Orientation=='h')
-        orientationClass='redNaoHorizontalElements'
+        orientationClass='redNaoHorizontalElements';
 
     var html=  '<div class="rednao_label_container"><label class="rednao_control_label">'+this.Options.Label+'</label></div>\
         <div class="redNaoControls">';
@@ -1292,7 +1292,7 @@ sfSelectBasicElement.prototype.GenerateInlineElement=function()
 {
     var additionalStyle='';
     if(!isNaN(parseFloat(this.Options.Width)))
-        additionalStyle='width:'+this.Options.Width+'px'+' !important;'
+        additionalStyle='width:'+this.Options.Width+'px'+' !important;';
 
 
     var html=  '<div class="rednao_label_container"><label class="rednao_control_label">'+this.Options.Label+'</label></div>\
@@ -1302,7 +1302,7 @@ sfSelectBasicElement.prototype.GenerateInlineElement=function()
     var selected='';
     if(this.Options.DefaultText!="")
     {
-        var selected='selected="selected"';
+        selected='selected="selected"';
         for(var i=0;i<this.Options.Options.length;i++)
         {
             if(this.Options.Options[i].sel=='y')
@@ -1321,7 +1321,7 @@ sfSelectBasicElement.prototype.GenerateInlineElement=function()
         else
             selected='';
 
-        html+='<option   value="'+this.Options.Options[i].value+'" '+selected+'>'+this.Options.Options[i].label+'</opton>'
+        html+='<option   value="'+this.Options.Options[i].value+'" '+selected+'>'+this.Options.Options[i].label+'</opton>';
 
         selected="";
 
@@ -2172,7 +2172,7 @@ function sfRedNaoNumber(options)
     {
         this.Options.ClassName="rednaonumber";
         this.Options.Label="Number";
-        this.Options.Placeholder="Placeholder"
+        this.Options.Placeholder="Placeholder";
         this.Options.NumberOfDecimals=0;
         this.Options.MaximumValue="";
         this.Options.MinimumValue="";
@@ -2202,7 +2202,7 @@ sfRedNaoNumber.prototype.GenerateInlineElement=function()
 
     return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
                 <div class="redNaoControls">\
-                    <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText redNaoNumber'+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'
+                    <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText redNaoNumber'+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'+
     '</div>';
 };
 
