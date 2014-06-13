@@ -163,7 +163,7 @@ sfFormElementBase.prototype.FirePropertyChanged=function(val){
 
     RedNaoEventManager.Publish('formPropertyChanged',{FieldName:this.Id, Value:val});
 
-}
+};
 
 sfFormElementBase.prototype.SetDefaultIfUndefined=function(propertyName,defaultValue)
 {
@@ -206,7 +206,7 @@ sfFormElementBase.prototype.RefreshElement=function()
 };
 sfFormElementBase.prototype.GenerateHtml=function(jqueryElement)
 {
-    var newElement=rnJQuery('<div class="rednao-control-group '+this.Options.ClassName+'" id="'+this.Id+'" style="margin-bottom:15px;clear:both;">'+this.GenerateInlineElement()+'</div>')
+    var newElement=rnJQuery('<div class="rednao-control-group '+this.Options.ClassName+'" id="'+this.Id+'" style="margin-bottom:15px;clear:both;">'+this.GenerateInlineElement()+'</div>');
     jqueryElement.replaceWith(newElement );
     this.JQueryElement=newElement;
     this.GenerationCompleted(newElement);
@@ -245,24 +245,13 @@ sfFormElementBase.prototype.GetProperties=function()
 {
     if(this.Properties==null)
     {
-        this.Properties=new Array();
+        this.Properties=[];
         this.CreateProperties();
     }
 
     return this.Properties;
 };
 
-
-sfFormElementBase.prototype.UpdateProperties=function()
-{
-    if(this.Properties!=null)
-    {
-        for(var i=0;i<this.Properties.length;i++)
-        {
-            this.Properties[i].UpdateProperty();
-        }
-    }
-};
 
 sfFormElementBase.prototype.GetPropertyName=function()
 {
@@ -344,8 +333,10 @@ sfFormElementBase.prototype.ApplyTagStyleForElement=function(elementName)
     var elementProperties=this.Options.Styles[elementName];
     for(var styleName in elementProperties.Properties)
     {
-        style+=styleName+":"+elementProperties.Properties[styleName]+" !important;"
+        //noinspection JSUnfilteredForInLoop
+        style+=styleName+":"+elementProperties.Properties[styleName]+" !important;";
     }
+    //noinspection JSUnresolvedVariable
     var selector=this.GetSelectorByScope(elementProperties.Scope,elementName);
 
     var tag=this.GetStyleTagForElement(elementName);
@@ -359,6 +350,8 @@ sfFormElementBase.prototype.GetSelectorByScope=function(scope,elementName)
 {
     if(scope==SmartFormsStyleScopeField)
         return '#'+this.Id + " ."+elementName;
+
+    throw ("Undefined scope");
 };
 
 
@@ -414,7 +407,7 @@ function sfTextInputElement(options)
         this.Options.Label="Text Input";
         this.Options.Placeholder="Placeholder";
         this.Options.Value="";
-        this.Options.ReadOnly='n'
+        this.Options.ReadOnly='n';
         this.Options.Width="";
     }else{
         this.SetDefaultIfUndefined('Value','');
@@ -528,7 +521,7 @@ sfPrependTexElement.prototype.GenerateInlineElement=function()
 {
     var additionalStyle='';
     if(!isNaN(parseFloat(this.Options.Width)))
-        additionalStyle='width:'+this.Options.Width+'px'+' !important;'
+        additionalStyle='width:'+this.Options.Width+'px'+' !important;';
 
 
     return '<div class="rednao_label_container"><label class="rednao_control_label" for="prependedtext">'+this.Options.Label+'</label></div>\
@@ -564,6 +557,7 @@ sfPrependTexElement.prototype.IsValid=function()
     return true;
 };
 
+//noinspection JSUnusedLocalSymbols
 sfPrependTexElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
@@ -610,7 +604,7 @@ sfAppendedTexElement.prototype.GenerateInlineElement=function()
 {
     var additionalStyle='';
     if(!isNaN(parseFloat(this.Options.Width)))
-        additionalStyle='width:'+this.Options.Width+'px'+' !important;'
+        additionalStyle='width:'+this.Options.Width+'px'+' !important;';
 
 
     return '<div class="rednao_label_container"><label class="rednao_control_label" for="appendedtext">'+this.Options.Label+'</label></div>\
@@ -647,6 +641,7 @@ sfAppendedTexElement.prototype.IsValid=function()
     return true;
 };
 
+//noinspection JSUnusedLocalSymbols
 sfPrependTexElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
@@ -694,7 +689,7 @@ sfPrependCheckBoxElement.prototype.GenerateInlineElement=function()
 {
     var additionalStyle='';
     if(!isNaN(parseFloat(this.Options.Width)))
-        additionalStyle='width:'+this.Options.Width+'px'+' !important;'
+        additionalStyle='width:'+this.Options.Width+'px'+' !important;';
 
 
     return '<div class="rednao_label_container"><label class="rednao_control_label" for="prependedcheckbox">'+this.Options.Label+'</label></div>\
@@ -710,7 +705,7 @@ sfPrependCheckBoxElement.prototype.GenerateInlineElement=function()
                 </div>';
 
 
-}
+};
 
 
 
@@ -735,6 +730,7 @@ sfPrependCheckBoxElement.prototype.IsValid=function()
     return true;
 };
 
+//noinspection JSUnusedLocalSymbols
 sfPrependCheckBoxElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
@@ -780,7 +776,7 @@ sfAppendCheckBoxElement.prototype.GenerateInlineElement=function()
 {
     var additionalStyle='';
     if(!isNaN(parseFloat(this.Options.Width)))
-        additionalStyle='width:'+this.Options.Width+'px'+' !important;'
+        additionalStyle='width:'+this.Options.Width+'px'+' !important;';
 
 
     return '<div class="rednao_label_container"><label class="rednao_control_label" for="appendedcheckbox">'+this.Options.Label+'</label></div>\
@@ -818,6 +814,7 @@ sfAppendCheckBoxElement.prototype.IsValid=function()
     return true;
 };
 
+//noinspection JSUnusedLocalSymbols
 sfAppendCheckBoxElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
@@ -918,6 +915,7 @@ sfTextAreaElement.prototype.IsValid=function()
     return true;
 };
 
+//noinspection JSUnusedLocalSymbols
 sfTextAreaElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
@@ -943,13 +941,13 @@ function sfMultipleRadioElement(options)
 {
     sfFormElementBase.call(this,options);
     this.Title="Multiple Radio";
-
+    var i=undefined;
     if(this.IsNew)
     {
         this.Options.Label="Multiple Radio";
         this.Options.ClassName="rednaomultipleradios";
         this.Options.Orientation='v';
-        this.Options.Options=new Array({label:'Option 1',value:0,sel:'n'},{label:'Option 2',value:0,sel:'n'},{label:'Option 3',value:0,sel:'n'});
+        this.Options.Options=[{label:'Option 1',value:0,sel:'n'},{label:'Option 2',value:0,sel:'n'},{label:'Option 3',value:0,sel:'n'}];
     }else
     {
         if(RedNaoGetValueOrNull(this.Options.Orientation)==null)
@@ -957,13 +955,13 @@ function sfMultipleRadioElement(options)
         if(this.Options.Options.length>0&&typeof this.Options.Options[0].sel=='undefined')
         {
             this.Options.Options[0].sel='y';
-            for(var i=1;i<this.Options.Options.length;i++)
+            for(i=1;i<this.Options.Options.length;i++)
                 this.Options.Options[i].sel='n';
         }
         if(this.Options.Options.length>0&&typeof this.Options.Options[i]=='string')
         {
-            var aux=new Array();
-            for(var i=0;i<this.Options.Options.length;i++)
+            var aux=[];
+            for(i=0;i<this.Options.Options.length;i++)
             {
                 aux.push({label:this.Options.Options[i]});
             }
@@ -1066,10 +1064,9 @@ sfMultipleRadioElement.prototype.SetUpICheck=function(style)
     });
 };
 
+//noinspection JSUnusedLocalSymbols
 sfMultipleRadioElement.prototype.GenerationCompleted=function(jQueryElement)
 {
-    var self=this;
-    //rnJQuery('#'+this.Id+ ' .redNaoInputRadio').change(function(){self.FirePropertyChanged(self.GetValueString());});
     this.SetUpICheck('iradio_minimal');
 };
 
@@ -1079,7 +1076,7 @@ function sfMultipleCheckBoxElement(options)
 {
     sfFormElementBase.call(this,options);
     this.Title="Multiple Checkboxes";
-
+    var i=undefined;
     if(this.IsNew)
     {
         this.Options.Label="Multiple Checkbox";
@@ -1092,14 +1089,14 @@ function sfMultipleCheckBoxElement(options)
             this.Options.Orientation='v';
         if(this.Options.Options.length>0&&typeof this.Options.Options[0].sel=='undefined')
         {
-            for(var i=0;i<this.Options.Options.length;i++)
+            for(i=0;i<this.Options.Options.length;i++)
                 this.Options.Options[i].sel='n';
         }
 
         if(this.Options.Options.length>0&&typeof this.Options.Options[i]=='string')
         {
             var aux=[];
-            for(var i=0;i<this.Options.Options.length;i++)
+            for(i=0;i<this.Options.Options.length;i++)
             {
                 aux.push({label:this.Options.Options[i]});
             }
