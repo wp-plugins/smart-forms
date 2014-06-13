@@ -1158,8 +1158,6 @@ sfMultipleCheckBoxElement.prototype.GenerateInlineElement=function()
 
 sfMultipleCheckBoxElement.prototype.GetValueString=function()
 {
-    var valueString="";
-    var me=this;
     this.amount=0;
     var jQueryElement=rnJQuery('#'+this.Id).find(':checked');
     var data={};
@@ -1215,12 +1213,10 @@ sfMultipleCheckBoxElement.prototype.SetUpICheck=function(style)
 
 
 
+//noinspection JSUnusedLocalSymbols
 sfMultipleCheckBoxElement.prototype.GenerationCompleted=function(jQueryElement)
 {
-    var self=this;
-    //rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').change(function(){self.FirePropertyChanged(self.GetValueString());});
-    this.SetUpICheck('icheckbox_minimal');
-    //rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').iCheck({checkboxClass: 'icheckbox_minimal'});
+      this.SetUpICheck('icheckbox_minimal');
 };
 
 
@@ -1230,13 +1226,13 @@ function sfSelectBasicElement(options)
 {
     sfFormElementBase.call(this,options);
     this.Title="Select Basic";
-
+    var i=undefined;
     if(this.IsNew)
     {
         this.Options.Label="Select Basic";
         this.Options.ClassName="rednaoselectbasic";
         this.Options.DefaultText="Select a value";
-        this.Options.Options=new Array({label:'Option 1',value:0,sel:'n'},{label:'Option 2',value:0,sel:'n'},{label:'Option',value:0,sel:'n'});
+        this.Options.Options=[{label:'Option 1',value:0,sel:'n'},{label:'Option 2',value:0,sel:'n'},{label:'Option',value:0,sel:'n'}];
         this.SetDefaultIfUndefined('Width','');
 
     }else
@@ -1246,13 +1242,13 @@ function sfSelectBasicElement(options)
         if(this.Options.Options.length>0&&typeof this.Options.Options[0].sel=='undefined')
         {
             this.Options.Options[0].sel='y';
-            for(var i=1;i<this.Options.Options.length;i++)
+            for(i=1;i<this.Options.Options.length;i++)
                 this.Options.Options[i].sel='n';
         }
         if(this.Options.Options.length>0&&typeof this.Options.Options[i]=='string')
         {
-            var aux=new Array();
-            for(var i=0;i<this.Options.Options.length;i++)
+            var aux=[];
+            for(i=0;i<this.Options.Options.length;i++)
             {
                 aux.push({label:this.Options.Options[i]});
             }
@@ -1292,10 +1288,11 @@ sfSelectBasicElement.prototype.GenerateInlineElement=function()
         <select style="'+additionalStyle+'" name="'+this.GetPropertyName()+'" class="redNaoSelect">';
 
     var selected='';
+    var i=undefined;
     if(this.Options.DefaultText!="")
     {
         selected='selected="selected"';
-        for(var i=0;i<this.Options.Options.length;i++)
+        for(i=0;i<this.Options.Options.length;i++)
         {
             if(this.Options.Options[i].sel=='y')
                 selected='';
@@ -1306,7 +1303,7 @@ sfSelectBasicElement.prototype.GenerateInlineElement=function()
 
 
     selected='';
-    for(var i=0;i<this.Options.Options.length;i++)
+    for(i=0;i<this.Options.Options.length;i++)
     {
         if(this.Options.Options[i].sel=='y')
             selected='selected="selected"';
@@ -1351,6 +1348,7 @@ sfSelectBasicElement.prototype.IsValid=function()
 };
 
 
+//noinspection JSUnusedLocalSymbols
 sfSelectBasicElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
@@ -1733,6 +1731,7 @@ sfRedNaoName.prototype.IsValid=function()
     return true;
 };
 
+//noinspection JSUnusedLocalSymbols
 sfRedNaoName.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
@@ -1747,7 +1746,7 @@ function sfRedNaoAddress(options)
 {
     sfFormElementBase.call(this,options);
     this.Title="Text Input";
-    this.Countries=new Array("Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burma", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo, Democratic Republic", "Congo, Republic of the", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Greenland", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Mongolia", "Morocco", "Monaco", "Mozambique", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Samoa", "San Marino", " Sao Tome", "Saudi Arabia", "Senegal", "Serbia and Montenegro", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe");
+    this.Countries=["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burma", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo, Democratic Republic", "Congo, Republic of the", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Greenland", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Mongolia", "Morocco", "Monaco", "Mozambique", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway", "Oman", "Pakistan", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Samoa", "San Marino", " Sao Tome", "Saudi Arabia", "Senegal", "Serbia and Montenegro", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"];
     if(this.IsNew)
     {
         this.Options.ClassName="rednaoaddress";
