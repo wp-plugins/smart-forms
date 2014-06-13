@@ -351,8 +351,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
                             <div id="formBuilderButtonSet" class="smartFormsSlider">
                                 <input type="radio" id="formRadio1" value="Fields"  name="smartFormsFormEditStyle"  checked="checked" style="display:inline-block;"/><label style="margin:0px;width:150px;display:inline-block;" for="formRadio1">Fields</label>
                                 <input type="radio" id="formRadio2"  value="Settings" name="smartFormsFormEditStyle" style="display:inline-block;"/><label label style="width:150px;margin:0px;margin-left:-5px;display:inline-block;" for="formRadio2">Field Settings</label>
-								<input type="radio" id="formRadio3"  value="Conditional Logic" name="smartFormsFormEditStyle" style="display:inline-block;"/><label label style="width:150px;margin:0px;margin-left:-5px;display:inline-block;" for="formRadio2">Conditional Logic</label>
-                            </div>
+								    </div>
 
                             <div id="formBuilderContainer">
                                 <div class="span6" id="formBuilderComponents">
