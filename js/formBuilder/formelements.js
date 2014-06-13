@@ -2114,7 +2114,7 @@ sfRedNaoEmail.prototype.GenerateInlineElement=function()
 
     return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
                 <div class="redNaoControls">\
-                    <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText redNaoEmail'+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'
+                    <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText redNaoEmail'+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'+
     '</div>';
 };
 
