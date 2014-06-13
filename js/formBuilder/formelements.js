@@ -1,8 +1,8 @@
 "use strict";
 /************************************************************************************* Formula Methods ***************************************************************************************************/
 var SmartFormsStyleScopeField=1;
-var SmartFormsStyleScopeAllFieldsOfSameTime=2;
-var SmartFormsStyleScopeAllFields=3;
+//used in an string that is evaluated as function
+//noinspection JSUnusedGlobalSymbols
 function RedNaoGetValueFromArray(array)
 {
     var value=0;
@@ -92,15 +92,15 @@ function sfRedNaoCreateFormElementByName(elementName,options)
     for(var i=0;i<sfFormElementBase.Extensions.length;i++)
         if(sfFormElementBase.Extensions[i].Name==elementName)
             return sfFormElementBase.Extensions[i].Create(options);
+
+    throw 'Element Type Not Found';
 }
 
 
 
 function sfRedNaoCreateFormElementByOptions(options)
 {
-    var element=sfRedNaoCreateFormElementByName(options.ClassName,options);
-    return element;
-
+    return sfRedNaoCreateFormElementByName(options.ClassName,options);
 }
 
 
@@ -108,11 +108,13 @@ function sfRedNaoCreateFormElementByOptions(options)
 /************************************************************************************* Base Class  ***************************************************************************************************/
 function sfFormElementBase(options)
 {
+    //Variable declared in another javascript;
+    //noinspection JSUnresolvedVariable
     this.Translations=SmartFormsElementsTranslation;
     this.StyleTags={};
     if(options==null)
     {
-        this.Options=new Object();
+        this.Options={};
         this.Options.ClassName="";
         this.Options.IsRequired='n';
         this.Options.Formulas={};
@@ -167,22 +169,22 @@ sfFormElementBase.prototype.SetDefaultIfUndefined=function(propertyName,defaultV
 {
     if(typeof this.Options[propertyName]=='undefined')
         this.Options[propertyName]=defaultValue;
-}
+};
 
 
 sfFormElementBase.prototype.GenerateDefaultStyle=function()
 {
-}
+};
 
 sfFormElementBase.prototype.GetRootContainer=function()
 {
     return rnJQuery("#"+this.Id);
-}
+};
 
 sfFormElementBase.prototype.GetElementByClassName=function(className)
 {
     return this.GetRootContainer().find("."+className);
-}
+};
 
 sfFormElementBase.prototype.RefreshElement=function()
 {
@@ -201,7 +203,7 @@ sfFormElementBase.prototype.RefreshElement=function()
         element.find('.redNaoControls').width(controlWidth);
     }
     return element;
-}
+};
 sfFormElementBase.prototype.GenerateHtml=function(jqueryElement)
 {
     var newElement=rnJQuery('<div class="rednao-control-group '+this.Options.ClassName+'" id="'+this.Id+'" style="margin-bottom:15px;clear:both;">'+this.GenerateInlineElement()+'</div>')
@@ -211,7 +213,7 @@ sfFormElementBase.prototype.GenerateHtml=function(jqueryElement)
     this.ApplyAllStyles();
     return newElement;
 
-}
+};
 
 sfFormElementBase.prototype.AppendElementToContainer=function(jqueryElement)
 {
@@ -221,23 +223,23 @@ sfFormElementBase.prototype.AppendElementToContainer=function(jqueryElement)
     this.GenerationCompleted(JQueryElement);
     this.ApplyAllStyles();
 
-}
+};
 
 sfFormElementBase.prototype.StoresInformation=function()
 {
     return true;
-}
+};
 
 
 sfFormElementBase.prototype.CreateProperties=function()
 {
     throw 'Abstract method';
-}
+};
 
 sfFormElementBase.prototype.GenerateInlineElement=function()
 {
     throw 'Abstract method';
-}
+};
 
 sfFormElementBase.prototype.GetProperties=function()
 {
@@ -248,7 +250,7 @@ sfFormElementBase.prototype.GetProperties=function()
     }
 
     return this.Properties;
-}
+};
 
 
 sfFormElementBase.prototype.UpdateProperties=function()
@@ -260,12 +262,12 @@ sfFormElementBase.prototype.UpdateProperties=function()
             this.Properties[i].UpdateProperty();
         }
     }
-}
+};
 
 sfFormElementBase.prototype.GetPropertyName=function()
 {
     return RedNaoFormElementEscape(this.Options.Label);
-}
+};
 
 
 sfFormElementBase.prototype.GeneratePropertiesHtml=function(jQueryObject)
@@ -276,28 +278,28 @@ sfFormElementBase.prototype.GeneratePropertiesHtml=function(jQueryObject)
     {
         properties[i].CreateProperty(jQueryObject);
     }
-}
+};
 
 
 sfFormElementBase.prototype.GetValueString=function()
 {
 
-}
+};
 
 sfFormElementBase.prototype.GenerationCompleted=function(jQueryElement)
 {
 
-}
+};
 
 sfFormElementBase.prototype.IsValid=function()
 {
     return true;
-}
+};
 
 sfFormElementBase.prototype.ClearInvalidStyle=function()
 {
 
-}
+};
 
 sfFormElementBase.prototype.Clone=function()
 {
@@ -309,12 +311,12 @@ sfFormElementBase.prototype.Clone=function()
     newObject.CreateProperties();
 
     return newObject;
-}
+};
 
 sfFormElementBase.prototype.GetValuePath=function()
 {
     return '';
-}
+};
 
 sfFormElementBase.prototype.GetStyleTagForElement=function(elementName)
 {
@@ -325,13 +327,13 @@ sfFormElementBase.prototype.GetStyleTagForElement=function(elementName)
     }
 
     return this.StyleTags[elementName];
-}
+};
 
 sfFormElementBase.prototype.ApplyAllStyles=function()
 {
     for(var elements in this.Options.Styles)
         this.ApplyTagStyleForElement(elements);
-}
+};
 
 sfFormElementBase.prototype.ApplyTagStyleForElement=function(elementName)
 {
@@ -351,13 +353,13 @@ sfFormElementBase.prototype.ApplyTagStyleForElement=function(elementName)
     tag.append( selector+' {'+style+'}')
 
 
-}
+};
 
 sfFormElementBase.prototype.GetSelectorByScope=function(scope,elementName)
 {
     if(scope==SmartFormsStyleScopeField)
         return '#'+this.Id + " ."+elementName;
-}
+};
 
 
 
@@ -367,7 +369,7 @@ sfFormElementBase.prototype.ApplyStyleByElementName=function(elementName)
         return;
 
 
-}
+};
 
 /************************************************************************************* Title Element ***************************************************************************************************/
 
@@ -388,12 +390,12 @@ sfTitleElement.prototype.CreateProperties=function()
 {
 
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Title","Title",{ManipulatorType:'basic'}));
-}
+};
 
 sfTitleElement.prototype.GenerateInlineElement=function()
 {
     return '<legend class="redNaoLegend redNaoOneColumn">'+this.Options.Title+'</legend>';
-}
+};
 
 
 
@@ -402,12 +404,12 @@ sfTitleElement.prototype.GetValueString=function()
 {
     return '';
 
-}
+};
 
 sfTitleElement.prototype.StoresInformation=function()
 {
     return false;
-}
+};
 
 /************************************************************************************* Text Element ***************************************************************************************************/
 
@@ -447,30 +449,30 @@ sfTextInputElement.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ReadOnly","Read Only",{ManipulatorType:'basic'}));
 
-}
+};
 
 sfTextInputElement.prototype.GenerateInlineElement=function()
 {
     var additionalStyle='';
     if(!isNaN(parseFloat(this.Options.Width)))
-        additionalStyle='width:'+this.Options.Width+'px'+' !important;'
+        additionalStyle='width:'+this.Options.Width+'px'+' !important;';
 
     return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
                 <div class="redNaoControls">\
                     <input style="'+additionalStyle+'" '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'" value="'+this.Options.Value+'">'
                 '</div>';
-}
+};
 
 
 sfTextInputElement.prototype.GetValueString=function()
 {
     return {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
-}
+};
 
 sfTextInputElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
-}
+};
 
 
 sfTextInputElement.prototype.IsValid=function()
@@ -482,13 +484,13 @@ sfTextInputElement.prototype.IsValid=function()
      }
 
     return true;
-}
+};
 
 sfTextInputElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged(self.GetValueString());});
-}
+};
 
 /************************************************************************************* Prepend Text Element ***************************************************************************************************/
 
@@ -528,7 +530,7 @@ sfPrependTexElement.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
 
-}
+};
 
 sfPrependTexElement.prototype.GenerateInlineElement=function()
 {
@@ -544,7 +546,7 @@ sfPrependTexElement.prototype.GenerateInlineElement=function()
                     <input style="'+additionalStyle+'" id="prependedtext" name="prependedtext" class="redNaoInputText" placeholder="'+this.Options.Placeholder+'" type="text" value="'+this.Options.Value+'">\
                 </div>\
             </div>';
-}
+};
 
 
 
@@ -552,12 +554,12 @@ sfPrependTexElement.prototype.GenerateInlineElement=function()
 sfPrependTexElement.prototype.GetValueString=function()
 {
     return {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
-}
+};
 
 sfPrependTexElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
-}
+};
 
 
 sfPrependTexElement.prototype.IsValid=function()
@@ -568,13 +570,13 @@ sfPrependTexElement.prototype.IsValid=function()
         return false;
     }
     return true;
-}
+};
 
 sfPrependTexElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged(self.GetValueString());});
-}
+};
 
 /************************************************************************************* Appended Text Element ***************************************************************************************************/
 
@@ -596,10 +598,6 @@ function sfAppendedTexElement(options)
         this.SetDefaultIfUndefined('Width','');
 
     }
-
-
-
-
 }
 
 sfAppendedTexElement.prototype=Object.create(sfFormElementBase.prototype);
@@ -614,7 +612,7 @@ sfAppendedTexElement.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
 
-}
+};
 
 sfAppendedTexElement.prototype.GenerateInlineElement=function()
 {
@@ -632,7 +630,7 @@ sfAppendedTexElement.prototype.GenerateInlineElement=function()
             </div>';
 
 
-}
+};
 
 
 
@@ -640,12 +638,12 @@ sfAppendedTexElement.prototype.GenerateInlineElement=function()
 sfAppendedTexElement.prototype.GetValueString=function()
 {
     return  {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
-}
+};
 
 sfAppendedTexElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
-}
+};
 
 sfAppendedTexElement.prototype.IsValid=function()
 {
@@ -655,13 +653,13 @@ sfAppendedTexElement.prototype.IsValid=function()
         return false;
     }
     return true;
-}
+};
 
 sfPrependTexElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged(self.GetValueString());});
-}
+};
 
 
 /************************************************************************************* Prepend Checkbox Element ***************************************************************************************************/
@@ -684,9 +682,6 @@ function sfPrependCheckBoxElement(options)
         this.SetDefaultIfUndefined('Width','');
 
     }
-
-
-
 }
 
 sfPrependCheckBoxElement.prototype=Object.create(sfFormElementBase.prototype);
@@ -701,7 +696,7 @@ sfPrependCheckBoxElement.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
 
-}
+};
 
 sfPrependCheckBoxElement.prototype.GenerateInlineElement=function()
 {
@@ -730,12 +725,12 @@ sfPrependCheckBoxElement.prototype.GenerateInlineElement=function()
 sfPrependCheckBoxElement.prototype.GetValueString=function()
 {
     return  {checked:(rnJQuery('#'+this.Id).find('.redNaoRealCheckBox').is(':checked')?'Yes':'No'),value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
-}
+};
 
 sfPrependCheckBoxElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
-}
+};
 
 
 sfPrependCheckBoxElement.prototype.IsValid=function()
@@ -746,13 +741,13 @@ sfPrependCheckBoxElement.prototype.IsValid=function()
         return false;
     }
     return true;
-}
+};
 
 sfPrependCheckBoxElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText','#'+this.Id+' .redNaoRealCheckBox').change(function(){self.FirePropertyChanged(self.GetValueString());});
-}
+};
 /************************************************************************************* Append Checkbox Element ***************************************************************************************************/
 
 function sfAppendCheckBoxElement(options)
@@ -773,9 +768,6 @@ function sfAppendCheckBoxElement(options)
         this.SetDefaultIfUndefined('Width','');
 
     }
-
-
-
 }
 
 sfAppendCheckBoxElement.prototype=Object.create(sfFormElementBase.prototype);
@@ -790,7 +782,7 @@ sfAppendCheckBoxElement.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
 
-}
+};
 
 sfAppendCheckBoxElement.prototype.GenerateInlineElement=function()
 {
@@ -810,19 +802,19 @@ sfAppendCheckBoxElement.prototype.GenerateInlineElement=function()
             </div>';
 
 
-}
+};
 
 
 
 sfAppendCheckBoxElement.prototype.GetValueString=function()
 {
     return  {checked:(rnJQuery('#'+this.Id).find('.redNaoRealCheckBox').is(':checked')?'Yes':'No'),value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
-}
+};
 
 sfAppendCheckBoxElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
-}
+};
 
 sfAppendCheckBoxElement.prototype.IsValid=function()
 {
@@ -832,13 +824,13 @@ sfAppendCheckBoxElement.prototype.IsValid=function()
         return false;
     }
     return true;
-}
+};
 
 sfAppendCheckBoxElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText','#'+this.Id+' .redNaoRealCheckBox').change(function(){self.FirePropertyChanged(self.GetValueString());});
-}
+};
 /************************************************************************************* Text Area Element ***************************************************************************************************/
 
 function sfTextAreaElement(options)
@@ -867,8 +859,6 @@ function sfTextAreaElement(options)
     }
 
     this.MaxLength=parseFloat(this.Options.MaxLength);
-
-
 }
 
 sfTextAreaElement.prototype=Object.create(sfFormElementBase.prototype);
@@ -887,7 +877,7 @@ sfTextAreaElement.prototype.CreateProperties=function()
 
 
 
-}
+};
 
 sfTextAreaElement.prototype.GenerateInlineElement=function()
 {
@@ -911,19 +901,19 @@ sfTextAreaElement.prototype.GenerateInlineElement=function()
     html+='</div>';
 
     return html;
-}
+};
 
 
 
 sfTextAreaElement.prototype.GetValueString=function()
 {
     return  {value:rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').val()};
-}
+};
 
 sfTextAreaElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
-}
+};
 
 
 sfTextAreaElement.prototype.IsValid=function()
@@ -934,7 +924,7 @@ sfTextAreaElement.prototype.IsValid=function()
         return false;
     }
     return true;
-}
+};
 
 sfTextAreaElement.prototype.GenerationCompleted=function(jQueryElement)
 {
@@ -953,7 +943,7 @@ sfTextAreaElement.prototype.GenerationCompleted=function(jQueryElement)
                 wordCounter.removeClass("smartFormsAlmostFull");
 
         });
-}
+};
 
 /*************************************************************************************Multiple Radio Element ***************************************************************************************************/
 
@@ -1005,7 +995,7 @@ sfMultipleRadioElement.prototype.CreateProperties=function()
 
 
 
-}
+};
 
 sfMultipleRadioElement.prototype.GenerateInlineElement=function()
 {
@@ -1034,7 +1024,7 @@ sfMultipleRadioElement.prototype.GenerateInlineElement=function()
 
     html+='</div>';
     return html;
-}
+};
 
 
 
@@ -1048,13 +1038,13 @@ sfMultipleRadioElement.prototype.GetValueString=function()
     if(isNaN(this.amount))
         this.amount=0;
     return  {value:rnJQuery.trim(jQueryElement.parent().parent().text().trim()),amount:this.amount};
-}
+};
 
 
 sfMultipleRadioElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.amount';
-}
+};
 
 
 sfMultipleRadioElement.prototype.IsValid=function()
@@ -1066,12 +1056,12 @@ sfMultipleRadioElement.prototype.IsValid=function()
     }
 
     return true;
-}
+};
 
 sfMultipleRadioElement.prototype.ClearInvalidStyle=function()
 {
     this.SetUpICheck('iradio_minimal');
-}
+};
 
 sfMultipleRadioElement.prototype.SetUpICheck=function(style)
 {
@@ -1082,14 +1072,14 @@ sfMultipleRadioElement.prototype.SetUpICheck=function(style)
             self.FirePropertyChanged(self.GetValueString());
         }
     });
-}
+};
 
 sfMultipleRadioElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     //rnJQuery('#'+this.Id+ ' .redNaoInputRadio').change(function(){self.FirePropertyChanged(self.GetValueString());});
     this.SetUpICheck('iradio_minimal');
-}
+};
 
 /*************************************************************************************Multiple Checkbox Element ***************************************************************************************************/
 
@@ -1138,7 +1128,7 @@ sfMultipleCheckBoxElement.prototype.CreateProperties=function()
     this.Properties.push(new ArrayProperty(this,this.Options,"Options","Options",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new ComboBoxProperty(this,this.Options,"Orientation","Orientation",{ManipulatorType:'basic',Values:[{label:'Vertical',value:'v'},{label:'Horizontal',value:'h'}]}));
-}
+};
 
 sfMultipleCheckBoxElement.prototype.GenerateInlineElement=function()
 {
@@ -1167,7 +1157,7 @@ sfMultipleCheckBoxElement.prototype.GenerateInlineElement=function()
 
     html+='</div>';
     return html;
-}
+};
 
 
 
@@ -1196,13 +1186,13 @@ sfMultipleCheckBoxElement.prototype.GetValueString=function()
 
     return data;
 
-}
+};
 
 
 sfMultipleCheckBoxElement.prototype.GetValuePath=function()
 {
     return 'RedNaoGetValueFromArray(formData.'+this.Id+'.selectedValues)';
-}
+};
 
 
 sfMultipleCheckBoxElement.prototype.IsValid=function()
@@ -1213,12 +1203,12 @@ sfMultipleCheckBoxElement.prototype.IsValid=function()
         return false;
     }
     return true;
-}
+};
 
 sfMultipleCheckBoxElement.prototype.ClearInvalidStyle=function()
 {
     this.SetUpICheck('icheckbox_minimal');
-}
+};
 
 sfMultipleCheckBoxElement.prototype.SetUpICheck=function(style)
 {
@@ -1229,7 +1219,7 @@ sfMultipleCheckBoxElement.prototype.SetUpICheck=function(style)
             self.FirePropertyChanged(self.GetValueString());
         }
     });
-}
+};
 
 
 
@@ -1239,7 +1229,7 @@ sfMultipleCheckBoxElement.prototype.GenerationCompleted=function(jQueryElement)
     //rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').change(function(){self.FirePropertyChanged(self.GetValueString());});
     this.SetUpICheck('icheckbox_minimal');
     //rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').iCheck({checkboxClass: 'icheckbox_minimal'});
-}
+};
 
 
 /*************************************************************************************Select Basic Element ***************************************************************************************************/
@@ -1296,7 +1286,7 @@ sfSelectBasicElement.prototype.CreateProperties=function()
 
 
 
-}
+};
 
 sfSelectBasicElement.prototype.GenerateInlineElement=function()
 {
@@ -1338,7 +1328,7 @@ sfSelectBasicElement.prototype.GenerateInlineElement=function()
     }
     html+='</select></div>';
     return html;
-}
+};
 
 
 
@@ -1350,12 +1340,12 @@ sfSelectBasicElement.prototype.GetValueString=function()
     if(isNaN(this.amount))
         this.amount=0;
     return  {value:jQueryElement.text(),amount:this.amount};
-}
+};
 
 sfSelectBasicElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.amount';
-}
+};
 
 
 sfSelectBasicElement.prototype.IsValid=function()
@@ -1366,14 +1356,14 @@ sfSelectBasicElement.prototype.IsValid=function()
         return false;
     }
     return true;
-}
+};
 
 
 sfSelectBasicElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoSelect').change(function(){self.FirePropertyChanged(self.GetValueString());});
-}
+};
 
 /*************************************************************************************Donation Button***************************************************************************************************/
 
@@ -1405,7 +1395,7 @@ sfDonationButtonElement.prototype.CreateProperties=function()
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Image","Image Url",{ManipulatorType:'basic'}));
-}
+};
 
 sfDonationButtonElement.prototype.GenerateInlineElement=function()
 {
@@ -1414,19 +1404,19 @@ sfDonationButtonElement.prototype.GenerateInlineElement=function()
             '<div class="redNaoControls">' +
                 '<input type="image" class="redNaoDonationButton" src="'+this.Options.Image+'" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">' +
            '</div>';
-}
+};
 
 
 sfDonationButtonElement.prototype.GetValueString=function()
 {
     return '';
 
-}
+};
 
 sfDonationButtonElement.prototype.StoresInformation=function()
 {
     return false;
-}
+};
 
 
 /************************************************************************************* Recurrence Element  ***************************************************************************************************/
@@ -1464,7 +1454,7 @@ sfRecurrenceElement.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowWeekly","Show weekly option",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowMonthly","Show monthly option",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowYearly","Show yearly option",{ManipulatorType:'basic'}));
-}
+};
 
 sfRecurrenceElement.prototype.GenerateInlineElement=function()
 {
@@ -1508,7 +1498,7 @@ sfRecurrenceElement.prototype.GenerateInlineElement=function()
     html+='</select></div>';
 
     return html;
-}
+};
 
 
 
@@ -1517,13 +1507,13 @@ sfRecurrenceElement.prototype.GetValueString=function()
     var jQueryElement=rnJQuery('#'+this.Id+ ' .redNaoSelect option:selected');
     return {value:jQueryElement.val()};
 
-}
+};
 
 
 sfRecurrenceElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
-}
+};
 
 
 
@@ -1550,24 +1540,24 @@ sfRedNaoSubmissionButton.prototype=Object.create(sfFormElementBase.prototype);
 sfRedNaoSubmissionButton.prototype.CreateProperties=function()
 {
     this.Properties.push(new SimpleTextProperty(this,this.Options,"ButtonText","Button Text",{ManipulatorType:'basic'}));
-}
+};
 
 sfRedNaoSubmissionButton.prototype.GenerateInlineElement=function()
 {
     return '<div class="rednao_label_container"></div><div class="redNaoControls"><input type="submit" class="redNaoSubmitButton" value="'+this.Options.ButtonText+'" /></div>';
-}
+};
 
 
 sfRedNaoSubmissionButton.prototype.GetValueString=function()
 {
     return '';
 
-}
+};
 
 sfRedNaoSubmissionButton.prototype.StoresInformation=function()
 {
     return false;
-}
+};
 
 
 
@@ -1597,13 +1587,13 @@ sfRedNaoDatePicker.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"DateFormat","Date Format",{ManipulatorType:'basic'}));
 
-}
+};
 
 sfRedNaoDatePicker.prototype.GenerateInlineElement=function()
 {
     return '<div class="rednao_label_container"><label class="rednao_control_label">'+this.Options.Label+'</label></div><div class="redNaoControls"><input type="text" class="redNaoDatePicker"  /></div>';
 
-}
+};
 
 
 sfRedNaoDatePicker.prototype.GetValueString=function()
@@ -1615,19 +1605,19 @@ sfRedNaoDatePicker.prototype.GetValueString=function()
         selectedDate=selectedDate.getFullYear()+'-'+(selectedDate.getMonth()+1)+'-'+selectedDate.getDate();
     return {value:selectedDate};
 
-}
+};
 
 sfRedNaoDatePicker.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
-}
+};
 
 
 
 sfRedNaoDatePicker.prototype.StoresInformation=function()
 {
     return true;
-}
+};
 
 sfRedNaoDatePicker.prototype.GenerationCompleted=function(jQueryElement)
 {
@@ -1645,12 +1635,12 @@ sfRedNaoDatePicker.prototype.GenerationCompleted=function(jQueryElement)
     rnJQuery('#'+this.Id+ ' .redNaoDatePicker').change(function(){self.FirePropertyChanged(self.GetValueString());});
 
 
-}
+};
 
 sfRedNaoDatePicker.prototype.IsValid=function()
 {
     return true;
-}
+};
 
 /************************************************************************************* Name ***************************************************************************************************/
 
@@ -1686,7 +1676,7 @@ sfRedNaoName.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ReadOnly","Read Only",{ManipulatorType:'basic'}));
 
-}
+};
 
 sfRedNaoName.prototype.GenerateInlineElement=function()
 {
@@ -1710,7 +1700,7 @@ sfRedNaoName.prototype.GenerateInlineElement=function()
                     </div>\
                <div>     \
     </div>';
-}
+};
 
 
 sfRedNaoName.prototype.GetValueString=function()
@@ -1722,13 +1712,13 @@ sfRedNaoName.prototype.GetValueString=function()
     };
 
 
-}
+};
 
 
 sfRedNaoName.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.firstName+" "'+'formData.'+this.Id+'.lastName';
-}
+};
 
 
 sfRedNaoName.prototype.IsValid=function()
@@ -1748,13 +1738,13 @@ sfRedNaoName.prototype.IsValid=function()
     }
 
     return true;
-}
+};
 
 sfRedNaoName.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputFirstName,#'+this.Id+ ' .redNaoInputLastName').change(function(){self.FirePropertyChanged(self.GetValueString());});
-}
+};
 
 
 
@@ -1785,11 +1775,6 @@ function sfRedNaoAddress(options)
         this.Options.ShowCountry='y';
     }else
         this.SetDefaultIfUndefined("DefaultCountry","United States");
-
-
-
-
-
 }
 
 sfRedNaoAddress.prototype=Object.create(sfFormElementBase.prototype);
@@ -1823,7 +1808,7 @@ sfRedNaoAddress.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowCountry","Show Country",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
 
-}
+};
 
 sfRedNaoAddress.prototype.GenerateInlineElement=function()
 {
@@ -1901,7 +1886,7 @@ sfRedNaoAddress.prototype.GenerateInlineElement=function()
                 }
     html+='</div>';
     return html;
-}
+};
 
 
 sfRedNaoAddress.prototype.GetValueString=function()
@@ -1917,7 +1902,7 @@ sfRedNaoAddress.prototype.GetValueString=function()
     };
 
 
-}
+};
 
 
 sfRedNaoAddress.prototype.GetValuePath=function()
@@ -1928,7 +1913,7 @@ sfRedNaoAddress.prototype.GetValuePath=function()
             " "+'formData.'+this.Id+'.state'+
             " "+'formData.'+this.Id+'.zip'+
             " "+'formData.'+this.Id+'.country';
-}
+};
 
 
 sfRedNaoAddress.prototype.IsValid=function()
@@ -1984,13 +1969,13 @@ sfRedNaoAddress.prototype.IsValid=function()
 
     return isValid;
 
-}
+};
 
 sfRedNaoAddress.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoStreetAddress1,#'+this.Id+ ' .redNaoStreetAddress2,#'+this.Id+ ' .redNaoCity,#'+this.Id+ ' .redNaoState,#'+this.Id+ ' .redNaoZip,#'+this.Id+ ' .redNaoCountry').change(function(){self.FirePropertyChanged(self.GetValueString());});
-}
+};
 
 
 /************************************************************************************* Phone ***************************************************************************************************/
@@ -2006,11 +1991,6 @@ function sfRedNaoPhone(options)
         this.Options.AreaLabel="Area";
         this.Options.PhoneLabel="Phone";
     }
-
-
-
-
-
 }
 
 sfRedNaoPhone.prototype=Object.create(sfFormElementBase.prototype);
@@ -2023,7 +2003,7 @@ sfRedNaoPhone.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"PhoneLabel","Phone",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
 
-}
+};
 
 sfRedNaoPhone.prototype.GenerateInlineElement=function()
 {
@@ -2047,7 +2027,7 @@ sfRedNaoPhone.prototype.GenerateInlineElement=function()
                     </div>\
                <div>     \
     </div>';
-}
+};
 
 
 sfRedNaoPhone.prototype.GetValueString=function()
@@ -2059,14 +2039,14 @@ sfRedNaoPhone.prototype.GetValueString=function()
     };
 
 
-}
+};
 
 
 
 sfRedNaoPhone.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.area+" "'+'formData.'+this.Id+'.phone';
-}
+};
 
 
 sfRedNaoPhone.prototype.IsValid=function()
@@ -2089,7 +2069,7 @@ sfRedNaoPhone.prototype.IsValid=function()
     }
 
     return true;
-}
+};
 
 
 sfRedNaoPhone.prototype.GenerationCompleted=function(jQueryElement)
@@ -2101,7 +2081,7 @@ sfRedNaoPhone.prototype.GenerationCompleted=function(jQueryElement)
 
     rnJQuery('#'+this.Id+ ' .redNaoInputArea,#'+this.Id+ ' .redNaoInputPhone').ForceNumericOnly();
 
-}
+};
 
 
 /************************************************************************************* Email Element ***************************************************************************************************/
@@ -2116,11 +2096,6 @@ function sfRedNaoEmail(options)
         this.Options.Label="Email";
         this.Options.Placeholder="Placeholder"
     }
-
-
-
-
-
 }
 
 sfRedNaoEmail.prototype=Object.create(sfFormElementBase.prototype);
@@ -2132,7 +2107,7 @@ sfRedNaoEmail.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
 
-}
+};
 
 sfRedNaoEmail.prototype.GenerateInlineElement=function()
 {
@@ -2141,18 +2116,18 @@ sfRedNaoEmail.prototype.GenerateInlineElement=function()
                 <div class="redNaoControls">\
                     <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText redNaoEmail'+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'
     '</div>';
-}
+};
 
 
 sfRedNaoEmail.prototype.GetValueString=function()
 {
     return {value:rnJQuery('#'+this.Id+ ' .redNaoEmail').val()};
-}
+};
 
 sfRedNaoEmail.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
-}
+};
 
 
 sfRedNaoEmail.prototype.IsValid=function()
@@ -2172,19 +2147,19 @@ sfRedNaoEmail.prototype.IsValid=function()
     }
 
     return true;
-}
+};
 
 sfRedNaoEmail.prototype.EmailIsValid=function(email)
 {
     var reg=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return reg.test(email);
-}
+};
 
 sfRedNaoEmail.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoEmail').change(function(){self.FirePropertyChanged(self.GetValueString());});
-}
+};
 
 
 /************************************************************************************* Number Element ***************************************************************************************************/
@@ -2206,11 +2181,6 @@ function sfRedNaoNumber(options)
         this.SetDefaultIfUndefined("MaximumValue","");
         this.SetDefaultIfUndefined("MinimumValue","");
     }
-
-
-
-
-
 }
 
 sfRedNaoNumber.prototype=Object.create(sfFormElementBase.prototype);
@@ -2225,7 +2195,7 @@ sfRedNaoNumber.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"MinimumValue","Minimum Value",{ManipulatorType:'basic',Placeholder:'No Minimum'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"MaximumValue","Maximum Value",{ManipulatorType:'basic',Placeholder:'No Maximum'}));
 
-}
+};
 
 sfRedNaoNumber.prototype.GenerateInlineElement=function()
 {
@@ -2234,18 +2204,18 @@ sfRedNaoNumber.prototype.GenerateInlineElement=function()
                 <div class="redNaoControls">\
                     <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText redNaoNumber'+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'
     '</div>';
-}
+};
 
 
 sfRedNaoNumber.prototype.GetValueString=function()
 {
     return {value:rnJQuery('#'+this.Id+ ' .redNaoNumber').val()};
-}
+};
 
 sfRedNaoNumber.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
-}
+};
 
 
 sfRedNaoNumber.prototype.IsValid=function()
@@ -2257,7 +2227,7 @@ sfRedNaoNumber.prototype.IsValid=function()
         return false;
     }
     return true;
-}
+};
 
 sfRedNaoNumber.prototype.InputIsValid=function()
 {
@@ -2281,7 +2251,7 @@ sfRedNaoNumber.prototype.InputIsValid=function()
             return false;
     }
     return true;
-}
+};
 
 sfRedNaoNumber.prototype.GenerationCompleted=function(jQueryElement)
 {
@@ -2292,7 +2262,7 @@ sfRedNaoNumber.prototype.GenerationCompleted=function(jQueryElement)
 
         self.FirePropertyChanged(self.GetValueString());});
     rnJQuery('#'+this.Id+ ' .redNaoNumber').ForceNumericOnly();
-}
+};
 
 
 /************************************************************************************* Recaptcha Element ***************************************************************************************************/
@@ -2310,9 +2280,6 @@ function sfRedNaoCaptcha(options)
 
     this.Options.Id="captcha";
     this.Id="captcha";
-
-
-
 }
 
 sfRedNaoCaptcha.prototype=Object.create(sfFormElementBase.prototype);
@@ -2321,7 +2288,7 @@ sfRedNaoCaptcha.prototype.CreateProperties=function()
 {
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
 
-}
+};
 
 sfRedNaoCaptcha.prototype.GenerateInlineElement=function()
 {
@@ -2329,11 +2296,11 @@ sfRedNaoCaptcha.prototype.GenerateInlineElement=function()
     return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
                 <div class="redNaoControls redNaoCaptcha" id="captchaComponent">\
     </div>';
-}
+};
 sfRedNaoCaptcha.prototype.StoresInformation=function()
 {
     return false;
-}
+};
 
 
 sfRedNaoCaptcha.prototype.GenerationCompleted=function(jQueryElement)
@@ -2348,7 +2315,7 @@ sfRedNaoCaptcha.prototype.GenerationCompleted=function(jQueryElement)
             }
         );
     });
-}
+};
 
 
 
@@ -2370,11 +2337,6 @@ function sfDonationAmountElement(options)
 
     if(typeof  this.Options.DefaultValue=='undefined')
         this.Options.DefaultValue=0;
-
-
-
-
-
 }
 
 sfDonationAmountElement.prototype=Object.create(sfFormElementBase.prototype);
@@ -2390,7 +2352,7 @@ sfDonationAmountElement.prototype.CreateProperties=function()
 
 
 
-}
+};
 
 sfDonationAmountElement.prototype.GenerateInlineElement=function()
 {
@@ -2399,7 +2361,7 @@ sfDonationAmountElement.prototype.GenerateInlineElement=function()
                 <div class="redNaoControls">\
                     <input  class="redNaoInputText redNaoNumber" type="text" placeholder="'+this.Options.Placeholder+'" class="redNaoInputText" value="'+this.Options.DefaultValue+'"  >'+
         '</div>';
-}
+};
 
 
 
@@ -2414,7 +2376,7 @@ sfDonationAmountElement.prototype.GetValueString=function()
     }
 
     return  encodeURI(this.Options.Label)+"="+encodeURI(rnJQuery('#'+this.Id+ ' .redNaoInputText').val());
-}
+};
 
 sfDonationAmountElement.prototype.GenerationCompleted=function(jQueryElement)
 {
@@ -2422,7 +2384,7 @@ sfDonationAmountElement.prototype.GenerationCompleted=function(jQueryElement)
     {
         rnJQuery('#'+this.Id).find('.redNaoInputText').attr('readonly','readonly').css('background-color','#eeeeee');
     }
-}
+};
 
 sfDonationAmountElement.prototype.IsValid=function()
 {
@@ -2433,4 +2395,4 @@ sfDonationAmountElement.prototype.IsValid=function()
     {
         return false;
     }
-}
+};
