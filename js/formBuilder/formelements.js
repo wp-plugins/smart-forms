@@ -322,7 +322,7 @@ sfFormElementBase.prototype.GetStyleTagForElement=function(elementName)
 {
     if(typeof this.StyleTags[elementName]=='undefined')
     {
-        this.StyleTags[elementName]=rnJQuery("<style type='text/css'></style>")
+        this.StyleTags[elementName]=rnJQuery("<style type='text/css'></style>");
         rnJQuery("head").append(this.StyleTags[elementName]);
     }
 
@@ -361,15 +361,6 @@ sfFormElementBase.prototype.GetSelectorByScope=function(scope,elementName)
         return '#'+this.Id + " ."+elementName;
 };
 
-
-
-sfFormElementBase.prototype.ApplyStyleByElementName=function(elementName)
-{
-    if(typeof this.Options.Styles[elementName]=='undefined')
-        return;
-
-
-};
 
 /************************************************************************************* Title Element ***************************************************************************************************/
 
@@ -486,6 +477,7 @@ sfTextInputElement.prototype.IsValid=function()
     return true;
 };
 
+//noinspection JSUnusedLocalSymbols
 sfTextInputElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
@@ -1093,7 +1085,7 @@ function sfMultipleCheckBoxElement(options)
         this.Options.Label="Multiple Checkbox";
         this.Options.ClassName="rednaomultiplecheckboxes";
         this.Options.Orientation='v';
-        this.Options.Options=new Array({label:'Check 1',value:0,sel:'n'},{label:'Check 2',value:0,sel:'n'},{label:'Check 3',value:0,sel:'n'});
+        this.Options.Options=[{label:'Check 1',value:0,sel:'n'},{label:'Check 2',value:0,sel:'n'},{label:'Check 3',value:0,sel:'n'}];
     }else
     {
         if(RedNaoGetValueOrNull(this.Options.Orientation)==null)
@@ -1106,7 +1098,7 @@ function sfMultipleCheckBoxElement(options)
 
         if(this.Options.Options.length>0&&typeof this.Options.Options[i]=='string')
         {
-            var aux=new Array();
+            var aux=[];
             for(var i=0;i<this.Options.Options.length;i++)
             {
                 aux.push({label:this.Options.Options[i]});
@@ -1619,6 +1611,7 @@ sfRedNaoDatePicker.prototype.StoresInformation=function()
     return true;
 };
 
+//noinspection JSUnusedLocalSymbols
 sfRedNaoDatePicker.prototype.GenerationCompleted=function(jQueryElement)
 {
     rnJQuery('#'+this.Id).find('.redNaoDatePicker').datepicker({
@@ -1971,6 +1964,7 @@ sfRedNaoAddress.prototype.IsValid=function()
 
 };
 
+//noinspection JSUnusedLocalSymbols
 sfRedNaoAddress.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
@@ -2072,6 +2066,7 @@ sfRedNaoPhone.prototype.IsValid=function()
 };
 
 
+//noinspection JSUnusedLocalSymbols
 sfRedNaoPhone.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
@@ -2155,6 +2150,7 @@ sfRedNaoEmail.prototype.EmailIsValid=function(email)
     return reg.test(email);
 };
 
+//noinspection JSUnusedLocalSymbols
 sfRedNaoEmail.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
@@ -2244,7 +2240,7 @@ sfRedNaoNumber.prototype.InputIsValid=function()
             return false;
     }
 
-    if(!isNaN(this.Options.MinimumValue))
+    if(!isNaN(parseInt(this.Options.MinimumValue)))
     {
         var minimumValue=parseFloat(this.Options.MinimumValue);
         if(inputNumber<minimumValue)
@@ -2253,6 +2249,7 @@ sfRedNaoNumber.prototype.InputIsValid=function()
     return true;
 };
 
+//noinspection JSUnusedLocalSymbols
 sfRedNaoNumber.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
@@ -2303,15 +2300,15 @@ sfRedNaoCaptcha.prototype.StoresInformation=function()
 };
 
 
+//noinspection JSUnusedLocalSymbols
 sfRedNaoCaptcha.prototype.GenerationCompleted=function(jQueryElement)
 {
-    var self=this;
     rnJQuery.getScript("http://www.google.com/recaptcha/api/js/recaptcha_ajax.js", function(){
+        //noinspection JSUnresolvedVariable
         Recaptcha.create("6Lf2J-wSAAAAACCijq50oACQRuvrsmNt9DeUsE-7",
             'captchaComponent',
             {
                 theme: "red"
-               // callback: Recaptcha.focus_response_field
             }
         );
     });
@@ -2378,6 +2375,7 @@ sfDonationAmountElement.prototype.GetValueString=function()
     return  encodeURI(this.Options.Label)+"="+encodeURI(rnJQuery('#'+this.Id+ ' .redNaoInputText').val());
 };
 
+//noinspection JSUnusedLocalSymbols
 sfDonationAmountElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     if(this.Options.Disabled=='y')
