@@ -1907,7 +1907,7 @@ sfRedNaoAddress.prototype.GetValueString=function()
 
 sfRedNaoAddress.prototype.GetValuePath=function()
 {
-    return  "formData."+this.Id+'.streetAddress1'
+    return  "formData."+this.Id+'.streetAddress1'+
             " "+'formData.'+this.Id+'.streetAddress2'+
             " "+'formData.'+this.Id+'.city'+
             " "+'formData.'+this.Id+'.state'+
