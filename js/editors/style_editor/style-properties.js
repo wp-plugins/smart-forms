@@ -145,7 +145,7 @@ RedNaoColorStyleProperty.prototype.GenerateInlineElement=function()
                     this.PropertyLabel +
                     "</td>" +
                     "<td>" +
-                    "<input placeholder='"+smartFormsTranslation.Default+"'  class='color'  "+ (selectedColor!=null?("value='"+selectedColor+"'"):"")+"/>"
+                    "<input placeholder='"+smartFormsTranslation.Default+"'  class='color'  "+ (selectedColor!=null?("value='"+selectedColor+"'"):"")+"/>"+
                 "</td>" +
             "</tr>";
 }
