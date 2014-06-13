@@ -1,5 +1,10 @@
 "use strict";
+//used in another javascript
+//noinspection JSUnusedGlobalSymbols
 var smartDonationsIsDesignMode=true;
+
+//function overwritten by one that use field name
+//noinspection JSUnusedLocalSymbols
 var SmartFormsFieldIsAvailable=function(fieldName){return true;};
 function RedNaoFormBuilder(smartFormsOptions,formElementsOptions) {
 
@@ -15,7 +20,7 @@ function RedNaoFormBuilder(smartFormsOptions,formElementsOptions) {
 
 
     var self = this;
-    rnJQuery(window).scroll(function (data) {
+    rnJQuery(window).scroll(function () {
         if (self.scrollTimeOut != null)
             clearTimeout(self.scrollTimeOut);
 
@@ -24,13 +29,7 @@ function RedNaoFormBuilder(smartFormsOptions,formElementsOptions) {
         }, 150);
 
     });
-    rnJQuery('#rednaoPropertySave').click(function () {
-        self.SavePropertyEdition
-    });
-    rnJQuery('#rednaoPropertyCancel').click(function () {
-        self.CloseProperties
-    });
-    rnJQuery('input[name=smartFormsFormEditStyle]').change(function (e) {
+    rnJQuery('input[name=smartFormsFormEditStyle]').change(function () {
         self.smartFormsFormEditTypeChanged()
     });
 
@@ -45,23 +44,26 @@ function RedNaoFormBuilder(smartFormsOptions,formElementsOptions) {
     else
         sfFormElementBase.IdCounter=0;
     this.DragManager = new RedNaoDragManager(this);
-};
+}
 
 
-
+//used in drag manager
+//noinspection JSUnusedGlobalSymbols
 RedNaoFormBuilder.prototype.SmartDonationsPrepareDraggableItems = function () {
     rnJQuery(".rednaoformbuilder .component,#redNaoElementlist .rednao-control-group").unbind('mousedown');
+    //noinspection JSUnresolvedVariable
     rnJQuery(".rednaoformbuilder .component,#redNaoElementlist .rednao-control-group").mousedown(SmartDonationsFormMouseDownFired);
 
     rnJQuery(".redNaoDonationButton").unbind('click');
     rnJQuery(".redNaoDonationButton").click(function () {
         return false;
     })
-}
+};
 
 
 RedNaoFormBuilder.prototype.RecreateExistingFormIfAny=function(elementOptions)
 {
+
     for(var i=0;i<elementOptions.length;i++)
     {
         var element=sfRedNaoCreateFormElementByName(elementOptions[i].ClassName,elementOptions[i]);
@@ -71,14 +73,14 @@ RedNaoFormBuilder.prototype.RecreateExistingFormIfAny=function(elementOptions)
 
     var form=rnJQuery("#redNaoElementlist");
     form.empty();
-    for(var i=0;i<this.RedNaoFormElements.length;i++)
+    for(i=0;i<this.RedNaoFormElements.length;i++)
     {
         this.RedNaoFormElements[i].AppendElementToContainer(form);
     }
 
     form.append('<div class="formelement last" style="height:77px;width:100%"><p>Drop new fields here</p></div>');
 
-}
+};
 
 
 /************************************************************************************* Tabs ***************************************************************************************************/
@@ -99,14 +101,13 @@ RedNaoFormBuilder.prototype.smartFormsFormEditTypeChanged = function () {
         rnJQuery('#formPropertiesContainer').show();
     }
 
-}
+};
 
 
 RedNaoFormBuilder.prototype.OpenProperties = function (element) {
     rnJQuery('#formRadio2').click();
-
     this.FillPropertiesPanel(this.RedNaoFormElements[element.index()]);
-}
+};
 
 RedNaoFormBuilder.prototype.FillPropertiesPanel = function (element) {
 
@@ -117,26 +118,14 @@ RedNaoFormBuilder.prototype.FillPropertiesPanel = function (element) {
 
     this.propertiesPanel.find('.popover-title').text(element.Title);
     element.GeneratePropertiesHtml(tableProperties);
-}
+};
 
 
 /************************************************************************************* General Methods ***************************************************************************************************/
-
-
-
-
-RedNaoFormBuilder.prototype.GetJavascriptObjectOfElement = function (element) {
-    var id = element.attr("id");
-    for (var i = 0; i < RedNaoFormElements.length; i++)
-        if (RedNaoFormElements[i].Id == id) {
-            return RedNaoFormElements[i];
-        }
-}
-
 RedNaoFormBuilder.prototype.CreateNewInstanceOfElement = function (element) {
     var componentType = this.GetComponentType(element);
     return sfRedNaoCreateFormElementByName(componentType);
-}
+};
 
 RedNaoFormBuilder.prototype.GetComponentType = function (element) {
     if (rnJQuery(element).children().first().hasClass('rednaotextinput'))
@@ -201,7 +190,8 @@ RedNaoFormBuilder.prototype.GetComponentType = function (element) {
         if(rnJQuery(element).children().first().hasClass(this.extensions[i]))
             return this.extensions[i];
 
-}
+    throw "Invalid element type";
+};
 
 
 /************************************************************************************* Initialization ***************************************************************************************************/
@@ -210,7 +200,7 @@ RedNaoFormBuilder.prototype.GetComponentType = function (element) {
 
 
 RedNaoFormBuilder.prototype.InitializeTabs = function () {
-    rnJQuery(".rednaoformbuilder .formtab").click(function (e) {
+    rnJQuery(".rednaoformbuilder .formtab").click(function () {
 
         var thisJQuery = rnJQuery(this);
         var tabName = thisJQuery.attr("id");
@@ -223,7 +213,7 @@ RedNaoFormBuilder.prototype.InitializeTabs = function () {
         rnJQuery(".rednaoformbuilder #" + tabName).css("display", "block");
 
     });
-}
+};
 
 RedNaoFormBuilder.prototype.InitializeComponents = function () {
     sfRedNaoCreateFormElementByName('rednaotitle', null).GenerateHtml(rnJQuery("#components .rednaotitle"));
@@ -261,7 +251,7 @@ RedNaoFormBuilder.prototype.InitializeComponents = function () {
     }
 
 
-}
+};
 
 
 /************************************************************************************* Move Windows On Scroll ***************************************************************************************************/
@@ -275,7 +265,7 @@ RedNaoFormBuilder.prototype.GetFormInformation=function()
         arrayOfOptions.push(this.RedNaoFormElements[i].Options);
     }
    return arrayOfOptions;
-}
+};
 
 
 RedNaoFormBuilder.prototype.ScrollSettings = function () {
@@ -307,7 +297,7 @@ RedNaoFormBuilder.prototype.CloneFormElement=function(jQueryElement){
     this.ElementClicked(container);
     this.OpenProperties(container);
 
-}
+};
 
 RedNaoFormBuilder.prototype.ElementClicked=function(jQueryElement)
 {
@@ -317,6 +307,7 @@ RedNaoFormBuilder.prototype.ElementClicked=function(jQueryElement)
     jQueryElement.addClass('SmartFormsElementSelected');
     this.OpenProperties(jQueryElement);
 
+    //noinspection JSUnresolvedVariable variable loaded in another file
     var actionElement=rnJQuery('<div class="smartFormsActionMenu" ><img id="editStyleElement" src="'+smartFormsRootPath+'images/edit_style.png" title="Edit Style" /><img id="cloneFormElement" src="'+smartFormsRootPath+'images/clone.png" title="Clone" /><img id="deleteFormElement" src="'+smartFormsRootPath+'images/delete.png" title="Delete"/></div>');
     var self=this;
 
@@ -326,29 +317,17 @@ RedNaoFormBuilder.prototype.ElementClicked=function(jQueryElement)
     actionElement.find('#cloneFormElement').mousedown(function(e){e.preventDefault();e.stopPropagation(); self.CloneFormElement(jQueryElement);});
     actionElement.find('#deleteFormElement').mousedown(function(e){e.preventDefault();e.stopPropagation(); self.DeleteFormElement(jQueryElement);});
     actionElement.find('#editStyleElement').mousedown(function(e){e.preventDefault();e.stopPropagation();self.EditStyle(jQueryElement)});
-}
+};
 
 RedNaoFormBuilder.prototype.EditStyle=function(jQueryElement){
     var formElement=this.RedNaoFormElements[jQueryElement.index()];
     RedNaoStyleEditorVar.OpenStyleEditor(formElement,jQueryElement);
-}
+};
 
 RedNaoFormBuilder.prototype.DeleteFormElement=function(jQueryElement){
     var index=jQueryElement.index();
     this.RedNaoFormElements.splice(index,1);
     jQueryElement.remove();
-}
+};
 
-
-/*
-RedNaoFormBuilder.prototype.RefreshForm = function () {
-    var form = rnJQuery("#redNaoElementlist");
-    form.empty();
-    for (var i = 0; i < this.RedNaoFormElements.length; i++) {
-        this.RedNaoFormElements[i].AppendElementToContainer(form);
-    }
-
-    form.append('<div class="rednaoformbuilder formelement last" style="height:77px;width:100%;"></div>');
-    SmartDonationsPrepareDraggableItems();
-}*/
 
