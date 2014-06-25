@@ -112,7 +112,13 @@ class RednaoForms extends WP_List_Table
     {
         $this->_column_headers=array($this->get_columns(),array(),$this->get_sortable_columns());
         global $wpdb;
-        $this->items=$result=$wpdb->get_results("SELECT * FROM ".SMART_FORMS_TABLE_NAME);
+        $savedForms=$result=$wpdb->get_results("SELECT * FROM ".SMART_FORMS_TABLE_NAME);
+        foreach($savedForms as $form)
+        {
+            $form->form_name=esc_html($form->form_name);
+            $form->form_id=esc_html($form->form_id);
+        }
+        $this->items=$savedForms;
     }
 
     function get_sortable_columns()
