@@ -37,7 +37,8 @@ smartFormGenerator.prototype.InitializeConditionalLogic=function()
             var condition=this.client_form_options.Conditions[i];
             this.client_form_options.Conditions[i]=SmartFormsGetConditionalHandlerByType(condition.Type,condition);
         }
-    }
+    }else
+        this.client_form_options.Conditions=[];
 };
 
 smartFormGenerator.prototype.SetDefaultIfUndefined=function(propertyName,defaultValue)
