@@ -2,6 +2,7 @@ function RedNaoEmailEditor()
 {
     rnJQuery( "#redNaoAccordion" ).accordion();
     var self=this;
+    //noinspection JSUnusedLocalSymbols
     this.Dialog=rnJQuery("#redNaoEmailEditor").dialog(
         {   width:"800",
             height:"750",
@@ -42,7 +43,7 @@ RedNaoEmailEditor.prototype.UpdateToEmails=function()
     }
     this.Emails[0].ToEmail=selectedEmailsString;
     return true;
-}
+};
 RedNaoEmailEditor.prototype.SetupEmailTo=function(emailToOptions,alreadySelectedEmails)
 {
     var selectOptions='<optgroup label="'+smartFormsTranslation.SelectAField+'">';
@@ -85,7 +86,7 @@ RedNaoEmailEditor.prototype.SetupEmailTo=function(emailToOptions,alreadySelected
             self.AddEmailIfValid(text);
         }
     });
-}
+};
 
 RedNaoEmailEditor.prototype.AddEmailIfValid=function(text)
 {
@@ -95,7 +96,7 @@ RedNaoEmailEditor.prototype.AddEmailIfValid=function(text)
         this.AddEmail(text);
     else
         alert('Please type a valid email');
-}
+};
 
 RedNaoEmailEditor.prototype.AddEmail=function(email)
 {
@@ -104,7 +105,7 @@ RedNaoEmailEditor.prototype.AddEmail=function(email)
     selectedValues.push(email);
     rnJQuery('#redNaoToEmail').select2('val',selectedValues);
 
-}
+};
 
 RedNaoEmailEditor.prototype.OpenEmailEditor=function(redNaoFormElements,emails)
 {
@@ -125,18 +126,18 @@ RedNaoEmailEditor.prototype.OpenEmailEditor=function(redNaoFormElements,emails)
 
     var selectedToEmails=emails[0].ToEmail;
     this.SetupEmailTo(emailToOptions,RedNaoGetValueOrEmpty(selectedToEmails).split(','));
-}
+};
 
 
-RedNaoEmailEditor.prototype.CloseEmailEditor=function(redNaoFormElements)
+RedNaoEmailEditor.prototype.CloseEmailEditor=function()
 {
     this.Dialog.dialog('close');
-}
+};
 
 RedNaoEmailEditor.prototype.AddFieldToEmail=function(id)
 {
     tinymce.activeEditor.execCommand('mceInsertContent', false, "[field "+id.trim()+"]");
-}
+};
 
 
 

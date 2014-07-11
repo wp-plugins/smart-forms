@@ -92,3 +92,16 @@ Object.isNullOrEmpty=function(object){
          });
      });
  };
+
+ function RedNaoEscapeHtml(s) {
+     try{
+
+     return s.toString().replace(/&/g, '&amp;')
+         .replace(/"/g, '&quot;')
+         .replace(/</g, '&lt;')
+         .replace(/>/g, '&gt;');
+     }catch(error)
+     {
+         alert('abc');
+     }
+ }

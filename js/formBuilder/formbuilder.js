@@ -6,7 +6,7 @@ var smartDonationsIsDesignMode=true;
 //function overwritten by one that use field name
 //noinspection JSUnusedLocalSymbols
 var SmartFormsFieldIsAvailable=function(fieldName){return true;};
-function RedNaoFormBuilder(smartFormsOptions,formElementsOptions) {
+function RedNaoFormBuilder(smartFormsOptions,formElementsOptions,formClientOptions) {
 
     this.formSettings = rnJQuery('#formSettings');
     this.redNaoWindow = rnJQuery(document);
@@ -15,6 +15,18 @@ function RedNaoFormBuilder(smartFormsOptions,formElementsOptions) {
     this.scrollTimeOut = null;
     this.propertiesPanel = rnJQuery("#rednaoPropertiesPanel");
     this.extensions=[];
+    this.FormBuilderDisabled=false;
+    this.Conditions=[];
+    if(typeof formClientOptions.Conditions!='undefined')
+    {
+        this.Conditions=formClientOptions.Conditions;
+        for(var i=0;i<this.Conditions.length;i++)
+        {
+            SfConditionalHandlerBase.prototype.ConditionId=Math.max(this.Conditions[i].Id);
+        }
+    }
+
+    this.SfConditionalLogicManager=new SfConditionalLogicManager(this);
     RedNaoEventManager.Publish('AddExtendedElements',this.extensions);
     rnJQuery("#formBuilderButtonSet").buttonset();
 
@@ -94,12 +106,23 @@ RedNaoFormBuilder.prototype.smartFormsFormEditTypeChanged = function () {
     if (typeOfEdition == 'Fields') {
         rnJQuery('#formBuilderComponents').show();
         rnJQuery('#formPropertiesContainer').hide();
+        rnJQuery('#formConditionalLogicContainer').hide();
     }
 
     if (typeOfEdition == 'Settings') {
         rnJQuery('#formBuilderComponents').hide();
         rnJQuery('#formPropertiesContainer').show();
+        rnJQuery('#formConditionalLogicContainer').hide();
     }
+
+    if (typeOfEdition == 'ConditionalLogic') {
+        rnJQuery('#formBuilderComponents').hide();
+        rnJQuery('#formPropertiesContainer').hide();
+        rnJQuery('#formConditionalLogicContainer').show();
+        this.SfConditionalLogicManager.FillSavedConditionList();
+    }
+
+
 
 };
 
@@ -267,10 +290,28 @@ RedNaoFormBuilder.prototype.GetFormInformation=function()
    return arrayOfOptions;
 };
 
+RedNaoFormBuilder.prototype.Disable=function()
+{
+    this.FormBuilderDisabled=true;
+};
+
+RedNaoFormBuilder.prototype.Enable=function()
+{
+    this.FormBuilderDisabled=false;
+};
 
 RedNaoFormBuilder.prototype.ScrollSettings = function () {
     var documentScroll = this.redNaoWindow.scrollTop();
     var newPosition = Math.max(0, documentScroll - this.formSettingsOriginalTop);
+
+    var previousPosition=parseFloat(this.formSettings.css('top'));
+    if(isNaN(previousPosition))
+        previousPosition=0;
+
+
+    if(newPosition>previousPosition&&(this.formSettings.height())>rnJQuery(window).height())
+        return;
+
 
     this.formSettings.animate({
         top:newPosition

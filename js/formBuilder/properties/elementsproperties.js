@@ -72,15 +72,15 @@ SimpleTextProperty.prototype.GenerateHtml=function()
     var tdStyle="";
     if(this.AdditionalInformation.MultipleLine==true)
     {
-        input='<textarea style="width:206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="'+this.AdditionalInformation.Placeholder+'"/>';
+        input='<textarea style="width:206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+RedNaoEscapeHtml(this.GetPropertyCurrentValue())+'" placeholder="'+this.AdditionalInformation.Placeholder+'"/>';
         tdStyle='vertical-align:top;'
     }
     else
     {
-        input='<input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="'+this.AdditionalInformation.Placeholder+'"/>';
+        input='<input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+RedNaoEscapeHtml(this.GetPropertyCurrentValue())+'" placeholder="'+this.AdditionalInformation.Placeholder+'"/>';
     }
 
-    var value=this.GetPropertyCurrentValue().trim();
+
     var newProperty=rnJQuery( '<td style="text-align: right;'+tdStyle+'"><label class="rednao-properties-control-label"> '+this.PropertyTitle+' </label></td>\
             <td style="text-align: left">'+input+'\
             <img style="width:15px;height: 20px; vertical-align: middle;cursor:pointer;cursor:hand;" title="Formula" src="'+ smartFormsRootPath+(this.FormulaExists(this.FormElement,this.PropertyName)?'images/formula_used.png' :'images/formula.png')+'"/> </td>');
@@ -114,15 +114,15 @@ SimpleNumericProperty.prototype.GenerateHtml=function()
     var tdStyle="";
     if(this.AdditionalInformation.MultipleLine==true)
     {
-        input='<textarea style="width:206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="'+this.AdditionalInformation.Placeholder+'"/>';
+        input='<textarea style="width:206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+RedNaoEscapeHtml(this.GetPropertyCurrentValue())+'" placeholder="'+this.AdditionalInformation.Placeholder+'"/>';
         tdStyle='vertical-align:top;'
     }
     else
     {
-        input='<input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+this.GetPropertyCurrentValue()+'" placeholder="'+this.AdditionalInformation.Placeholder+'"/>';
+        input='<input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+RedNaoEscapeHtml(this.GetPropertyCurrentValue())+'" placeholder="'+this.AdditionalInformation.Placeholder+'"/>';
     }
 
-    var value=this.GetPropertyCurrentValue().trim();
+
     var newProperty=rnJQuery( '<td style="text-align: right;'+tdStyle+'"><label class="rednao-properties-control-label"> '+this.PropertyTitle+' </label></td>\
             <td style="text-align: left">'+input+'\
             <img style="width:15px;height: 20px; vertical-align: middle;cursor:pointer;cursor:hand;" title="Formula" src="'+ smartFormsRootPath+(this.FormulaExists(this.FormElement,this.PropertyName)?'images/formula_used.png' :'images/formula.png')+'"/> </td>');
@@ -262,8 +262,8 @@ ArrayProperty.prototype.CreateListRow=function(isFirst,item)
 {
     var row= '<tr class="redNaoRowOption">' +
             '       <td style="text-align: right;">'+this.GetSelector(item)+'</td>' +
-            '       <td><input type="text" class="itemText" value="'+item.label+'"/></td>' +
-            '       <td><input type="text" class="itemValue" style="text-align: right; width: 50px;" value="'+item.value+'"/></td>' +
+            '       <td><input type="text" class="itemText" value="'+RedNaoEscapeHtml(item.label)+'"/></td>' +
+            '       <td><input type="text" class="itemValue" style="text-align: right; width: 50px;" value="'+RedNaoEscapeHtml(item.value)+'"/></td>' +
             '       <td style="text-align: center;vertical-align: middle;"><img style="cursor: hand;cursor: pointer; width:15px;height:15px;" class="cloneArrayItem" src="'+smartFormsRootPath+'images/clone.png" title="Clone"></td>';
             if(!isFirst)
                 row+=' <td style="text-align: center;vertical-align: middle;"><img style="cursor: hand; cursor: pointer;width:15px;height:15px;" class="deleteArrayItem" src="'+smartFormsRootPath+'images/delete.png" title="Delete"></td>';
@@ -375,12 +375,12 @@ ComboBoxProperty.prototype.GenerateHtml=function()
         if(this.AdditionalInformation.Values[i].value==value)
             selected='selected="selected"';
 
-        selectText+='<option value="'+this.AdditionalInformation.Values[i].value+'" '+selected+'>'+this.AdditionalInformation.Values[i].label+'</option>'
+        selectText+='<option value="'+RedNaoEscapeHtml(this.AdditionalInformation.Values[i].value)+'" '+selected+'>'+RedNaoEscapeHtml(this.AdditionalInformation.Values[i].label)+'</option>';
     }
     selectText+='</select>'
 
-    var newProperty=rnJQuery( '<td style="text-align: right"><label class="rednao-properties-control-label"> '+this.PropertyTitle+' </label></td>\
-            <td style="text-align: left">'+selectText+' </td>');
+    var newProperty=rnJQuery( '<td style="text-align: right"><label class="rednao-properties-control-label"> '+RedNaoEscapeHtml(this.PropertyTitle)+' </label></td>'+
+            '<td style="text-align: left">'+selectText+' </td>');
 
     var self=this;
     newProperty.find('select').change(function(){
@@ -391,7 +391,7 @@ ComboBoxProperty.prototype.GenerateHtml=function()
 
     newProperty.find('img').click(function(){RedNaoEventManager.Publish('FormulaButtonClicked',{"FormElement":self.FormElement,"PropertyName":self.PropertyName,AdditionalInformation:self.AdditionalInformation,Image:null})});
     return newProperty;
-}
+};
 
 
 

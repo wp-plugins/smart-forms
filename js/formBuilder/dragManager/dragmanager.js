@@ -38,7 +38,8 @@ RedNaoDragManager.prototype.MakeItemDraggable=function(jQueryElement)
 RedNaoDragManager.prototype.SmartDonationsFormMouseDownFired = function (e,draggedElement) {
     e.stopPropagation();
     e.preventDefault();
-
+    if(this.FormBuilder.FormBuilderDisabled)
+        return;
     var draggedItemDisplayed = false;
 
     if (rnJQuery(this).hasClass('last'))

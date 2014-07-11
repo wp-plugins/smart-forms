@@ -26,9 +26,12 @@ wp_enqueue_script('smart-forms-elements-properties',SMART_FORMS_DIR_URL.'js/form
 wp_enqueue_script('smart-forms-formBuilder',SMART_FORMS_DIR_URL.'js/formBuilder/formbuilder.js',array('smart-forms-elements-properties'));
 wp_enqueue_script('smart-forms-dragmanager',SMART_FORMS_DIR_URL.'js/formBuilder/dragManager/dragmanager.js');
 wp_enqueue_script('smart-forms-dragitembehaviors',SMART_FORMS_DIR_URL.'js/formBuilder/dragManager/dragitembehaviors.js');
-wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',apply_filters('smart_forms_pr_add_new_js_extension',array('isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2','smart-forms-event-manager')));
-wp_enqueue_script('smart-forms-icheck',SMART_FORMS_DIR_URL.'js/utilities/iCheck/icheck.js',array('isolated-slider'));
-wp_enqueue_script('smart-forms-select2',SMART_FORMS_DIR_URL.'js/utilities/select2/select2.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-conditional-steps',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-handler-steps.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-conditional-handlers',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-handlers.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-conditional-manager',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-logic-manager.js',array('isolated-slider','smart-forms-conditional-handlers'));
+wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',apply_filters('smart_forms_pr_add_new_js_extension',array('isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2','smart-forms-event-manager','smart-forms-conditional-manager')));
+wp_enqueue_script('smart-forms-icheck',SMART_FORMS_DIR_URL.'js/utilities/iCheck/icheck.min.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-select2',SMART_FORMS_DIR_URL.'js/utilities/select2/select2.min.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-jsColor',SMART_FORMS_DIR_URL.'js/utilities/jsColor/jscolor.js',array('isolated-slider'));
 require_once(SMART_FORMS_DIR.'translations/smart-forms-add-new-translation.php');
 require_once(SMART_FORMS_DIR.'translations/form-elements-translation.php');
@@ -98,7 +101,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
         </tr>
 
         <tr>
-            <td style="text-align: right">To email address(es)</td><td> <select multiple="multiple" id="redNaoToEmail" style="width:300px"/></td>
+            <td style="text-align: right">To email address(es)</td><td> <select multiple="multiple" id="redNaoToEmail" style="width:300px"></select></td>
         </tr>
 
         <tr>
@@ -198,7 +201,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 <div id="smartDonationsDiv" style="display: none">
     <table style="width: 100%">
         <tr>
-            <td style="text-align: right;width: 200px;">Campaign</td><td> <select id="redNaoCampaign"/></td>
+            <td style="text-align: right;width: 200px;">Campaign</td><td> <select id="redNaoCampaign"></select></td>
         </tr>
         <tr >
             <td style="text-align: right" ><span class="smartDonationsConfigurationInfo">PayPal email</span></td><td class="smartDonationsConfigurationInfo"> <input type="text" id="smartDonationsEmail" />  <span  class="description smartDonationsConfigurationInfoDesc" style="margin-bottom:5px;display: inline;"> <?php echo __("*The email of your paypal account"); ?></span></td>
@@ -316,7 +319,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 
         </div>-->
 
-<hr style="margin:20px 0 0px -17px;"/>
+<hr style="margin:20px 0 0 -17px;"/>
 
        <div id="redNaoFormBackground" style="background-color: #efefef;">
             <div class="rednaoformbuilder container rednaoFormContainer">
@@ -324,7 +327,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
                 <table style="border-collapse: collapse;background-color: #efefef;">
                     <tr>
 
-                    <td style="vertical-align: top;background-color: white">
+                    <td style="vertical-align: top;background-color: white" class="smartFormsSelectedElementContainer">
 
                    <div class="span6 " id="newFormContainer">
                             <div class="clearfix" style="text-align:left;">
@@ -349,23 +352,24 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
                    <div id="formSettingsScrollArea">
                        <div id="formSettings" >
                             <div id="formBuilderButtonSet" class="smartFormsSlider">
-                                <input type="radio" id="formRadio1" value="Fields"  name="smartFormsFormEditStyle"  checked="checked" style="display:inline-block;"/><label style="margin:0px;width:150px;display:inline-block;" for="formRadio1">Fields</label>
-                                <input type="radio" id="formRadio2"  value="Settings" name="smartFormsFormEditStyle" style="display:inline-block;"/><label label style="width:150px;margin:0px;margin-left:-5px;display:inline-block;" for="formRadio2">Field Settings</label>
-								    </div>
+                                <input type="radio" id="formRadio1" value="Fields"  name="smartFormsFormEditStyle"  checked="checked" style="display:inline-block;"/><label style="margin:0;width:150px;display:inline-block;" for="formRadio1"><?php echo __("Fields")?></label>
+                                <input type="radio" id="formRadio2"  value="Settings" name="smartFormsFormEditStyle" style="display:inline-block;"/><label style="width:150px;margin: 0 0 0 -5px;display:inline-block;" for="formRadio2"><?php echo __("Field Settings")?></label>
+								<input type="radio" id="formRadio3"  value="ConditionalLogic" name="smartFormsFormEditStyle" style="display:inline-block;"/><label style="width:170px;margin: 0 0 0 -5px;display:inline-block;" for="formRadio3"><?php echo __("Conditional Logic")?></label>
+                            </div>
 
                             <div id="formBuilderContainer">
                                 <div class="span6" id="formBuilderComponents">
-                                    <h2 class="redNaoFormContainerHeading">Drag &amp; Drop components</h2>
+                                    <h2 class="redNaoFormContainerHeading"><?php echo __("Drag &amp; Drop components")?></h2>
                                     <hr>
                                     <div class="tabbable" >
                                         <ul class="nav nav-tabs" id="navtab">
-                                            <li><a id="alayout" class="formtab" >Layout</a></li>
-                                            <li><a id="atabinput" class="formtab selectedTab" >Basic Input</a></li>
-                                            <li><a id="atabselect" class="formtab">Advanced</a></li>
-                                            <li><a id="atabradioscheckboxes" class="formtab">Multiple Choices</a></li>
+                                            <li><a id="alayout" class="formtab" ><?php echo __("Layout")?></a></li>
+                                            <li><a id="atabinput" class="formtab selectedTab" ><?php echo __("Basic Input")?></a></li>
+                                            <li><a id="atabselect" class="formtab"><?php echo __("Advanced")?></a></li>
+                                            <li><a id="atabradioscheckboxes" class="formtab"><?php echo __("Multiple Choices")?></a></li>
 
                                             <li><a id="atabbuttons" class="formtab" <?php echo (has_smart_donations_license_and_is_active()?"":'style="display: none"');?> >Paypal</a></li>
-											<li><a id="atabpro" class="formtab" >Pro</a></li>
+											<li><a id="atabpro" class="formtab" ><?php echo __("Pro")?></a></li>
                                         </ul>
                                         <div class="form-horizontal" id="components">
                                             <fieldset  >
@@ -475,7 +479,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
                                                     </div>
 
 													<div class="tab-pane rednaotablist" id="tabpro"  style="display: none;">
-														<h4 id="smartFormsProWarning" style="margin-top: 0;"><span style="color: red;">Warning</span> This field require a license of smart forms, you can get one <a target="_blank" href="http://rednao.com/smartforms.html">here.</a> If you already have a license please <a href="javascript:RedNaoLicensingManagerVar.ActivateLicense();">activate it here</a> </h4>
+														<h4 id="smartFormsProWarning" style="margin-top: 0;"><span style="color: red;"><?php echo __("Warning")?></span> <?php echo __("This field require a license of smart forms, you can get one ")?><a target="_blank" href="http://rednao.com/smartforms.html"><?php echo __("here")?>.</a> <?php echo __("If you already have a license please")?> <a href="javascript:RedNaoLicensingManagerVar.ActivateLicense();"><?php echo __("activate it here")?></a> </h4>
 
 														<div >
 															<img src="<?php echo SMART_FORMS_DIR_URL?>images/file_upload.png"/>
@@ -491,6 +495,18 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 
                                     </table>
                                 </div>
+
+								<div id="formConditionalLogicContainer" style="padding:0px;display:none;overflow-x: hidden;">
+									<table id="sfPanelContainer" cellpadding="0" cellspacing="0" style="position: relative; width: 100%;">
+										<tr>
+											<td style="vertical-align: top;">
+												<table id="sfSavedConditionList" style="width:550px;padding: 5px;">
+
+												</table>
+											</td>
+										</tr>
+									</table>
+								</div>
                             </div>
                        </div>
                    </div>
@@ -501,7 +517,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
             </div>
        </div>
 </form>
-<hr style="margin:0px 0 0px -17px;"/>
+<hr style="margin:0 0 0 -17px;"/>
 </div>
 </div>
 <?php

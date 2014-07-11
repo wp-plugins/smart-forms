@@ -11,6 +11,7 @@ RedNaoFormulaManager.prototype.PropertyChanged=function(data)
 {
     this.SetFormulaValue(data.FieldName,data.Value);
     this.UpdateFormulaFieldsIfNeeded(data.FieldName,data.Value);
+    RedNaoEventManager.Publish('FormValueChanged',{FieldName:data.FieldName,Data:this.Data});
 }
 
 
@@ -18,6 +19,7 @@ RedNaoFormulaManager.prototype.SetFormulaValue=function(fieldName,data)
 {
     if(RedNaoPathExists(data,'value'))
     {
+        data.label=data.value.toString();
         if(data.value=='')
             data.value=0;
         else
@@ -37,10 +39,12 @@ RedNaoFormulaManager.prototype.UpdateFormulaFieldsIfNeeded=function(fieldName)
     }
 }
 
-RedNaoFormulaManager.prototype.RefreshAllFormulas=function()
+RedNaoFormulaManager.prototype.RefreshAllFormulasAndConditionalLogic=function()
 {
     for(var i=0;i<this.Formulas.length;i++)
         this.Formulas[i].UpdateFieldWithValue(this.Data);
+
+
 }
 
 RedNaoFormulaManager.prototype.AddFormula=function(formElement,formula)

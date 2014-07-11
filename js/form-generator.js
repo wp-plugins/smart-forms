@@ -1,7 +1,8 @@
 
 function smartFormGenerator(options){
     this.client_form_options=options.client_form_options;
-    this.SetDefaultIfUndefined('InvalidInputMessage','*Please fill all the required fields')
+    this.InitializeConditionalLogic();
+    this.SetDefaultIfUndefined('InvalidInputMessage','*Please fill all the required fields');
     this.SubmittingThroughIframe=false;
     try{
         this.JavaScriptCode=eval(this.client_form_options.JavascriptCode)();
@@ -27,16 +28,29 @@ function smartFormGenerator(options){
 
 }
 
+smartFormGenerator.prototype.InitializeConditionalLogic=function()
+{
+    if(typeof this.client_form_options.Conditions !='undefined')
+    {
+        for(var i=0;i<this.client_form_options.Conditions.length;i++)
+        {
+            var condition=this.client_form_options.Conditions[i];
+            this.client_form_options.Conditions[i]=SmartFormsGetConditionalHandlerByType(condition.Type,condition);
+        }
+    }
+};
+
 smartFormGenerator.prototype.SetDefaultIfUndefined=function(propertyName,defaultValue)
 {
     if(typeof this.client_form_options[propertyName]=='undefined')
         this.client_form_options[propertyName]=defaultValue;
-}
+};
 
 smartFormGenerator.prototype.CreateForm=function(){
     var container=this.GetRootContainer();
     container.empty();
     this.JQueryForm=rnJQuery('<form ></form>');
+    this.JQueryForm.css('visibility','hidden');
     container.append(this.JQueryForm);
     for(var i=0;i<this.RedNaoFormElements.length;i++)
     {
@@ -71,15 +85,19 @@ smartFormGenerator.prototype.CreateForm=function(){
         self.SaveForm();
     });
     this.AdjustLayout();
-    RedNaoFormulaManagerVar.RefreshAllFormulas();
-
+    RedNaoFormulaManagerVar.RefreshAllFormulasAndConditionalLogic();
+    for(var i=0;i<this.client_form_options.Conditions.length;i++)
+    {
+        this.client_form_options.Conditions[i].Initialize(this,RedNaoFormulaManagerVar.Data);
+    }
+    this.JQueryForm.css('visibility','visible');
     try{
         this.JavaScriptCode.AfterFormLoaded();
     }catch(exception)
     {
 
     }
-}
+};
 
 smartFormGenerator.prototype.CreatePayPalHiddenFields=function()
 {
@@ -106,7 +124,7 @@ smartFormGenerator.prototype.CreatePayPalHiddenFields=function()
     if(RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)=="y")
         this.JQueryForm.append('<input type="hidden" name="return" value="'+this.client_form_options.redirect_to+'">');
 
-}
+};
 
 smartFormGenerator.prototype.AdjustLayout=function()
 {
@@ -114,7 +132,8 @@ smartFormGenerator.prototype.AdjustLayout=function()
     var controlsArray=[];
     var maxWidth=0;
     var maxControlWidth=0;
-    for(var i=0;i<this.FormElements.length;i++)
+    var i;
+    for(i=0;i<this.FormElements.length;i++)
     {
         var element=this.FormElements[i].JQueryElement;
 
@@ -129,46 +148,18 @@ smartFormGenerator.prototype.AdjustLayout=function()
         controlsArray.push(control);
     }
 
-    for(var i=0;i<labelArray.length;i++)
+    for(i=0;i<labelArray.length;i++)
         labelArray[i].width(maxWidth);
 
-    for(var i=0;i<controlsArray.length;i++)
+    for(i=0;i<controlsArray.length;i++)
         controlsArray[i].width(maxControlWidth);
 
     this.maxWidth=maxWidth+maxControlWidth;
-    /*
-    this.maxWidth=0;
-    for(var i=0;i<this.FormElements.length;i++)
-    {
-        var width=0;
-        this.FormElements[i].JQueryElement.find('.rednao_label_container,.redNaoControls').each(function()
-        {
-            width+=rnJQuery(this).width();
-        });
-        this.maxWidth=Math.max(this.maxWidth,width);
-    }*/
+
 
     if(this.JQueryForm.width()<(this.maxWidth+5))//5px is the margin size between the label and the control
         this.JQueryForm.parent().addClass('redNaoCompactForm');
-}
-
-
-smartFormGenerator.prototype.GenerateFormElements=function(formElementsOptions)
-{
-    this.FormElements=new Array();
-
-    for(var i=0;i<formElementsOptions.length;i++)
-    {
-        this.FormElements.push(sfRedNaoCreateFormElementByOptions(formElementsOptions[i]));
-    }
-}
-
-
-smartFormGenerator.prototype.DonationGeneratedCode=function()
-{
-    return this.GetStartOfDonationForm()+this.GetEndOfDonationForm(); //'<form id="redNaoElementlist" class="formelements" style="width:600px;"></form>';
-}
-
+};
 
 smartFormGenerator.prototype.GenerationCompleted=function()
 {
@@ -193,17 +184,18 @@ smartFormGenerator.prototype.GenerationCompleted=function()
 
 
             }finally{
+                //noinspection ReturnInsideFinallyBlockJS
                 return false;
             }
         }
     );
 
-}
+};
 
 smartFormGenerator.prototype.GenerateDefaultStyle=function()
 {
     this.styles.formelements="width:600px;padding:10px;margin:0px;";
-}
+};
 
 
 smartFormGenerator.prototype.SaveForm=function()
@@ -234,7 +226,7 @@ smartFormGenerator.prototype.SaveForm=function()
     }
     if(!formIsValid)
     {
-        this.GetRootContainer().prepend('<p class="redNaoValidationMessage" style="margin:0;padding: 0; font-style: italic; color:red;font-family:Arial;font-size:12px;">'+this.client_form_options.InvalidInputMessage+'</p>')
+        this.GetRootContainer().prepend('<p class="redNaoValidationMessage" style="margin:0;padding: 0; font-style: italic; color:red;font-family:Arial,serif;font-size:12px;">'+this.client_form_options.InvalidInputMessage+'</p>');
         return;
     }
 
@@ -265,7 +257,7 @@ smartFormGenerator.prototype.SaveForm=function()
     }
 
 
-}
+};
 
 smartFormGenerator.prototype.SendToSmartForms=function(formValues,isUsingAFileUploader)
 {
@@ -286,10 +278,11 @@ smartFormGenerator.prototype.SendToSmartForms=function(formValues,isUsingAFileUp
     }
 
     if(isUsingAFileUploader)
-        this.SendFilesWithForm(data)
+        this.SendFilesWithForm(data);
     else
     {
         var self=this;
+        //noinspection JSUnusedLocalSymbols
         rnJQuery.ajax({
             type:'POST',
             url:ajaxurl,
@@ -302,7 +295,7 @@ smartFormGenerator.prototype.SendToSmartForms=function(formValues,isUsingAFileUp
                 alert('An error occurred, please try again later');}
         });
     }
-}
+};
 
 smartFormGenerator.prototype.SendFilesWithForm=function(data)
 {
@@ -331,19 +324,21 @@ smartFormGenerator.prototype.SendFilesWithForm=function(data)
     this.SubmittingThroughIframe=true;
     this.JQueryForm.submit();
 
-}
+};
 
+//noinspection JSUnusedLocalSymbols
 smartFormGenerator.prototype.SendToSmartDonations=function(formValues,isUsingAFileUploader)
 {
     if(RedNaoPathExists(this.client_form_options,'Formulas.DonationFormula'))
     {
+        //noinspection JSUnresolvedVariable
         var formula=new RedNaoFormula(null,this.client_form_options.Formulas.DonationFormula);
         var donationAmount=formula.GetValueFromFormula(formValues);
 
 
         if(donationAmount<=0)
         {
-            this.GetRootContainer().prepend('<p class="redNaoValidationMessage" style="margin:0;padding: 0; font-style: italic; color:red;font-family:Arial;font-size:12px;">*The donation amount should be greater than zero</p>')
+            this.GetRootContainer().prepend('<p class="redNaoValidationMessage" style="margin:0;padding: 0; font-style: italic; color:red;font-family:Arial,serif;font-size:12px;">*The donation amount should be greater than zero</p>');
             return;
         }
 
@@ -369,7 +364,7 @@ smartFormGenerator.prototype.SendToSmartDonations=function(formValues,isUsingAFi
             {
                 self.JQueryForm.find('.amountToDonate').attr('name','a3');
                 self.JQueryForm.find('.smartDonationsPaypalCommand').val('_xclick-subscriptions');
-                self.JQueryForm.append('<input type="hidden" class="redNaoRecurrenceField" name="src" value="1"><input type="hidden" class="redNaoRecurrenceField"name="p3" value="1"><input type="hidden" name="t3" value="'+self.JQueryForm.find('.redNaoRecurrence').find(':selected').val()+'">');
+                self.JQueryForm.append('<input type="hidden" class="redNaoRecurrenceField" name="src" value="1"><input type="hidden" class="redNaoRecurrenceField" name="p3" value="1"><input type="hidden" name="t3" value="'+self.JQueryForm.find('.redNaoRecurrence').find(':selected').val()+'">');
             }
             self.SubmittingRedNaoDonationForm='y';
             self.JQueryForm.submit();
@@ -382,7 +377,7 @@ smartFormGenerator.prototype.SendToSmartDonations=function(formValues,isUsingAFi
 
         },"json");
 
-}
+};
 
 smartFormGenerator.prototype.SaveCompleted=function(result){
     rnJQuery('body, input[type="submit"]').removeClass('redNaoWait');
@@ -410,68 +405,13 @@ smartFormGenerator.prototype.SaveCompleted=function(result){
 
     this.CreateForm();
 
-}
+};
 
-smartFormGenerator.prototype.SubmitForm=function(data,amount)
-{
-    if(data.status=="success")
-    {
-        var form=this.GetRootContainer().find('form');
-        form.attr('target','_self');
-        form.find('input[name=custom]').val(encodeURI('campaign_id='+this.campaign_id+"&formId="+data.randomString))
-        if(amount>0)
-            form.append('<input type="hidden" name="amount" class="amountToDonate" value="'+amount+'">')
-
-        if(this.IsRecurrentPayment(form))
-        {
-            if(amount<=0)
-            {
-                alert('Please set a donation amount before proceeding');
-                return;
-            }
-            this.TurnFormIntoRecurrentPayment(form);
-        }
-
-        form.submit();
-
-
-    }else
-    {
-        alert("An error occured, please try again");
-    }
-
-}
-
-smartFormGenerator.prototype.TurnFormIntoRecurrentPayment=function(form)
-{
-    form.find('.amountToDonate').attr('name','a3');
-    form.find('.smartDonationsPaypalCommand').val('_xclick-subscriptions');
-    form.append('<input type="hidden" name="src" value="1"><input type="hidden" name="p3" value="1"><input type="hidden" name="t3" value="'+form.find('.redNaoRecurrence').find(':selected').val()+'">');
-}
-
-smartFormGenerator.prototype.IsRecurrentPayment=function(form)
-{
-    return form.find('.redNaoRecurrence').length>0&&form.find('.redNaoRecurrence').find(':selected').val()!='OT';
-}
-
-smartFormGenerator.prototype.GetOptions=function()
-{
-    var options=new Object();
-    options.FormElementsOptions=new Array();
-
-    for(var i=0;i<this.FormElements.length;i++)
-    {
-        options.FormElementsOptions.push(this.FormElements[i].Options);
-    }
-
-    return options;
-
-}
 
 smartFormGenerator.prototype.GetRootContainer=function()
 {
     return rnJQuery('#'+this.containerName);
-}
+};
 
 rnJQuery(function(){
     if( window.smartFormsItemsToLoad)
@@ -484,7 +424,7 @@ var smartFormsLoadedItems=[];
 
 function smartFormsLoadForm(options)
 {
-    var form=new smartFormGenerator(options)
+    var form=new smartFormGenerator(options);
     smartFormsLoadedItems.push(form);
 
 
