@@ -31,7 +31,7 @@ wp_enqueue_script('smart-forms-conditional-handlers',SMART_FORMS_DIR_URL.'js/con
 wp_enqueue_script('smart-forms-conditional-manager',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-logic-manager.js',array('isolated-slider','smart-forms-conditional-handlers'));
 wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',apply_filters('smart_forms_pr_add_new_js_extension',array('isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2','smart-forms-event-manager','smart-forms-conditional-manager')));
 wp_enqueue_script('smart-forms-icheck',SMART_FORMS_DIR_URL.'js/utilities/iCheck/icheck.min.js',array('isolated-slider'));
-wp_enqueue_script('smart-forms-select2',SMART_FORMS_DIR_URL.'js/utilities/select2/select2.min.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-select2',SMART_FORMS_DIR_URL.'js/utilities/select2/select2.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-jsColor',SMART_FORMS_DIR_URL.'js/utilities/jsColor/jscolor.js',array('isolated-slider'));
 require_once(SMART_FORMS_DIR.'translations/smart-forms-add-new-translation.php');
 require_once(SMART_FORMS_DIR.'translations/form-elements-translation.php');
