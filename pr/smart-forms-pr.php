@@ -43,7 +43,7 @@ function smart_forms_lc_is_valid($val)
 	$email=trim($email);
 	$key=trim($key);
 	delete_transient("smart_forms_check_again");
-	$response=wp_remote_post(SMART_FORMS_REDNAO_URL.'smart_donations_license_validation.php',array('body'=> array( 'email'=>$email,'key'=>$key,'product'=>'sf'),'timeout'=>10));
+	$response=wp_remote_post(SECURE_SMART_FORMS_REDNAO_URL.'smart_forms_license_validation.php',array('body'=> array( 'email'=>$email,'key'=>$key,'product'=>'sf'),'timeout'=>10));
 	if($response instanceof WP_Error)
 	{
 		$val["error"]=$response->get_error_message();

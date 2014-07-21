@@ -4,13 +4,13 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: contact form, contact, form, forms, contact form plugin, contact form builder, contact form with recaptcha, feedback form, contact us, request form, contact button, drag and drop contact form, file upload contact form, contact form to email, contact form payments, contact for paypal, form solution, form builder, feedback, easy contact form, helpdesk
 Requires at least: 3.3
 Tested up to: 3.9
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 With Smart Forms build forms easily by dragging and dropping elements. Create multiple forms like contact forms or advanced forms that need fields calculations or send customizable emails!!.
 == Description ==
-For more information check: http://rednao.com/smartforms.html
+For more information check: http://smartforms.rednao.com/getit
 **If you have questions or suggestions please let me know in the smart forms official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601**
 Also if you have issues or need support please submit a ticket in the smart forms support site: https://smartforms.uservoice.com
 
@@ -71,6 +71,8 @@ This generally happens when your database doesn't support UTF-8 characters, so t
 10. Example of date field
 11. Conditional logic example
 == Changelog ==
+= Smart Forms 2.3 =
+* Updated smart forms's site.
 = Smart Forms 2.0 =
 * Added conditional formatting
 = Smart Forms 1.5.23 =

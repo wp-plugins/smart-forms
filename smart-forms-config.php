@@ -19,7 +19,8 @@ define('SMART_FORMS_DIR_URL',plugin_dir_url(__FILE__));
 define('SMART_FORMS_TABLE_NAME',$wpdb->prefix . "rednao_smart_forms_table_name");
 define('SMART_FORMS_ENTRY',$wpdb->prefix . "rednao_smart_forms_entry");
 define('SMART_FORMS_LATEST_DB_VERSION',7);
-define('SMART_FORMS_REDNAO_URL',"http://rednao.com/");
+define('SMART_FORMS_REDNAO_URL',"http://smartforms.rednao.com/");
+define('SECURE_SMART_FORMS_REDNAO_URL',"https://smartforms.rednao.com/");
 define('SMART_FORMS_SANDBOX','n')
 
 

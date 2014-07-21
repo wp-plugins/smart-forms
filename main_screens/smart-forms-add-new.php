@@ -479,7 +479,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
                                                     </div>
 
 													<div class="tab-pane rednaotablist" id="tabpro"  style="display: none;">
-														<h4 id="smartFormsProWarning" style="margin-top: 0;"><span style="color: red;"><?php echo __("Warning")?></span> <?php echo __("This field require a license of smart forms, you can get one ")?><a target="_blank" href="http://rednao.com/smartforms.html"><?php echo __("here")?>.</a> <?php echo __("If you already have a license please")?> <a href="javascript:RedNaoLicensingManagerVar.ActivateLicense();"><?php echo __("activate it here")?></a> </h4>
+														<h4 id="smartFormsProWarning" style="margin-top: 0;"><span style="color: red;"><?php echo __("Warning")?></span> <?php echo __("This field require a license of smart forms, you can get one ")?><a target="_blank" href="http://smartforms.rednao.com/getit"><?php echo __("here")?>.</a> <?php echo __("If you already have a license please")?> <a href="javascript:RedNaoLicensingManagerVar.ActivateLicense();"><?php echo __("activate it here")?></a> </h4>
 
 														<div >
 															<img src="<?php echo SMART_FORMS_DIR_URL?>images/file_upload.png"/>

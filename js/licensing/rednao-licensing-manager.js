@@ -9,7 +9,7 @@ function RedNaoLicensingManager()
             autoOpen:false,
             buttons: {
                 "Get Pro Version": function() {
-                    window.open("http://rednao.com/smartforms.html",'_blank');
+                    window.open("http://smartforms.rednao.com/getit",'_blank');
                     rnJQuery( this ).dialog( "close" );
 
                 },

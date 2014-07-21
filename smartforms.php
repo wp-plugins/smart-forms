@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Smart Forms
- * Plugin URI: http://rednao.com/smart-donations/
+ * Plugin URI: http://smartforms.rednao.com/getit
  * Description: Place diferent form of donations on your blog...
  * Author: RedNao
  * Author URI: http://rednao.com
- * Version: 2.0.2
+ * Version: 2.0.3
  * Text Domain: SmartDonations
  * Domain Path: /languages/
  * Network: true
