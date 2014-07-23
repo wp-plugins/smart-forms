@@ -6,7 +6,7 @@
  * Author: RedNao
  * Author URI: http://rednao.com
  * Version: 2.0.4
- * Text Domain: SmartDonations
+ * Text Domain: Smart Forms
  * Domain Path: /languages/
  * Network: true
  * License: GPLv3
