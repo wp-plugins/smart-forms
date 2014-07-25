@@ -117,6 +117,8 @@ sfFileUpload.prototype.GetValueString=function () {
     var data= [];
     var count=1;
     var self=this;
+    if(this.IsIgnored())
+        return [];
     rnJQuery('#'+this.Id+ ' .sfUploadFileButton').each(function()
     {
         var jqueryFileElement=rnJQuery(this);

@@ -58,19 +58,13 @@ SfConditionalHandlerBase.prototype.Initialize=function(form,data)
 };
 
 
-SfConditionalHandlerBase.prototype.ParseConditionLogic=function(form)
-{
-    throw "method is abstract";
-};
-
 SfConditionalHandlerBase.prototype.SubscribeCondition=function(condition,initialData)
 {
     var self=this;
-    var cond=condition;
     this.ConditionFunction=new Function('formData','return '+condition.CompiledCondition);
     var fieldsInCondition=[];
-    for(var i=0;i<cond.Conditions.length;i++)
-        fieldsInCondition.push(cond.Conditions[i].Field);
+    for(var i=0;i<condition.Conditions.length;i++)
+        fieldsInCondition.push(condition.Conditions[i].Field);
 
     RedNaoEventManager.Subscribe('FormValueChanged',function(data){
         if(fieldsInCondition.indexOf(data.FieldName)>-1)
@@ -99,11 +93,13 @@ SfConditionalHandlerBase.prototype.ProcessCondition=function(data)
     }
 };
 
+//noinspection JSUnusedLocalSymbols
 SfConditionalHandlerBase.prototype.ExecuteTrueAction=function(form)
 {
     throw "method is abstract";
 };
 
+//noinspection JSUnusedLocalSymbols
 SfConditionalHandlerBase.prototype.ExecuteFalseAction=function(form)
 {
     throw "method is abstract";
@@ -114,6 +110,7 @@ function SfShowConditionalHandler(options)
     SfConditionalHandlerBase.call(this,options);
     this.Options.Type="SfShowConditionalHandler";
     this.Fields="";
+    this.FormElements=null;
 }
 SfShowConditionalHandler.prototype=Object.create(SfConditionalHandlerBase.prototype);
 
@@ -143,6 +140,9 @@ SfShowConditionalHandler.prototype.Initialize=function(form,data)
 SfShowConditionalHandler.prototype.HideFields=function()
 {
     this.Form.JQueryForm.find(this.GetFieldIds()).css('display','none');
+    var formElements=this.GetFormElements();
+    for(var i=0;i<formElements.length;i++)
+        formElements[i].Ignore();
 };
 
 SfShowConditionalHandler.prototype.GetFieldIds=function()
@@ -158,24 +158,38 @@ SfShowConditionalHandler.prototype.GetFieldIds=function()
     return this.Fields;
 };
 
-SfShowConditionalHandler.prototype.RegisterToEvents=function()
+SfShowConditionalHandler.prototype.GetFormElements=function()
 {
+    if(this.FormElements==null)
+    {
+        this.FormElements=[];
+        for(var i=0;i<this.Options.FieldPicker.AffectedItems.length;i++)
+        {
+            var fieldId=this.Options.FieldPicker.AffectedItems[i];
+            for(var t=0;t<this.Form.FormElements.length;t++)
+                if(this.Form.FormElements[t].Id==fieldId)
+                    this.FormElements.push(this.Form.FormElements[t]);
 
-};
 
-SfShowConditionalHandler.prototype.RegisterToEvents=function()
-{
-
-};
+        }
+    }
+    return this.FormElements;
+};0
 
 
 SfShowConditionalHandler.prototype.ExecuteTrueAction=function()
 {
     this.Form.JQueryForm.find(this.GetFieldIds()).slideDown();
+    var formElements=this.GetFormElements();
+    for(var i=0;i<formElements.length;i++)
+        formElements[i].UnIgnore();
 };
 
 SfShowConditionalHandler.prototype.ExecuteFalseAction=function()
 {
     this.Form.JQueryForm.find(this.GetFieldIds()).slideUp();
+    var formElements=this.GetFormElements();
+    for(var i=0;i<formElements.length;i++)
+        formElements[i].Ignore();
 };
 

@@ -213,7 +213,7 @@ smartFormGenerator.prototype.SaveForm=function()
         this.FormElements[i].ClearInvalidStyle();
         if(this.FormElements[i].Options.ClassName=="sfFileUpload")
             isUsingAFileUploader=true;
-        if(!this.FormElements[i].IsValid())
+        if(!this.FormElements[i].IsIgnored()&&!this.FormElements[i].IsValid())
         {
             formIsValid=false;
             continue;

@@ -71,9 +71,6 @@ function sfRedNaoCreateFormElementByName(elementName,options)
         return new sfMultipleCheckBoxElement(options);
     if(elementName=='rednaoselectbasic')
         return new sfSelectBasicElement(options);
-    if(elementName=='rednaodonationamount')
-        return new sfDonationAmountElement(options);
-
     if(elementName=='rednaofilebutton')
         return 'rednaofilebutton';
     if(elementName=='rednaosinglebutton')
@@ -122,6 +119,7 @@ function sfFormElementBase(options)
     //noinspection JSUnresolvedVariable
     this.Translations=SmartFormsElementsTranslation;
     this.StyleTags={};
+    this._ignore=false;
     if(options==null)
     {
         this.Options={};
@@ -168,6 +166,22 @@ function sfFormElementBase(options)
 }
 sfFormElementBase.Extensions=[];
 sfFormElementBase.IdCounter=0;
+
+sfFormElementBase.prototype.Ignore=function()
+{
+    this._ignore=true;
+};
+
+sfFormElementBase.prototype.UnIgnore=function()
+{
+    this._ignore=false;
+};
+
+sfFormElementBase.prototype.IsIgnored=function()
+{
+    return this._ignore;
+};
+
 
 sfFormElementBase.prototype.FirePropertyChanged=function(val){
 
@@ -307,7 +321,7 @@ sfFormElementBase.prototype.ClearInvalidStyle=function()
 
 sfFormElementBase.prototype.Clone=function()
 {
-   var newObject=  jQuery.extend(true, {}, this);
+   var newObject=  rnJQuery.extend(true, {}, this);
     sfFormElementBase.IdCounter++;
     newObject.Id='rnField'+sfFormElementBase.IdCounter;
     newObject.Options.Id=newObject.Id;
@@ -324,7 +338,7 @@ sfFormElementBase.prototype.GetValuePath=function()
 
 sfFormElementBase.prototype.GetLabelPath=function()
 {
-    return 'formData.'+this.Id+'.label';;
+    return 'formData.'+this.Id+'.label';
 };
 
 sfFormElementBase.prototype.GetStyleTagForElement=function(elementName)
@@ -475,6 +489,8 @@ sfTextInputElement.prototype.GenerateInlineElement=function()
 
 sfTextInputElement.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+        return {value:''};
     return {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 };
 
@@ -563,6 +579,8 @@ sfPrependTexElement.prototype.GenerateInlineElement=function()
 
 sfPrependTexElement.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+        return {value:''};
     return {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 };
 
@@ -648,6 +666,8 @@ sfAppendedTexElement.prototype.GenerateInlineElement=function()
 
 sfAppendedTexElement.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+        return {value:''};
     return  {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 };
 
@@ -736,6 +756,8 @@ sfPrependCheckBoxElement.prototype.GenerateInlineElement=function()
 
 sfPrependCheckBoxElement.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+        return {checked:'n',value:''};
     return  {checked:(rnJQuery('#'+this.Id).find('.redNaoRealCheckBox').is(':checked')?'Yes':'No'),value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 };
 
@@ -821,6 +843,8 @@ sfAppendCheckBoxElement.prototype.GenerateInlineElement=function()
 
 sfAppendCheckBoxElement.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+        return {checked:'n',value:''};
     return  {checked:(rnJQuery('#'+this.Id).find('.redNaoRealCheckBox').is(':checked')?'Yes':'No'),value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 };
 
@@ -921,6 +945,8 @@ sfTextAreaElement.prototype.GenerateInlineElement=function()
 
 sfTextAreaElement.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+        return {value:''};
     return  {value:rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').val()};
 };
 
@@ -1047,6 +1073,11 @@ sfMultipleRadioElement.prototype.GenerateInlineElement=function()
 
 sfMultipleRadioElement.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+    {
+        this.amount=0;
+        return {value:'',amount:0};
+    }
     var jQueryElement=rnJQuery('#'+this.Id).find(':checked');
     if(jQueryElement.length>0)
         this.amount=parseFloat(jQueryElement.val());
@@ -1181,6 +1212,8 @@ sfMultipleCheckBoxElement.prototype.GenerateInlineElement=function()
 sfMultipleCheckBoxElement.prototype.GetValueString=function()
 {
     this.amount=0;
+    if(this.IsIgnored())
+        return [];
     var jQueryElement=rnJQuery('#'+this.Id).find(':checked');
     var data={};
     data.selectedValues=[];
@@ -1195,6 +1228,7 @@ sfMultipleCheckBoxElement.prototype.GetValueString=function()
             data.selectedValues.push({value:rnJQuery(jQueryElement[i]).parent().parent().text().trim(),amount:this.amount,label:rnJQuery(jQueryElement[i]).parent().parent().text().trim()})
         }
     }
+
 
     return data;
 
@@ -1345,6 +1379,11 @@ sfSelectBasicElement.prototype.GenerateInlineElement=function()
 
 sfSelectBasicElement.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+    {
+        this.amount=0;
+        return {value:'',amount:0};
+    }
     var jQueryElement=rnJQuery('#'+this.Id+ ' .redNaoSelect option:selected');
     if(jQueryElement.length>0)
         this.amount=parseFloat(jQueryElement.val());
@@ -1516,6 +1555,8 @@ sfRecurrenceElement.prototype.GenerateInlineElement=function()
 
 sfRecurrenceElement.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+        return {value:''};
     var jQueryElement=rnJQuery('#'+this.Id+ ' .redNaoSelect option:selected');
     return {value:jQueryElement.val()};
 
@@ -1614,6 +1655,8 @@ sfRedNaoDatePicker.prototype.GenerateInlineElement=function()
 
 sfRedNaoDatePicker.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+        return {value:''};
     var selectedDate= rnJQuery('#'+this.Id).find('.redNaoDatePicker').datepicker('getDate');
     if(selectedDate==null)
         selectedDate ="";
@@ -1722,6 +1765,8 @@ sfRedNaoName.prototype.GenerateInlineElement=function()
 
 sfRedNaoName.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+        return {firstName:'',lastName:''};
     return {
         firstName:rnJQuery('#'+this.Id+ ' .redNaoInputFirstName').val(),
         lastName:rnJQuery('#'+this.Id+ ' .redNaoInputLastName').val()
@@ -1909,6 +1954,14 @@ sfRedNaoAddress.prototype.GenerateInlineElement=function()
 
 sfRedNaoAddress.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+        return {streetAddress1:'',
+                streetAddress2:'',
+                city:'',
+                state:'',
+                zip:'',
+                country:''
+        };
     return {
         streetAddress1:rnJQuery('#'+this.Id+ ' .redNaoStreetAddress1').val(),
         streetAddress2:rnJQuery('#'+this.Id+ ' .redNaoStreetAddress2').val(),
@@ -2051,6 +2104,8 @@ sfRedNaoPhone.prototype.GenerateInlineElement=function()
 
 sfRedNaoPhone.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+        return {area:'',phone:''};
     return {
         area:rnJQuery('#'+this.Id+ ' .redNaoInputArea').val(),
         phone:rnJQuery('#'+this.Id+ ' .redNaoInputPhone').val()
@@ -2141,6 +2196,8 @@ sfRedNaoEmail.prototype.GenerateInlineElement=function()
 
 sfRedNaoEmail.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+        return {value:''};
     return {value:rnJQuery('#'+this.Id+ ' .redNaoEmail').val()};
 };
 
@@ -2230,6 +2287,8 @@ sfRedNaoNumber.prototype.GenerateInlineElement=function()
 
 sfRedNaoNumber.prototype.GetValueString=function()
 {
+    if(this.IsIgnored())
+        return {value:''};
     return {value:rnJQuery('#'+this.Id+ ' .redNaoNumber').val()};
 };
 
@@ -2342,7 +2401,7 @@ sfRedNaoCaptcha.prototype.GenerationCompleted=function(jQueryElement)
 
 
 /************************************************************************************* Donation Amount ***************************************************************************************************/
-
+/*
 function sfDonationAmountElement(options)
 {
     sfFormElementBase.call(this,options);
@@ -2391,13 +2450,18 @@ sfDonationAmountElement.prototype.GetValueString=function()
 {
     try
     {
+        if(this.IsIgnored())
+        {
+            this.amount=0;
+            return {value:''};
+        }
         this.amount=parseFloat(rnJQuery('#'+this.Id+ ' .redNaoInputText').val());
     }catch(exception)
     {
 
     }
 
-    return  encodeURI(this.Options.Label)+"="+encodeURI(rnJQuery('#'+this.Id+ ' .redNaoInputText').val());
+    return  {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 };
 
 //noinspection JSUnusedLocalSymbols
@@ -2418,4 +2482,4 @@ sfDonationAmountElement.prototype.IsValid=function()
     {
         return false;
     }
-};
+};*/

@@ -153,8 +153,6 @@ RedNaoFormBuilder.prototype.CreateNewInstanceOfElement = function (element) {
 RedNaoFormBuilder.prototype.GetComponentType = function (element) {
     if (rnJQuery(element).children().first().hasClass('rednaotextinput'))
         return 'rednaotextinput';
-    if (rnJQuery(element).children().first().hasClass('rednaodonationamount'))
-        return 'rednaodonationamount';
     if (rnJQuery(element).children().first().hasClass('rednaopasswordinput'))
         return 'rednaopasswordinput';
     if (rnJQuery(element).children().first().hasClass('rednaosearchinput'))
@@ -249,7 +247,6 @@ RedNaoFormBuilder.prototype.InitializeComponents = function () {
     sfRedNaoCreateFormElementByName('rednaomultipleradios', null).GenerateHtml(rnJQuery("#components .rednaomultipleradios"));
     sfRedNaoCreateFormElementByName('rednaomultiplecheckboxes', null).GenerateHtml(rnJQuery("#components .rednaomultiplecheckboxes"));
     sfRedNaoCreateFormElementByName('rednaoselectbasic', null).GenerateHtml(rnJQuery("#components .rednaoselectbasic"));
-    sfRedNaoCreateFormElementByName('rednaodonationamount', null).GenerateHtml(rnJQuery("#components .rednaodonationamount"));
     sfRedNaoCreateFormElementByName('rednaodonationbutton', null).GenerateHtml(rnJQuery("#components .rednaodonationbutton"));
     sfRedNaoCreateFormElementByName('rednaodonationrecurrence', null).GenerateHtml(rnJQuery("#components .rednaodonationrecurrence"));
     sfRedNaoCreateFormElementByName('rednaosubmissionbutton', null).GenerateHtml(rnJQuery("#components .rednaosubmissionbutton"));

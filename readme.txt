@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: form, forms, form builder, form maker, form creator, form generator, contact form, form widget, form plugin, bootstrap forms, jquery forms, form manager, ajax forms
 Requires at least: 3.3
 Tested up to: 3.9.1
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -71,6 +71,8 @@ This generally happens when your database doesn't support UTF-8 characters, so t
 10. Example of date field
 11. Conditional logic example
 == Changelog ==
+= Smart Forms 2.5 =
+* Update smart forms logic, making required but hidden fields in the forms not required.
 = Smart Forms 2.3 =
 * Updated smart forms's site.
 = Smart Forms 2.0 =
