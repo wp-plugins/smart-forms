@@ -334,3 +334,265 @@ Foundation and other contributors Licensed MIT */.forms-smart-formsSlider .ui-he
     width: 200px; /*must have*/
     height: 200px; /*must have*/
 }
+
+
+/*rules for the plot target div.  These will be cascaded down to all plot elements according to css rules*/
+.forms-smart-forms-target {
+    position: relative;
+    color: #666666;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 1em;
+/*    height: 300px;
+    width: 400px;*/
+}
+
+/*rules applied to all axes*/
+.forms-smart-forms-axis {
+    font-size: 0.75em;
+}
+
+.forms-smart-forms-xaxis {
+    margin-top: 10px;
+}
+
+.forms-smart-forms-x2axis {
+    margin-bottom: 10px;
+}
+
+.forms-smart-forms-yaxis {
+    margin-right: 10px;
+}
+
+.forms-smart-forms-y2axis, .forms-smart-forms-y3axis, .forms-smart-forms-y4axis, .forms-smart-forms-y5axis, .forms-smart-forms-y6axis, .forms-smart-forms-y7axis, .forms-smart-forms-y8axis, .forms-smart-forms-y9axis, .forms-smart-forms-yMidAxis {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+/*rules applied to all axis tick divs*/
+.forms-smart-forms-axis-tick, .forms-smart-forms-xaxis-tick, .forms-smart-forms-yaxis-tick, .forms-smart-forms-x2axis-tick, .forms-smart-forms-y2axis-tick, .forms-smart-forms-y3axis-tick, .forms-smart-forms-y4axis-tick, .forms-smart-forms-y5axis-tick, .forms-smart-forms-y6axis-tick, .forms-smart-forms-y7axis-tick, .forms-smart-forms-y8axis-tick, .forms-smart-forms-y9axis-tick, .forms-smart-forms-yMidAxis-tick {
+    position: absolute;
+    white-space: pre;
+}
+
+
+.forms-smart-forms-xaxis-tick {
+    top: 0px;
+    /* initial position untill tick is drawn in proper place */
+    left: 15px;
+/*    padding-top: 10px;*/
+    vertical-align: top;
+}
+
+.forms-smart-forms-x2axis-tick {
+    bottom: 0px;
+    /* initial position untill tick is drawn in proper place */
+    left: 15px;
+/*    padding-bottom: 10px;*/
+    vertical-align: bottom;
+}
+
+.forms-smart-forms-yaxis-tick {
+    right: 0px;
+    /* initial position untill tick is drawn in proper place */
+    top: 15px;
+/*    padding-right: 10px;*/
+    text-align: right;
+}
+
+.forms-smart-forms-yaxis-tick.forms-smart-forms-breakTick {
+	right: -20px;
+	margin-right: 0px;
+	padding:1px 5px 1px 5px;
+/*	background-color: white;*/
+	z-index: 2;
+	font-size: 1.5em;
+}
+
+.forms-smart-forms-y2axis-tick, .forms-smart-forms-y3axis-tick, .forms-smart-forms-y4axis-tick, .forms-smart-forms-y5axis-tick, .forms-smart-forms-y6axis-tick, .forms-smart-forms-y7axis-tick, .forms-smart-forms-y8axis-tick, .forms-smart-forms-y9axis-tick {
+    left: 0px;
+    /* initial position untill tick is drawn in proper place */
+    top: 15px;
+/*    padding-left: 10px;*/
+/*    padding-right: 15px;*/
+    text-align: left;
+}
+
+.forms-smart-forms-yMidAxis-tick {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.forms-smart-forms-xaxis-label {
+    margin-top: 10px;
+    font-size: 11pt;
+    position: absolute;
+}
+
+.forms-smart-forms-x2axis-label {
+    margin-bottom: 10px;
+    font-size: 11pt;
+    position: absolute;
+}
+
+.forms-smart-forms-yaxis-label {
+    margin-right: 10px;
+/*    text-align: center;*/
+    font-size: 11pt;
+    position: absolute;
+}
+
+.forms-smart-forms-yMidAxis-label {
+    font-size: 11pt;
+    position: absolute;
+}
+
+.forms-smart-forms-y2axis-label, .forms-smart-forms-y3axis-label, .forms-smart-forms-y4axis-label, .forms-smart-forms-y5axis-label, .forms-smart-forms-y6axis-label, .forms-smart-forms-y7axis-label, .forms-smart-forms-y8axis-label, .forms-smart-forms-y9axis-label {
+/*    text-align: center;*/
+    font-size: 11pt;
+    margin-left: 10px;
+    position: absolute;
+}
+
+.forms-smart-forms-meterGauge-tick {
+    font-size: 0.75em;
+    color: #999999;
+}
+
+.forms-smart-forms-meterGauge-label {
+    font-size: 1em;
+    color: #999999;
+}
+
+table.forms-smart-forms-table-legend {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+table.forms-smart-forms-table-legend, table.forms-smart-forms-cursor-legend {
+    background-color: rgba(255,255,255,0.6);
+    border: 1px solid #cccccc;
+    position: absolute;
+    font-size: 0.75em;
+}
+
+td.forms-smart-forms-table-legend {
+    vertical-align:middle;
+}
+
+/*
+These rules could be used instead of assigning
+element styles and relying on js object properties.
+*/
+
+/*
+td.forms-smart-forms-table-legend-swatch {
+    padding-top: 0.5em;
+    text-align: center;
+}
+
+tr.forms-smart-forms-table-legend:first td.forms-smart-forms-table-legend-swatch {
+    padding-top: 0px;
+}
+*/
+
+td.forms-smart-forms-seriesToggle:hover, td.forms-smart-forms-seriesToggle:active {
+    cursor: pointer;
+}
+
+.forms-smart-forms-table-legend .forms-smart-forms-series-hidden {
+    text-decoration: line-through;
+}
+
+div.forms-smart-forms-table-legend-swatch-outline {
+    border: 1px solid #cccccc;
+    padding:1px;
+}
+
+div.forms-smart-forms-table-legend-swatch {
+    width:0px;
+    height:0px;
+    border-top-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 6px;
+    border-right-width: 6px;
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
+}
+
+.forms-smart-forms-title {
+    top: 0px;
+    left: 0px;
+    padding-bottom: 0.5em;
+    font-size: 1.2em;
+}
+
+table.forms-smart-forms-cursor-tooltip {
+    border: 1px solid #cccccc;
+    font-size: 0.75em;
+}
+
+
+.forms-smart-forms-cursor-tooltip {
+    border: 1px solid #cccccc;
+    font-size: 0.75em;
+    white-space: nowrap;
+    background: rgba(208,208,208,0.5);
+    padding: 1px;
+}
+
+.forms-smart-forms-highlighter-tooltip, .forms-smart-forms-canvasOverlay-tooltip {
+    border: 1px solid #cccccc;
+    font-size: 0.75em;
+    white-space: nowrap;
+    background: rgba(208,208,208,0.5);
+    padding: 1px;
+}
+
+.forms-smart-forms-point-label {
+    font-size: 0.75em;
+    z-index: 2;
+}
+
+td.forms-smart-forms-cursor-legend-swatch {
+    vertical-align: middle;
+    text-align: center;
+}
+
+div.forms-smart-forms-cursor-legend-swatch {
+    width: 1.2em;
+    height: 0.7em;
+}
+
+.forms-smart-forms-error {
+/*   Styles added to the plot target container when there is an error go here.*/
+    text-align: center;
+}
+
+.forms-smart-forms-error-message {
+/*    Styling of the custom error message div goes here.*/
+    position: relative;
+    top: 46%;
+    display: inline-block;
+}
+
+div.forms-smart-forms-bubble-label {
+    font-size: 0.8em;
+/*    background: rgba(90%, 90%, 90%, 0.15);*/
+    padding-left: 2px;
+    padding-right: 2px;
+    color: rgb(20%, 20%, 20%);
+}
+
+div.forms-smart-forms-bubble-label.forms-smart-forms-bubble-label-highlight {
+    background: rgba(90%, 90%, 90%, 0.7);
+}
+
+div.forms-smart-forms-noData-container {
+	text-align: center;
+	background-color: rgba(96%, 96%, 96%, 0.3);
+}
+
