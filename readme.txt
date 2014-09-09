@@ -8,7 +8,7 @@ Stable tag: 2.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-With Smart Forms build forms easily by dragging and dropping elements. Create multiple forms like contact forms or advanced forms that need fields calculations or send customizable emails!!.
+Formulas, conditional logic, customized emails, everything you need in an easy to use interface.
 == Description ==
 For more information check: http://smartforms.rednao.com/getit
 **If you have questions or suggestions please let me know in the smart forms official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601**
