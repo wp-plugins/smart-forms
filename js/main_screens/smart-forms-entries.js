@@ -217,11 +217,15 @@ rnJQuery(function () {
         var colmodel=[];
         colmodel.push();
         colmodel.push({"name": "date", "index": "date", "sorttype": "string", "key": false, "editable": false,hidden:false,width:100});
-        for(var i=0;i<formOptions.length;i++)
+        var i;
+        for(i=0;i<formOptions.length;i++)
         {
             var column=RedNaoCreateColumn(formOptions[i]);
             if(column!=null)
-                colmodel.push(column)
+            {
+                for(var t=0;t<column.length;t++)
+                    colmodel.push(column[t]);
+            }
         }
 
         var max=500;

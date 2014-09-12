@@ -42,6 +42,7 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
 
     if($returnComponent==false)
     {
+		echo "<div class='widget'>";
         if($options==null)
             return;
 
@@ -66,6 +67,8 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
         <?php
         if($title)
             echo "</div>";
+
+		echo "</div>";
 
     }else{
         if($options==null)

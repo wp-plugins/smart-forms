@@ -1,4 +1,3 @@
-
 function smartFormGenerator(options){
     this.client_form_options=options.client_form_options;
     this.InitializeConditionalLogic();
@@ -53,7 +52,8 @@ smartFormGenerator.prototype.CreateForm=function(){
     this.JQueryForm=rnJQuery('<form ></form>');
     this.JQueryForm.css('visibility','hidden');
     container.append(this.JQueryForm);
-    for(var i=0;i<this.RedNaoFormElements.length;i++)
+    var i;
+    for(i=0;i<this.RedNaoFormElements.length;i++)
     {
         var formElement=this.RedNaoFormElements[i];
         formElement.AppendElementToContainer(this.JQueryForm);
@@ -87,7 +87,7 @@ smartFormGenerator.prototype.CreateForm=function(){
     });
     this.AdjustLayout();
     RedNaoFormulaManagerVar.RefreshAllFormulasAndConditionalLogic();
-    for(var i=0;i<this.client_form_options.Conditions.length;i++)
+    for(i=0;i<this.client_form_options.Conditions.length;i++)
     {
         this.client_form_options.Conditions[i].Initialize(this,RedNaoFormulaManagerVar.Data);
     }
@@ -140,12 +140,23 @@ smartFormGenerator.prototype.AdjustLayout=function()
 
         var label=element.find('.rednao_label_container');
         if(label.length>0)
-            maxWidth=Math.max(maxWidth,label[0].getBoundingClientRect().width);
+        {
+            if(!SmartFormsIsIE8OrEarlier())
+                maxWidth=Math.max(maxWidth,label[0].getBoundingClientRect().width);
+            else
+                maxWidth=Math.max(maxWidth,label.width());
+        }
         labelArray.push(label);
 
         var control=element.find('.redNaoControls');
         if(control.length>0)
-            maxControlWidth=Math.max(maxControlWidth,control[0].getBoundingClientRect().width);
+        {
+            if(!SmartFormsIsIE8OrEarlier())
+                maxControlWidth=Math.max(maxControlWidth,control[0].getBoundingClientRect().width);
+            else
+                maxControlWidth=Math.max(maxControlWidth,control.width());
+        }
+
         controlsArray.push(control);
     }
 
@@ -383,6 +394,18 @@ smartFormGenerator.prototype.SendToSmartDonations=function(formValues,isUsingAFi
 smartFormGenerator.prototype.SaveCompleted=function(result){
     rnJQuery('body, input[type="submit"]').removeClass('redNaoWait');
     this.JQueryForm.find('input[type="submit"]').removeAttr('disabled');
+
+    if(typeof result.AdditionalActions!='undefined')
+    {
+        for(var i=0;i<result.AdditionalActions.length;i++)
+        {
+            if(result.AdditionalActions[0].Action=="RedirectTo")
+            {
+                window.location=result.AdditionalActions[0].Value;
+                return;
+            }
+        }
+    }
 
     if(typeof result.refreshCaptcha!='undefined'&&result.refreshCaptcha=='y')
     {

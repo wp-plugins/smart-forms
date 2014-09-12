@@ -105,3 +105,21 @@ Object.isNullOrEmpty=function(object){
          alert('abc');
      }
  }
+
+rnJQuery.getWaitCursor=function()
+{
+    if(typeof rnJQuery.waitCursor=='undefined')
+        rnJQuery.waitCursor=rnJQuery('<img src="'+smartFormsRootPath+'images/wait.gif" style="position:absolute;"/>');
+    return rnJQuery.waitCursor;
+}
+rnJQuery.fn.wait=function(){
+    var offset=rnJQuery(this).offset();
+    offset.left+=rnJQuery(this).outerWidth()+2;
+
+    rnJQuery('body').append(rnJQuery.getWaitCursor().css('display','block').offset(offset));
+};
+
+rnJQuery.unwait=function()
+{
+    rnJQuery.getWaitCursor().css('display','none');
+}

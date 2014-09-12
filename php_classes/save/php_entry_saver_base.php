@@ -1,30 +1,34 @@
 <?php
 
 class php_entry_saver_base {
-    private $FormId;
-    private $FormEntryData;
-    private $FormOptions;
-    private $ElementOptions;
-    private $Captcha;
-    private $ReferenceId;
+    private $FormId=null;
+    private $FormEntryData=null;
+    private $FormOptions=null;
+    private $ElementOptions=null;
+    private $Captcha=null;
+    private $ReferenceId=null;
 	private $EntryId="";
 	private $FormString="";
 
 
-    function __construct($formId,$formString,$captcha,$referenceId="")
+    function __construct($formId,$formString,$captcha,$referenceId="",$formOptions=null,$elementOptions=null)
     {
         $this->FormId = $formId;
         $this->FormString=$formString;
         $this->FormEntryData = json_decode($this->FormString,true);
         $this->Captcha=$captcha;
         $this->ReferenceId=$referenceId;
-        $this->GetFormOptions();
+		$this->FormOptions=$formOptions;
+		$this->ElementOptions=$elementOptions;
     }
 
-
-    public function ProcessEntry()
+    public function ProcessEntry($validateCaptcha=true,$additionalData=array())
     {
-        if($this->FormOptions["UsesCaptcha"]=="y")
+		if($this->FormOptions==null||$this->ElementOptions==null)
+			$this->GetFormOptions();
+
+
+        if($this->FormOptions["UsesCaptcha"]=="y"&&$validateCaptcha==true)
         {
             if(!$this->CaptchaIsValid())
             {
@@ -41,15 +45,65 @@ class php_entry_saver_base {
 				return;
 			}
 		}
+
+		$additionalActions=apply_filters('sf_before_saving_form',array(
+			"ContinueInsertion"=>true,
+			"FormInformation"=>array(
+				"FormId"=>$this->FormId,
+				"FormString"=>$this->FormString,
+				"FormEntryData"=>$this->FormEntryData,
+				"FormOptions"=>$this->FormOptions,
+				"ElementOptions"=>$this->ElementOptions
+			),
+			"AdditionalData"=>$additionalData,
+			"Actions"=>array()
+		));
+
+
+		if($additionalActions["ContinueInsertion"]==false)
+		{
+			echo json_encode(
+				array(
+					"message"=>__("Information submitted successfully."),
+					"success"=>"y",
+					"AdditionalActions"=>$additionalActions["Actions"]
+				)
+			);
+
+			return false;
+		}
+
        	$result=$this->ExecuteInsertions();
         if($this->FormOptions["SendNotificationEmail"]=="y")
             $this->SendFormEmail($this->FormOptions["Emails"][0],$this->FormEntryData,$this->ElementOptions,false);
 
+
         if($result==true)
-            echo '{"message":"'.__("Information submitted successfully.").'","success":"y"}';
+		{
+			$additionalActions=apply_filters('sf_submitted_successfully',array(
+				"FormId"=>$this->FormId,
+				"FormEntryData"=>$this->FormEntryData,
+				"FormOptions"=>$this->FormOptions,
+				"ElementOptions"=>$this->ElementOptions,
+				"Actions"=>array()
+			));
+
+			echo json_encode(
+				array(
+					"message"=>__("Information submitted successfully."),
+					"success"=>"y",
+					"AdditionalActions"=>$additionalActions["Actions"]
+				)
+			);
+			return true;
+		}
         else
+		{
             echo '{"message":"'.__("An error occurred, please try again later.").'","success":"n"}';
-        return;
+			return false;
+		}
+
+
     }
 
     private function ExecuteInsertions()
@@ -199,5 +253,47 @@ class php_entry_saver_base {
 
 function SmartFormsOverwriteHandleUpload($upload)
 {
+
+}
+
+function GetPHPFormula($formula)
+{
+	$fieldPattern='/\\[field ([^\\]]+)/';
+	preg_match_all($fieldPattern,$formula, $matches, PREG_PATTERN_ORDER);
+
+	foreach($matches[1] as $match)
+	{
+		$formula=str_replace("[field $match]","formData[$match]['amount']",$formula);
+	}
+
+	return $formula;
+}
+
+function SmartFormsGetFormattedFormValues($formValues,$elementOptions)
+{
+	include_once(SMART_FORMS_DIR.'string_renderer/rednao_string_builder.php');
+	include_once(SMART_FORMS_DIR.'smart-forms-ajax.php');
+	$stringBuilder=new rednao_string_builder();
+	$processedData=array();
+	foreach($formValues as $key=>$value)
+	{
+		$element=null;
+		foreach($elementOptions as $item)
+		{
+			if($item["Id"]==$key)
+			{
+				$element=$item;
+				break;
+			}
+		}
+
+		if($element!=null)
+		{
+			 $processedData[]=array("name"=>$element["Label"],
+			 						"value"=>$stringBuilder->GetStringFromColumn($element,$value));
+		}
+	}
+
+	return $processedData;
 
 }

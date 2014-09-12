@@ -1,4 +1,9 @@
 "use strict";
+
+function SmartFormsIsIE8OrEarlier()
+{
+    return navigator.appVersion.indexOf("MSIE 7.")!=-1||navigator.appVersion.indexOf("MSIE 8.")!=-1||navigator.appVersion.indexOf("MSIE 9.")!=-1
+}
 /************************************************************************************* Formula Methods ***************************************************************************************************/
 var SmartFormsStyleScopeField=1;
 //used in an string that is evaluated as function
@@ -33,7 +38,7 @@ function RedNaoListContainsValue(options,value)
     for(var i=0;i<arrayOfValues.length;i++)
     {
         for(var h=0;h<options.length;h++)
-            if(options[h].toLowerCase().trim()==arrayOfValues[i].label.toLowerCase().trim())
+            if(rnJQuery.trim(options[h].toLowerCase())==rnJQuery.trim(arrayOfValues[i].label.toLowerCase()))
                 return true;
     }
 
@@ -360,7 +365,7 @@ sfFormElementBase.prototype.ApplyAllStyles=function()
 
 sfFormElementBase.prototype.ApplyTagStyleForElement=function(elementName)
 {
-    if(typeof this.Options.Styles[elementName]=='undefined')
+    if(typeof this.Options.Styles[elementName]=='undefined'||SmartFormsIsIE8OrEarlier())
         return;
 
     var style="";
@@ -1083,7 +1088,7 @@ sfMultipleRadioElement.prototype.GetValueString=function()
         this.amount=parseFloat(jQueryElement.val());
     if(isNaN(this.amount))
         this.amount=0;
-    return  {value:rnJQuery.trim(jQueryElement.parent().parent().text().trim()),amount:this.amount};
+    return  {value:rnJQuery.trim(jQueryElement.parent().parent().text()),amount:this.amount};
 };
 
 
@@ -1225,7 +1230,7 @@ sfMultipleCheckBoxElement.prototype.GetValueString=function()
                 this.amount=parseFloat(rnJQuery(jQueryElement[i]).val());
             if(isNaN(this.amount))
                 this.amount=0;
-            data.selectedValues.push({value:rnJQuery(jQueryElement[i]).parent().parent().text().trim(),amount:this.amount,label:rnJQuery(jQueryElement[i]).parent().parent().text().trim()})
+            data.selectedValues.push({value:rnJQuery.trim(rnJQuery(jQueryElement[i]).parent().parent().text()),amount:this.amount,label:rnJQuery.trim(rnJQuery(jQueryElement[i]).parent().parent().text())})
         }
     }
 
@@ -1658,11 +1663,15 @@ sfRedNaoDatePicker.prototype.GetValueString=function()
     if(this.IsIgnored())
         return {value:''};
     var selectedDate= rnJQuery('#'+this.Id).find('.redNaoDatePicker').datepicker('getDate');
+    var dateLabel='';
     if(selectedDate==null)
         selectedDate ="";
     else
+    {
         selectedDate=selectedDate.getFullYear()+'-'+(selectedDate.getMonth()+1)+'-'+selectedDate.getDate();
-    return {value:selectedDate};
+        dateLabel=rnJQuery('#'+this.Id).find('.redNaoDatePicker').datepicker({dateFormat: this.Options.DateFormat}).val();
+    }
+    return {value:selectedDate,formattedValue:dateLabel};
 
 };
 

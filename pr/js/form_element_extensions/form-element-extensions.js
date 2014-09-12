@@ -122,7 +122,7 @@ sfFileUpload.prototype.GetValueString=function () {
     rnJQuery('#'+this.Id+ ' .sfUploadFileButton').each(function()
     {
         var jqueryFileElement=rnJQuery(this);
-        if(jqueryFileElement.val().trim()!="")
+        if(rnJQuery.trim(jqueryFileElement.val())!="")
         {
             var fieldName="sfufn"+"@"+self.Id+"@"+count.toString();
             jqueryFileElement.attr('name',fieldName);

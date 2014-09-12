@@ -29,10 +29,17 @@ wp_enqueue_script('smart-forms-dragitembehaviors',SMART_FORMS_DIR_URL.'js/formBu
 wp_enqueue_script('smart-forms-conditional-steps',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-handler-steps.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-conditional-handlers',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-handlers.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-conditional-manager',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-logic-manager.js',array('isolated-slider','smart-forms-conditional-handlers'));
-wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',apply_filters('smart_forms_pr_add_new_js_extension',array('isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2','smart-forms-event-manager','smart-forms-conditional-manager')));
+wp_enqueue_script('ismart-forms-add-new',SMART_FORMS_DIR_URL.'js/subscriber_interfaces/ismart-forms-add-new.js');
+wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',apply_filters('ismart-forms-add-new','smart_forms_pr_add_new_js_extension',array('isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2','smart-forms-event-manager','smart-forms-conditional-manager')));
 wp_enqueue_script('smart-forms-icheck',SMART_FORMS_DIR_URL.'js/utilities/iCheck/icheck.min.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-select2',SMART_FORMS_DIR_URL.'js/utilities/select2/select2.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-jsColor',SMART_FORMS_DIR_URL.'js/utilities/jsColor/jscolor.js',array('isolated-slider'));
+
+$additionalJS=apply_filters("sf_form_configuration_on_load_js",array());
+for($i=0;$i<count($additionalJS);$i++){
+	wp_enqueue_script($additionalJS[$i]["handler"],$additionalJS[$i]["path"],array("smart-forms-add-new"));
+}
+
 require_once(SMART_FORMS_DIR.'translations/smart-forms-add-new-translation.php');
 require_once(SMART_FORMS_DIR.'translations/form-elements-translation.php');
 
@@ -79,6 +86,15 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
     <a class='nav-tab' id="smartFormsAfterSubmitTab" onclick="SmartFormsAddNewVar.GoToAfterSubmit();">After Submit</a>
     <a class='nav-tab' style="display: none;" id="smartFormsCSSTab" onclick="SmartFormsAddNewVar.GoToSmartDonations();">CSS</a>
 
+	<?php
+		$tabs=array();
+		$tabs=apply_filters("sf_form_configuration_on_load_tabs",$tabs);
+		for($i=0;$i<count($tabs);$i++)
+		{
+			echo '<a id="smartFormsCustom'.$i.'Tab" class="nav-tab sfcustomtab" onclick="SmartFormsAddNewVar.GoToCustomTab('.$i.');" >'.esc_html($tabs[$i]["name"]).'</a>';
+		}
+	?>
+
     <?php
         if(has_smart_donations_license_and_is_active())
         {
@@ -91,6 +107,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 </h2>
 <div id="redNaoGeneralInfo">
 <div id="redNaoEmailEditor" title="Email" style="display: none;">
+	<a target="_blank" style="float: right;margin-right: 10px;margin-top: 10px;" href="http://smartforms.rednao.com/not-receiving-form-submission-in-your-email/">Not receiving the email?</a>
     <table>
         <tr>
             <td style="text-align: right">From email address</td><td> <input placeholder="Default (wordpress@yoursite.com)" type="text" id="redNaoFromEmail" style="width:300px"></td>
@@ -193,6 +210,15 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
         <button onclick="SmartFormsAddNewVar.Validate()">Validate</button>
     </div>
 </div>
+
+<?php
+	for($i=0; $i<count($tabs);$i++)
+	{
+		echo "<div style='display:none;' class='smartFormsCustomTab'  id='smartFormsCustom".$i."Div'>";
+			echo $tabs[$i]["content"];
+		echo "</div>";
+	}
+?>
 
 <div id="smartFormsCSSDiv" style="display: none">
     <textarea id="smartFormsCSSText"></textarea>
@@ -496,8 +522,8 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
                                     </table>
                                 </div>
 
-								<div id="formConditionalLogicContainer" style="padding:0px;display:none;overflow-x: hidden;">
-									<table id="sfPanelContainer" cellpadding="0" cellspacing="0" style="position: relative; width: 100%;">
+								<div id="formConditionalLogicContainer" style="padding:0;display:none;overflow-x: hidden;">
+									<table id="sfPanelContainer" cellpadding="0" style="position: relative; width: 100%;">
 										<tr>
 											<td style="vertical-align: top;">
 												<table id="sfSavedConditionList" style="width:550px;padding: 5px;">
