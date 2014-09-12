@@ -17,10 +17,15 @@ RedNaoFormula.prototype.FieldUsedInFormula=function(fieldName)
 
 RedNaoFormula.prototype.UpdateFieldWithValue=function(value)
 {
-    var calculatedValue=this.GetValueFromFormula(value);
+    try{
+        var calculatedValue=this.GetValueFromFormula(value);
 
-    RedNaoBasicManipulatorInstance.SetValue(this.FormElement.Options,this.Formula.PropertyName,calculatedValue,this.Formula.additionalInformation);
-    this.FormElement.RefreshElement();
+        RedNaoBasicManipulatorInstance.SetValue(this.FormElement.Options,this.Formula.PropertyName,calculatedValue,this.Formula.additionalInformation);
+        this.FormElement.RefreshElement();
+    }catch(exception)
+    {
+
+    }
 }
 
 RedNaoFormula.prototype.GetValueFromFormula=function(values)

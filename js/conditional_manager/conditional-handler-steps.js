@@ -419,10 +419,10 @@ SfHandlerConditionGenerator.prototype.IsValid=function(data)
             return false;
         }
 
-        if(data[i].IsOpeningPar)
+        if(data[i].IsOpeningPar=='y')
             openPar++;
 
-        if(data[i].IsClosingPar)
+        if(data[i].IsClosingPar=='y')
         {
             if(closePar>=openPar)
             {
