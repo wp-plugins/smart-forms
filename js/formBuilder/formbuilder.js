@@ -17,6 +17,7 @@ function RedNaoFormBuilder(smartFormsOptions,formElementsOptions,formClientOptio
     this.extensions=[];
     this.FormBuilderDisabled=false;
     this.Conditions=[];
+    RedNaoEventManager.Publish('AddNewRegisterElementExtensions');
     if(typeof formClientOptions.Conditions!='undefined')
     {
         this.Conditions=formClientOptions.Conditions;

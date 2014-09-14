@@ -16,7 +16,7 @@ SmartFormsAddNewExtension.prototype.AddExtendedElements=function(extensionArray)
 }
 
 var SmartFormsAddNewExtensionVar=null;
-rnJQuery(function()
-{
-    SmartFormsAddNewExtensionVar=new SmartFormsAddNewExtension();
-})
+RedNaoEventManager.Subscribe('AddNewRegisterElementExtensions',function(){
+        SmartFormsAddNewExtensionVar=new SmartFormsAddNewExtension();
+    }
+);
