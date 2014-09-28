@@ -1,6 +1,7 @@
 function RedNaoEmailEditor()
 {
-    rnJQuery( "#redNaoAccordion" ).accordion();
+    rnJQuery( "#redNaoAccordion" ).accordion({ clearStyle: true, autoHeight: false });
+    this.SetUpFixedFields();
     var self=this;
     //noinspection JSUnusedLocalSymbols
     this.Dialog=rnJQuery("#redNaoEmailEditor").dialog(
@@ -17,7 +18,7 @@ function RedNaoEmailEditor()
             },
             beforeClose:function(event,ui)
             {
-               return self.UpdateToEmails();
+               return self.UpdateToEmails()&&self.UpdateFromEmail();
             }
 
 
@@ -25,6 +26,35 @@ function RedNaoEmailEditor()
 
 
 }
+
+RedNaoEmailEditor.prototype.SetUpFixedFields=function()
+{
+    rnJQuery('#rnEmailCurrentDate').click(function(){RedNaoEmailEditorVar.AddFieldToEmail('{"Op":"CurrentDate", "Format":"m/d/y"}')});
+
+};
+
+RedNaoEmailEditor.prototype.UpdateFromEmail=function()
+{
+    var selectedToEmails=rnJQuery('#redNaoFromEmail').select2('val');
+
+    var selectedEmailsString="";
+    for(var i=0;i<selectedToEmails.length;i++)
+    {
+        if(selectedToEmails[i].indexOf("[field")==0)
+        {
+            if(!RedNaoLicensingManagerVar.LicenseIsValid('Sorry, you can\'t add fields to the "To Email" box in this version, please use only emails '))
+            {
+                return false;
+            }
+        }
+        selectedEmailsString=selectedToEmails[i];
+    }
+    this.Emails[0].FromEmail=selectedEmailsString;
+    return true;
+};
+
+
+
 RedNaoEmailEditor.prototype.UpdateToEmails=function()
 {
     var selectedToEmails=rnJQuery('#redNaoToEmail').select2('val');
@@ -44,7 +74,7 @@ RedNaoEmailEditor.prototype.UpdateToEmails=function()
     this.Emails[0].ToEmail=selectedEmailsString;
     return true;
 };
-RedNaoEmailEditor.prototype.SetupEmailTo=function(emailToOptions,alreadySelectedEmails)
+RedNaoEmailEditor.prototype.SetupEmailTo=function(emailToOptions,alreadySelectedEmails,jQuerySelect,callBack,multiple)
 {
     var selectOptions='<optgroup label="'+smartFormsTranslation.SelectAField+'">';
     selectOptions+=emailToOptions;
@@ -66,44 +96,58 @@ RedNaoEmailEditor.prototype.SetupEmailTo=function(emailToOptions,alreadySelected
     selectOptions+='</optgroup>';
 
     var self=this;
-    rnJQuery('#redNaoToEmail').empty();
-    rnJQuery('#redNaoToEmail').append(selectOptions);
-    rnJQuery('#redNaoToEmail').select2(
-        {
-            placeholder: "Type email or field (e.g. example@gmail.com)",
-            allowClear: true
-        }
+    var select2Options={
+        placeholder: "Type email or field (e.g. example@gmail.com)",
+        allowClear: true
+    };
+
+    if(!multiple)
+        select2Options.maximumSelectionSize;
+
+    jQuerySelect.empty();
+    jQuerySelect.append(selectOptions);
+    jQuerySelect.select2(
+        select2Options
         ).unbind("dropdown-closed")
         .on("dropdown-closed", function(event) {
-            self.AddEmailIfValid(event.val);
+            callBack(event.val);
+
         });
 
-    rnJQuery('#redNaoToEmail').select2('val',alreadySelectedEmails);
+    jQuerySelect.select2('val',alreadySelectedEmails);
     rnJQuery('#redNaoEmailEditor .select2-input').on('keyup', function(e) {
         if(e.which==13||e.which == 32)
         {
+
             var text=rnJQuery(this).val().trim();
-            self.AddEmailIfValid(text);
+            callBack(text);
+
         }
     });
 };
 
-RedNaoEmailEditor.prototype.AddEmailIfValid=function(text)
+RedNaoEmailEditor.prototype.AddEmailIfValid=function(text,select,multiple)
 {
     if(text.trim()=="")
         return;
+    if(!multiple&&select.select2('val').length>0)
+    {
+        alert('You can only have one email in this field');
+        return;
+    }
+
     if(sfRedNaoEmail.prototype.EmailIsValid(text))
-        this.AddEmail(text);
+        this.AddEmail(text,select);
     else
         alert('Please type a valid email');
 };
 
-RedNaoEmailEditor.prototype.AddEmail=function(email)
+RedNaoEmailEditor.prototype.AddEmail=function(email,select)
 {
-    rnJQuery('#redNaoToEmail').append(rnJQuery('<option>', {value:email, text: email}));
-    var selectedValues=rnJQuery('#redNaoToEmail').select2('val');
+    select.append(rnJQuery('<option>', {value:email, text: email}));
+    var selectedValues=select.select2('val');
     selectedValues.push(email);
-    rnJQuery('#redNaoToEmail').select2('val',selectedValues);
+    select.select2('val',selectedValues);
 
 };
 
@@ -124,8 +168,10 @@ RedNaoEmailEditor.prototype.OpenEmailEditor=function(redNaoFormElements,emails)
         }
     }
 
+    var self=this;
     var selectedToEmails=emails[0].ToEmail;
-    this.SetupEmailTo(emailToOptions,RedNaoGetValueOrEmpty(selectedToEmails).split(','));
+    this.SetupEmailTo(emailToOptions,RedNaoGetValueOrEmpty(selectedToEmails).split(','),rnJQuery('#redNaoToEmail'),function(text){self.AddEmailIfValid(text,rnJQuery('#redNaoToEmail'),true);},true);
+    this.SetupEmailTo(emailToOptions,RedNaoGetValueOrEmpty(emails[0].FromEmail).split(','),rnJQuery('#redNaoFromEmail'),function(text){self.AddEmailIfValid(text,rnJQuery('#redNaoFromEmail'),false);},false);
 };
 
 

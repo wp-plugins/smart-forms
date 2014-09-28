@@ -2396,7 +2396,13 @@ sfRedNaoCaptcha.prototype.StoresInformation=function()
 //noinspection JSUnusedLocalSymbols
 sfRedNaoCaptcha.prototype.GenerationCompleted=function(jQueryElement)
 {
-    rnJQuery.getScript("http://www.google.com/recaptcha/api/js/recaptcha_ajax.js", function(){
+    var url='';
+    if(location.protocol == 'https:')
+        url="https://www.google.com/recaptcha/api/js/recaptcha_ajax.js";
+    else
+        url="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js";
+
+    rnJQuery.getScript(url, function(){
         //noinspection JSUnresolvedVariable
         Recaptcha.create("6Lf2J-wSAAAAACCijq50oACQRuvrsmNt9DeUsE-7",
             'captchaComponent',

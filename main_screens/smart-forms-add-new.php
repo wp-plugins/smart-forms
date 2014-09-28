@@ -110,7 +110,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 	<a target="_blank" style="float: right;margin-right: 10px;margin-top: 10px;" href="http://smartforms.rednao.com/not-receiving-form-submission-in-your-email/">Not receiving the email?</a>
     <table>
         <tr>
-            <td style="text-align: right">From email address</td><td> <input placeholder="Default (wordpress@yoursite.com)" type="text" id="redNaoFromEmail" style="width:300px"></td>
+            <td style="text-align: right">From email address</td><td> <select  multiple="multiple"  type="text" id="redNaoFromEmail" style="width:300px"></td>
         </tr>
 
         <tr>
@@ -172,7 +172,12 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 
             </ul>
         </div>
-
+		<h3>Fixed Values</h3>
+		<div>
+			<ul id="redNaoEmailFormfields">
+				<button id="rnEmailCurrentDate">Current Date</button>
+			</ul>
+		</div>
     </div>
     </div>
     <div style="text-align: right;clear: both;">

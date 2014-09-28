@@ -173,10 +173,35 @@ function rednao_smart_forms_save_form_values()
     die();*/
 }
 
+function rednao_get_fixed_field_value($match)
+{
 
+	$fixedFieldParameters=json_decode($match,true);
+	if($fixedFieldParameters==null)
+	{
+		error_log('error parsing fixed field');
+		return '';
+	}
+	if($fixedFieldParameters["Op"]=="CurrentDate")
+	{
+		try{
+			return date($fixedFieldParameters["Format"]);
+		}catch(Exception $e)
+		{
+			error_log("Couldn't format date ".$e->getMessage());
+		}
+
+	}
+}
 
 function GetValueByField($stringBuilder,$match,$entryData,$elementOptions,$useTestData)
 {
+	if(strpos(trim($match),'{')===0)
+	{
+
+		return rednao_get_fixed_field_value($match);
+	}
+
     foreach($entryData as $key=>$value)
     {
         $element=null;

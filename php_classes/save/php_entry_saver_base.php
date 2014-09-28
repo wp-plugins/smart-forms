@@ -160,9 +160,26 @@ class php_entry_saver_base {
             $EmailText=str_replace("[field $match]",$value,$EmailText);
         }
 
+
+		if(strpos($FromEmail,"[field")===0)
+		{
+			preg_match_all($fieldPattern,$FromEmail, $matches, PREG_PATTERN_ORDER);
+			if(count($matches[1])>0)
+			{
+				$field=$matches[1][0];
+				$value=GetValueByField($stringBuilder,$field,$entryData,$elementOptions,$useTestData);
+				$FromEmail=$value;
+			}else{
+				$FromEmail="";
+				error_log('the to email field was not found');
+			}
+
+		}
+
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
-        $headers.= "From: $FromName <$FromEmail>";
+        $headers.= "From: $FromName <$FromEmail>". "\r\n";
+		$headers.= "Reply-To: $FromName <$FromEmail>";
         if(trim($ToEmail)!="")
         {
 
