@@ -51,12 +51,13 @@ RedNaoEmailEditor.prototype.ExecuteFixedFieldButton=function(buttonProperties)
 {
     var op={};
     op.Op=buttonProperties.Op;
+    //noinspection JSUnresolvedVariable
     for(var param in buttonProperties.Parameters)
     {
         op[param]=buttonProperties.Parameters[param];
     }
     RedNaoEmailEditorVar.AddFieldToEmail(JSON.stringify(op));
-}
+};
 
 RedNaoEmailEditor.prototype.UpdateFromEmail=function()
 {
@@ -120,14 +121,14 @@ RedNaoEmailEditor.prototype.SetupEmailTo=function(emailToOptions,alreadySelected
 
     selectOptions+='</optgroup>';
 
-    var self=this;
+
     var select2Options={
         placeholder: "Type email or field (e.g. example@gmail.com)",
         allowClear: true
     };
 
     if(!multiple)
-        selectOptions.maximumSelectionSize=1;
+        select2Options.maximumSelectionSize=1;
 
     jQuerySelect.empty();
     jQuerySelect.append(selectOptions);
