@@ -33,7 +33,7 @@ RedNaoEmailEditor.prototype.SetUpFixedFields=function()
     for(var i=0;i<smartFormsFixedFields.length;i++)
     {
         var button=this.CreateFixedFieldButton(smartFormsFixedFields[i]);
-        fixedFieldList.append(button);
+        fixedFieldList.append(button.wrap('<li></li>'));
     }
    // rnJQuery('#rnEmailCurrentDate').click(function(){RedNaoEmailEditorVar.AddFieldToEmail('{"Op":"CurrentDate", "Format":"m/d/y"}')});
 
