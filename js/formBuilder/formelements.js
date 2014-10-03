@@ -188,9 +188,9 @@ sfFormElementBase.prototype.IsIgnored=function()
 };
 
 
-sfFormElementBase.prototype.FirePropertyChanged=function(val){
+sfFormElementBase.prototype.FirePropertyChanged=function(){
 
-    RedNaoEventManager.Publish('formPropertyChanged',{FieldName:this.Id, Value:val});
+    RedNaoEventManager.Publish('formPropertyChanged',{FieldName:this.Id, Value:this.GetValueString()});
 
 };
 
@@ -344,6 +344,11 @@ sfFormElementBase.prototype.GetValuePath=function()
 sfFormElementBase.prototype.GetLabelPath=function()
 {
     return 'formData.'+this.Id+'.label';
+};
+
+sfFormElementBase.prototype.GetNumericalValuePath=function()
+{
+    return 'formData.'+this.Id+'.numericalValue';
 };
 
 sfFormElementBase.prototype.GetStyleTagForElement=function(elementName)
@@ -520,7 +525,7 @@ sfTextInputElement.prototype.IsValid=function()
 sfTextInputElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged();});
 };
 
 /************************************************************************************* Prepend Text Element ***************************************************************************************************/
@@ -609,7 +614,7 @@ sfPrependTexElement.prototype.IsValid=function()
 sfPrependTexElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged();});
 };
 
 /************************************************************************************* Appended Text Element ***************************************************************************************************/
@@ -695,7 +700,7 @@ sfAppendedTexElement.prototype.IsValid=function()
 sfAppendedTexElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged();});
 };
 
 
@@ -786,7 +791,7 @@ sfPrependCheckBoxElement.prototype.IsValid=function()
 sfPrependCheckBoxElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoInputText,#'+this.Id+' .redNaoRealCheckBox').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    rnJQuery('#'+this.Id+ ' .redNaoInputText,#'+this.Id+' .redNaoRealCheckBox').change(function(){self.FirePropertyChanged();});
 };
 /************************************************************************************* Append Checkbox Element ***************************************************************************************************/
 
@@ -872,7 +877,7 @@ sfAppendCheckBoxElement.prototype.IsValid=function()
 sfAppendCheckBoxElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoInputText,#'+this.Id+' .redNaoRealCheckBox').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    rnJQuery('#'+this.Id+ ' .redNaoInputText,#'+this.Id+' .redNaoRealCheckBox').change(function(){self.FirePropertyChanged();});
 };
 /************************************************************************************* Text Area Element ***************************************************************************************************/
 
@@ -975,7 +980,7 @@ sfTextAreaElement.prototype.IsValid=function()
 sfTextAreaElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').change(function(){self.FirePropertyChanged();});
     if(!isNaN(this.MaxLength))
         rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').bind('keyup keydown',function(){
             var length=rnJQuery(this).val().length;
@@ -1120,7 +1125,7 @@ sfMultipleRadioElement.prototype.SetUpICheck=function(style)
     rnJQuery('#'+this.Id+ ' .redNaoInputRadio').iCheck({radioClass: style});
     rnJQuery('#'+this.Id+ ' .redNaoInputRadio').on('ifChecked', function(event){
         if(event.type ==="ifChecked"){
-            self.FirePropertyChanged(self.GetValueString());
+            self.FirePropertyChanged();
         }
     });
 };
@@ -1267,7 +1272,7 @@ sfMultipleCheckBoxElement.prototype.SetUpICheck=function(style)
     rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').iCheck({checkboxClass: style});
     rnJQuery('#'+this.Id+ ' .redNaoInputCheckBox').on('ifChanged', function(event){
         if(event.type ==="ifChanged"){
-            self.FirePropertyChanged(self.GetValueString());
+            self.FirePropertyChanged();
         }
     });
 };
@@ -1418,7 +1423,7 @@ sfSelectBasicElement.prototype.IsValid=function()
 sfSelectBasicElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoSelect').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    rnJQuery('#'+this.Id+ ' .redNaoSelect').change(function(){self.FirePropertyChanged();});
 };
 
 /*************************************************************************************Donation Button***************************************************************************************************/
@@ -1701,7 +1706,7 @@ sfRedNaoDatePicker.prototype.GenerationCompleted=function(jQueryElement)
     });
 
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoDatePicker').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    rnJQuery('#'+this.Id+ ' .redNaoDatePicker').change(function(){self.FirePropertyChanged();});
 
 
 };
@@ -1815,7 +1820,7 @@ sfRedNaoName.prototype.IsValid=function()
 sfRedNaoName.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoInputFirstName,#'+this.Id+ ' .redNaoInputLastName').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    rnJQuery('#'+this.Id+ ' .redNaoInputFirstName,#'+this.Id+ ' .redNaoInputLastName').change(function(){self.FirePropertyChanged();});
 };
 
 
@@ -2055,7 +2060,7 @@ sfRedNaoAddress.prototype.IsValid=function()
 sfRedNaoAddress.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoStreetAddress1,#'+this.Id+ ' .redNaoStreetAddress2,#'+this.Id+ ' .redNaoCity,#'+this.Id+ ' .redNaoState,#'+this.Id+ ' .redNaoZip,#'+this.Id+ ' .redNaoCountry').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    rnJQuery('#'+this.Id+ ' .redNaoStreetAddress1,#'+this.Id+ ' .redNaoStreetAddress2,#'+this.Id+ ' .redNaoCity,#'+this.Id+ ' .redNaoState,#'+this.Id+ ' .redNaoZip,#'+this.Id+ ' .redNaoCountry').change(function(){self.FirePropertyChanged();});
 };
 
 
@@ -2160,7 +2165,7 @@ sfRedNaoPhone.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputArea,#'+this.Id+ ' .redNaoInputPhone').change(function(){
-        self.FirePropertyChanged(self.GetValueString());
+        self.FirePropertyChanged();
     });
 
     rnJQuery('#'+this.Id+ ' .redNaoInputArea,#'+this.Id+ ' .redNaoInputPhone').ForceNumericOnly();
@@ -2245,7 +2250,7 @@ sfRedNaoEmail.prototype.EmailIsValid=function(email)
 sfRedNaoEmail.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoEmail').change(function(){self.FirePropertyChanged(self.GetValueString());});
+    rnJQuery('#'+this.Id+ ' .redNaoEmail').change(function(){self.FirePropertyChanged();});
 };
 
 
@@ -2350,7 +2355,7 @@ sfRedNaoNumber.prototype.GenerationCompleted=function(jQueryElement)
         if(!self.InputIsValid())
             rnJQuery('#'+self.Id+ ' .redNaoNumber').val('');
 
-        self.FirePropertyChanged(self.GetValueString());});
+        self.FirePropertyChanged();});
     rnJQuery('#'+this.Id+ ' .redNaoNumber').ForceNumericOnly();
 };
 

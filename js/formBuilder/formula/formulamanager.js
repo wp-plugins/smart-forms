@@ -20,11 +20,19 @@ RedNaoFormulaManager.prototype.SetFormulaValue=function(fieldName,data)
     if(RedNaoPathExists(data,'value'))
     {
         data.label=data.value.toString();
+        data.numericalValue=0;
         if(data.value=='')
             data.value=0;
         else
             if(!isNaN(data.value))
+            {
                 data.value=parseFloat(data.value);
+                data.numericalValue=data.value;
+            }
+    }else
+    {
+        data.label='';
+        data.numericalValue=0;
     }
 
     this.Data[fieldName]=data;

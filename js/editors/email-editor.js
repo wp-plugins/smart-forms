@@ -29,9 +29,34 @@ function RedNaoEmailEditor()
 
 RedNaoEmailEditor.prototype.SetUpFixedFields=function()
 {
-    rnJQuery('#rnEmailCurrentDate').click(function(){RedNaoEmailEditorVar.AddFieldToEmail('{"Op":"CurrentDate", "Format":"m/d/y"}')});
+    var fixedFieldList=rnJQuery('#redNaoEmailFormFixedFields');
+    for(var i=0;i<smartFormsFixedFields.length;i++)
+    {
+        var button=this.CreateFixedFieldButton(smartFormsFixedFields[i]);
+        fixedFieldList.append(button);
+    }
+   // rnJQuery('#rnEmailCurrentDate').click(function(){RedNaoEmailEditorVar.AddFieldToEmail('{"Op":"CurrentDate", "Format":"m/d/y"}')});
 
 };
+
+RedNaoEmailEditor.prototype.CreateFixedFieldButton=function(buttonProperties)
+{
+    var self=this;
+    var button=rnJQuery('<button>'+buttonProperties.Label+'</button>');
+    button.click(function(){self.ExecuteFixedFieldButton(buttonProperties)});
+    return button;
+};
+
+RedNaoEmailEditor.prototype.ExecuteFixedFieldButton=function(buttonProperties)
+{
+    var op={};
+    op.Op=buttonProperties.Op;
+    for(var param in buttonProperties.Parameters)
+    {
+        op[param]=buttonProperties.Parameters[param];
+    }
+    RedNaoEmailEditorVar.AddFieldToEmail(JSON.stringify(op));
+}
 
 RedNaoEmailEditor.prototype.UpdateFromEmail=function()
 {

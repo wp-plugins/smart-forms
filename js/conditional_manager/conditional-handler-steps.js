@@ -291,10 +291,15 @@ SfHandlerConditionGenerator.prototype.FieldSelected=function(row,selectedField,c
     if(typeof selectedField.Options.Options=='undefined')
     {
         row.find('.operType').val('text');
-        options="<option value='eq'>equal</option>" +
+        options=
+                "<option value='eq'>equal</option>" +
                 "<option value='neq'>not equal</option>" +
                 "<option value='contains'>contains</option>" +
-                "<option value='ncontains'>not contains</option>";/*+
+                "<option value='ncontains'>not contains</option>"+
+                "<option value='gt'>Great than</option>" +
+                "<option value='get'>Great or equal than</option>" +
+                "<option value='lt'>Less than</option>" +
+                "<option value='let'>Less or equal than</option>";/*+
                 "<option value='empty'>Is Empty</option>"+
                 "<option value='nempty'>Is Not Empty</option>"*/
 
@@ -376,6 +381,9 @@ SfHandlerConditionGenerator.prototype.CompileCondition=function(conditions)
            conditionTxt+=(conditions[i].Op=="contains"?"":"!")+"RedNaoListContainsValue("+JSON.stringify(conditions[i].Value)+",formData."+formElement.Id+") ";
 
         }else{
+            var amount=parseFloat(conditions[i].Value);
+            if(isNaN(amount))
+                amount=0;
             switch(conditions[i].Op)
             {
                 case 'eq':
@@ -389,6 +397,18 @@ SfHandlerConditionGenerator.prototype.CompileCondition=function(conditions)
                     break;
                 case 'ncontains':
                     conditionTxt+=formElement.GetLabelPath()+".toLowerCase().indexOf('"+conditions[i].Value.toLowerCase()+"')==-1 ";
+                    break;
+                case 'gt':
+                    conditionTxt+=formElement.GetNumericalValuePath()+">"+amount.toString()+" ";
+                    break;
+                case 'get':
+                    conditionTxt+=formElement.GetNumericalValuePath()+">="+amount.toString()+" ";
+                    break;
+                case 'lt':
+                    conditionTxt+=formElement.GetNumericalValuePath()+"<"+amount.toString()+" ";
+                    break;
+                case 'let':
+                    conditionTxt+=formElement.GetNumericalValuePath()+"<="+amount.toString()+" ";
                     break;
             }
         }

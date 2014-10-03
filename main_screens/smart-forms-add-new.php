@@ -11,6 +11,8 @@ if(!defined('ABSPATH'))
     die('Forbidden');
 
 require_once(SMART_FORMS_DIR.'integration/smart-donations-integration-license-helper.php');
+require_once(SMART_FORMS_DIR.'filter_listeners/fixed-field-listeners.php');
+
 
 smart_forms_load_license_manager("");
 
@@ -68,6 +70,11 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 
 <script type="text/javascript">
 
+	<?php
+	$emailFixedFieldListeners=array();
+	$emailFixedFieldListeners=apply_filters('smart-forms-get-email-fixed-field-listener',$emailFixedFieldListeners);
+	echo "var smartFormsFixedFields=".json_encode($emailFixedFieldListeners);
+	 ?>
 
     var smartForms_arrow_closed="<?php echo SMART_FORMS_DIR_URL?>images/arrow_right.png";
     var smartForms_arrow_open="<?php echo SMART_FORMS_DIR_URL?>images/arrow_down.png";
@@ -110,7 +117,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 	<a target="_blank" style="float: right;margin-right: 10px;margin-top: 10px;" href="http://smartforms.rednao.com/not-receiving-form-submission-in-your-email/">Not receiving the email?</a>
     <table>
         <tr>
-            <td style="text-align: right">From email address</td><td> <select  multiple="multiple"  type="text" id="redNaoFromEmail" style="width:300px"></td>
+            <td style="text-align: right">From email address</td><td> <select  multiple="multiple"  id="redNaoFromEmail" style="width:300px"></td>
         </tr>
 
         <tr>
@@ -174,8 +181,8 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
         </div>
 		<h3>Fixed Values</h3>
 		<div>
-			<ul id="redNaoEmailFormfields">
-				<button id="rnEmailCurrentDate">Current Date</button>
+			<ul id="redNaoEmailFormFixedFields">
+
 			</ul>
 		</div>
     </div>

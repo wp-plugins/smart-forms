@@ -173,25 +173,27 @@ function rednao_smart_forms_save_form_values()
     die();*/
 }
 
-function rednao_get_fixed_field_value($match)
+function rednao_get_fixed_field_value($match,$entryData)
 {
-
+	require_once(SMART_FORMS_DIR.'filter_listeners/fixed-field-listeners.php');
 	$fixedFieldParameters=json_decode($match,true);
 	if($fixedFieldParameters==null)
 	{
 		error_log('error parsing fixed field');
 		return '';
 	}
-	if($fixedFieldParameters["Op"]=="CurrentDate")
-	{
-		try{
-			return date($fixedFieldParameters["Format"]);
-		}catch(Exception $e)
-		{
-			error_log("Couldn't format date ".$e->getMessage());
-		}
 
+	try{
+		$value=apply_filters("smart-forms-fixed-field-value-".$fixedFieldParameters["Op"],$fixedFieldParameters,$entryData);
+		if($value==$fixedFieldParameters)
+			return "";
+		return $value;
+	}catch(Exception $e)
+	{
+			error_log("Couldn't format date ".$e->getMessage());
 	}
+
+	return "";
 }
 
 function GetValueByField($stringBuilder,$match,$entryData,$elementOptions,$useTestData)
@@ -199,7 +201,7 @@ function GetValueByField($stringBuilder,$match,$entryData,$elementOptions,$useTe
 	if(strpos(trim($match),'{')===0)
 	{
 
-		return rednao_get_fixed_field_value($match);
+		return rednao_get_fixed_field_value($match,$entryData);
 	}
 
     foreach($entryData as $key=>$value)
