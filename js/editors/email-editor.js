@@ -127,7 +127,7 @@ RedNaoEmailEditor.prototype.SetupEmailTo=function(emailToOptions,alreadySelected
     };
 
     if(!multiple)
-        selectOptions.maximumSelectionSize;
+        selectOptions.maximumSelectionSize=1;
 
     jQuerySelect.empty();
     jQuerySelect.append(selectOptions);
