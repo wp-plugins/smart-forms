@@ -32,6 +32,7 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
 	wp_enqueue_script('smart-forms-conditional-handlers',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-handlers.js',array('isolated-slider'));
 	do_action('smart_forms_pr_add_form_elements_extensions');
 	require_once(SMART_FORMS_DIR.'translations/form-elements-translation.php');
+	require_once(SMART_FORMS_DIR.'smart-forms-bootstrap.php');
 
     wp_enqueue_style('smart-forms-Slider',SMART_FORMS_DIR_URL.'css/smartFormsSlider/jquery-ui-1.10.2.custom.min.css');
     wp_enqueue_style('smart-forms-custom-elements',plugin_dir_url(__FILE__).'css/formBuilder/custom.css');
@@ -51,7 +52,7 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
 
         ?>
 
-        <div id="formContainer<?php echo $random?>" class='rednaoFormContainer'></div>
+        <div id="formContainer<?php echo $random?>" class='rednaoFormContainer bootstrap-wrapper'></div>
 
         <script>
             var smartFormsPath="<?php echo plugin_dir_url(__FILE__)?>";
@@ -73,7 +74,7 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
     }else{
         if($options==null)
             return "";
-        return "<div id='formContainer$random' class='rednaoFormContainer'></div>
+        return "<div id='formContainer$random' class='rednaoFormContainer bootstrap-wrapper'></div>
             <script>
                 var smartFormsPath=\"".plugin_dir_url(__FILE__)."\";
                 var smartDonationsRootPath=\"".SMART_DONATIONS_PLUGIN_URL."\";

@@ -40,5 +40,5 @@ function smart_forms_email_original_url($array)
 add_filter('smart-forms-fixed-field-value-OriginalUrl','smart_forms_get_fixed_fields_OriginalUrl',10,2);
 function smart_forms_get_fixed_fields_OriginalUrl($fieldParameters,$formData)
 {
-	return "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+	return $_POST['requestUrl'];
 }

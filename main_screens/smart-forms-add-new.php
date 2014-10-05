@@ -12,7 +12,7 @@ if(!defined('ABSPATH'))
 
 require_once(SMART_FORMS_DIR.'integration/smart-donations-integration-license-helper.php');
 require_once(SMART_FORMS_DIR.'filter_listeners/fixed-field-listeners.php');
-
+require_once(SMART_FORMS_DIR.'smart-forms-bootstrap.php');
 
 smart_forms_load_license_manager("");
 
@@ -84,8 +84,10 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 
 </script>
 
-<div style="text-align: left;" >
-	<button style="width:150px;cursor: hand;cursor: pointer;" id="smartFormsSaveButton" >Save</button>
+<div style="text-align: left;" class="bootstrap-wrapper">
+	<button style="width:100px;cursor: hand;cursor: pointer;" class="btn btn-success ladda-button" id="smartFormsSaveButton"  data-style="expand-left" onclick="return false;" >
+		<span class="glyphicon glyphicon-floppy-disk"></span><span class="ladda-label">Save</span>
+	</button>
 </div>
 <h2 class="nav-tab-wrapper" id="smartFormsTopTab">
     <a class='nav-tab nav-tab-active' id="smartFormsGeneralTab"  onclick="SmartFormsAddNewVar.GoToGeneral();">General Info</a>
@@ -196,7 +198,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 	<table style="width: 100%;height: 100%;">
 		<tr>
 			<td style="width: 550px;">
-				<div id="styleEditorPreview" class="rednaoFormContainer" style="width: 100%;height: 100%;">
+				<div id="styleEditorPreview" class="rednaoFormContainer " style="width: 100%;height: 100%;">
 					<table style="width: 100%;height: 100%;">
 						<tr>
 							<td style="vertical-align: middle;" id="smartFormStyleEditorContainer">
@@ -359,8 +361,8 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 
 <hr style="margin:20px 0 0 -17px;"/>
 
-       <div id="redNaoFormBackground" style="background-color: #efefef;">
-            <div class="rednaoformbuilder container rednaoFormContainer">
+       <div id="redNaoFormBackground" class="bootstrap-wrapper" style="background-color: #efefef;">
+            <div class="rednaoformbuilder container rednaoFormContainer" style="margin:0;">
 
                 <table style="border-collapse: collapse;background-color: #efefef;">
                     <tr>
@@ -473,9 +475,9 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
                                                             </div>
                                                         </div>
                                                         <div class="component">
-                                                            <div class="control-group rednaocaptcha">
-                                                                <div class="rednao_label_container"><label class="rednao_control_label">Captcha</label></div>
-                                                                <div class="control-group redNaoControls rednaocaptcha">
+                                                            <div class="control-group row rednaocaptcha">
+                                                                <div class="rednao_label_container col-sm-3"><label class="rednao_control_label">Captcha</label></div>
+                                                                <div class="control-group redNaoControls rednaocaptcha col-sm-9">
                                                                     <img style="width:300px;height:116px;" src="<?php echo SMART_FORMS_DIR_URL?>images/captcha.png"/>
                                                                 </div>
                                                             </div>

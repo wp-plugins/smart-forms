@@ -49,7 +49,7 @@ smartFormGenerator.prototype.SetDefaultIfUndefined=function(propertyName,default
 smartFormGenerator.prototype.CreateForm=function(){
     var container=this.GetRootContainer();
     container.empty();
-    this.JQueryForm=rnJQuery('<form ></form>');
+    this.JQueryForm=rnJQuery('<form class="form-horizontal" ></form>');
     this.JQueryForm.css('visibility','hidden');
     container.append(this.JQueryForm);
     var i;
@@ -85,7 +85,9 @@ smartFormGenerator.prototype.CreateForm=function(){
         e.stopPropagation();
         self.SaveForm();
     });
-    this.AdjustLayout();
+    if(this.JQueryForm.width()<=500)
+        this.JQueryForm.parent().addClass('compact');
+    //this.AdjustLayout();
     RedNaoFormulaManagerVar.RefreshAllFormulasAndConditionalLogic();
     for(i=0;i<this.client_form_options.Conditions.length;i++)
     {
@@ -276,7 +278,8 @@ smartFormGenerator.prototype.SendToSmartForms=function(formValues,isUsingAFileUp
     var data={
         form_id:this.form_id,
         action:"rednao_smart_forms_save_form_values",
-        formString:JSON.stringify(formValues)
+        formString:JSON.stringify(formValues),
+        requestUrl:document.URL
     };
 
 

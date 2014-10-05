@@ -249,14 +249,11 @@ SmartFormsAddNew.prototype.ExecuteSaveRequest=function(formOptions,clientFormOpt
     data.extensions={};
 
     var self=this;
-    rnJQuery('#smartFormsSaveButton').text('Saving...').wait();
-    rnJQuery('#smartFormsSaveButton').attr('disabled','disabled');
+    rnJQuery('#smartFormsSaveButton').RNWait('start');
     data.id=this.id;
     data.action="rednao_smart_forms_save";
     rnJQuery.post(ajaxurl,data,function(result){
-        rnJQuery('#smartFormsSaveButton').text('Save');
-        rnJQuery('#smartFormsSaveButton').removeAttr('disabled');
-        rnJQuery.unwait();
+        rnJQuery('#smartFormsSaveButton').RNWait('stop');
         result=rnJQuery.parseJSON(result);
         alert(result.Message);
         if(result.Message=="saved")

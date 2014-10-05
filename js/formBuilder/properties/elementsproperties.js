@@ -161,7 +161,7 @@ CheckBoxProperty.prototype=Object.create(ElementPropertiesBase.prototype);
 
 CheckBoxProperty.prototype.GenerateHtml=function()
 {
-    var newProperty=rnJQuery('<td style="text-align: right"><label class="checkbox control-group" style="display: block;">'+this.PropertyTitle+'</label></td>\
+    var newProperty=rnJQuery('<td style="text-align: right"><label class="checkbox control-group rednao-properties-control-label" style="display: block;">'+this.PropertyTitle+'</label></td>\
                 <td style="text-align: left"><input type="checkbox" class="input-inline field" name="checked" id="'+this.PropertyId+'" '+(this.GetPropertyCurrentValue()=='y'? 'checked="checked"':'')+'/></td>');
 
     var self=this;
@@ -192,7 +192,7 @@ ArrayProperty.prototype.GenerateHtml=function()
 {
     var currentValues=this.GetPropertyCurrentValue();
     var self=this;
-    var newProperty=rnJQuery('<td style="vertical-align: top;text-align: right;"><label class="checkbox control-group" style="display: block;vertical-align: top;">'+this.PropertyTitle+'</label></td><td style="text-align: left">'+this.GetItemList(currentValues)+'</td>');
+    var newProperty=rnJQuery('<td style="vertical-align: top;text-align: right;"><label class="checkbox control-group rednao-properties-control-label" style="display: block;vertical-align: top;">'+this.PropertyTitle+'</label></td><td style="text-align: left">'+this.GetItemList(currentValues)+'</td>');
     newProperty.find('table').append("<tr><td style='border-bottom-style: none;'><button class='redNaoPropertyClearButton' value='None'>Clear</button></td></tr></table>");
     newProperty.find('.redNaoPropertyClearButton').click(function(event)
     {

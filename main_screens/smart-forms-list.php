@@ -3,6 +3,7 @@
 
 <?php
 include_once(SMART_FORMS_DIR.'smart-forms-license.php');
+require_once(SMART_FORMS_DIR.'smart-forms-bootstrap.php');
 
 if(!defined('ABSPATH'))
     die('Forbidden');
@@ -29,8 +30,9 @@ if($action==="add"||$action=="clone"){
 
 if($action!=="edit")
 {
-	echo "<h1>".__("Forms")."</h1>";
-	echo sprintf('<h2 ><a style="color:blue; text-decoration: underline;" href="?page=%s&action=%s">'.__("Add New").'</a></h2>',$_REQUEST['page'],'add');
+
+	echo "<div class='bootstrap-wrapper'><h1>".__("Forms")."</h1>";
+	echo sprintf(' <a href="?page=%s&action=%s" class="btn btn-default btn-success" ><span class="glyphicon glyphicon-plus" ></span>Add New</a></div>',$_REQUEST['page'],'add');
 }
 
 

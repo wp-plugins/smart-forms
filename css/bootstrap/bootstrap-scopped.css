@@ -1416,8 +1416,7 @@
   margin-left: auto;
 }
 .bootstrap-wrapper .row {
-  margin-right: -15px;
-  margin-left: -15px;
+    margin-bottom: 10px;
 }
 .bootstrap-wrapper .col-xs-1,
 .bootstrap-wrapper .col-sm-1,
@@ -1469,7 +1468,6 @@
 .bootstrap-wrapper .col-lg-12 {
   position: relative;
   min-height: 1px;
-  padding-right: 15px;
   padding-left: 15px;
 }
 .bootstrap-wrapper .col-xs-1,
@@ -2785,8 +2783,7 @@
   min-height: 27px;
 }
 .bootstrap-wrapper .form-horizontal .form-group {
-  margin-right: -15px;
-  margin-left: -15px;
+
 }
 @media (min-width: 768px) {
   .bootstrap-wrapper .form-horizontal .control-label {

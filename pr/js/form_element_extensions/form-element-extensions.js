@@ -29,24 +29,24 @@ sfFileUpload.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"Multiple","Multiple files",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
-}
+};
 
 sfFileUpload.prototype.GenerateInlineElement=function()
 {
-    var disabled="";
-    return '<div class="rednao_label_container"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
-            <div class="redNaoControls"></div>';
-}
+    return '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label" >'+this.Options.Label+'</label></div>\
+            <div class="redNaoControls col-sm-9"></div>';
+};
 
 
 sfFileUpload.prototype.GetFileUploadComponent=function(jQueryFileContainer)
 {
-    var component= rnJQuery('<div class="sfUploadFileElement"><input class="sfUploadFilePath" placeholder="Choose File" disabled="disabled" type="text" />\
-                <div class="sfUploadFileContainer">\
-                    <span class="sfUploadFileButtonText">Upload</span>\
-                    <input class="sfUploadFileButton" type="file" name="'+this.Id+'" class="upload"/>\
-                </div>\
-                <div class="sfDeleteButton sfDeletebutton_invisible"></div></div>');
+    var component= rnJQuery('<div class="sfUploadFileElement input-group">\
+                                <input class="sfUploadFilePath form-control" placeholder="Choose File" disabled="disabled" type="text" />\
+                                <span class="sfUploadFileContainer input-group-addon">\
+                                    <span class="sfUploadFileButtonText">Upload</span>\
+                                    <input class="sfUploadFileButton" type="file" name="'+this.Id+'" class="upload"/>\
+                                </span>\
+                              <div class="sfDeleteButton sfDeletebutton_invisible" style="display: table-cell !important"></div></div>');
 
     var self=this;
     component.find('.sfUploadFileButton').change(
@@ -83,21 +83,21 @@ sfFileUpload.prototype.GetFileUploadComponent=function(jQueryFileContainer)
     function()
     {
         self.DeleteComponent(component);
-    })
+    });
     return component;
-}
+};
 
 sfFileUpload.prototype.DeleteComponent=function(component)
 {
 
     if(rnJQuery('#'+this.Id+ ' .sfUploadFileButton').length>1)
         component.remove();
-}
+};
 
 sfFileUpload.prototype.GenerationCompleted=function(jQueryElement)
 {
     this.AppendComponent(jQueryElement);
-}
+};
 
 sfFileUpload.prototype.AppendComponent=function(jQueryElement)
 {
@@ -111,7 +111,7 @@ sfFileUpload.prototype.AppendComponent=function(jQueryElement)
 
     jQueryElement.find('.sfUploadFileElement').removeClass('sfUploadFilePathMargin');
     jQueryElement.find('.sfUploadFileElement:not(:last-child)').addClass('sfUploadFilePathMargin');
-}
+};
 
 sfFileUpload.prototype.GetValueString=function () {
     var data= [];
@@ -134,7 +134,7 @@ sfFileUpload.prototype.GetValueString=function () {
 
     return data;
 
-}
+};
 
 sfFileUpload.prototype.IsValid=function()
 {
@@ -168,9 +168,9 @@ sfFileUpload.prototype.IsValid=function()
     );
 
     return false;
-}
+};
 
 sfFileUpload.prototype.StoresInformation=function()
 {
     return true;
-}
+};

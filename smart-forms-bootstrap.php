@@ -6,4 +6,4 @@ wp_enqueue_style('smart-forms-ladda',SMART_FORMS_DIR_URL.'css/bootstrap/ladda-th
 wp_enqueue_script('smart-forms-bootstrap-theme',SMART_FORMS_DIR_URL.'js/bootstrap/bootstrapUtils.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-bootstrap-js',SMART_FORMS_DIR_URL.'js/bootstrap/bootstrap.min.js',array('jquery'));
 wp_enqueue_script('smart-forms-spin-js',SMART_FORMS_DIR_URL.'js/bootstrap/spin.min.js');
-wp_enqueue_script('smart-forms-ladda-js',SMART_FORMS_DIR_URL.'js/bootstrap/ladda.min.js',array('smart-donations-spin-js'));
+wp_enqueue_script('smart-forms-ladda-js',SMART_FORMS_DIR_URL.'js/bootstrap/ladda.min.js',array('smart-forms-spin-js'));
