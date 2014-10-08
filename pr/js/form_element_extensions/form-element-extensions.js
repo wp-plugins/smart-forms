@@ -161,7 +161,7 @@ sfFileUpload.prototype.IsValid=function()
         {
             if(rnJQuery(this).val()=="")
             {
-                rnJQuery('#'+self.Id).find('.sfUploadFilePath').addClass('redNaoInvalid');
+                rnJQuery('#'+self.Id).addClass('has-error');
                 isValid=false;
             }
         }

@@ -219,7 +219,8 @@ smartFormGenerator.prototype.SaveForm=function()
     var amount=0;
 
     this.GetRootContainer().find('.redNaoValidationMessage').remove();
-    this.GetRootContainer().find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea,.redNaoInvalid').removeClass('redNaoInvalid');
+    this.GetRootContainer().find('.redNaoSubmitButton').removeClass('btn-danger');
+    this.GetRootContainer().find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea,.redNaoInvalid,.has-error').removeClass('redNaoInvalid').removeClass('has-error');
     var isUsingAFileUploader=false;
     for(var i=0;i<this.FormElements.length;i++)
     {
@@ -241,6 +242,7 @@ smartFormGenerator.prototype.SaveForm=function()
     if(!formIsValid)
     {
         this.GetRootContainer().prepend('<p class="redNaoValidationMessage" style="margin:0;padding: 0; font-style: italic; color:red;font-family:Arial,serif;font-size:12px;">'+this.client_form_options.InvalidInputMessage+'</p>');
+        this.GetRootContainer().find('.redNaoSubmitButton').addClass('btn-danger');
         return;
     }
 

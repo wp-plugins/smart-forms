@@ -425,5 +425,6 @@
 
 .bootstrap-wrapper .radio,.bootstrap-wrapper .checkbox
 {
-    padding-left: 0px !important;
+    padding-left: 0 !important;
 }
+

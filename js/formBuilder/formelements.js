@@ -218,8 +218,8 @@ sfFormElementBase.prototype.GetElementByClassName=function(className)
 sfFormElementBase.prototype.RefreshElement=function()
 {
     var element=rnJQuery("#"+this.Id);
-    var labelWidth=element.find('.rednao_label_container').width();
-    var controlWidth=element.find('.redNaoControls').width();
+   // var labelWidth=element.find('.rednao_label_container').width();
+    //var controlWidth=element.find('.redNaoControls').width();
     element.find(".rednao_label_container, .redNaoControls").remove();
     element.find(".redNaoOneColumn").remove();
     var generatedElement=rnJQuery(this.GenerateInlineElement());
@@ -228,8 +228,8 @@ sfFormElementBase.prototype.RefreshElement=function()
     this.GenerationCompleted(element);
     if(!smartFormsDesignMode)
     {
-        element.find('.rednao_label_container').width(labelWidth);
-        element.find('.redNaoControls').width(controlWidth);
+    //    element.find('.rednao_label_container').width(labelWidth);
+    //    element.find('.redNaoControls').width(controlWidth);
     }
     return element;
 };
@@ -514,7 +514,7 @@ sfTextInputElement.prototype.IsValid=function()
 {
      if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
      {
-        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        rnJQuery('#'+this.Id).addClass('has-error');
         return false;
      }
 
@@ -604,7 +604,7 @@ sfPrependTexElement.prototype.IsValid=function()
 {
     if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
     {
-        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        rnJQuery('#'+this.Id).addClass('has-error');
         return false;
     }
     return true;
@@ -690,7 +690,7 @@ sfAppendedTexElement.prototype.IsValid=function()
 {
     if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
     {
-        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        rnJQuery('#'+this.Id).addClass('has-error');
         return false;
     }
     return true;
@@ -779,7 +779,7 @@ sfPrependCheckBoxElement.prototype.IsValid=function()
 {
     if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
     {
-        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        rnJQuery('#'+this.Id).addClass('has-error');
         return false;
     }
     return true;
@@ -865,7 +865,7 @@ sfAppendCheckBoxElement.prototype.IsValid=function()
 {
     if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
     {
-        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        rnJQuery('#'+this.Id).addClass('has-error');
         return false;
     }
     return true;
@@ -968,7 +968,7 @@ sfTextAreaElement.prototype.IsValid=function()
 {
     if(rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').val()==""&&this.Options.IsRequired=='y')
     {
-        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextAreaInput').addClass('redNaoInvalid');
+        rnJQuery('#'+this.Id).addClass('has-error');
         return false;
     }
     return true;
@@ -1349,7 +1349,7 @@ sfSelectBasicElement.prototype.GenerateInlineElement=function()
 
     var html=  '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label">'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>\
         <div class="redNaoControls col-sm-9">\
-        <select style="'+additionalStyle+'" name="'+this.GetPropertyName()+'" class="redNaoSelect">';
+        <select style="'+additionalStyle+'" name="'+this.GetPropertyName()+'" class="redNaoSelect form-control">';
 
     var selected='';
     var i=undefined;
@@ -1410,7 +1410,7 @@ sfSelectBasicElement.prototype.IsValid=function()
 {
     if(this.Options.IsRequired=='y'&&(this.GetValueString().value==this.Options.DefaultText||rnJQuery('#'+this.Id+ ' .redNaoSelect option:selected').length==0))
     {
-        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        rnJQuery('#'+this.Id).addClass('has-error');
         return false;
     }
     return true;
@@ -1460,7 +1460,7 @@ sfDonationButtonElement.prototype.GenerateInlineElement=function()
 {
     return '<div class="rednao_label_container col-sm-3"></div>'+
             '<div class="redNaoControls col-sm-9">' +
-                '<input type="image" class="redNaoDonationButton" src="'+this.Options.Image+'" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">' +
+                '<input type="image" class="redNaoDonationButton btn btn-normal" src="'+this.Options.Image+'" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">' +
            '</div>';
 };
 
@@ -1804,10 +1804,10 @@ sfRedNaoName.prototype.IsValid=function()
         var lastNameJQuery=rnJQuery('#'+this.Id+ ' .redNaoInputLastName');
 
         if(firstNameJQuery.val()=="")
-            firstNameJQuery.addClass('redNaoInvalid');
+            firstNameJQuery.parent().addClass('has-error');
 
         if(lastNameJQuery.val()=="")
-            lastNameJQuery.addClass('redNaoInvalid');
+            lastNameJQuery.parent().addClass('has-error');
 
         return false;
     }
@@ -2021,37 +2021,37 @@ sfRedNaoAddress.prototype.IsValid=function()
     if(this.Options.ShowStreetAddress1&&streetAddress1JQuery.val()=='')
     {
         isValid=false;
-        streetAddress1JQuery.addClass('redNaoInvalid');
+        streetAddress1JQuery.parent().addClass('has-error');
     }
 
     if(this.Options.ShowStreetAddress2&&streetAddress2JQuery.val()=='')
     {
         isValid=false;
-        streetAddress2JQuery.addClass('redNaoInvalid');
+        streetAddress2JQuery.parent().addClass('has-error');
     }
 
     if(this.Options.ShowCity&&cityJQuery.val()=='')
     {
         isValid=false;
-        cityJQuery.addClass('redNaoInvalid');
+        cityJQuery.parent().addClass('has-error');
     }
 
     if(this.Options.ShowState&&stateJQuery.val()=='')
     {
         isValid=false;
-        stateJQuery.addClass('redNaoInvalid');
+        stateJQuery.parent().addClass('has-error');
     }
 
     if(this.Options.ShowZip&&zipJQuery.val()=='')
     {
         isValid=false;
-        zipJQuery.addClass('redNaoInvalid');
+        zipJQuery.parent().addClass('has-error');
     }
 
     if(this.Options.ShowCountry&&countryJQuery.val()=='')
     {
         isValid=false;
-        countryJQuery.addClass('redNaoInvalid');
+        countryJQuery.parent().addClass('has-error');
     }
 
     return isValid;
@@ -2152,10 +2152,10 @@ sfRedNaoPhone.prototype.IsValid=function()
         var phoneJQuery=rnJQuery('#'+this.Id+ ' .redNaoInputPhone');
 
         if(areaJQuery.val()=="")
-            areaJQuery.addClass('redNaoInvalid');
+            areaJQuery.parent().addClass('has-error');
 
         if(phoneJQuery.val()=="")
-            phoneJQuery.addClass('redNaoInvalid');
+            phoneJQuery.parent().addClass('has-error');
 
         return false;
     }
@@ -2230,14 +2230,14 @@ sfRedNaoEmail.prototype.IsValid=function()
     var email=rnJQuery('#'+this.Id+ ' .redNaoEmail').val();
     if(email==""&&this.Options.IsRequired=='y')
     {
-        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        rnJQuery('#'+this.Id).addClass('has-error');
         return false;
     }
 
 
     if(email!=''&&!this.EmailIsValid(email))
     {
-        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        rnJQuery('#'+this.Id).addClass('has-error');
         return false;
     }
 
@@ -2321,7 +2321,7 @@ sfRedNaoNumber.prototype.IsValid=function()
     var number=rnJQuery('#'+this.Id+ ' .redNaoNumber').val();
     if(number==""&&this.Options.IsRequired=='y')
     {
-        rnJQuery('#'+this.Id).find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea').addClass('redNaoInvalid');
+        rnJQuery('#'+this.Id).addClass('has-error');
         return false;
     }
     return true;
