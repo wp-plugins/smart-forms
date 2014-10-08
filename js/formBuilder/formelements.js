@@ -1460,7 +1460,7 @@ sfDonationButtonElement.prototype.GenerateInlineElement=function()
 {
     return '<div class="rednao_label_container col-sm-3"></div>'+
             '<div class="redNaoControls col-sm-9">' +
-                '<input type="image" class="redNaoDonationButton btn btn-normal" src="'+this.Options.Image+'" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">' +
+                '<input type="image" class="redNaoDonationButton" src="'+this.Options.Image+'" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">' +
            '</div>';
 };
 
@@ -1608,7 +1608,7 @@ sfRedNaoSubmissionButton.prototype.CreateProperties=function()
 
 sfRedNaoSubmissionButton.prototype.GenerateInlineElement=function()
 {
-    return '<div class="rednao_label_container col-sm-3"></div><div class="redNaoControls col-sm-9"><input type="submit" class="redNaoSubmitButton" value="'+RedNaoEscapeHtml(this.Options.ButtonText)+'" /></div>';
+    return '<div class="rednao_label_container col-sm-3"></div><div class="redNaoControls col-sm-9"><input type="submit" class="redNaoSubmitButton btn btn-normal" value="'+RedNaoEscapeHtml(this.Options.ButtonText)+'" /></div>';
 };
 
 
