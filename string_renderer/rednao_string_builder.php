@@ -68,6 +68,9 @@ class rednao_string_builder {
 			case "rednaodatepicker":
 				$renderer=$this->GetRenderer("rednao_date_picker_renderer");
 				break;
+			default:
+				$renderer=$this->GetRenderer("rednao_text_input_renderer");
+				break;
         }
 
       return $renderer->GetString($formElement,$entry);

@@ -123,3 +123,19 @@ rnJQuery.unwait=function()
 {
     rnJQuery.getWaitCursor().css('display','none');
 }
+
+
+ var RedNaoEntityMap = {
+     "&": "&amp;",
+     "<": "&lt;",
+     ">": "&gt;",
+     '"': '&quot;',
+     "'": '&#39;',
+     "/": '&#x2F;'
+ };
+
+ function RedNaoEscapeHtml(string) {
+     return String(string).replace(/[&<>"'\/]/g, function (s) {
+         return RedNaoEntityMap[s];
+     });
+ }

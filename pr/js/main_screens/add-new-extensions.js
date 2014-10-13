@@ -1,6 +1,5 @@
 function SmartFormsAddNewExtension()
 {
-    rnJQuery("#tabpro").empty();
     rnJQuery("#tabpro").append('<div class="component">\
         <div class="control-group sfFileUpload">\
     </div>\

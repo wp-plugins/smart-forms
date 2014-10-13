@@ -17,6 +17,8 @@ function RedNaoFormBuilder(smartFormsOptions,formElementsOptions,formClientOptio
     this.extensions=[];
     this.FormBuilderDisabled=false;
     this.Conditions=[];
+    if(RedNaoSmartFormLicenseIsValid)
+        rnJQuery("#tabpro").empty();
     RedNaoEventManager.Publish('AddNewRegisterElementExtensions');
     if(typeof formClientOptions.Conditions!='undefined')
     {
@@ -259,7 +261,7 @@ RedNaoFormBuilder.prototype.InitializeComponents = function () {
     sfRedNaoCreateFormElementByName('rednaonumber', null).GenerateHtml(rnJQuery("#components .rednaonumber"));
 
     for(var i=0;i<this.extensions.length;i++)
-        sfRedNaoCreateFormElementByName(this.extensions[i], null).GenerateHtml(rnJQuery("#components .sfFileUpload"));
+        sfRedNaoCreateFormElementByName(this.extensions[i], null).GenerateHtml(rnJQuery("#components ."+this.extensions[i]));
 
     var self=this;
     SmartFormsFieldIsAvailable=function(fieldName)

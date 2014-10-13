@@ -64,7 +64,7 @@ function RedNaoTextInputColumn(options)
         var data=GetObjectOrNull(rowObject,cellOptions);
         if(data==null)
             return '';
-        return data.value;
+        return RedNaoEscapeHtml(data.value);
         }catch(exception)
         {
             return '';
@@ -113,7 +113,7 @@ function RedNaoCheckboxInputColumn(options)
         var data=GetObjectOrNull(rowObject,cellOptions);
         if(data==null)
             return '';
-        return data.checked+". "+data.value;
+        return RedNaoEscapeHtml(data.checked)+". "+RedNaoEscapeHtml(data.value);
         }catch(exception)
         {
             return '';
@@ -133,7 +133,7 @@ function RedNaoMultipleCheckBoxesColumn(options)
 
         for(var i=0;i<data.selectedValues.length;i++)
             values+=data.selectedValues[i].value.trim()+";";
-        return values;
+        return RedNaoEscapeHtml(values);
         }catch(exception)
         {
             return '';
@@ -155,7 +155,7 @@ function RedNaoDatePicker(options)
 
             var date=new Date(dateParts[0],parseInt(dateParts[1])-1,dateParts[2]);
 
-            return rnJQuery.datepicker.formatDate( options.DateFormat, date );
+            return RedNaoEscapeHtml(rnJQuery.datepicker.formatDate( options.DateFormat, date ));
         }catch(exception)
         {
             return '';
@@ -171,7 +171,7 @@ function RedNaoName(options)
             var data=GetObjectOrNull(rowObject,cellOptions);
             if(data==null)
                 return '';
-            return data.firstName+' '+data.lastName;
+            return RedNaoEscapeHtml(data.firstName+' '+data.lastName);
         }catch(exception)
         {
             return '';
@@ -188,7 +188,7 @@ function RedNaoPhone(options)
             var data=GetObjectOrNull(rowObject,cellOptions);
             if(data==null)
                 return '';
-            return data.area+'-'+data.phone;
+            return RedNaoEscapeHtml(data.area+'-'+data.phone);
         }catch(exception)
         {
             return '';
@@ -227,7 +227,7 @@ function RedNaoAddress(options)
             address=appendAddressElement(address,data.zip);
             address=appendAddressElement(address,data.country);
 
-            return address;
+            return RedNaoEscapeHtml(address);
         }catch(exception)
         {
             return '';

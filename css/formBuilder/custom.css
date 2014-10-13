@@ -428,3 +428,11 @@
     padding-left: 0 !important;
 }
 
+
+.control-group *, input[type=text].redNaoInputText{
+    moz-box-sizing: border-box !important;
+    -webkit-box-sizing: border-box !important;
+    -ms-box-sizing: border-box !important;
+    box-sizing: border-box !important;
+
+}
