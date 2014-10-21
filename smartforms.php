@@ -75,6 +75,7 @@ function rednao_smart_forms_create_menu(){
     add_submenu_page(__FILE__,'Entries','Entries','manage_options',__FILE__.'entries', 'rednao_smart_forms_entries');
     add_submenu_page(__FILE__,'Support/Wish List','Support/Wish List','manage_options',__FILE__.'wish_list', 'rednao_smart_forms_wish_list');
 	add_submenu_page(__FILE__,'Tutorials','Tutorials','manage_options',__FILE__.'tutorials', 'rednao_smart_forms_tutorials');
+	add_submenu_page(__FILE__,'Add-Ons','Add-Ons','manage_options',__FILE__.'addons', 'rednao_smart_forms_add_ons');
 
 }
 
@@ -171,4 +172,8 @@ function rednao_smart_forms_tutorials()
 }
 
 require_once(SMART_FORMS_DIR.'pr/smart-forms-pr.php');
-?>
+
+function rednao_smart_forms_add_ons()
+{
+	include(SMART_FORMS_DIR.'main_screens/smart-forms-add-ons.php');
+}

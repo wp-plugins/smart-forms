@@ -51,7 +51,7 @@ echo "<h1>".__("Forms")."</h1>";
 
 wp_enqueue_script('smart-forms-email-editor',SMART_FORMS_DIR_URL.'js/editors/email-editor.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-style-editor',SMART_FORMS_DIR_URL.'js/editors/style_editor/style-editor.js',array('isolated-slider'));
-wp_enqueue_script('smart-forms-style-elements',SMART_FORMS_DIR_URL.'js/editors/style_editor/element-styler.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-style-elements',SMART_FORMS_DIR_URL.'js/editors/style_editor/element-styler.js',array('isolated-slider','smart-forms-styler-set','smart-forms-style-properties'));
 wp_enqueue_script('smart-forms-style-properties',SMART_FORMS_DIR_URL.'js/editors/style_editor/style-properties.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-styler-set',SMART_FORMS_DIR_URL.'js/editors/style_editor/styler-set.js',array('isolated-slider'));
 wp_enqueue_script('json2');
@@ -198,7 +198,7 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
 	<table style="width: 100%;height: 100%;">
 		<tr>
 			<td style="width: 550px;">
-				<div id="styleEditorPreview" class="rednaoFormContainer " style="width: 100%;height: 100%;">
+				<div id="styleEditorPreview" class="rednaoFormContainer bootstrap-wrapper" style="width: 100%;height: 100%;">
 					<table style="width: 100%;height: 100%;">
 						<tr>
 							<td style="vertical-align: middle;" id="smartFormStyleEditorContainer">

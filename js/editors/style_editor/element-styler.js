@@ -1,3 +1,5 @@
+var sfElementStylerExtensions=[];
+
 function GetElementStyler(formElement,elementToStyle,attributesCointainer)
 {
     if(formElement.Options.ClassName=="rednaotitle")
@@ -37,6 +39,12 @@ function GetElementStyler(formElement,elementToStyle,attributesCointainer)
     if(formElement.Options.ClassName=="sfFileUpload")
         return new RedNaoFileUploadStyler(formElement,elementToStyle,attributesCointainer);
 
+    for(var i=0;i<RedNaoBaseElementStyler.Extensions.length;i++)
+        if(RedNaoBaseElementStyler.Extensions[i].Name==formElement.Options.ClassName)
+            return RedNaoBaseElementStyler.Extensions[i].Create(formElement,elementToStyle,attributesCointainer);
+
+    throw 'Element Type Not Found';
+
 }
 
 
@@ -51,6 +59,8 @@ function RedNaoBaseElementStyler(formElement,elementToStyle,attributesCointainer
 
     this.SetupSelectableElements();
 }
+
+RedNaoBaseElementStyler.Extensions=[];
 
 RedNaoBaseElementStyler.prototype.SetupSelectableElements=function()
 {
