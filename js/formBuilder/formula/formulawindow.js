@@ -1,6 +1,6 @@
 function RedNaoFormulaWindow()
 {
-    rnJQuery( "#redNaoFormulaAccordion" ).accordion();
+    rnJQuery( "#redNaoFormulaAccordion" ).accordion({ clearStyle: true, autoHeight: false });
     var self=this;
     rnJQuery('#smartFormsHumanReadableCheck').click(function(){
         self.ToggleDisplayFormat();
