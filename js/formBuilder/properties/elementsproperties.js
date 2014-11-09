@@ -321,7 +321,7 @@ IdProperty.prototype.GenerateHtml=function()
 
     var value=this.PreviousId;
     var newProperty=rnJQuery( '<td style="text-align: right"><label class="rednao-properties-control-label"> '+this.PropertyTitle+' </label></td>\
-            <td style="text-align: left"><input style="width: 206px;" class="rednao-input-large" data-type="input" type="text" name="name" id="'+this.PropertyId+'" value="'+value+'" placeholder="Default"/></td>');
+            <td style="text-align: left"><input style="width: 206px;" class="rednao-input-large" data-type="input" maxlength="50" type="text" name="name" id="'+this.PropertyId+'" value="'+value+'" placeholder="Default"/></td>');
 
 
     var self=this;

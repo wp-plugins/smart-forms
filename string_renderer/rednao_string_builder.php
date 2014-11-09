@@ -14,67 +14,74 @@ class rednao_string_builder {
 
     }
 
+	private function GetElementRenderer($formElement)
+	{
 
-    public function  GetStringFromColumn($formElement,$entry){
+		switch($formElement["ClassName"])
+		{
+			case "rednaotextinput":
+			case "rednaoprependedtext":
+			case "rednaoappendedtext":
+			case "rednaoemail":
+			case "rednaonumber":
+				return $renderer=$this->GetRenderer("rednao_text_input_renderer");
+				break;
 
+			case "rednaoprependedcheckbox":
+			case "rednaoappendedcheckbox":
+			 	return $renderer=$this->GetRenderer("rednao_checkbox_input_renderer");
+				break;
 
-        $renderer=null;
-        switch($formElement["ClassName"])
-        {
-            case "rednaotextinput":
-            case "rednaoprependedtext":
-            case "rednaoappendedtext":
-            case "rednaoemail":
-            case "rednaonumber":
-                $renderer=$this->GetRenderer("rednao_text_input_renderer");
-                break;
+			case "rednaotextarea":
+				return $renderer=$this->GetRenderer("rednao_text_area_renderer");
+				break;
 
-            case "rednaoprependedcheckbox":
-            case "rednaoappendedcheckbox":
-                $renderer=$this->GetRenderer("rednao_checkbox_input_renderer");
-                break;
+			case "rednaomultipleradios":
+				return $renderer=$this->GetRenderer("rednao_radio_renderer");
+				break;
 
-            case "rednaotextarea":
-                $renderer=$this->GetRenderer("rednao_text_area_renderer");
-                break;
+			case "rednaomultiplecheckboxes":
+				return $renderer=$this->GetRenderer("rednao_checkbox_renderer");
+				break;
 
-            case "rednaomultipleradios":
-                $renderer=$this->GetRenderer("rednao_radio_renderer");
-                break;
+			case "rednaoselectbasic":
+				return $renderer=$this->GetRenderer("rednao_select_renderer");
+				break;
 
-            case "rednaomultiplecheckboxes":
-                $renderer=$this->GetRenderer("rednao_checkbox_renderer");
-                break;
-
-            case "rednaoselectbasic":
-                $renderer=$this->GetRenderer("rednao_select_renderer");
-                break;
-
-            case "rednaoname":
-                $renderer=$this->GetRenderer("rednao_name_renderer");
-                break;
-            case "rednaoaddress":
-                $renderer=$this->GetRenderer("rednao_address_renderer");
-                break;
-            case "rednaophone":
-                $renderer=$this->GetRenderer("rednao_phone_renderer");
-                break;
+			case "rednaoname":
+				return $renderer=$this->GetRenderer("rednao_name_renderer");
+				break;
+			case "rednaoaddress":
+				return $renderer=$this->GetRenderer("rednao_address_renderer");
+				break;
+			case "rednaophone":
+				return $renderer=$this->GetRenderer("rednao_phone_renderer");
+				break;
 			case "rednaodonationrecurrence":
-				$renderer=$this->GetRenderer("rednao_donation_recurrence");
+				return $renderer=$this->GetRenderer("rednao_donation_recurrence");
 				break;
 			case "sfFileUpload":
-				$renderer=$this->GetRenderer("rednao_file_upload");
+				return $renderer=$this->GetRenderer("rednao_file_upload");
 				break;
 			case "rednaodatepicker":
-				$renderer=$this->GetRenderer("rednao_date_picker_renderer");
+				return $renderer=$this->GetRenderer("rednao_date_picker_renderer");
 				break;
 			default:
-				$renderer=$this->GetRenderer("rednao_text_input_renderer");
+				return $renderer=$this->GetRenderer("rednao_text_input_renderer");
 				break;
-        }
-
-      return $renderer->GetString($formElement,$entry);
+		}
+	}
+    public function  GetStringFromColumn($formElement,$entry){
+		$renderer=$this->GetElementRenderer($formElement);
+		/** @noinspection PhpUndefinedMethodInspection */
+		return $renderer->GetString($formElement,$entry);
     }
+
+	public function  GetExValue($formElement,$entry){
+		$renderer=$this->GetElementRenderer($formElement);
+		/** @noinspection PhpUndefinedMethodInspection */
+		return $renderer->GetExValues($formElement,$entry);
+	}
 
     public function GetRenderer($rendererName)
     {

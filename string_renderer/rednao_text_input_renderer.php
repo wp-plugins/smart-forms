@@ -13,4 +13,11 @@ class rednao_text_input_renderer extends rednao_base_elements_renderer {
     {
         return htmlspecialchars($entry["value"]);
     }
+
+	public function GetExValues($formElement, $entry)
+	{
+		return array(
+			"exvalue1"=>$this->GetString($formElement,$entry)
+		);
+	}
 }

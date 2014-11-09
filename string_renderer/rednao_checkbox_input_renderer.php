@@ -12,4 +12,11 @@ class rednao_checkbox_input_renderer extends  rednao_base_elements_renderer{
         return ($entry["checked"]=="Yes"?__("Yes"):__("No")).". ".htmlspecialchars($entry["value"]);
     }
 
+	public function GetExValues($formElement, $entry)
+	{
+		return array(
+			"exvalue1"=>htmlspecialchars($entry["value"]),
+			"exvalue2"=>htmlspecialchars($entry["checked"])
+		);
+	}
 }

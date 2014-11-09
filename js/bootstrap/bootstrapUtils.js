@@ -34,7 +34,10 @@ rnJQuery.fn.RDNotifications=function(dynamicHeight)
         ShowError:function(message)
         {
             this.SetAlert('error',message);
-
+        },
+        ShowWarning:function(message)
+        {
+            this.SetAlert('warning',message);
         },
 
         ShowSuccess:function(message)
@@ -44,7 +47,7 @@ rnJQuery.fn.RDNotifications=function(dynamicHeight)
         },
         Clear:function()
         {
-          this.Element.slideUp('1000','easeInQuint');
+            this.Element.slideUp('1000','easeInQuint');
         },
         SetAlert:function(type,message)
         {
@@ -78,4 +81,56 @@ rnJQuery.fn.RDNotifications=function(dynamicHeight)
             this.Element.removeClass('alert alert-success alert-info alert-warning alert-danger')
         }
     };
+}
+
+rnJQuery.RNGetWaitDialog=function()
+{
+    if(typeof this.RNWaitDialog =='undefined')
+        this.RNWaitDialog=new RNWaitDialog();
+
+    return this.RNWaitDialog;
+};
+
+
+/************************************************************************************* Wait Dialog ***************************************************************************************************/
+function RNWaitDialog()
+{
+    if(typeof RNWaitDialog.prototype.$Dialog=='undefined')
+    {
+        RNWaitDialog.prototype.$Dialog=rnJQuery(
+            '<div class="modal fade" data-backdrop="static"  data-keyboard="false">'+
+                '<div class="modal-dialog">'+
+                    '<div class="modal-content">'+
+                        '<div class="modal-header">'+
+                            '<h4 class="modal-title">Processing</h4>'+
+                        '</div>'+
+                        '<div class="modal-body">'+
+                            '<div class="progress">'+
+                                '<div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>' +
+            '</div>');
+
+        var container=rnJQuery('<div class="bootstrap-wrapper"></div>');
+        container.append(RNWaitDialog.prototype.$Dialog);
+        rnJQuery('body').append(container);
+    }
+}
+
+RNWaitDialog.prototype.Show=function(message)
+{
+    var $dialog = this.$Dialog.find(".modal-dialog");
+    var offset = (rnJQuery(window).height() - $dialog.height()) / 2;
+    // Center modal vertically in window
+    $dialog.css("margin-top", offset);
+    this.$Dialog.find('.modal-title').text(message);
+    this.$Dialog.modal('show');
+}
+
+
+RNWaitDialog.prototype.Hide=function()
+{
+    this.$Dialog.modal('hide');
 }

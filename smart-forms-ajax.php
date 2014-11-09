@@ -106,71 +106,21 @@ function rednao_smart_forms_save_form_values()
     $phpEntry=new php_entry_saver_base($form_id,$formString,$captcha);
     $phpEntry->ProcessEntry();
 	die();
+}
 
-   /* $form_id=GetPostValue("form_id");
-    $formString=GetPostValue("formString");
-    $captcha=$_POST["captcha"];
+function rednao_smart_forms_get_form_element_info()
+{
+	$formId=GetPostValue("formId");
+	if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') ) {
+		return;
+	}
 
-    $entryData=json_decode($formString,true);
+	global $wpdb;
+	$result=$wpdb->get_var($wpdb->prepare("SELECT element_options FROM ".SMART_FORMS_TABLE_NAME.' where form_id=%d',$formId));
 
-    global $wpdb;
-    $result=$wpdb->get_results($wpdb->prepare("select form_options,element_options from ".SMART_FORMS_TABLE_NAME." where form_id=%d",$form_id));
+	echo '{"elementsInfo":'.$result.'}';
 
-    $formOptions=null;
-    $elementOptions=null;
-
-    if(count($result)>0){
-        $formOptions=json_decode($result[0]->form_options,true);
-        $elementOptions=json_decode($result[0]->element_options,true);
-    }
-
-    if($formOptions["UsesCaptcha"]=="y")
-    {
-        if(!isset($_POST["captcha"]))
-        {
-            echo '{"message":"'.__("Invalid captcha.").'", "success":"n"}';
-            die();
-        }
-        $captchaPost=$_POST["captcha"];
-        $captcha=ARRAY();
-        $captcha["challenge"]=stripslashes($captchaPost["challenge"]);
-        $captcha["response"]=stripslashes($captchaPost["response"]);
-        $captcha["remoteip"]=$_SERVER['REMOTE_ADDR'];
-        $captcha["privatekey"]="6Lf2J-wSAAAAAOH6uSmSdx75ZLRpDIfvSeAdx9ST";
-
-        $args=Array();
-
-        $args['headers']=Array
-        (
-            'Content-Type'=>'application/x-www-form-urlencoded;',
-            'Method'=>'Post'
-        );
-        $args['body']=$captcha;
-        $res=wp_remote_post('http://www.google.com/recaptcha/api/verify',$args);
-        if(strpos($res["body"],"true")!==0)
-        {
-            echo '{"message":"'.__("Invalid captcha.").'","refreshCaptcha":"y","success":"n"}';
-            die();
-        }
-
-
-    }
-
-    $result=$wpdb->insert(SMART_FORMS_ENTRY,array(
-        'form_id'=>$form_id,
-        'date'=>date('Y-m-d H:i:s'),
-        'data'=>$formString,
-        'ip'=>$_SERVER['REMOTE_ADDR'],
-    ));
-
-    if($formOptions["SendNotificationEmail"]=="y")
-        send_form_email($formOptions["Emails"][0],$entryData,$elementOptions,false);
-
-    if($result==true)
-        echo '{"message":"'.__("Information submitted successfully.").'","success":"y"}';
-    else
-        echo '{"message":"'.__("An error occurred, please try again later.").'","success":"n"}';
-    die();*/
+	die();
 }
 
 function rednao_get_fixed_field_value($match,$entryData)
@@ -242,11 +192,11 @@ function rednao_smart_forms_entries_list()
     $endDate=date('Y-m-d H:i:s', strtotime($endDate .' +1 day'));
 
     $query="select concat(year(date),'-',month(date),'-' ,day(date)) date,date,entry_id,data from ".SMART_FORMS_ENTRY."
-        where date between '$startDate' and '$endDate' and form_id=$formId";
+        where date between %s and %s and form_id=%d";
 
 
     global $wpdb;
-    $result=$wpdb->get_results($query);
+    $result=$wpdb->get_results($wpdb->prepare($query,$startDate,$endDate,$formId));
     $isFirstRecord=true;
 
     echo '{"entries":[';
@@ -262,8 +212,8 @@ function rednao_smart_forms_entries_list()
     }
     echo '],"formOptions":';
 
-    $query="select element_options from ".SMART_FORMS_TABLE_NAME." where form_id=".$formId;
-    $elementOptions=$wpdb->get_var($query);
+    $query="select element_options from ".SMART_FORMS_TABLE_NAME." where form_id=%d";
+    $elementOptions=$wpdb->get_var($wpdb->prepare($query,$formId));
     echo $elementOptions.'}';
 
 
@@ -299,7 +249,8 @@ function rednao_smart_form_send_test_email()
     }
 
 	include_once(SMART_FORMS_DIR.'php_classes/save/php_entry_saver_base.php');
-    if(call_user_func(array('php_entry_saver_base','SendFormEmail'),  $valueArray,$entryData,$elementOptions,true))
+	$entrySaver=new php_entry_saver_base("","","");
+    if($entrySaver->SendFormEmail($valueArray,$entryData,$elementOptions,true))
         echo '{"Message":"'.__("Email sent successfully").'"}';
     else
         echo '{"Message":"'.__("There was an error sending the email, please check the configuration").'"}';

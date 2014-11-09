@@ -46,6 +46,8 @@ require_once(SMART_FORMS_DIR.'translations/smart-forms-add-new-translation.php')
 require_once(SMART_FORMS_DIR.'translations/form-elements-translation.php');
 
 
+echo "<div class='bootstrap-wrapper' style='position: absolute;width:100%;'><div id='smart-forms-notification'></div></div>";
+
 echo "<h1>".__("Forms")."</h1>";
 
 
@@ -64,6 +66,10 @@ wp_enqueue_style('form-builder-boot-strap',SMART_FORMS_DIR_URL.'css/formBuilder/
 wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/custom.css');
 wp_enqueue_style('form-builder-icheck-normal',SMART_FORMS_DIR_URL.'js/utilities/iCheck/skins/minimal/minimal.css');
 wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select2/select2.css');
+
+if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
+	wp_enqueue_script('smart-forms-detail-generator',SMART_FORMS_DIR_URL.'utilities/smart-forms-detail-generator.js',array('isolated-slider'));
+
 
 ?>
 
@@ -391,14 +397,20 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
                 <td style="background-color: #efefef; vertical-align: top;border-left:1px solid #cfcfcf">
                    <div id="formSettingsScrollArea">
                        <div id="formSettings" >
+						   <ul class="nav nav-tabs" role="tablist" style="margin: 0">
+							   <li   class="active"><a  id="formRadio1" href="#formBuilderComponents" data-toggle="tab"><span class="glyphicon glyphicon-list-alt"></span><?php echo __("Fields")?></a></li>
+							   <li   ><a id="formRadio2" href="#formPropertiesContainer" data-toggle="tab"><span class="glyphicon glyphicon glyphicon-cog"></span><?php echo __("Field Settings")?></a></li>
+							   <li " ><a id="formRadio3" href="#formConditionalLogicContainer" data-toggle="tab"><span class="glyphicon glyphicon glyphicon-link"></span><?php echo __("Conditional Logic")?></a></li>
+						   </ul>
+						   <!--
                             <div id="formBuilderButtonSet" class="smartFormsSlider">
                                 <input type="radio" id="formRadio1" value="Fields"  name="smartFormsFormEditStyle"  checked="checked" style="display:inline-block;"/><label style="margin:0;width:150px;display:inline-block;" for="formRadio1"><?php echo __("Fields")?></label>
                                 <input type="radio" id="formRadio2"  value="Settings" name="smartFormsFormEditStyle" style="display:inline-block;"/><label style="width:150px;margin: 0 0 0 -5px;display:inline-block;" for="formRadio2"><?php echo __("Field Settings")?></label>
 								<input type="radio" id="formRadio3"  value="ConditionalLogic" name="smartFormsFormEditStyle" style="display:inline-block;"/><label style="width:170px;margin: 0 0 0 -5px;display:inline-block;" for="formRadio3"><?php echo __("Conditional Logic")?></label>
-                            </div>
+                            </div>-->
 
-                            <div id="formBuilderContainer">
-                                <div class="span6" id="formBuilderComponents">
+                            <div id="formBuilderContainer" class="tab-content">
+                                <div class="span6 tab-pane active" id="formBuilderComponents">
                                     <h2 class="redNaoFormContainerHeading"><?php echo __("Drag &amp; Drop components")?></h2>
                                     <hr>
                                     <div class="tabbable" >
@@ -530,13 +542,13 @@ wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select
                                         </div>
                                     </div>
                                 </div>
-                                <div id="formPropertiesContainer" style="padding:5px;display:none;">
+                                <div class="tab-pane" id="formPropertiesContainer" >
                                     <table id="smartFormPropertiesTable" style="width:100%">
 
                                     </table>
                                 </div>
 
-								<div id="formConditionalLogicContainer" style="padding:0;display:none;overflow-x: hidden;">
+								<div class="tab-pane" id="formConditionalLogicContainer" style="padding: 0px; overflow-x: hidden;" >
 									<table id="sfPanelContainer" cellpadding="0" style="position: relative; width: 100%;">
 										<tr>
 											<td style="vertical-align: top;">

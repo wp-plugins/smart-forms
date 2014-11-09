@@ -20,4 +20,11 @@ class rednao_donation_recurrence extends  rednao_base_elements_renderer{
 		return '';
 
 	}
+
+	public function GetExValues($formElement, $entry)
+	{
+		return array(
+			"exvalue1"=>$this->GetString($formElement,$entry)
+		);
+	}
 }

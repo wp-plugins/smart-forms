@@ -56,6 +56,9 @@ add_action( 'wp_ajax_nopriv_rednao_smart_forms_save_form_values','rednao_smart_f
 add_action( 'wp_ajax_rednao_smart_form_send_test_email','rednao_smart_form_send_test_email');
 add_action('wp_ajax_rednao_smart_forms_submit_license','rednao_smart_forms_submit_license');
 add_action('wp_ajax_rednao_smart_forms_execute_op','rednao_smart_forms_execute_op');
+add_action('wp_ajax_rednao_smart_forms_generate_detail','rednao_smart_forms_generate_detail');
+add_action('wp_ajax_rednao_smart_forms_get_form_element_info','rednao_smart_forms_get_form_element_info');
+
 
 //integration
 
@@ -71,11 +74,13 @@ add_action('admin_menu','rednao_smart_forms_create_menu');
 
 function rednao_smart_forms_create_menu(){
 
-    add_menu_page('Smart Forms','Smart Forms','manage_options',__FILE__,'rednao_forms',plugin_dir_url(__FILE__).'images/smartFormsIcon.png');
-    add_submenu_page(__FILE__,'Entries','Entries','manage_options',__FILE__.'entries', 'rednao_smart_forms_entries');
-    add_submenu_page(__FILE__,'Support/Wish List','Support/Wish List','manage_options',__FILE__.'wish_list', 'rednao_smart_forms_wish_list');
-	add_submenu_page(__FILE__,'Tutorials','Tutorials','manage_options',__FILE__.'tutorials', 'rednao_smart_forms_tutorials');
-	add_submenu_page(__FILE__,'Add-Ons','Add-Ons','manage_options',__FILE__.'addons', 'rednao_smart_forms_add_ons');
+    add_menu_page('Smart Forms','Smart Forms','manage_options',"smart_forms_menu",'rednao_forms',plugin_dir_url(__FILE__).'images/smartFormsIcon.png');
+    add_submenu_page("smart_forms_menu",'Entries','Entries','manage_options',__FILE__.'entries', 'rednao_smart_forms_entries');
+    add_submenu_page("smart_forms_menu",'Support/Wish List','Support/Wish List','manage_options',__FILE__.'wish_list', 'rednao_smart_forms_wish_list');
+	add_submenu_page("smart_forms_menu",'Tutorials','Tutorials','manage_options',__FILE__.'tutorials', 'rednao_smart_forms_tutorials');
+	add_submenu_page("smart_forms_menu",'Add-Ons','Add-Ons','manage_options',__FILE__.'addons', 'rednao_smart_forms_add_ons');
+
+	do_action('add_smart_forms_menu_items');
 
 }
 
@@ -83,12 +88,11 @@ function rednao_smart_forms_create_menu(){
 
 function rednao_smart_forms_plugin_was_activated()
 {
-    $dbversion=get_option(SMART_FORMS_LATEST_DB_VERSION);
-
-
-    global $wpdb;
-    if( $dbversion<SMART_FORMS_LATEST_DB_VERSION )
+    $dbversion=get_option("SMART_FORMS_LATEST_DB_VERSION");
+    if($dbversion<SMART_FORMS_LATEST_DB_VERSION )
     {
+		if($dbversion!=false&&$dbversion<10)
+			update_option('SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION','y');
         require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 
         $sql="CREATE TABLE ".SMART_FORMS_TABLE_NAME." (
@@ -113,7 +117,23 @@ function rednao_smart_forms_plugin_was_activated()
         );";
         dbDelta($sql);
 
-        update_option("SMART_FORMS_LATEST_DB_VERSION",$dbversion);
+		$sql="CREATE TABLE ".SMART_FORMS_ENTRY_DETAIL." (
+        entry_detail_id int AUTO_INCREMENT,
+        entry_id int,
+        field_id varchar(50) NOT NULL,
+        json_value MEDIUMTEXT NOT NULL,
+        value MEDIUMTEXT NOT NULL,
+        exvalue1 MEDIUMTEXT NOT NULL,
+        exvalue2 MEDIUMTEXT NOT NULL,
+        exvalue3 MEDIUMTEXT NOT NULL,
+        exvalue4 MEDIUMTEXT NOT NULL,
+        exvalue5 MEDIUMTEXT NOT NULL,
+        exvalue6 MEDIUMTEXT NOT NULL,
+        PRIMARY KEY  (entry_detail_id)
+        );";
+		dbDelta($sql);
+
+        update_option("SMART_FORMS_LATEST_DB_VERSION",SMART_FORMS_LATEST_DB_VERSION);
     }
 }
 
@@ -125,7 +145,7 @@ function rednao_forms()
     include(SMART_FORMS_DIR.'main_screens/smart-forms-list.php');
 }
 
-function rednao_smart_form_short_code($attr,$content)
+function rednao_smart_form_short_code(/** @noinspection PhpUnusedParameterInspection */ $attr,$content)
 {
     require_once('smart-forms-helpers.php');
     return rednao_smart_forms_load_form(null,$content,true);
@@ -176,4 +196,9 @@ require_once(SMART_FORMS_DIR.'pr/smart-forms-pr.php');
 function rednao_smart_forms_add_ons()
 {
 	include(SMART_FORMS_DIR.'main_screens/smart-forms-add-ons.php');
+}
+
+function rednao_smart_forms_generate_detail()
+{
+	include(SMART_FORMS_DIR.'utilities/smart-forms-detail-generator.php');
 }

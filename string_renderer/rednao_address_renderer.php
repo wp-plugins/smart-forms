@@ -30,4 +30,16 @@ class rednao_address_renderer extends rednao_base_elements_renderer {
         return $address;
 
     }
+
+	public function GetExValues($formElement, $entry)
+	{
+		return array(
+			"exvalue1"=>htmlspecialchars($entry["streetAddress1"]),
+			"exvalue2"=>htmlspecialchars($entry["streetAddress2"]),
+			"exvalue3"=>htmlspecialchars($entry["city"]),
+			"exvalue4"=>htmlspecialchars($entry["state"]),
+			"exvalue5"=>htmlspecialchars($entry["zip"]),
+			"exvalue6"=>htmlspecialchars($entry["country"])
+		);
+	}
 }

@@ -1221,7 +1221,7 @@ sfMultipleCheckBoxElement.prototype.GetValueString=function()
 {
     this.amount=0;
     if(this.IsIgnored())
-        return [];
+        return {selectedValues:[]};
     var jQueryElement=rnJQuery('#'+this.Id).find(':checked');
     var data={};
     data.selectedValues=[];

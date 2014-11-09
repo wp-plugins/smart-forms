@@ -31,7 +31,7 @@ function RedNaoFormBuilder(smartFormsOptions,formElementsOptions,formClientOptio
 
     this.SfConditionalLogicManager=new SfConditionalLogicManager(this);
     RedNaoEventManager.Publish('AddExtendedElements',this.extensions);
-    rnJQuery("#formBuilderButtonSet").buttonset();
+
 
 
     var self = this;
@@ -44,8 +44,8 @@ function RedNaoFormBuilder(smartFormsOptions,formElementsOptions,formClientOptio
         }, 150);
 
     });
-    rnJQuery('input[name=smartFormsFormEditStyle]').change(function () {
-        self.smartFormsFormEditTypeChanged()
+    rnJQuery('#formRadio3').click(function () {
+        self.SfConditionalLogicManager.FillSavedConditionList();
     });
 
 
@@ -102,32 +102,6 @@ RedNaoFormBuilder.prototype.RecreateExistingFormIfAny=function(elementOptions)
 
 
 
-
-RedNaoFormBuilder.prototype.smartFormsFormEditTypeChanged = function () {
-    var typeOfEdition = rnJQuery('input[name=smartFormsFormEditStyle]:checked').val();
-
-    if (typeOfEdition == 'Fields') {
-        rnJQuery('#formBuilderComponents').show();
-        rnJQuery('#formPropertiesContainer').hide();
-        rnJQuery('#formConditionalLogicContainer').hide();
-    }
-
-    if (typeOfEdition == 'Settings') {
-        rnJQuery('#formBuilderComponents').hide();
-        rnJQuery('#formPropertiesContainer').show();
-        rnJQuery('#formConditionalLogicContainer').hide();
-    }
-
-    if (typeOfEdition == 'ConditionalLogic') {
-        rnJQuery('#formBuilderComponents').hide();
-        rnJQuery('#formPropertiesContainer').hide();
-        rnJQuery('#formConditionalLogicContainer').show();
-        this.SfConditionalLogicManager.FillSavedConditionList();
-    }
-
-
-
-};
 
 
 RedNaoFormBuilder.prototype.OpenProperties = function (element) {

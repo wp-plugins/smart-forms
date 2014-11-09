@@ -24,4 +24,22 @@ class rednao_file_upload extends  rednao_base_elements_renderer{
 		$html.="</p>";
 		return $html;
     }
-} 
+
+	public function GetExValues($formElement, $entry)
+	{
+		$html="";
+		$firstElement=true;
+		foreach($entry as $value)
+		{
+			if($firstElement)
+				$firstElement=false;
+
+
+			$html.= $value["path"].';;;';
+		}
+
+		return array(
+			"exvalue1"=>htmlspecialchars($html)
+		);
+	}
+}

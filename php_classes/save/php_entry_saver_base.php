@@ -1,4 +1,7 @@
 <?php
+include_once(SMART_FORMS_DIR.'string_renderer/rednao_string_builder.php');
+include_once(SMART_FORMS_DIR.'smart-forms-ajax.php');
+
 
 class php_entry_saver_base {
     private $FormId=null;
@@ -9,6 +12,7 @@ class php_entry_saver_base {
     private $ReferenceId=null;
 	private $EntryId="";
 	private $FormString="";
+	private $StringBuilder;
 
 
     function __construct($formId,$formString,$captcha,$referenceId="",$formOptions=null,$elementOptions=null)
@@ -20,6 +24,7 @@ class php_entry_saver_base {
         $this->ReferenceId=$referenceId;
 		$this->FormOptions=$formOptions;
 		$this->ElementOptions=$elementOptions;
+		$this->StringBuilder=new rednao_string_builder();
     }
 
     public function ProcessEntry($validateCaptcha=true,$additionalData=array())
@@ -27,6 +32,11 @@ class php_entry_saver_base {
 		if($this->FormOptions==null||$this->ElementOptions==null)
 			$this->GetFormOptions();
 
+		if($this->FormEntryData==null)
+		{
+			echo '{"message":"'.__("An error occurred, please try again later.").'","refreshCaptcha":"n","success":"n"}';
+			return;
+		}
 
         if($this->FormOptions["UsesCaptcha"]=="y"&&$validateCaptcha==true)
         {
@@ -111,7 +121,21 @@ class php_entry_saver_base {
         return $this->InsertEntryData();
     }
 
+	public function GetFormElementsDictionary()
+	{
+		$formElementsDictionary =array();
+		foreach($this->ElementOptions as $element)
+			$formElementsDictionary[$element["Id"]]=$element;
+
+		return $formElementsDictionary;
+	}
+
     private function InsertEntryData(){
+
+		$parsedData=json_decode($this->FormString);
+		if($parsedData==null)
+			return false;
+
         global $wpdb;
         $result= $wpdb->insert(SMART_FORMS_ENTRY,array(
             'form_id'=>$this->FormId,
@@ -121,19 +145,18 @@ class php_entry_saver_base {
             'reference_id'=>$this->ReferenceId
         ));
 
+
+		if($result==false)
+			return false;
 		$this->EntryId=$wpdb->insert_id;
+		$result=$this->ParseAndInsertDetail($this->EntryId,$this->FormEntryData,$this->GetFormElementsDictionary());
 		return $result;
 
 
     }
 
-    public static function SendFormEmail($formOptions,$entryData,$elementOptions,$useTestData)
+    public function SendFormEmail($formOptions,$entryData,$elementOptions,$useTestData)
     {
-        include_once(SMART_FORMS_DIR.'string_renderer/rednao_string_builder.php');
-		include_once(SMART_FORMS_DIR.'smart-forms-ajax.php');
-
-
-        $stringBuilder=new rednao_string_builder();
         $EmailText=$formOptions["EmailText"];
         $FromName=$formOptions["FromName"];
         $FromEmail=$formOptions["FromEmail"];
@@ -156,7 +179,7 @@ class php_entry_saver_base {
 
         foreach($matches[1] as $match)
         {
-            $value=GetValueByField($stringBuilder,$match,$entryData,$elementOptions,$useTestData);
+            $value=GetValueByField($this->StringBuilder,$match,$entryData,$elementOptions,$useTestData);
             $EmailText=str_replace("[field $match]",$value,$EmailText);
         }
 
@@ -167,7 +190,7 @@ class php_entry_saver_base {
 			if(count($matches[1])>0)
 			{
 				$field=$matches[1][0];
-				$value=GetValueByField($stringBuilder,$field,$entryData,$elementOptions,$useTestData);
+				$value=GetValueByField($this->StringBuilder,$field,$entryData,$elementOptions,$useTestData);
 				$FromEmail=$value;
 			}else{
 				$FromEmail="";
@@ -192,7 +215,7 @@ class php_entry_saver_base {
 					if(count($matches[1])>0)
 					{
 						$field=$matches[1][0];
-						$value=GetValueByField($stringBuilder,$field,$entryData,$elementOptions,$useTestData);
+						$value=GetValueByField($this->StringBuilder,$field,$entryData,$elementOptions,$useTestData);
 						$toEmailArray[$i]=$value;
 					}else
 						$toEmailArray[$i]="";
@@ -263,6 +286,36 @@ class php_entry_saver_base {
 	{
 		global $wpdb;
 		$wpdb->query($wpdb->prepare("delete from ".SMART_FORMS_ENTRY." WHERE entry_id=%d",$this->EntryId));
+	}
+
+	public function ParseAndInsertDetail($entryId,$entryData,$formElementsDictionary)
+	{
+		foreach($entryData as $key=>$unprocessedValue)
+		{
+			if(!isset($formElementsDictionary[$key]))
+				continue;
+
+			$fieldConfiguration=$formElementsDictionary[$key];
+			$value=$this->StringBuilder->GetStringFromColumn($fieldConfiguration,$unprocessedValue);
+			$exValue=$this->StringBuilder->GetExValue($fieldConfiguration,$unprocessedValue);
+			$jsonValue=json_encode($unprocessedValue);
+			if(!$this->InsertDetailRecord($entryId,$key,$value,$jsonValue,$exValue))
+				return false;
+		}
+
+		return true;
+	}
+
+	private function InsertDetailRecord($entry_id, $fieldId, $value, $jsonValue,$exValue)
+	{
+		global $wpdb;
+		$arrayToInsert=array_merge(array(
+			"entry_id"=>$entry_id,
+			"field_id"=>$fieldId,
+			"json_value"=>$jsonValue,
+			"value"=>$value
+		),$exValue);
+		return $wpdb->insert(SMART_FORMS_ENTRY_DETAIL,$arrayToInsert);
 	}
 
 
