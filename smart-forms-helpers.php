@@ -55,6 +55,7 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
         <div id="formContainer<?php echo $random?>" class='rednaoFormContainer bootstrap-wrapper'></div>
 
         <script>
+			var smartFormsCurrentTime=new Date(''".date('D M d Y H:i:s O')."'');
             var smartFormsPath="<?php echo plugin_dir_url(__FILE__)?>";
             var smartDonationsRootPath="<?php echo SMART_DONATIONS_PLUGIN_URL ?>";
             var smartDonationsSandbox="<?php echo SMART_DONATIONS_SANDBOX ?>";
@@ -76,6 +77,7 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
             return "";
         return "<div id='formContainer$random' class='rednaoFormContainer bootstrap-wrapper'></div>
             <script>
+            	var smartFormsCurrentTime=new Date('".date('D M d Y H:i:s O')."');
                 var smartFormsPath=\"".plugin_dir_url(__FILE__)."\";
                 var smartDonationsRootPath=\"".SMART_DONATIONS_PLUGIN_URL."\";
                 var smartDonationsSandbox=\"".SMART_DONATIONS_SANDBOX."\";
