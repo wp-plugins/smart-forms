@@ -84,15 +84,20 @@ function rednao_smart_forms_create_menu(){
 
 }
 
+function smart_forms_indexing_is_requred()
+{
+	global $wpdb;
+	$entriesCount=$wpdb->get_var('select count(*) from '. SMART_FORMS_ENTRY);
+	$entriesDetailCount=$wpdb->get_var('select count(*) from '. SMART_FORMS_ENTRY_DETAIL);
 
+	return $entriesCount!=0&&$entriesDetailCount==0;
+}
 
 function rednao_smart_forms_plugin_was_activated()
 {
     $dbversion=get_option("SMART_FORMS_LATEST_DB_VERSION");
     if($dbversion<SMART_FORMS_LATEST_DB_VERSION )
     {
-		if($dbversion!=false&&$dbversion<10)
-			update_option('SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION','y');
         require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 
         $sql="CREATE TABLE ".SMART_FORMS_TABLE_NAME." (
@@ -132,6 +137,9 @@ function rednao_smart_forms_plugin_was_activated()
         PRIMARY KEY  (entry_detail_id)
         );";
 		dbDelta($sql);
+
+		if(smart_forms_indexing_is_requred())
+			update_option('SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION','y');
 
         update_option("SMART_FORMS_LATEST_DB_VERSION",SMART_FORMS_LATEST_DB_VERSION);
     }
