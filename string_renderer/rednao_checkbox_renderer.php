@@ -21,7 +21,7 @@ class rednao_checkbox_renderer extends  rednao_base_elements_renderer {
 	public function GetExValues($formElement, $entry)
 	{
 
-		$rowInformation= "";
+		$rowInformation= ";;;";
 		$arrayValues=$entry["selectedValues"];
 		foreach($arrayValues as $value)
 		{
