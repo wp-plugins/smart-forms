@@ -1,12 +1,13 @@
 <?php
 function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
 {
-    $options=get_transient("rednao_smart_forms_$form_id");
+    //$options=get_transient("rednao_smart_forms_$form_id");
     $options=false;
     if($options==false)
     {
         global $wpdb;
-        $result=$wpdb->get_results($wpdb->prepare("select form_id,element_options,form_options,client_form_options from ".SMART_FORMS_TABLE_NAME." where form_id=%d",$form_id));
+		/** @noinspection PhpUndefinedMethodInspection */
+		$result=$wpdb->get_results($wpdb->prepare("select form_id,element_options,form_options,client_form_options from ".SMART_FORMS_TABLE_NAME." where form_id=%d",$form_id));
         if(count($result)>0)
         {
             $result=$result[0];
@@ -41,11 +42,17 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
     echo "<script type=\"text/javascript\">var ajaxurl = '".admin_url('admin-ajax.php')."';</script>";
     $random=rand();
 
+	if(!defined ("SMART_DONATIONS_PLUGIN_URL"))
+		define("SMART_DONATIONS_PLUGIN_URL","");
+
+	if(!defined ("SMART_DONATIONS_SANDBOX"))
+		define("SMART_DONATIONS_SANDBOX","");
+
     if($returnComponent==false)
     {
 		echo "<div class='widget'>";
         if($options==null)
-            return;
+            return null;
 
         if($title)
             echo "<div class='widget-wrapper'><h3 class='widgettitle widget-title'>$title</h3>"
@@ -55,13 +62,13 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
         <div id="formContainer<?php echo $random?>" class='rednaoFormContainer bootstrap-wrapper'></div>
 
         <script>
-			var smartFormsCurrentTime=new Date(''".date('D M d Y H:i:s O')."'');
+			var smartFormsCurrentTime=new Date(".date('D M d Y H:i:s O').");
             var smartFormsPath="<?php echo plugin_dir_url(__FILE__)?>";
             var smartDonationsRootPath="<?php echo SMART_DONATIONS_PLUGIN_URL ?>";
             var smartDonationsSandbox="<?php echo SMART_DONATIONS_SANDBOX ?>";
 			var smartFormsDesignMode=false;
             if(!window.smartFormsItemsToLoad)
-                window.smartFormsItemsToLoad=new Array();;
+                window.smartFormsItemsToLoad=[];
 
             window.smartFormsItemsToLoad.push({'form_id':<?php echo $options['form_id']?>, 'elements':<?php echo $options['elements']?>,'client_form_options':<?php echo $options['client_form_options']?>,'container':'formContainer<?php echo $random?>'});
 
@@ -83,9 +90,11 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
                 var smartDonationsSandbox=\"".SMART_DONATIONS_SANDBOX."\";
                 var smartFormsDesignMode=false;
                 if(!window.smartFormsItemsToLoad)
-                    window.smartFormsItemsToLoad=new Array();;
+                    window.smartFormsItemsToLoad=new Array();
                 window.smartFormsItemsToLoad.push({ 'form_id':".$options['form_id'].",  'elements':".$options['elements'].",'client_form_options':".$options['client_form_options'].",'container':'formContainer$random'});
             </script>
            ";
     }
+
+	return null;
 }

@@ -5,7 +5,11 @@
             javascriptUrl=url.substring(0,url.length-13);
             // Register command for when button is clicked
             ed.addCommand('rednao_smart_forms_short_code_clicked', function(a,donationId) {
-                tinymce.execCommand('mceInsertContent', false, '[sform]'+donationId+'[/sform]');
+
+                var shortCode=rnJQuery('#smartFormShortCodeSelect').val();
+                if(shortCode==null)
+                    return;
+                tinymce.execCommand('mceInsertContent', false,shortCode);
 
                 rnJQuery("#smartformsShortCodeDialog").dialog('close');
                 rnJQuery("#smartformsShortCodeDialog").remove();
@@ -16,7 +20,7 @@
             onclick:function()
             {
                 var data={
-                    action:"rednao_smart_form_list"
+                    action:"rednao_smart_form_short_code_setup"
                 };
 
                 rnJQuery.post(ajaxurl,data,smartFormsAjaxCompleted);
@@ -31,12 +35,19 @@
 var smartFormsShortCodeDialog;
 function smartFormsAjaxCompleted(result,status)
 {
+    var shortCodeOptions=rnJQuery.parseJSON(result);
 
+    //todo: acer que el popup funcione con los shortcodeoptions
     if(smartFormsShortCodeDialog==null)
     {
-        var smartFormsPopUpForm='<div style=""><div id="smartformsShortCodeDialog"  title="Basic modal dialog"><select id="smartFormList">';
-        smartFormsPopUpForm+='</select></div></div>'
+        var $optionsSelect=rnJQuery('<select style="display: block;width:100%;margin-bottom: 10px;" ></select>');
+        var $elementsSelect=rnJQuery('<select id="smartFormShortCodeSelect" style="display: block;width:100%;"></select>');
+        var smartFormsPopUpForm='<div style=""><div id="smartformsShortCodeDialog"  title="Basic modal dialog">';
+        smartFormsPopUpForm+='</div></div>';
         var dialog=rnJQuery(smartFormsPopUpForm);
+        dialog.find('#smartformsShortCodeDialog').append($optionsSelect).append($elementsSelect);
+
+        ConfigureDialogs(shortCodeOptions,$optionsSelect,$elementsSelect);
 
         smartFormsShortCodeDialog=dialog.dialog({
         modal:true,
@@ -60,20 +71,33 @@ function smartFormsAjaxCompleted(result,status)
         rnJQuery('#redNaoSelection').val('button');
     }
 
-    ajaxFormCompleted(result);
-
-    function ajaxFormCompleted(result) {
-        var formArray=rnJQuery.parseJSON(result);
-        var options="";
-        for(var i=0;i<formArray.length;i++)
+    function ConfigureDialogs(shortCodeOptions,$optionsSelect,$elementsSelect)
+    {
+        var isFirst=true;
+        for(var i=0;i<shortCodeOptions.length;i++)
         {
-            options+=' <option value="'+formArray[i].Id+'">'+formArray[i].Name+'</option>';
+            $optionsSelect.append('<option '+(isFirst?'selected="selected"':'')+'>'+RedNaoEscapeHtml(shortCodeOptions[i].Name)+'</option>');
+            isFirst=false;
         }
 
-        rnJQuery('#smartFormList').empty().append(options);
+        $optionsSelect.change(function ()
+        {
+            $elementsSelect.empty();
+            var index=rnJQuery(this).find('option:selected').index();
+            if(index<0)
+                return;
+
+
+            var selectedOption=shortCodeOptions[index];
+            var isFirst=true;
+            for(var i=0;i<selectedOption.Elements.length;i++)
+            {
+                $elementsSelect.append('<option value="['+selectedOption.ShortCode+']'+selectedOption.Elements[i].Id+'[/'+selectedOption.ShortCode+']" '+(isFirst?'selected="selected"':'')+'>'+RedNaoEscapeHtml(selectedOption.Elements[i].Name)+'</option>');
+                isFirst=false;
+            }
+        }).change();
+
     }
-
-
 
 
 

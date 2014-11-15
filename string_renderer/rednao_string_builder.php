@@ -14,7 +14,7 @@ class rednao_string_builder {
 
     }
 
-	private function GetElementRenderer($formElement)
+	public function GetElementRenderer($formElement)
 	{
 
 		switch($formElement["ClassName"])

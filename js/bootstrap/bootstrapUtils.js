@@ -81,8 +81,10 @@ rnJQuery.fn.RDNotifications=function(dynamicHeight)
             this.Element.removeClass('alert alert-success alert-info alert-warning alert-danger')
         }
     };
-}
+};
 
+
+/************************************************************************************* Wait Dialog ***************************************************************************************************/
 rnJQuery.RNGetWaitDialog=function()
 {
     if(typeof this.RNWaitDialog =='undefined')
@@ -91,8 +93,6 @@ rnJQuery.RNGetWaitDialog=function()
     return this.RNWaitDialog;
 };
 
-
-/************************************************************************************* Wait Dialog ***************************************************************************************************/
 function RNWaitDialog()
 {
     if(typeof RNWaitDialog.prototype.$Dialog=='undefined')
@@ -127,10 +127,65 @@ RNWaitDialog.prototype.Show=function(message)
     $dialog.css("margin-top", offset);
     this.$Dialog.find('.modal-title').text(message);
     this.$Dialog.modal('show');
-}
+};
 
 
 RNWaitDialog.prototype.Hide=function()
 {
     this.$Dialog.modal('hide');
+};
+
+
+/************************************************************************************* Alert Dialog ***************************************************************************************************/
+rnJQuery.RNGetAlertDialog=function()
+{
+    if(typeof this.RNAlertDialog =='undefined')
+        this.RNAlertDialog=new RNAlertDialog();
+
+    return this.RNAlertDialog;
+};
+
+function RNAlertDialog()
+{
+    if(typeof RNAlertDialog.prototype.$Dialog=='undefined')
+    {
+        //todo:create error and warning dialog
+        RNAlertDialog.prototype.$Dialog=rnJQuery(
+            '<div class="modal fade"  tabindex="-1">'+
+                '<div class="modal-dialog warning">'+
+                    '<div class="modal-content">'+
+                        '<div class="modal-header">'+
+                            '<span class="glyphicon glyphicon-warning-sign" style="display: inline"></span>'+
+                            '<h4 style="display: inline" class="modal-title"></h4>'+
+                        '</div>'+
+                        '<div class="modal-body">'+
+                        '</div>'+
+                        '<div class="modal-footer">'+
+                            '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+            '</div>');
+
+        var container=rnJQuery('<div class="bootstrap-wrapper"></div>');
+        container.append(RNAlertDialog.prototype.$Dialog);
+        rnJQuery('body').append(container);
+    }
 }
+
+RNAlertDialog.prototype.ShowWarning=function(title,message)
+{
+    var $dialog = this.$Dialog.find(".modal-dialog");
+    $dialog.find('.modal-body').html(RedNaoEscapeHtml(message));
+    $dialog.find('.modal-title').text(title);
+    var offset = (rnJQuery(window).height() - $dialog.height()) / 2;
+    // Center modal vertically in window
+    $dialog.css("margin-top", offset);
+    this.$Dialog.modal('show');
+};
+
+
+RNAlertDialog.prototype.Hide=function()
+{
+    this.$Dialog.modal('hide');
+};

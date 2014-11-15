@@ -71,21 +71,35 @@ function rednao_smart_forms_save()
 }
 
 
-function rednao_smart_form_list()
+function rednao_smart_form_short_code_setup()
 {
     if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') ) {
         return;
     }
 
     global $wpdb;
-    $result=$wpdb->get_results("SELECT form_id,form_name FROM ".SMART_FORMS_TABLE_NAME);
 
-    echo "[{\"Id\":\"0\",\"Name\":\"Select a Form\"}";
+	$shortCodeOptions=array();
+	array_push($shortCodeOptions,array(
+		"Name"=>"Forms",
+		"ShortCode"=>"sform",
+		"Elements"=>array()
+	));
+
+	$result=$wpdb->get_results("SELECT form_id,form_name FROM ".SMART_FORMS_TABLE_NAME);
+    //echo "[{\"Id\":\"0\",\"Name\":\"Select a Form\"}";
     foreach($result as $key=>$row)
     {
-        echo ",{\"Id\":\"$row->form_id\",\"Name\":\"$row->form_name\"}";
+		array_push($shortCodeOptions[0]["Elements"],array(
+			"Id"=>$row->form_id,
+			"Name"=>$row->form_name
+		));
+
     }
-    echo"]";
+
+	$shortCodeOptions=apply_filters("smart_forms_get_short_code_options",$shortCodeOptions);
+
+	echo json_encode($shortCodeOptions);
     die();
 }
 

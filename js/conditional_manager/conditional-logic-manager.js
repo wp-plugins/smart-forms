@@ -41,7 +41,7 @@ SfConditionalLogicManager.prototype.CreateConditionalHandlersListScreen=function
     var table=html.find('table');
     for(var i=0;i<handlers.length;i++)
     {
-        var link=rnJQuery("<tr><td style='cursor: hand;cursor: pointer;'><a style='cursor: hand;cursor: pointer;'>"+handlers[i].Label+"</a></td></tr>");
+        var link=rnJQuery("<tr><td style='cursor: hand;cursor: pointer;text-align: center;'><a style='cursor: hand;cursor: pointer;'>"+handlers[i].Label+"</a></td></tr>");
         var handlerId=handlers[i].id;
         link.find('td').click(function(){
         //noinspection JSReferencingMutableVariableFromClosure
@@ -133,9 +133,6 @@ SfConditionalLogicManager.prototype.SaveCondition=function()
 
 SfConditionalLogicManager.prototype.GoToRoot=function()
 {
-    if(this.CurrentStepIndex<0)
-        return;
-
     this.CurrentStep=null;
     var self=this;
 

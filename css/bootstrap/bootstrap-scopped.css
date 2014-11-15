@@ -6279,3 +6279,22 @@
   }
 }
 
+.bootstrap-wrapper .modal-dialog.warning .modal-header
+{
+    background-color: #FFB431;
+    color:white;
+}
+
+.bootstrap-wrapper .modal-dialog.warning .modal-body,.modal-dialog.warning .modal-footer
+{
+    background-color: rgba(255,233,111,0.3);;
+}
+
+.bootstrap-wrapper .modal-dialog.warning .glyphicon{
+    font-size: 20px;
+}
+
+.bootstrap-wrapper .modal-dialog.warning .glyphicon,.modal-dialog.warning h4{
+    vertical-align: middle;
+}
+
