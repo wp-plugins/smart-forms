@@ -14,6 +14,8 @@ class rednao_file_upload extends  rednao_base_elements_renderer{
 		$firstElement=true;
 		foreach($entry as $value)
 		{
+			if(!isset($value["path"]))
+				continue;
 			if($firstElement)
 				$firstElement=false;
 			else
