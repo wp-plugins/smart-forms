@@ -32,15 +32,19 @@ wp_enqueue_script('smart-forms-conditional-steps',SMART_FORMS_DIR_URL.'js/condit
 wp_enqueue_script('smart-forms-conditional-handlers',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-handlers.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-conditional-manager',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-logic-manager.js',array('isolated-slider','smart-forms-conditional-handlers'));
 wp_enqueue_script('ismart-forms-add-new',SMART_FORMS_DIR_URL.'js/subscriber_interfaces/ismart-forms-add-new.js');
-wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',apply_filters('ismart-forms-add-new','smart_forms_pr_add_new_js_extension',array('isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2','smart-forms-event-manager','smart-forms-conditional-manager')));
+
+$additionalJS=apply_filters("sf_form_configuration_on_load_js",array());
+$addNewDependencies= array('ismart-forms-add-new','isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2','smart-forms-event-manager','smart-forms-conditional-manager');
+for($i=0;$i<count($additionalJS);$i++){
+	wp_enqueue_script($additionalJS[$i]["handler"],$additionalJS[$i]["path"],array('ismart-forms-add-new'));
+	array_push($addNewDependencies,$additionalJS[$i]["handler"]);
+}
+wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',$addNewDependencies);
 wp_enqueue_script('smart-forms-icheck',SMART_FORMS_DIR_URL.'js/utilities/iCheck/icheck.min.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-select2',SMART_FORMS_DIR_URL.'js/utilities/select2/select2.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-jsColor',SMART_FORMS_DIR_URL.'js/utilities/jsColor/jscolor.js',array('isolated-slider'));
 
-$additionalJS=apply_filters("sf_form_configuration_on_load_js",array());
-for($i=0;$i<count($additionalJS);$i++){
-	wp_enqueue_script($additionalJS[$i]["handler"],$additionalJS[$i]["path"],array("smart-forms-add-new"));
-}
+
 
 require_once(SMART_FORMS_DIR.'translations/smart-forms-add-new-translation.php');
 require_once(SMART_FORMS_DIR.'translations/form-elements-translation.php');
@@ -278,23 +282,26 @@ if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
     </table>
 </div>
 
-<div id="smartFormsAfterSubmitDiv" style="display: none;padding: 10px">
+<div id="smartFormsAfterSubmitDiv" style="display: none;padding: 10px" class="form-horizontal bootstrap-wrapper">
 
-    <input type="checkbox"  id="smartFormsSendNotificationEmail"/>
-    <span><?php echo __("Send notification email"); ?></span>
-    <button id="redNaoEditEmailButton" disabled="disabled"><?php echo __("Edit Email"); ?></button>
-    <br/>
+	<div class="row">
+		<input type="checkbox"  id="smartFormsSendNotificationEmail"/>
+		<span><?php echo __("Send notification email"); ?></span>
+		<button id="redNaoEditEmailButton" disabled="disabled"><?php echo __("Edit Email"); ?></button>
+	</div>
 
-    <div style="margin-top:10px;">
-    <input  type="checkbox"  id="redNaoRedirectToCB"/>
-    <span ><?php echo __("Redirect to"); ?></span>
-    <input type="text" style="width: 600px;" id="redirectToInput" disabled="disabled" class="redNaoDisabled"/>
+    <div  class="row">
+		<input  type="checkbox"  id="redNaoRedirectToCB"/>
+		<span ><?php echo __("Redirect to"); ?></span>
+		<input type="text" style="width: 600px;" id="redirectToInput" disabled="disabled" class="redNaoDisabled"/>
+		<button disabled="disabled" id="smartFormsAddParameter">Add Parameters to Url</button>
     </div>
 
-    <div style="margin-top:10px;">
-    <input style="vertical-align: top" type="checkbox"  id="redNaoAlertMessageCB"/>
-    <span style="vertical-align: top"><?php echo __("Show alert message"); ?></span>
-    <textarea style="width:250px;height: 70px;" id="alertMessageInput" disabled="disabled" class="redNaoDisabled"></textarea>
+
+    <div class="row">
+		<input style="vertical-align: top" type="checkbox"  id="redNaoAlertMessageCB"/>
+		<span style="vertical-align: top"><?php echo __("Show alert message"); ?></span>
+		<textarea style="width:250px;height: 70px;" id="alertMessageInput" disabled="disabled" class="redNaoDisabled"></textarea>
     </div>
 
 

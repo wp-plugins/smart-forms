@@ -145,3 +145,8 @@
 .sfConditionRow td{
     padding-right: 5px;
 }
+
+#smartFormsAfterSubmitDiv input[type=checkbox]
+{
+    margin-top: 0px;
+}

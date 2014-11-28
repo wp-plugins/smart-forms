@@ -361,10 +361,6 @@
     margin-bottom: 0 !important;
 }
 
-.bootstrap-wrapper .radio label, .bootstrap-wrapper .checkbox label{
-    padding-left:0 !important;
-
-}
 .bootstrap-wrapper .radio{
     padding-top: 0 !important;
 }

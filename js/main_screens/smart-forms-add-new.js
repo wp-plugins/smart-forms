@@ -87,28 +87,131 @@ function SmartFormsAddNew()
     rnJQuery('#smartFormsSendNotificationEmail').change(function(){self.NotifyToChanged()});
     rnJQuery('#smartFormsSendNotificationEmail').change();
     rnJQuery('#redNaoEditEmailButton').click(function(e){e.preventDefault();self.EditEmailClicked();});
-    rnJQuery('#redNaoRedirectToCB').change(function(){self.DisableOnEmpty(rnJQuery(this),rnJQuery('#redirectToInput'))});
+    rnJQuery('#redNaoRedirectToCB').change(function(){
+        self.DisableOnEmpty(rnJQuery(this),rnJQuery('#redirectToInput'));
+        self.DisableOnEmpty(rnJQuery(this),rnJQuery('#smartFormsAddParameter'));
+    });
     rnJQuery('#redNaoAlertMessageCB').change(function(){self.DisableOnEmpty(rnJQuery(this),rnJQuery('#alertMessageInput'))});
-
+    rnJQuery('#smartFormsAddParameter').click(function(e){e.preventDefault();self.OpenParameterPicker();});
     rnJQuery('#redNaoRedirectToCB').change();
     rnJQuery('#redNaoAlertMessageCB').change();
-    this.Subscribers=[];
-    //rnJQuery('#sfAddConditionalLogic').click(function(){self.SfConditionalLogicManager.AddNew();});
+    this.Subscribers=ISmartFormsAddNew.prototype.Subscribers;
     RedNaoEventManager.Subscribe('FormulaButtonClicked',function(data){self.OpenFormulaBuilder(data.FormElement,data.PropertyName,data.AdditionalInformation,data.Image)});
-    RedNaoEventManager.Subscribe('SubscribeToFormConfigurationEvents',function(subscriber)
+
+    var i;
+    for(i=0;i<self.Subscribers.length;i++)
     {
-        self.Subscribers.push(subscriber);
-        var saveDataId= subscriber.GetSaveDataId();
+        var saveDataId= self.Subscribers[i].GetSaveDataId();
         if(saveDataId!=null)
         {
             if(typeof self.ExtensionData[saveDataId]!='undefined')
-                subscriber.LoadSavedData(self.ExtensionData[saveDataId]);
+                self.Subscribers[i].LoadSavedData(self.ExtensionData[saveDataId]);
         }
+    }
+
+
+    for(var i=0;i<self.Subscribers.length;i++)
+    {
+        self.Subscribers[i].OnLoad();
+    }
+}
+
+
+SmartFormsAddNew.prototype.OpenParameterPicker=function()
+{
+    var self=this;
+    this.ShowFieldPicker('Select the fields you want to send as parameters to the redirect page',this.FormBuilder.RedNaoFormElements.slice(0),function(success,selectedFields){
+                                                                                                                                                    if(success)
+                                                                                                                                                         self.AddFieldsToRedirectUrl(selectedFields);});
+};
+
+
+SmartFormsAddNew.prototype.AddFieldsToRedirectUrl=function(selectedFields)
+{
+    var parameterString="";
+    for(var i=0;i<selectedFields.length;i++)
+    {
+        parameterString+=selectedFields[i].Id+'={'+selectedFields[i].Id+'}'+'&';
+    }
+    parameterString=parameterString.substring(0,parameterString.length-1);
+
+    var currentRedirectUrl=rnJQuery.trim(rnJQuery('#redirectToInput').val());
+    if(currentRedirectUrl.indexOf('?')>=0)
+        currentRedirectUrl+='&';
+    else
+    {
+        if(currentRedirectUrl.length==0||currentRedirectUrl[currentRedirectUrl.length-1]!='/')
+            currentRedirectUrl+='/';
+        currentRedirectUrl+='?';
+    }
+    currentRedirectUrl+=parameterString;
+
+    rnJQuery('#redirectToInput').val(currentRedirectUrl);
+
+
+
+};
+
+SmartFormsAddNew.prototype.ShowFieldPicker=function(popUpTitle,formElements,callBack)
+{
+    var $dialog=rnJQuery(
+        '<div class="modal fade"  tabindex="-1">'+
+            '<div class="modal-dialog">'+
+            '<div class="modal-content">'+
+            '<div class="modal-header">'+
+            '<h4 style="display: inline" class="modal-title">'+popUpTitle+'</h4>'+
+            '</div>'+
+            '<div class="modal-body">'+
+            '</div>'+
+            '<div class="modal-footer">'+
+            '<button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>Cancel</button>'+
+            '<button type="button" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span>Apply</button>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '</div>');
+
+    var container=rnJQuery('<div class="bootstrap-wrapper"></div>');
+    container.append($dialog);
+    rnJQuery('body').append(container);
+    $dialog.modal('show');
+
+
+    var $body=rnJQuery('<div class="bootstrap-wrapper"><form role="form"></form></div>');
+    var $form=$body.find("form");
+
+    formElements.splice(0,0,{Id:'_formid',Options:{Label:'Form Id'},StoresInformation:function(){return true;}});
+    for(var i=0;i<formElements.length;i++)
+    {
+        if(formElements[i].StoresInformation())
+        {
+            $form.append('<div class="checkbox" style="font-size: 15px;margin-bottom: 10px;">'+
+                '<label>'+
+                '<input type="checkbox" value="'+RedNaoEscapeHtml(formElements[i].Id)+'"> '+RedNaoEscapeHtml(formElements[i].Options.Label)+
+                '</label>'+
+                '</div>');
+        }
+    }
+    $dialog.find('.modal-body').append($form);
+    $dialog.find(".btn-success").click(function()
+    {
+        $dialog.modal('hide');
+        $checkedBoxes=$form.find('input[type=checkbox]:checked');
+        var selectedFields=[];
+        for(var i=0;i<$checkedBoxes.length;i++)
+        {
+            for(var t=0;t<formElements.length;t++)
+                if(formElements[t].Id==$checkedBoxes[i].value)
+                {
+                    selectedFields.push(formElements[t]);
+                    break;
+                }
+        }
+        callBack(true,selectedFields);
     });
 
+};
 
-
-}
 SmartFormsAddNew.prototype.DisableOnEmpty=function(checkbox,elementToDisable)
 {
     if(checkbox.is(':checked'))

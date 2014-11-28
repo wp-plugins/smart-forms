@@ -13,6 +13,7 @@ class php_entry_saver_base {
 	private $EntryId="";
 	private $FormString="";
 	private $StringBuilder;
+	private $InsertedValuesString=null;
 
 
     function __construct($formId,$formString,$captcha,$referenceId="",$formOptions=null,$elementOptions=null)
@@ -76,6 +77,7 @@ class php_entry_saver_base {
 				array(
 					"message"=>__("Information submitted successfully."),
 					"success"=>"y",
+					"insertedValues"=>$this->InsertedValuesString,
 					"AdditionalActions"=>$additionalActions["Actions"]
 				)
 			);
@@ -83,6 +85,7 @@ class php_entry_saver_base {
 			return false;
 		}
 
+		$this->InsertedValuesString=array();
        	$result=$this->ExecuteInsertions();
         if($this->FormOptions["SendNotificationEmail"]=="y")
             $this->SendFormEmail($this->FormOptions["Emails"][0],$this->FormEntryData,$this->ElementOptions,false);
@@ -102,7 +105,8 @@ class php_entry_saver_base {
 				array(
 					"message"=>__("Information submitted successfully."),
 					"success"=>"y",
-					"AdditionalActions"=>$additionalActions["Actions"]
+					"AdditionalActions"=>$additionalActions["Actions"],
+					"insertedValues"=>$this->InsertedValuesString,
 				)
 			);
 			return true;
@@ -149,6 +153,7 @@ class php_entry_saver_base {
 		if($result==false)
 			return false;
 		$this->EntryId=$wpdb->insert_id;
+		$this->InsertedValuesString["_formid"]=$this->EntryId;
 		$result=$this->ParseAndInsertDetail($this->EntryId,$this->FormEntryData,$this->GetFormElementsDictionary());
 		return $result;
 
@@ -290,6 +295,7 @@ class php_entry_saver_base {
 
 	public function ParseAndInsertDetail($entryId,$entryData,$formElementsDictionary)
 	{
+
 		foreach($entryData as $key=>$unprocessedValue)
 		{
 			if(!isset($formElementsDictionary[$key]))
@@ -297,6 +303,8 @@ class php_entry_saver_base {
 
 			$fieldConfiguration=$formElementsDictionary[$key];
 			$value=$this->StringBuilder->GetStringFromColumn($fieldConfiguration,$unprocessedValue);
+			if($fieldConfiguration["ClassName"]!="sfFileUpload")
+				$this->InsertedValuesString[$key]=$value;
 			$exValue=$this->StringBuilder->GetExValue($fieldConfiguration,$unprocessedValue);
 			$jsonValue=json_encode($unprocessedValue);
 			if(!$this->InsertDetailRecord($entryId,$key,$value,$jsonValue,$exValue))

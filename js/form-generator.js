@@ -430,12 +430,36 @@ smartFormGenerator.prototype.SaveCompleted=function(result){
         alert(this.client_form_options.alert_message);
 
     if(RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)=="y")
-        window.location=this.client_form_options.redirect_to;
+    {
+        var processedUrl=this.ProcessRedirectUrl(this.client_form_options.redirect_to,result.insertedValues);
+        window.location=processedUrl;
+    }
 
     this.CreateForm();
 
 };
 
+smartFormGenerator.prototype.ProcessRedirectUrl=function(url,insertedValues)
+{
+    var regEx=/{([^}]+)}/g;
+    var matches;
+
+    while(matches=regEx.exec(url))
+    {
+        for(var i=0;i<matches.length;i++)
+        {
+            if(matches[i][0]=='{')
+                continue;
+            var value='';
+            if(typeof insertedValues[matches[i]]!='undefined')
+                value=insertedValues[matches[i]];
+
+            url=url.replace('{'+matches[i]+'}',encodeURIComponent(value));
+        }
+    }
+
+    return url;
+};
 
 smartFormGenerator.prototype.GetRootContainer=function()
 {

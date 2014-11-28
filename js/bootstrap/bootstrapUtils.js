@@ -189,3 +189,60 @@ RNAlertDialog.prototype.Hide=function()
 {
     this.$Dialog.modal('hide');
 };
+
+/************************************************************************************* Confirmation Dialog ***************************************************************************************************/
+rnJQuery.RNGetConfirmationDialog=function()
+{
+    if(typeof this.RNConfirmationDialog =='undefined')
+        this.RNConfirmationDialog=new RNConfirmationDialog();
+
+    return this.RNConfirmationDialog;
+};
+
+function RNConfirmationDialog()
+{
+    if(typeof RNConfirmationDialog.prototype.$Dialog=='undefined')
+    {
+        //todo:create error and warning dialog
+        RNConfirmationDialog.prototype.$Dialog=rnJQuery(
+            '<div class="modal fade"  tabindex="-1">'+
+                '<div class="modal-dialog">'+
+                '<div class="modal-content">'+
+                '<div class="modal-header" style="background-color: #3399FF;color:white;">'+
+                '<h4 style="display: inline" class="modal-title"></h4>'+
+                '</div>'+
+                '<div class="modal-body">'+
+                '</div>'+
+                '<div class="modal-footer">'+
+                '<button type="button" class="btn btn-success rnBtnYes" data-dismiss="modal"><span class="glyphicon glyphicon-ok"></span>Yes</button>'+
+                '<button type="button" class="btn btn-danger" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span>No</button>'+
+                '</div>'+
+                '</div>'+
+                '</div>'+
+                '</div>');
+
+        var container=rnJQuery('<div class="bootstrap-wrapper"></div>');
+        container.append(RNConfirmationDialog.prototype.$Dialog);
+        rnJQuery('body').append(container);
+    }
+}
+
+RNConfirmationDialog.prototype.ShowConfirmation=function(title,message,callback)
+{
+    var $dialog = this.$Dialog.find(".modal-dialog");
+    $dialog.find('.modal-body').html(RedNaoEscapeHtml(message));
+    $dialog.find('.modal-title').html(title);
+    var offset = (rnJQuery(window).height() - $dialog.height()) / 2;
+    // Center modal vertically in window
+    $dialog.css("margin-top", offset);
+    this.$Dialog.find('.rnBtnYes').unbind('click').bind('click',function(){callback();});
+
+    this.$Dialog.modal('show');
+
+};
+
+
+RNAlertDialog.prototype.Hide=function()
+{
+    this.$Dialog.modal('hide');
+};

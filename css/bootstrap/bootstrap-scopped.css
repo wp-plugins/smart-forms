@@ -6298,3 +6298,7 @@
     vertical-align: middle;
 }
 
+.bootstrap-wrapper .rnListManager .rnListManagerItemSelected{
+    background-color:#3399FF !important;
+    color:white !important;
+}
