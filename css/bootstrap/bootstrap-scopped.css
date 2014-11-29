@@ -2388,7 +2388,7 @@
   display: block;
   width: 100%;
   padding: 0;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   font-size: 21px;
   line-height: inherit;
   color: #333;
@@ -2504,7 +2504,7 @@
   line-height: 46px;
 }
 .bootstrap-wrapper .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 .bootstrap-wrapper .radio,
 .bootstrap-wrapper .checkbox {
