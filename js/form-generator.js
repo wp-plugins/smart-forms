@@ -23,9 +23,21 @@ function smartFormGenerator(options){
     }
 
     this.containerName=options.container;
+    if(typeof this.client_form_options.CSS!='undefined')
+        this.CreateCSS();
     this.CreateForm();
 
 }
+
+smartFormGenerator.prototype.CreateCSS=function()
+{
+    if(SmartFormsIsIE8OrEarlier())
+        return;
+
+    var $style=rnJQuery("<style type='text/css'></style>");
+    $style.append(this.client_form_options.CSS);
+    rnJQuery("head").append($style);
+};
 
 smartFormGenerator.prototype.InitializeConditionalLogic=function()
 {
@@ -128,7 +140,7 @@ smartFormGenerator.prototype.CreatePayPalHiddenFields=function()
         this.JQueryForm.append('<input type="hidden" name="return" value="'+this.client_form_options.redirect_to+'">');
 
 };
-
+/*
 smartFormGenerator.prototype.AdjustLayout=function()
 {
     var labelArray=[];
@@ -173,7 +185,7 @@ smartFormGenerator.prototype.AdjustLayout=function()
 
     if(this.JQueryForm.width()<(this.maxWidth+5))//5px is the margin size between the label and the control
         this.JQueryForm.parent().addClass('redNaoCompactForm');
-};
+};*/
 
 smartFormGenerator.prototype.GenerationCompleted=function()
 {
@@ -431,8 +443,7 @@ smartFormGenerator.prototype.SaveCompleted=function(result){
 
     if(RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)=="y")
     {
-        var processedUrl=this.ProcessRedirectUrl(this.client_form_options.redirect_to,result.insertedValues);
-        window.location=processedUrl;
+        window.location=this.ProcessRedirectUrl(this.client_form_options.redirect_to, result.insertedValues);
     }
 
     this.CreateForm();

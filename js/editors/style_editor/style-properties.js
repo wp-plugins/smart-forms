@@ -1,5 +1,6 @@
-function RedNaoBaseStyleProperty(formElement,elementName,cssProperty,propertyLabel)
+function RedNaoBaseStyleProperty(styleSetter,formElement,elementName,cssProperty,propertyLabel)
 {
+    this.StyleSetter=styleSetter;
     this.FormElement=formElement;
     this.ElementName=elementName;
     this.CssProperty=cssProperty;
@@ -11,7 +12,7 @@ RedNaoBaseStyleProperty.prototype.AppendToElement=function(jqueryElement)
     var createdElement=rnJQuery(this.GenerateInlineElement());
     jqueryElement.append(createdElement);
     this.GenerationCompleted(createdElement);
-}
+};
 
 RedNaoBaseStyleProperty.prototype.GetPropertyValue=function()
 {
@@ -19,17 +20,13 @@ RedNaoBaseStyleProperty.prototype.GetPropertyValue=function()
         return this.FormElement.Options.Styles[this.ElementName].Properties[this.CssProperty];
 
     return null;
-}
+};
 
 RedNaoBaseStyleProperty.prototype.SetPropertyValue=function(value)
 {
-    if(typeof this.FormElement.Options.Styles[this.ElementName]=='undefined')
-        this.FormElement.Options.Styles[this.ElementName]={Scope:SmartFormsStyleScopeField,Properties:{}};
-    if(typeof this.FormElement.Options.Styles[this.ElementName].Properties=='undefined')
-        this.FormElement.Options.Styles[this.ElementName].Properties={};
-
-    this.FormElement.Options.Styles[this.ElementName].Properties[this.CssProperty]=value;
-}
+    Properties=this.StyleSetter.GetOrCreateSection('Properties');
+    Properties[this.CssProperty]=value;
+};
 
 RedNaoBaseStyleProperty.prototype.RemoveProperty=function()
 {
@@ -51,20 +48,18 @@ RedNaoBaseStyleProperty.prototype.RemoveProperty=function()
     }
     if(count==0)
     {
-        delete this.FormElement.Options.Styles[this.ElementName].Properties;
-        delete this.FormElement.Options.Styles[this.ElementName];
+        this.StyleSetter.RemoveSection('Properties');
     }
 
-}
+};
 
 /************************************************************************************* Font Family Style ***************************************************************************************************/
 
-function RedNaoFontFamilyStyleProperty(formElement,elementName,cssProperty,propertyLabel)
+function RedNaoFontFamilyStyleProperty(styleSetter,formElement,elementName,cssProperty,propertyLabel)
 {
-    RedNaoBaseStyleProperty.call(this,formElement,elementName,cssProperty,propertyLabel);
+    RedNaoBaseStyleProperty.call(this,styleSetter,formElement,elementName,cssProperty,propertyLabel);
 
-    this.Fonts=fonts = new Array(
-                                    smartFormsTranslation.Default,
+    this.Fonts=fonts = [smartFormsTranslation.Default,
                                     '"Arial,Helvetica","sans-serif"',
                                     '"Arial Black","Gadget","sans-serif"',
                                     '"Comic Sans MS","cursive"',
@@ -77,7 +72,7 @@ function RedNaoFontFamilyStyleProperty(formElement,elementName,cssProperty,prope
                                     '"Tahoma","Geneva","sans-serif"',
                                     '"Times New Roman","Times","serif"',
                                     '"Trebuchet MS","Helvetica","sans-serif"',
-                                    '"Verdana","Geneva","sans-serif"' );
+                                    '"Verdana","Geneva","sans-serif"'];
 
 
 
@@ -110,7 +105,7 @@ RedNaoFontFamilyStyleProperty.prototype.GenerateInlineElement=function()
         "</select>"  +
         "   </td>" +
         "</tr>" ;
-}
+};
 
 RedNaoFontFamilyStyleProperty.prototype.GenerationCompleted=function(jQueryElement)
 {
@@ -124,14 +119,14 @@ RedNaoFontFamilyStyleProperty.prototype.GenerationCompleted=function(jQueryEleme
 
         self.FormElement.ApplyTagStyleForElement(self.ElementName);
     });
-}
+};
 
 
 /************************************************************************************* RedNaoColorStyleProperty ***************************************************************************************************/
 
-function RedNaoColorStyleProperty(formElement,elementName,cssProperty,propertyLabel)
+function RedNaoColorStyleProperty(styleSetter,formElement,elementName,cssProperty,propertyLabel)
 {
-    RedNaoBaseStyleProperty.call(this,formElement,elementName,cssProperty,propertyLabel);
+    RedNaoBaseStyleProperty.call(this,styleSetter,formElement,elementName,cssProperty,propertyLabel);
 }
 RedNaoColorStyleProperty.prototype=Object.create(RedNaoBaseStyleProperty.prototype);
 
@@ -148,7 +143,7 @@ RedNaoColorStyleProperty.prototype.GenerateInlineElement=function()
                     "<input placeholder='"+smartFormsTranslation.Default+"'  class='color'  "+ (selectedColor!=null?("value='"+selectedColor+"'"):"")+"/>"+
                 "</td>" +
             "</tr>";
-}
+};
 
 RedNaoColorStyleProperty.prototype.GenerationCompleted=function(jQueryElement)
 {
@@ -165,5 +160,5 @@ RedNaoColorStyleProperty.prototype.GenerationCompleted=function(jQueryElement)
         self.FormElement.ApplyTagStyleForElement(self.ElementName);
 
     });
-}
+};
 

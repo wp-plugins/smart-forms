@@ -26,21 +26,24 @@ function RedNaoStyleEditor()
 
 RedNaoStyleEditor.prototype.OpenStyleEditor=function(formElement,formElementJQuery)
 {
+    rnJQuery('#rnStyleEditorAttribute').click();
     this.Dialog.dialog('open');
     this.PreviewScreen.empty();
     var div=rnJQuery("<div></div>");
     this.PreviewScreen.append(div);
     var elementToStyle=formElement.GenerateHtml(div);
+    rnJQuery('#allOfTypeOption').text('Every '+formElement.Title +' field');
 
     RedNaoDragManager.prototype.MakeItemDraggable(formElementJQuery);
     RedNaoDragManager.prototype.MakeItemDraggable(elementToStyle);
 
 
     this.AttributesCointainer.empty();
+    rnJQuery('.rnEditorContainer').hide();
     this.AttributesCointainer.append("<table style='width: 100%;height: 100%;'><tr><td style='vertical-align:middle'><h1 style='width: 100%;text-align: center;'>"+smartFormsTranslation.ClickInAnElementToEditIt+"</h1></td></tr></table>");
     this.Styler=GetElementStyler(formElement,elementToStyle,this.AttributesCointainer);
 
-}
+};
 
 
 var RedNaoStyleEditorVar=null;

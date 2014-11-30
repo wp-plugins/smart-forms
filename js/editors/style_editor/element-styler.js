@@ -1,3 +1,4 @@
+//noinspection JSUnusedGlobalSymbols
 var sfElementStylerExtensions=[];
 
 function GetElementStyler(formElement,elementToStyle,attributesCointainer)
@@ -65,7 +66,7 @@ RedNaoBaseElementStyler.Extensions=[];
 RedNaoBaseElementStyler.prototype.SetupSelectableElements=function()
 {
 
-}
+};
 
 
 /************************************************************************************* Title Element Styler ***************************************************************************************************/
@@ -79,7 +80,7 @@ RedNaoTitleStyler.prototype=Object.create(RedNaoBaseElementStyler.prototype);
 RedNaoTitleStyler.prototype.SetupSelectableElements=function()
 {
     this.StyleSets.Title=new SmartFormsTitleStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoLegend");
-}
+};
 
 /************************************************************************************* Text Input Element Styler ***************************************************************************************************/
 function RedNaoTextInputStyler(formElement,elementToStyle,attributesCointainer)
@@ -93,7 +94,7 @@ RedNaoTextInputStyler.prototype.SetupSelectableElements=function()
 {
     this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoInputText");
-}
+};
 
 /************************************************************************************* PrependTextInput ***************************************************************************************************/
 function RedNaoPrependTextInputStyler(formElement,elementToStyle,attributesCointainer)
@@ -108,7 +109,7 @@ RedNaoPrependTextInputStyler.prototype.SetupSelectableElements=function()
     this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoInputText");
     this.StyleSets.Prepend=new SmartFormsPrependStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoPrepend");
-}
+};
 
 /************************************************************************************* AppendTextInput ***************************************************************************************************/
 function RedNaoAppendTextInputStyler(formElement,elementToStyle,attributesCointainer)
@@ -123,7 +124,7 @@ RedNaoAppendTextInputStyler.prototype.SetupSelectableElements=function()
     this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoInputText");
     this.StyleSets.Prepend=new SmartFormsPrependStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoAppend");
-}
+};
 
 /************************************************************************************* PrependCheckBox ***************************************************************************************************/
 function RedNaoPrependCheckBoxStyler(formElement,elementToStyle,attributesCointainer)
@@ -138,7 +139,7 @@ RedNaoPrependCheckBoxStyler.prototype.SetupSelectableElements=function()
     this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoInputText");
     this.StyleSets.Prepend=new SmartFormsCheckBoxStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoPrepend");
-}
+};
 
 /************************************************************************************* AppendCheckBox ***************************************************************************************************/
 function RedNaoAppendCheckBoxStyler(formElement,elementToStyle,attributesCointainer)
@@ -153,7 +154,7 @@ RedNaoAppendCheckBoxStyler.prototype.SetupSelectableElements=function()
     this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoInputText");
     this.StyleSets.Prepend=new SmartFormsCheckBoxStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoAppend");
-}
+};
 
 /************************************************************************************* TextArea ***************************************************************************************************/
 function RedNaoTextAreaStyler(formElement,elementToStyle,attributesCointainer)
@@ -167,7 +168,7 @@ RedNaoTextAreaStyler.prototype.SetupSelectableElements=function()
 {
     this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoTextAreaInput");
-}
+};
 
 /************************************************************************************* Date ***************************************************************************************************/
 function RedNaoDatePickerStyler(formElement,elementToStyle,attributesCointainer)
@@ -181,7 +182,7 @@ RedNaoDatePickerStyler.prototype.SetupSelectableElements=function()
 {
     this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoDatePicker");
-}
+};
 
 /************************************************************************************* Name ***************************************************************************************************/
 function RedNaoNameStyler(formElement,elementToStyle,attributesCointainer)
@@ -196,7 +197,7 @@ RedNaoNameStyler.prototype.SetupSelectableElements=function()
     this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoInputFirstName");
     this.StyleSets.LastName=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoInputLastName");
-}
+};
 
 /************************************************************************************* Phone ***************************************************************************************************/
 function RedNaoPhoneStyler(formElement,elementToStyle,attributesCointainer)
@@ -211,7 +212,7 @@ RedNaoPhoneStyler.prototype.SetupSelectableElements=function()
     this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoInputArea");
     this.StyleSets.Phone=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoInputPhone");
-}
+};
 
 /************************************************************************************* Address ***************************************************************************************************/
 function RedNaoAddressStyler(formElement,elementToStyle,attributesCointainer)
@@ -231,7 +232,7 @@ RedNaoAddressStyler.prototype.SetupSelectableElements=function()
     this.StyleSets.zip=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoZip");
     this.StyleSets.country=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoCountry");
 
-}
+};
 
 /************************************************************************************* Multiple Radio ***************************************************************************************************/
 function RedNaoRadioStyler(formElement,elementToStyle,attributesCointainer)
@@ -247,7 +248,7 @@ RedNaoRadioStyler.prototype.SetupSelectableElements=function()
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoRadio");
 
 
-}
+};
 
 /************************************************************************************* Multiple Checkbox ***************************************************************************************************/
 function RedNaoCheckBoxStyler(formElement,elementToStyle,attributesCointainer)
@@ -263,7 +264,7 @@ RedNaoCheckBoxStyler.prototype.SetupSelectableElements=function()
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoCheckBox ");
 
 
-}
+};
 
 /************************************************************************************* Select Basic ***************************************************************************************************/
 function RedNaoSelectBasicStyler(formElement,elementToStyle,attributesCointainer)
@@ -277,7 +278,7 @@ RedNaoSelectBasicStyler.prototype.SetupSelectableElements=function()
 {
     this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoSelect");
-}
+};
 
 /************************************************************************************* Submission Button ***************************************************************************************************/
 function RedNaoSubmissionButtonStyler(formElement,elementToStyle,attributesCointainer)
@@ -290,7 +291,7 @@ RedNaoSubmissionButtonStyler.prototype=Object.create(RedNaoBaseElementStyler.pro
 RedNaoSubmissionButtonStyler.prototype.SetupSelectableElements=function()
 {
     this.StyleSets.Label=new SmartFormsButtonStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoSubmitButton");
-}
+};
 
 /************************************************************************************* File Upload Styler ***************************************************************************************************/
 function RedNaoFileUploadStyler(formElement,elementToStyle,attributesCointainer)
@@ -307,4 +308,4 @@ RedNaoFileUploadStyler.prototype.SetupSelectableElements=function()
     this.StyleSets.Button=new SmartFormsFileButtonStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"sfUploadFileContainer");
 
 
-}
+};

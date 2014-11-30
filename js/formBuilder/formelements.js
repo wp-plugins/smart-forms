@@ -6,6 +6,9 @@ function SmartFormsIsIE8OrEarlier()
 }
 /************************************************************************************* Formula Methods ***************************************************************************************************/
 var SmartFormsStyleScopeField=1;
+var SmartFormsStyleScopeType=2;
+var SmartFormsStyleScopeAll=3;
+
 //used in an string that is evaluated as function
 //noinspection JSUnusedGlobalSymbols
 function RedNaoGetValueFromArray(array)
@@ -375,11 +378,16 @@ sfFormElementBase.prototype.ApplyTagStyleForElement=function(elementName)
 
     var style="";
     var elementProperties=this.Options.Styles[elementName];
-    for(var styleName in elementProperties.Properties)
-    {
-        //noinspection JSUnfilteredForInLoop
-        style+=styleName+":"+elementProperties.Properties[styleName]+" !important;";
-    }
+    if(typeof elementProperties.Properties !='undefined')
+        for(var styleName in elementProperties.Properties)
+        {
+            //noinspection JSUnfilteredForInLoop
+            style+=styleName+":"+elementProperties.Properties[styleName]+" !important;";
+        }
+
+    if(typeof elementProperties.CustomCSS!='undefined')
+        style+=elementProperties.CustomCSS.CSS;
+
     //noinspection JSUnresolvedVariable
     var selector=this.GetSelectorByScope(elementProperties.Scope,elementName);
 
@@ -394,6 +402,12 @@ sfFormElementBase.prototype.GetSelectorByScope=function(scope,elementName)
 {
     if(scope==SmartFormsStyleScopeField)
         return '#'+this.Id + " ."+elementName;
+
+    if(scope==SmartFormsStyleScopeType)
+        return '.'+this.Options.ClassName+' .'+elementName;
+
+    if(scope==SmartFormsStyleScopeAll)
+        return '.'+elementName;
 
     throw ("Undefined scope");
 };

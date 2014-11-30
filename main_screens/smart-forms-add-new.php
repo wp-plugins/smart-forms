@@ -100,10 +100,11 @@ if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
 	</button>
 </div>
 <h2 class="nav-tab-wrapper" id="smartFormsTopTab">
-    <a class='nav-tab nav-tab-active' id="smartFormsGeneralTab"  onclick="SmartFormsAddNewVar.GoToGeneral();">General Info</a>
-    <a class='nav-tab' id="smartFormsJavascriptTab" onclick="SmartFormsAddNewVar.GoToJavascript();">Javascript</a>
-    <a class='nav-tab' id="smartFormsAfterSubmitTab" onclick="SmartFormsAddNewVar.GoToAfterSubmit();">After Submit</a>
-    <a class='nav-tab' style="display: none;" id="smartFormsCSSTab" onclick="SmartFormsAddNewVar.GoToSmartDonations();">CSS</a>
+    <a style="cursor: hand;cursor: pointer;" class='nav-tab nav-tab-active' id="smartFormsGeneralTab"  onclick="SmartFormsAddNewVar.GoToGeneral();">General Info</a>
+    <a style="cursor: hand;cursor: pointer;" class='nav-tab' id="smartFormsJavascriptTab" onclick="SmartFormsAddNewVar.GoToJavascript();">Javascript</a>
+	<a style="cursor: hand;cursor: pointer;" class='nav-tab' id="smartFormsCSStTab" onclick="SmartFormsAddNewVar.GoToCSS();">CSS</a>
+    <a style="cursor: hand;cursor: pointer;" class='nav-tab' id="smartFormsAfterSubmitTab" onclick="SmartFormsAddNewVar.GoToAfterSubmit();">After Submit</a>
+
 
 	<?php
 		$tabs=array();
@@ -206,6 +207,7 @@ if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
 </div>
 <div id="redNaoStyleEditor" title="<?php echo __("Style Editor")?>" style="display: none;margin:0;padding:0;">
 	<table style="width: 100%;height: 100%;">
+
 		<tr>
 			<td style="width: 550px;">
 				<div id="styleEditorPreview" class="rednaoFormContainer bootstrap-wrapper" style="width: 100%;height: 100%;">
@@ -219,7 +221,32 @@ if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
 				</div>
 			</td>
 			<td>
-				<div id="styleEditorAttributes" style="width: 100%;height: 100%;"></div>
+				<div style="width: 100%;height: 100%;" class="bootstrap-wrapper">
+					<div style="text-align: right" class="rnEditorContainer">
+						<label>Apply to:</label>
+						<select  id="rnStyleApplyTo">
+							<option value="1">This field</option>
+							<option id="allOfTypeOption" value="2">All fields of the same type</option>
+							<option value="3">All fields</option>
+						</select>
+					</div>
+
+
+					<ul class="nav nav-tabs rnEditorContainer" >
+						<li role="presentation" class="active"><a id="rnStyleEditorAttribute" href="#styleEditorAttributes" data-toggle="tab">Styles</a></li>
+						<li role="presentation"><a href="#styleCustomRules" data-toggle="tab">Custom CSS (Advanced)</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="styleEditorAttributes" >
+						</div>
+						<div class="tab-pane" id="styleCustomRules" >
+							<textarea style="width: 100%;height: 555px;" id="rnCustomStyleContent" placeholder="Here you can put only style rules (e.g. background-color:red;), not selectors (e.g. .mybutton{background-color:red;}.
+If you want to add your own selectors and rules please add them in the CSS tab of your form.
+Tip:If your rule is not working try adding !important (e.g. background-color:red !important;)"></textarea>
+							<button id="rnApplyCustomRule" style="margin-left: auto;display: block;">Apply Custom Rules</button>
+						</div>
+					</div>
+				</div>
 			</td>
 		</tr>
 	</table>
@@ -244,9 +271,7 @@ if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
 	}
 ?>
 
-<div id="smartFormsCSSDiv" style="display: none">
-    <textarea id="smartFormsCSSText"></textarea>
-</div>
+
 
 <div id="smartDonationsDiv" style="display: none">
     <table style="width: 100%">
@@ -304,6 +329,18 @@ if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
 		<textarea style="width:250px;height: 70px;" id="alertMessageInput" disabled="disabled" class="redNaoDisabled"></textarea>
     </div>
 
+
+</div>
+
+
+<div id="smartFormsCSSDiv" style="display: none;padding: 10px" class="form-horizontal bootstrap-wrapper">
+
+	<textarea id="smartFormsCSSText" placeholder="You can put your custom css rules here, example:
+button{
+	background-color:red;
+}
+TIP: if the rule is not working try adding !important, e.g. background-color:red !important;
+"></textarea>
 
 </div>
 

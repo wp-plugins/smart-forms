@@ -49,6 +49,8 @@ function SmartFormsAddNew()
     if(typeof smartFormClientOptions!='undefined')
     {
         rnJQuery('#smartFormsJavascriptText').val(smartFormClientOptions.JavascriptCode);
+        if(typeof smartFormClientOptions.CSS!='undefined')
+            rnJQuery('#smartFormsCSSText').val(smartFormClientOptions.CSS);
         rnJQuery('#redirectToInput').val(RedNaoGetValueOrEmpty(smartFormClientOptions.redirect_to));
         rnJQuery('#alertMessageInput').val(RedNaoGetValueOrEmpty(smartFormClientOptions.alert_message));
         if(RedNaoGetValueOrEmpty(smartFormClientOptions.redirect_to_cb)=='y')
@@ -413,6 +415,7 @@ SmartFormsAddNew.prototype.GetClientFormOptions=function(usesCaptcha)
 {
     var clientOptions= {
         JavascriptCode:this.GetJavascriptCode(),
+        CSS:rnJQuery('#smartFormsCSSText').val(),
         Conditions:this.FormBuilder.Conditions,
         UsesCaptcha:usesCaptcha,
         alert_message:rnJQuery('#alertMessageInput').val(),
@@ -490,6 +493,11 @@ SmartFormsAddNew.prototype.GoToAfterSubmit=function()
     this.ActivateTab('smartFormsAfterSubmit');
 };
 
+SmartFormsAddNew.prototype.GoToCSS=function()
+{
+    this.ActivateTab('smartFormsCSS');
+};
+
 SmartFormsAddNew.prototype.RestoreDefault=function()
 {
     rnJQuery('#smartFormsJavascriptText').val('\
@@ -514,6 +522,7 @@ SmartFormsAddNew.prototype.GetJavascriptCode=function()
 {
     return rnJQuery('#smartFormsJavascriptText').val();
 };
+
 
 SmartFormsAddNew.prototype.Validate=function()
 {
