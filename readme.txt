@@ -25,7 +25,7 @@ You can easily customize forms to do additional actions after a form is submitte
 **Features:**
 
 *   **Responsive Forms**- The forms adjust automatically to available space, making them usable in a pc or phone.
-*   **Shortcode Forms **- The forms can be easily added to any post or page using a shortcode.
+*   **Shortcode Forms**- The forms can be easily added to any post or page using a shortcode.
 *   **Forms Entry Screen**- Easily view responses.
 *   **Customizable forms emails**- After a form is submitted, send notification email with any information, and in any format that you need.
 *   **Calculated forms fields**- Formulas fill fields automatically (up to three fields per formula in the free version)
