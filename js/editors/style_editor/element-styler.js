@@ -94,6 +94,7 @@ RedNaoTextInputStyler.prototype.SetupSelectableElements=function()
 {
     this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoInputText");
+    this.StyleSets.Prepend=new SmartFormsPrependStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoPrepend");
 };
 
 /************************************************************************************* PrependTextInput ***************************************************************************************************/
@@ -182,6 +183,7 @@ RedNaoDatePickerStyler.prototype.SetupSelectableElements=function()
 {
     this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoDatePicker");
+    this.StyleSets.Prepend=new SmartFormsPrependStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoPrepend");
 };
 
 /************************************************************************************* Name ***************************************************************************************************/
@@ -197,6 +199,7 @@ RedNaoNameStyler.prototype.SetupSelectableElements=function()
     this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoInputFirstName");
     this.StyleSets.LastName=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoInputLastName");
+    this.StyleSets.Prepend=new SmartFormsPrependStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoPrepend");
 };
 
 /************************************************************************************* Phone ***************************************************************************************************/
@@ -212,6 +215,7 @@ RedNaoPhoneStyler.prototype.SetupSelectableElements=function()
     this.StyleSets.Label=new SmartFormsLabelStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"rednao_control_label");
     this.StyleSets.Input=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoInputArea");
     this.StyleSets.Phone=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoInputPhone");
+    this.StyleSets.Prepend=new SmartFormsPrependStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoPrepend");
 };
 
 /************************************************************************************* Address ***************************************************************************************************/
@@ -231,6 +235,7 @@ RedNaoAddressStyler.prototype.SetupSelectableElements=function()
     this.StyleSets.state=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoState");
     this.StyleSets.zip=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoZip");
     this.StyleSets.country=new SmartFormsInputStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoCountry");
+    this.StyleSets.Prepend=new SmartFormsPrependStyleSet(this.FormElement,this.ElementToStyle,this.AttributesCointainer,"redNaoPrepend");
 
 };
 

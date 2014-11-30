@@ -2207,7 +2207,7 @@ sfRedNaoPhone.prototype.GenerateInlineElement=function()
     return '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label" >'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>'+
                 '<div class="redNaoControls col-sm-9">'+
                     '<div class="form-inline">'+
-                        '<div class="form-group col-sm-2">'+
+                        '<div class="form-group col-sm-3">'+
                             startOfInput+'<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_area" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.AreaLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputArea '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>'+endOfInput+
                             areaLabel+''+
                         '</div>    '+
