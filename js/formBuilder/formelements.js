@@ -472,10 +472,12 @@ function sfTextInputElement(options)
         this.Options.Value="";
         this.Options.ReadOnly='n';
         this.Options.Width="";
+        this.Options.Icon={ClassName:''};
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('ReadOnly','n');
         this.SetDefaultIfUndefined('Width','');
+        this.SetDefaultIfUndefined('Icon',{ClassName:''});
     }
 
 
@@ -495,7 +497,7 @@ sfTextInputElement.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ReadOnly","Read Only",{ManipulatorType:'basic'}));
-
+    this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
 };
 
 sfTextInputElement.prototype.GenerateInlineElement=function()
@@ -504,9 +506,20 @@ sfTextInputElement.prototype.GenerateInlineElement=function()
     if(!isNaN(parseFloat(this.Options.Width)))
         additionalStyle='width:'+this.Options.Width+'px'+' !important;';
 
-    return '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label" >'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>\
-                <div class="redNaoControls col-sm-9">\
-                    <input style="'+additionalStyle+'" '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.Placeholder)+'" class="form-control redNaoInputText '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'" value="'+RedNaoEscapeHtml(this.Options.Value)+'">'+
+    var startOfInput='';
+    var endOfInput='';
+
+    if(this.Options.Icon.ClassName!='')
+    {
+        startOfInput='<div class="rednao-input-prepend input-group"><span class="redNaoPrepend input-group-addon prefix '+RedNaoEscapeHtml(this.Options.Icon.ClassName)+' "></span>';
+        endOfInput='</div>';
+    }
+
+    return '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label" >'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>'+
+                '<div class="redNaoControls col-sm-9">'+
+                     startOfInput+
+                    '<input style="'+additionalStyle+'" '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.Placeholder)+'" class="form-control redNaoInputText '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'" value="'+RedNaoEscapeHtml(this.Options.Value)+'">'+
+                    endOfInput+
                 '</div>';
 };
 
@@ -558,11 +571,11 @@ function sfPrependTexElement(options)
         this.Options.Value='';
         this.Options.Checked='y';
         this.Options.Width='';
-        this.Options.Prepend_Icon={ClassName:''};
+        this.Options.Icon={ClassName:''};
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
-        this.SetDefaultIfUndefined('Prepend_Icon',{ClassName:""});
+        this.SetDefaultIfUndefined('Icon',{ClassName:''});
     }
 
 
@@ -575,11 +588,12 @@ sfPrependTexElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"Prepend","Prepend",{ManipulatorType:'basic',IconOptions:{Type:'add'}}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Prepend","Prepend",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
+    this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
 
 };
 
@@ -596,7 +610,7 @@ sfPrependTexElement.prototype.GenerateInlineElement=function()
             '</div>'+
             '<div class="redNaoControls col-sm-9">'+
                '<div class="rednao-input-prepend input-group">'+
-                    (this.Options.Prepend_Icon.ClassName!=''?'<span class="redNaoPrepend input-group-addon prefix '+RedNaoEscapeHtml(this.Options.Prepend_Icon.ClassName)+' "></span>'
+                    (this.Options.Icon.ClassName!=''?'<span class="redNaoPrepend input-group-addon prefix '+RedNaoEscapeHtml(this.Options.Icon.ClassName)+' "></span>'
                                                             :'<span class="redNaoPrepend input-group-addon prefix">'+RedNaoEscapeHtml(this.Options.Prepend)+'</span>')+
                     '<input style="'+additionalStyle+'"  name="prependedtext" class="redNaoInputText form-control" placeholder="'+RedNaoEscapeHtml(this.Options.Placeholder)+'" type="text" value="'+RedNaoEscapeHtml(this.Options.Value)+'">'+
                 '</div>'+
@@ -651,11 +665,11 @@ function sfAppendedTexElement(options)
         this.Options.Append="Append";
         this.Options.Value="";
         this.Options.Width='';
-        this.Options.Append_Icon={ClassName:''};
+        this.Options.Icon={ClassName:''};
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
-        this.SetDefaultIfUndefined('Append_Icon',{ClassName:""});
+        this.SetDefaultIfUndefined('Icon',{ClassName:""});
 
     }
 }
@@ -666,11 +680,12 @@ sfAppendedTexElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"Append","Append",{ManipulatorType:'basic',IconOptions:{Type:'add'}}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Append","Append",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
+    this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
 
 };
 
@@ -685,7 +700,7 @@ sfAppendedTexElement.prototype.GenerateInlineElement=function()
             '<div class="redNaoControls col-sm-9 ">'+
                 '<div class="rednao-input-append input-group">'+
                     '<input style="'+additionalStyle+'" name="appendedtext"  placeholder="'+RedNaoEscapeHtml(this.Options.Placeholder)+'" type="text" class="redNaoInputText form-control" value="'+RedNaoEscapeHtml(this.Options.Value)+'">'+
-                    (this.Options.Append_Icon.ClassName!=''?'<span class="redNaoAppend input-group-addon '+RedNaoEscapeHtml(this.Options.Append_Icon.ClassName)+' "></span>'
+                    (this.Options.Icon.ClassName!=''?'<span class="redNaoAppend input-group-addon '+RedNaoEscapeHtml(this.Options.Icon.ClassName)+' "></span>'
                                                             :'<span class="redNaoAppend input-group-addon">'+RedNaoEscapeHtml(this.Options.Append)+'</span>')+
                 '</div>'+
             '</div>';
@@ -1662,6 +1677,9 @@ function sfRedNaoDatePicker(options)
         this.Options.Label="Date";
         this.Options.DateFormat="MM-dd-yy";
         this.Options.Value='';
+        this.Options.Icon={ClassName:''};
+    }else{
+        this.SetDefaultIfUndefined('Icon',{ClassName:''});
     }
 
 }
@@ -1672,12 +1690,30 @@ sfRedNaoDatePicker.prototype.CreateProperties=function()
 {
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"DateFormat","Date Format",{ManipulatorType:'basic'}));
+    this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
 
 };
 
 sfRedNaoDatePicker.prototype.GenerateInlineElement=function()
 {
-    return '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label ">'+RedNaoEscapeHtml(this.Options.Label)+'</label></div><div class="redNaoControls col-sm-9"><input type="text" class="form-control redNaoDatePicker"  /></div>';
+    var startOfInput='';
+    var endOfInput='';
+
+    if(this.Options.Icon.ClassName!='')
+    {
+        startOfInput='<div class="rednao-input-prepend input-group"><span class="redNaoPrepend input-group-addon prefix '+RedNaoEscapeHtml(this.Options.Icon.ClassName)+' "></span>';
+        endOfInput='</div>';
+    }
+
+
+    return '<div class="rednao_label_container col-sm-3">' +
+                '<label class="rednao_control_label ">'+RedNaoEscapeHtml(this.Options.Label)+'</label>' +
+            '</div>' +
+            '<div class="redNaoControls col-sm-9">' +
+                startOfInput+
+                '<input type="text" class="form-control redNaoDatePicker"  />' +
+                endOfInput+
+            '</div>';
 
 };
 
@@ -1749,7 +1785,11 @@ function sfRedNaoName(options)
         this.Options.LastNamePlaceholder="Last Name";
         this.Options.FirstNameValue="";
         this.Options.LastNameValue="";
-        this.Options.ReadOnly='n'
+        this.Options.ReadOnly='n';
+        this.Options.Icon={ClassName:''};
+    }else
+    {
+        this.SetDefaultIfUndefined('Icon',{ClassName:''});
     }
 
 
@@ -1768,11 +1808,22 @@ sfRedNaoName.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"LastNamePlaceholder","Last name placeholder",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ReadOnly","Read Only",{ManipulatorType:'basic'}));
+    this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
 
 };
 
 sfRedNaoName.prototype.GenerateInlineElement=function()
 {
+
+    var startOfInput='';
+    var endOfInput='';
+
+    if(this.Options.Icon.ClassName!='')
+    {
+        startOfInput='<div class="rednao-input-prepend input-group"><span class="redNaoPrepend input-group-addon prefix '+RedNaoEscapeHtml(this.Options.Icon.ClassName)+' "></span>';
+        endOfInput='</div>';
+    }
+
     var firstNameLabel='';
     var lastNameLabel='';
 
@@ -1781,20 +1832,22 @@ sfRedNaoName.prototype.GenerateInlineElement=function()
     if(this.Options.LastNamePlaceholder!='')
         lastNameLabel='<br/><label class="redNaoHelper">'+this.Options.LastNamePlaceholder+'</label>';
 
-    return '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label" >'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>\
-                <div class="redNaoControls col-sm-9">\
-                    <div class="form-inline ">\
-                        <div class="redNaoFirstNameDiv redNaoTwoColumnsDiv form-group col-sm-6">\
-                            <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_firstname" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.FirstNamePlaceholder)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputFirstName '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
-                            '+firstNameLabel+'\
-                        </div>    \
-                        <div class="redNaoLastNameDiv redNaoTwoColumnsDiv form-group col-sm-6">\
-                            <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_lastname" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.LastNamePlaceholder)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputLastName '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">\
-                            '+lastNameLabel+'\
-                        </div>\
-                     </div>   \
-               <div>     \
-    </div>';
+    return '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label" >'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>'+
+                 '<div class="redNaoControls col-sm-9">'+
+                    '<div class="form-inline ">'+
+                        '<div class="redNaoFirstNameDiv redNaoTwoColumnsDiv form-group col-sm-6">'+
+                            startOfInput+
+                            '<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_firstname" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.FirstNamePlaceholder)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputFirstName '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>'+
+                            endOfInput+
+                            firstNameLabel+
+                        '</div>    '+
+                        '<div class="redNaoLastNameDiv redNaoTwoColumnsDiv form-group col-sm-6">'+
+                            '<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_lastname" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.LastNamePlaceholder)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputLastName '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'+
+                            lastNameLabel+
+                        '</div>'+
+                     '</div>   '+
+               '<div>     '+
+    '</div>';
 };
 
 
@@ -1871,8 +1924,12 @@ function sfRedNaoAddress(options)
         this.Options.ShowState="y";
         this.Options.ShowZip='y';
         this.Options.ShowCountry='y';
+        this.Options.Icon={ClassName:''};
     }else
+    {
         this.SetDefaultIfUndefined("DefaultCountry","United States");
+        this.SetDefaultIfUndefined('Icon',{ClassName:''});
+    }
 }
 
 sfRedNaoAddress.prototype=Object.create(sfFormElementBase.prototype);
@@ -1905,6 +1962,8 @@ sfRedNaoAddress.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowZip","Show Zip",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowCountry","Show Country",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+    this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
+
 
 };
 
@@ -1917,6 +1976,15 @@ sfRedNaoAddress.prototype.GenerateInlineElement=function()
     var ZipLabel='';
     var CountryLabel='';
     var isFirstElement=true;
+
+    var startOfInput='';
+    var endOfInput='';
+    if(this.Options.Icon.ClassName!='')
+    {
+        startOfInput='<div class="rednao-input-prepend input-group"><span class="redNaoPrepend input-group-addon prefix '+RedNaoEscapeHtml(this.Options.Icon.ClassName)+' "></span>';
+        endOfInput='</div>';
+    }
+
 
     if(this.Options.StreetAddress1Label!='')
         StreetAddress1Label='<label class="redNaoHelper">'+RedNaoEscapeHtml(this.Options.StreetAddress1Label)+'</label>';
@@ -1942,9 +2010,9 @@ sfRedNaoAddress.prototype.GenerateInlineElement=function()
     var html= '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label" >'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>\
                 <div class="redNaoControls col-sm-9">';
                 if(this.Options.ShowStreetAddress1=='y')
-                    html+='<div class="redNaoStreetAddress1Div form-group">\
-                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_streetaddress1" type="teºxt" placeholder="'+RedNaoEscapeHtml(this.Options.StreetAddress1Label)+'" class="form-control redNaoInputText redNaoOneColumn redNaoStreetAddress1 '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
-                        '+StreetAddress1Label+'\
+                    html+='<div class="redNaoStreetAddress1Div form-group">'+
+                        startOfInput+'<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_streetaddress1" type="teºxt" placeholder="'+RedNaoEscapeHtml(this.Options.StreetAddress1Label)+'" class="form-control redNaoInputText redNaoOneColumn redNaoStreetAddress1 '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>'+endOfInput+
+                        StreetAddress1Label+'\
                     </div>';
                 if(this.Options.ShowStreetAddress2=='y')
                     html+='<div class="redNaoStreetAddress2Div form-group">\
@@ -2100,6 +2168,9 @@ function sfRedNaoPhone(options)
         this.Options.Label="Phone";
         this.Options.AreaLabel="Area";
         this.Options.PhoneLabel="Phone";
+        this.Options.Icon={ClassName:''};
+    }else{
+        this.SetDefaultIfUndefined('Icon',{ClassName:''});
     }
 }
 
@@ -2112,11 +2183,19 @@ sfRedNaoPhone.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"AreaLabel","Area",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"PhoneLabel","Phone",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
-
+    this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
 };
 
 sfRedNaoPhone.prototype.GenerateInlineElement=function()
 {
+    var startOfInput='';
+    var endOfInput='';
+    if(this.Options.Icon.ClassName!='')
+    {
+        startOfInput='<div class="rednao-input-prepend input-group"><span class="redNaoPrepend input-group-addon prefix '+RedNaoEscapeHtml(this.Options.Icon.ClassName)+' "></span>';
+        endOfInput='</div>';
+    }
+
     var areaLabel='';
     var phoneLabel='';
 
@@ -2125,20 +2204,20 @@ sfRedNaoPhone.prototype.GenerateInlineElement=function()
     if(this.Options.PhoneLabel!='')
         phoneLabel='<br/><label class="redNaoHelper">'+RedNaoEscapeHtml(this.Options.PhoneLabel)+'</label>';
 
-    return '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label" >'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>\
-                <div class="redNaoControls col-sm-9">\
-                    <div class="form-inline">\
-                        <div class="form-group col-sm-2">\
-                            <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_area" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.AreaLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputArea '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
-                            '+areaLabel+'\
-                        </div>    \
-                        <div class="form-group col-sm-6">\
-                            <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_phone" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.PhoneLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputPhone '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">\
-                            '+phoneLabel+'\
-                        </div>\
-                    </div>\
-               <div>     \
-    </div>';
+    return '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label" >'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>'+
+                '<div class="redNaoControls col-sm-9">'+
+                    '<div class="form-inline">'+
+                        '<div class="form-group col-sm-2">'+
+                            startOfInput+'<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_area" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.AreaLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputArea '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>'+endOfInput+
+                            areaLabel+''+
+                        '</div>    '+
+                        '<div class="form-group col-sm-6">'+
+                            '<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_phone" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.PhoneLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputPhone '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'+
+                            phoneLabel+''+
+                        '</div>'+
+                    '</div>'+
+               '<div>     '+
+    '</div>';
 };
 
 
@@ -2210,6 +2289,9 @@ function sfRedNaoEmail(options)
         this.Options.ClassName="rednaoemail";
         this.Options.Label="Email";
         this.Options.Placeholder="Placeholder"
+        this.Options.Icon={ClassName:''};
+    }else{
+        this.SetDefaultIfUndefined('Icon',{ClassName:''});
     }
 }
 
@@ -2221,15 +2303,23 @@ sfRedNaoEmail.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
-
+    this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
 };
 
 sfRedNaoEmail.prototype.GenerateInlineElement=function()
 {
+    var startOfInput='';
+    var endOfInput='';
+    if(this.Options.Icon.ClassName!='')
+    {
+        startOfInput='<div class="rednao-input-prepend input-group"><span class="redNaoPrepend input-group-addon prefix '+RedNaoEscapeHtml(this.Options.Icon.ClassName)+' "></span>';
+        endOfInput='</div>';
+    }
 
-    return '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label " >'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>\
-                <div class="redNaoControls col-sm-9">\
-                    <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.Placeholder)+'" class="form-control redNaoInputText redNaoEmail'+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'+
+
+    return '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label " >'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>'+
+                '<div class="redNaoControls col-sm-9">'+
+                    startOfInput+'<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.Placeholder)+'" class="form-control redNaoInputText redNaoEmail'+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'+endOfInput+
     '</div>';
 };
 
@@ -2294,10 +2384,12 @@ function sfRedNaoNumber(options)
         this.Options.NumberOfDecimals=0;
         this.Options.MaximumValue="";
         this.Options.MinimumValue="";
+        this.Options.Icon={ClassName:''};
     }else
     {
         this.SetDefaultIfUndefined("MaximumValue","");
         this.SetDefaultIfUndefined("MinimumValue","");
+        this.SetDefaultIfUndefined('Icon',{ClassName:''});
     }
 }
 
@@ -2312,15 +2404,24 @@ sfRedNaoNumber.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"MinimumValue","Minimum Value",{ManipulatorType:'basic',Placeholder:'No Minimum'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"MaximumValue","Maximum Value",{ManipulatorType:'basic',Placeholder:'No Maximum'}));
-
+    this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
 };
 
 sfRedNaoNumber.prototype.GenerateInlineElement=function()
 {
+    var startOfInput='';
+    var endOfInput='';
+    if(this.Options.Icon.ClassName!='')
+    {
+        startOfInput='<div class="rednao-input-prepend input-group"><span class="redNaoPrepend input-group-addon prefix '+RedNaoEscapeHtml(this.Options.Icon.ClassName)+' "></span>';
+        endOfInput='</div>';
+    }
 
-    return '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label" >'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>\
-                <div class="redNaoControls col-sm-9">\
-                    <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+this.Options.Placeholder+'" class="form-control redNaoInputText redNaoNumber'+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'+
+
+
+    return '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label" >'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>'+
+                '<div class="redNaoControls col-sm-9">'+
+                    startOfInput+'<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'" type="text" placeholder="'+this.Options.Placeholder+'" class="form-control redNaoInputText redNaoNumber'+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'+endOfInput+
     '</div>';
 };
 
@@ -2444,88 +2545,3 @@ sfRedNaoCaptcha.prototype.GenerationCompleted=function(jQueryElement)
     });
 };
 
-
-
-/************************************************************************************* Donation Amount ***************************************************************************************************/
-/*
-function sfDonationAmountElement(options)
-{
-    sfFormElementBase.call(this,options);
-    this.Title="Donation Amount";
-
-    if(this.IsNew)
-    {
-        this.Options.ClassName="rednaodonationamount";
-        this.Options.Label="Donation Amount";
-        this.Options.Placeholder="Amount";
-        this.Options.DefaultValue="0";
-        this.Options.Disabled='n';
-    }
-
-    if(typeof  this.Options.DefaultValue=='undefined')
-        this.Options.DefaultValue=0;
-}
-
-sfDonationAmountElement.prototype=Object.create(sfFormElementBase.prototype);
-
-sfDonationAmountElement.prototype.CreateProperties=function()
-{
-    this.Properties.push(new IdProperty(this,this.Options));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"DefaultValue","Default Value",{ManipulatorType:'basic'}));
-
-    this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
-    this.Properties.push(new CheckBoxProperty(this,this.Options,"Disabled","Read Only",{ManipulatorType:'basic'}));
-
-
-
-};
-
-sfDonationAmountElement.prototype.GenerateInlineElement=function()
-{
-
-    return '<div class="rednao_label_container"><label class="rednao_control_label" >'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>\
-                <div class="redNaoControls">\
-                    <input  class="redNaoInputText redNaoNumber" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.Placeholder)+'" class="redNaoInputText" value="'+RedNaoEscapeHtml(this.Options.DefaultValue)+'"  >'+
-        '</div>';
-};
-
-
-
-sfDonationAmountElement.prototype.GetValueString=function()
-{
-    try
-    {
-        if(this.IsIgnored())
-        {
-            this.amount=0;
-            return {value:''};
-        }
-        this.amount=parseFloat(rnJQuery('#'+this.Id+ ' .redNaoInputText').val());
-    }catch(exception)
-    {
-
-    }
-
-    return  {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
-};
-
-//noinspection JSUnusedLocalSymbols
-sfDonationAmountElement.prototype.GenerationCompleted=function(jQueryElement)
-{
-    if(this.Options.Disabled=='y')
-    {
-        rnJQuery('#'+this.Id).find('.redNaoInputText').attr('readonly','readonly').css('background-color','#eeeeee');
-    }
-};
-
-sfDonationAmountElement.prototype.IsValid=function()
-{
-    try{
-        var number=parseFloat(rnJQuery('#'+this.Id+ ' .redNaoInputText').val());
-        return number>0;
-    }catch(exception)
-    {
-        return false;
-    }
-};*/

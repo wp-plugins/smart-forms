@@ -479,7 +479,7 @@ RedNaoIconSelector.prototype.InitializeDialog=function()
             '<option value="glyphicon glyphicon-earphone">Earphone</option>'+
             '<option value="glyphicon glyphicon-edit">Edit</option>'+
             '<option value="glyphicon glyphicon-eject">Eject</option>'+
-            '<option value="glyphicon glyphicon-envelope">Envelope</option>'+
+            '<option value="glyphicon glyphicon-envelope">Email</option>'+
             '<option value="glyphicon glyphicon-euro">Euro</option>'+
             '<option value="glyphicon glyphicon-exclamation-sign">Exclamation Sign</option>'+
             '<option value="glyphicon glyphicon-expand">Expand</option>'+
@@ -672,3 +672,42 @@ RedNaoIconSelector.prototype.FireAddIconCallBack=function(orientation)
 
 
 var RedNaoIconSelectorVar=new RedNaoIconSelector();
+
+
+
+/************************************************************************************* Icon Property ***************************************************************************************************/
+
+
+function IconProperty(formelement,propertiesObject,propertyName,propertyTitle,additionalInformation)
+{
+    ElementPropertiesBase.call(this,formelement,propertiesObject,propertyName,propertyTitle,additionalInformation);
+}
+
+IconProperty.prototype=Object.create(ElementPropertiesBase.prototype);
+
+
+IconProperty.prototype.GenerateHtml=function()
+{
+
+    var value=this.GetPropertyCurrentValue().ClassName;
+    var newProperty=rnJQuery( '<td style="text-align: right"><label class="rednao-properties-control-label"> '+this.PropertyTitle+' </label></td>\
+            <td style="text-align: left"><span class="'+RedNaoEscapeHtml(value)+'"></span><button style="margin-left: 2px">Edit</button></td>');
+
+    var self=this;
+    newProperty.find('button').click(function(e)
+    {
+        e.preventDefault();
+        RedNaoIconSelectorVar.Show( 'add',function(itemClass,orientation){
+            self.PropertiesObject[self.PropertyName]={
+                ClassName:itemClass,
+                Orientation:orientation
+            };
+            self.RefreshElement();
+            newProperty.find('span').attr('class',itemClass);
+        });
+    });
+
+    return newProperty;
+};
+
+
