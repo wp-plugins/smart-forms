@@ -62,8 +62,8 @@ This generally happens when your database doesn't support UTF-8 characters, so t
 3. Style it and save the form
 
 == Screenshots ==
-1. Dragging a form element
-2. Form Entries example
+1. Example of form with icons
+2. Styling a form, you can create custom css rules or use the sytle editor.
 3. Example of a form
 4. Example of the same form seen in an iphone
 5. Adding form as a widget
@@ -71,8 +71,8 @@ This generally happens when your database doesn't support UTF-8 characters, so t
 7. Advance email formatting
 8. Example of a form with a calculated field
 9. Calculated field interface
-10. Example of date field
-11. Conditional logic example
+10. Dragging a form element
+11. Form Entries example
 == Changelog ==
 = Smart Forms 2.5 =
 * Update smart forms logic, making required but hidden fields in the forms not required.
