@@ -11,28 +11,31 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Formulas, conditional logic, customized emails, everything you need in an easy to use plugin.
 == Description ==
 For more information check: http://smartforms.rednao.com/getit
-**If you have questions or suggestions please let me know in the smart forms official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601**
-Also if you have issues or need support please submit a ticket in the smart forms support site: https://smartforms.uservoice.com
+**If you have questions or suggestions please let me know at the Smart Forms official site here: https://www.facebook.com/pages/Smart-Forms/1453714741522601**
+if you have issues or need support please submit a ticket via the Smart Forms support site: https://smartforms.uservoice.com
 
 
-Smart Forms is a very powerful and easy to use Form Build plugin,the form builde lets you create forms by just dragging and dropping elements. The forms are responsive, they adjust to the available space. You can style each form element individually.
+Smart Forms is a very powerful and easy to use Form Build plugin. The form builder lets you create forms by simply dragging and dropping elements. The forms are responsive, they adjust to available space. You can style each form element individually.
 
-You can easily create contact forms, feedback forms, contact us forms or any kind of form, complex or not. 
+You can easily create contact forms, feedback forms, questionnaires, surveys or any other kind of form, from the simple, to the complex.
 
-If you require a form that display values depending of an operation with other forms (for example a form that display the total) you can do that with the Smart Forms calculated fields.
-You can also customize the form to do an additional action abter the form is submitted, you could customize the form to send an email, show an alert or redirect to another page. This again is very easy to configure in the forms after submit tab.  The forms email can have any format and any information that you want, also, you can check the information of all the forms submitted so far in the forms entries screen.
+If you need to display results of operations among fields (e.g. totals) you can do that with Smart Forms calculated fields.
+You can easily customize forms to do additional actions after a form is submitted - send a customized email (format it any way you want), show an alert, or redirect to another page. You can quickly view responses in the form’s entries screen.
 
 **Features:**
 
-*   **Responsive Forms**.- The forms adjust automatically to the available space making them usable in a pc or phone.
-*   **Shortcode Forms**.- The forms can also be easily added to any post or page using a shortcode.
-*   **Forms Entry Screen**.- Easily check the information that have been submitted so far in the entries screen.
-*   **Customizable forms emails**.- After a form is submitted send an email with any information and format that you need.
-*   **Calculated forms fields**.- You can use fields in a formulas to fill fields automatically (up to three fields per formula in the free version)
-*   **Custom forms fields**.- Currently the plugin supports these custom forms elements: name, phone, email, address, number,captcha.
-*   **File Uploader (pro)**.- Allow you to upload files in a form, you can configure the form to accept only one file or multiple.
-*   **Conditional Logic**.- Show and hide fields depending on other fields values.
-*   **Forms Compatible with Smart donations**.- You can create paypal forms with this plugin and also enjoy all the power of smart donations (https://wordpress.org/plugins/smart-donations/, an smart donation license is required).
+*   **Responsive Forms**- The forms adjust automatically to available space, making them usable in a pc or phone.
+*   **Shortcode Forms **- The forms can be easily added to any post or page using a shortcode.
+*   **Forms Entry Screen**- Easily view responses.
+*   **Customizable forms emails**- After a form is submitted, send notification email with any information, and in any format that you need.
+*   **Calculated forms fields**- Formulas fill fields automatically (up to three fields per formula in the free version)
+*   **Custom forms fields**- The plugin currently supports these custom forms elements: name, phone, email, address, number, captcha.
+*   **File Uploader (pro)**- Allows you to upload files in a form; you can configure the form to accept only one file or multiple files.
+*   **Conditional Logic**- Show and hide fields depending on values in other fields; allows you to have an all-in-one form all in one place, instead of in multiple pages; prevents forms from overwhelming users.
+*   **Tons of icons to decorate your form**- Create awesome forms with more than 200 icons; more coming soon.
+*   **Style editor**- Change the aspect of your form with the build-in style editor, or if you are a designer create your own css rules easily.
+*   **JavaScript editor**_ Create your own JavaScript code and customize your form exactly as you want it.
+*   **Forms Compatible with Smart donations**- - You can create paypal forms with this plugin, and also enjoy all the power of smart donations (https://wordpress.org/plugins/smart-donations/, a smart donation license is required).
 == Installation ==
 1. Upload smart forms to the `/wp-content/plugins/` directory
 2. Activate the item named  'smart forms' in the 'Plugins' menu in WordPress
