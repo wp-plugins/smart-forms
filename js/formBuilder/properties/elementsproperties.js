@@ -295,6 +295,16 @@ ArrayProperty.prototype.GetSelector=function(item)
 
 ArrayProperty.prototype.UpdateProperty=function()
 {
+		var processedValueArray=new Array();
+    var self=this;
+    var rows=this.ItemsList.find('tr.redNaoRowOption').each(
+        function()
+        {
+            var jQueryRow=rnJQuery(this);
+            var row=self.GetRowData(jQueryRow);
+            processedValueArray.push(row);
+        }
+    );
     this.Manipulator.SetValue(this.PropertiesObject,this.PropertyName, processedValueArray,this.AdditionalInformation);
     this.RefreshElement();
 };
