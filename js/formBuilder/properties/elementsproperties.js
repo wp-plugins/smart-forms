@@ -220,7 +220,7 @@ ArrayProperty.prototype.GenerateHtml=function()
     newProperty.find('input[type=text]').keyup(function(){self.UpdateProperty();});
 
 
-    //this.ItemsList=newProperty.find('.listOfItems');
+    this.ItemsList=newProperty.find('.listOfItems');
     return newProperty;
 };
 
