@@ -13,7 +13,7 @@ RedNaoFormula.prototype.FieldUsedInFormula=function(fieldName)
     }
 
     return false;
-}
+};
 
 RedNaoFormula.prototype.UpdateFieldWithValue=function(value)
 {
@@ -26,7 +26,7 @@ RedNaoFormula.prototype.UpdateFieldWithValue=function(value)
     {
 
     }
-}
+};
 
 RedNaoFormula.prototype.GetValueFromFormula=function(values)
 {
@@ -37,4 +37,4 @@ RedNaoFormula.prototype.GetValueFromFormula=function(values)
         calculatedValue=0;
 
     return calculatedValue;
-}
+};

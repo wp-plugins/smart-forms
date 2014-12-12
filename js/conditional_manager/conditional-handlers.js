@@ -66,9 +66,13 @@ SfConditionalHandlerBase.prototype.SubscribeCondition=function(condition,initial
     for(var i=0;i<condition.Conditions.length;i++)
         fieldsInCondition.push(condition.Conditions[i].Field);
 
-    RedNaoEventManager.Subscribe('FormValueChanged',function(data){
+    RedNaoEventManager.Subscribe('ProcessConditionsAfterValueChanged',function(data){
         if(fieldsInCondition.indexOf(data.FieldName)>-1)
-            self.ProcessCondition(data.Data);
+        {
+            var action=self.ProcessCondition(data.Data);
+            if(action!=null)
+                data.Actions.push(action);
+        }
     });
 
     this.ProcessCondition(initialData);
@@ -77,20 +81,27 @@ SfConditionalHandlerBase.prototype.SubscribeCondition=function(condition,initial
 
 SfConditionalHandlerBase.prototype.ProcessCondition=function(data)
 {
+    var self=this;
     if(this.ConditionFunction(data))
     {
         if(this.PreviousActionWasTrue!=1)
         {
-            this.PreviousActionWasTrue=1;
-            this.ExecuteTrueAction();
+            return {
+                ActionType:'show',
+                Execute:function(){self.PreviousActionWasTrue=1;self.ExecuteTrueAction()}
+            };
         }
     }
     else
     if(this.PreviousActionWasTrue!=0)
     {
-        this.PreviousActionWasTrue=0;
-        this.ExecuteFalseAction();
+        return{
+            ActionType:'hide',
+            Execute:function(){self.PreviousActionWasTrue=0;self.ExecuteFalseAction();}
+        }
     }
+
+    return null;
 };
 
 //noinspection JSUnusedLocalSymbols
