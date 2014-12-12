@@ -22,6 +22,7 @@ wp_enqueue_script('isolated-slider',SMART_FORMS_DIR_URL.'js/rednao-isolated-jq.j
 
 wp_enqueue_script('smart-forms-event-manager',SMART_FORMS_DIR_URL.'js/formBuilder/eventmanager.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-form-elements',SMART_FORMS_DIR_URL.'js/formBuilder/formelements.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-list-manager',SMART_FORMS_DIR_URL.'js/utilities/rnListManager.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-formula-window',SMART_FORMS_DIR_URL.'js/formBuilder/formula/formulawindow.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-elements-manipulators',SMART_FORMS_DIR_URL.'js/formBuilder/properties/manipulators.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-elements-properties',SMART_FORMS_DIR_URL.'js/formBuilder/properties/elementsproperties.js',array('isolated-slider','smart-forms-select2'));
@@ -34,7 +35,7 @@ wp_enqueue_script('smart-forms-conditional-manager',SMART_FORMS_DIR_URL.'js/cond
 wp_enqueue_script('ismart-forms-add-new',SMART_FORMS_DIR_URL.'js/subscriber_interfaces/ismart-forms-add-new.js');
 
 $additionalJS=apply_filters("sf_form_configuration_on_load_js",array());
-$addNewDependencies= array('ismart-forms-add-new','isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2','smart-forms-event-manager','smart-forms-conditional-manager');
+$addNewDependencies= array('smart-forms-list-manager','ismart-forms-add-new','isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2','smart-forms-event-manager','smart-forms-conditional-manager');
 for($i=0;$i<count($additionalJS);$i++){
 	wp_enqueue_script($additionalJS[$i]["handler"],$additionalJS[$i]["path"],array('ismart-forms-add-new'));
 	array_push($addNewDependencies,$additionalJS[$i]["handler"]);
@@ -127,10 +128,15 @@ if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
 </h2>
 <div id="redNaoGeneralInfo">
 <div id="redNaoEmailEditor" title="Email" style="display: none;">
-	<a target="_blank" style="float: right;margin-right: 10px;margin-top: 10px;" href="http://smartforms.rednao.com/not-receiving-form-submission-in-your-email/">Not receiving the email?</a>
     <table>
         <tr>
             <td style="text-align: right">From email address</td><td> <select  multiple="multiple"  id="redNaoFromEmail" style="width:300px"></td>
+			<td rowspan="5">
+				<a target="_blank" style="margin-right: 10px;margin-top: 10px;" href="http://smartforms.rednao.com/not-receiving-form-submission-in-your-email/">Not receiving the email?</a>
+				<div class="bootstrap-wrapper" style="height: 150px;overflow-y: scroll;width: 340px;">
+					<div id="emailList"></div>
+				</div>
+			</td>
         </tr>
 
         <tr>
@@ -506,6 +512,11 @@ TIP: if the rule is not working try adding !important, e.g. background-color:red
                                                             <div class="control-group rednaodatepicker">
                                                             </div>
                                                         </div>
+
+														<div class="component">
+															<div class="control-group rednaohtml">
+															</div>
+														</div>
 
                                                         <div class="component">
                                                             <div class="control-group rednaosubmissionbutton">

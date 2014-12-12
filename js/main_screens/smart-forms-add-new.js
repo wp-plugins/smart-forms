@@ -9,10 +9,8 @@ function SmartFormsAddNew()
         this.id=0;
 
     var options=null;
-    this.EmailTextLoaded=false;
-    this.EmailText="";
     this.RestoreDefault();
-    this.Emails=[{ToEmail:"",FromEmail:""}];
+    this.Emails=[{ToEmail:"",FromEmail:"",Name:"Default",FromName:"",EmailSubject:"",EmailText:""}];
     this.ExtensionData={};
     if(typeof smartFormsOptions!='undefined')
     {
@@ -27,12 +25,9 @@ function SmartFormsAddNew()
         {
             if(smartFormsOptions.Emails.length>0)
             {
-                rnJQuery('#redNaoFromName').val(smartFormsOptions.Emails[0].FromName);
-                this.Emails[0].ToEmail=smartFormsOptions.Emails[0].ToEmail||"";
-                this.Emails[0].FromEmail=RedNaoGetValueOrEmpty(smartFormsOptions.Emails[0].FromEmail);
+                this.Emails=smartFormsOptions.Emails;
                 if(this.Emails[0].FromEmail==null)
                     this.Emails[0].FromEmail='';
-                rnJQuery('#redNaoEmailSubject').val(smartFormsOptions.Emails[0].EmailSubject);
                 this.EmailText=smartFormsOptions.Emails[0].EmailText;
             }
         }
@@ -235,19 +230,6 @@ SmartFormsAddNew.prototype.OpenFormulaBuilder=function(formElement,propertyName,
 
 SmartFormsAddNew.prototype.EditEmailClicked=function()
 {
-
-    if(!this.EmailTextLoaded)
-    {
-        try{
-            tinymce.get('redNaoTinyMCEEditor').setContent(this.EmailText);
-        }catch(exception)
-        {
-            tinymce.init(tinyMCEPreInit.mceInit["redNaoTinyMCEEditor"]);
-            return;
-        }
-
-    }
-    this.EmailTextLoaded=true;
     RedNaoEmailEditorVar.OpenEmailEditor(this.FormBuilder.RedNaoFormElements,this.Emails);
 };
 
@@ -260,17 +242,6 @@ SmartFormsAddNew.prototype.NotifyToChanged=function()
 };
 
 
-SmartFormsAddNew.prototype.FillEmailData=function(emailOption)
-{
-    emailOption.FromName=rnJQuery('#redNaoFromName').val();
-    emailOption.FromEmail=this.Emails[0].FromEmail;
-    emailOption.ToEmail= this.Emails[0].ToEmail;
-    emailOption.EmailSubject=rnJQuery('#redNaoEmailSubject').val();
-    if(this.EmailTextLoaded)
-        emailOption.EmailText=tinymce.get('redNaoTinyMCEEditor').getContent();
-    else
-        emailOption.EmailText=this.EmailText;
-};
 
 SmartFormsAddNew.prototype.DonationConfigurationIsValid=function()
 {
@@ -374,9 +345,7 @@ SmartFormsAddNew.prototype.GetFormOptions=function()
     formOptions.NotifyTo=rnJQuery('#smartFormsSubmissionNotifyTo').val();
     formOptions.LatestId=sfFormElementBase.IdCounter;
     formOptions.SendNotificationEmail=(rnJQuery('#smartFormsSendNotificationEmail').is(':checked')?'y':'n');
-    formOptions.Emails=[{}];
-    this.FillEmailData(formOptions.Emails[0]);
-
+    formOptions.Emails=this.Emails;
 
     var usesCaptcha='n';
     var formElements=this.FormBuilder.RedNaoFormElements;

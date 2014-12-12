@@ -19,6 +19,11 @@ function RNListManager($list,options)
         options.ItemSelected=function(item){};
     }
 
+    if(typeof options.CreationLabel=='undefined')
+        this.CreationLabel='Click here to create a new item';
+    else
+        this.CreationLabel=options.CreationLabel;
+
     this.FireItemCreated=options.ItemCreated;
     this.FireItemSelected=options.ItemSelected;
 
@@ -42,7 +47,7 @@ RNListManager.prototype.InitializeList=function()
 
 RNListManager.prototype.AddCreateItemButton=function()
 {
-    var $createItem=rnJQuery('<a href="#" class="list-group-item rnListCreateButton" ><span style="color:green" class="glyphicon glyphicon-plus"></span>Click here to create a new item</a>');
+    var $createItem=rnJQuery('<a href="#" class="list-group-item rnListCreateButton" ><span style="color:green" class="glyphicon glyphicon-plus"></span>'+this.CreationLabel+'</a>');
     var self=this;
     $createItem.click(function(){self.StartEdition(rnJQuery(this),null)});//it is important to pass this instead of $createItem
     this.$List.append($createItem);
@@ -61,6 +66,17 @@ RNListManager.prototype.CreateItem=function(itemName)
     return createdItem;
 };
 
+RNListManager.prototype.SelectItem=function(item)
+{
+    var index=this.Items.indexOf(item);
+    if(index>=0)
+    {
+        this.$List.find('.rnListManagerItemSelected').removeClass('rnListManagerItemSelected');
+        this.$List.find('a:nth-child('+(index+1)+')').addClass('rnListManagerItemSelected');
+        this.FireItemSelected(item);
+    }
+
+};
 
 RNListManager.prototype.AddItem=function(item)
 {

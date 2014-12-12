@@ -112,6 +112,8 @@ function sfRedNaoCreateFormElementByName(elementName,options)
         return new sfRedNaoNumber(options);
     if(elementName=='rednaocaptcha')
         return new sfRedNaoCaptcha(options);
+    if(elementName=='rednaohtml')
+        return new sfHtmlElement(options);
 
     for(var i=0;i<sfFormElementBase.Extensions.length;i++)
         if(sfFormElementBase.Extensions[i].Name==elementName)
@@ -227,6 +229,7 @@ sfFormElementBase.prototype.RefreshElement=function()
     element.find(".redNaoOneColumn").remove();
     var generatedElement=rnJQuery(this.GenerateInlineElement());
     element.append(generatedElement);
+    //noinspection JSUnusedGlobalSymbols
     this.JQueryElement=generatedElement;
     this.GenerationCompleted(element);
     if(!smartFormsDesignMode)
@@ -240,6 +243,7 @@ sfFormElementBase.prototype.GenerateHtml=function(jqueryElement)
 {
     var newElement=rnJQuery('<div class="rednao-control-group form-group  row '+this.Options.ClassName+'" id="'+this.Id+'" >'+this.GenerateInlineElement()+'</div>');
     jqueryElement.replaceWith(newElement );
+    //noinspection JSUnusedGlobalSymbols
     this.JQueryElement=newElement;
     this.GenerationCompleted(newElement);
     this.ApplyAllStyles();
@@ -251,6 +255,7 @@ sfFormElementBase.prototype.AppendElementToContainer=function(jqueryElement)
 {
     var JQueryElement=rnJQuery( '<div class="rednao-control-group form-group row '+this.Options.ClassName+'" id="'+this.Id+'">'+this.GenerateInlineElement()+'</div>');
     jqueryElement.append(JQueryElement);
+    //noinspection JSUnusedGlobalSymbols
     this.JQueryElement=JQueryElement;
     this.GenerationCompleted(JQueryElement);
     this.ApplyAllStyles();
@@ -2288,7 +2293,7 @@ function sfRedNaoEmail(options)
     {
         this.Options.ClassName="rednaoemail";
         this.Options.Label="Email";
-        this.Options.Placeholder="Placeholder"
+        this.Options.Placeholder="Placeholder";
         this.Options.Icon={ClassName:''};
     }else{
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
@@ -2545,3 +2550,40 @@ sfRedNaoCaptcha.prototype.GenerationCompleted=function(jQueryElement)
     });
 };
 
+/************************************************************************************* Html Element ***************************************************************************************************/
+
+function sfHtmlElement(options)
+{
+    sfFormElementBase.call(this,options);
+    this.Title="HTML Element";
+
+    if(this.IsNew)
+    {
+        this.Options.ClassName="rednaohtml";
+        this.Options.Label="Html";
+        this.Options.HTML='';
+    }
+}
+sfHtmlElement.prototype=Object.create(sfFormElementBase.prototype);
+
+sfHtmlElement.prototype.CreateProperties=function()
+{
+    this.Properties.push(new IdProperty(this,this.Options));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"HTML","HTML",{ManipulatorType:'basic',RefreshFormData:true,MultipleLine:true}));
+};
+
+sfHtmlElement.prototype.StoresInformation=function()
+{
+    return false;
+};
+
+sfHtmlElement.prototype.GenerateInlineElement=function()
+{
+    var html=  '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label" for="textarea">'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>'+
+                '<div class="redNaoControls col-sm-9">'+
+                this.Options.HTML+
+    '</div>';
+
+    return html;
+};

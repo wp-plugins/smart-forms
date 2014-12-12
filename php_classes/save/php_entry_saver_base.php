@@ -88,7 +88,10 @@ class php_entry_saver_base {
 		$this->InsertedValuesString=array();
        	$result=$this->ExecuteInsertions();
         if($this->FormOptions["SendNotificationEmail"]=="y")
-            $this->SendFormEmail($this->FormOptions["Emails"][0],$this->FormEntryData,$this->ElementOptions,false);
+		{
+			foreach($this->FormOptions["Emails"] as $email)
+            	$this->SendFormEmail($email,$this->FormEntryData,$this->ElementOptions,false);
+		}
 
 
         if($result==true)
@@ -153,6 +156,7 @@ class php_entry_saver_base {
 		if($result==false)
 			return false;
 		$this->EntryId=$wpdb->insert_id;
+        $this->FormEntryData["_formid"]=$this->EntryId;
 		$this->InsertedValuesString["_formid"]=$this->EntryId;
 		$result=$this->ParseAndInsertDetail($this->EntryId,$this->FormEntryData,$this->GetFormElementsDictionary());
 		return $result;
