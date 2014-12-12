@@ -174,7 +174,7 @@ SfShowConditionalHandler.prototype.GetFormElements=function()
         }
     }
     return this.FormElements;
-};0
+};
 
 
 SfShowConditionalHandler.prototype.ExecuteTrueAction=function()
