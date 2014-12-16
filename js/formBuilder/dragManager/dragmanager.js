@@ -15,7 +15,7 @@ function RedNaoDragManager(formBuilder) {
 
 
 
-};
+}
 
 
 
@@ -23,17 +23,20 @@ RedNaoDragManager.prototype.MakeItemDraggable=function(jQueryElement)
 {
     var self = this;
     jQueryElement.mousedown(function(e){self.SmartDonationsFormMouseDownFired(e, rnJQuery(this))});
-    jQueryElement.find('input[type=submit],input[type=image]').click(function(e){e.preventDefault();e.stopPropagation();})
+    jQueryElement.find('input[type=submit],input[type=image]').click(function(e){e.preventDefault();e.stopPropagation();});
 
     jQueryElement.find('.redNaoCheckBox').unbind('mouseover');
     jQueryElement.find('.redNaoCheckBox').unbind('click');
-    jQueryElement.find('.iCheck-helper').unbind('mouseover')
-    jQueryElement.find('.iCheck-helper').unbind('click')
+    jQueryElement.find('.iCheck-helper').unbind('mouseover');
+    jQueryElement.find('.iCheck-helper').unbind('click');
 
     jQueryElement.find('.redNaoRadio').unbind('mouseover');
     jQueryElement.find('.redNaoRadio').unbind('click');
 
-}
+    jQueryElement.find('.select2-choice').unbind('mousedown');
+
+
+};
 
 RedNaoDragManager.prototype.SmartDonationsFormMouseDownFired = function (e,draggedElement) {
     e.stopPropagation();
@@ -57,7 +60,7 @@ RedNaoDragManager.prototype.SmartDonationsFormMouseDownFired = function (e,dragg
     this.DragBehavior.ElementAdded=function(newElementJQuery)
     {
         self.MakeItemDraggable(newElementJQuery);
-    }
+    };
 
     var offset = draggedElement.offset();
 
@@ -116,7 +119,7 @@ RedNaoDragManager.prototype.SmartDonationsFormMouseDownFired = function (e,dragg
         }
 
         self.displayedDraggedElement=null;
-    }
+    };
 
 
     rnJQuery("body").mouseup(self.UnbindMoveFunction);
@@ -163,7 +166,7 @@ RedNaoDragManager.prototype.SwitchFormElements = function (draggedElementSource,
      draggedElementSource.replaceWith(clonedTarget);
      SmartDonationsPrepareDraggableItems();*/
 
-}
+};
 
 RedNaoDragManager.prototype.AddFormElement = function (draggedElement, target) {
     var newElement = this.FormBuilder.CreateNewInstanceOfElement(draggedElement);
@@ -171,7 +174,7 @@ RedNaoDragManager.prototype.AddFormElement = function (draggedElement, target) {
         this.FormBuilder.RedNaoFormElements.splice(target.index(), 0, newElement);
 
     //this.FormBuilder.RefreshForm();
-}
+};
 
 
 

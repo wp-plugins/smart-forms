@@ -114,6 +114,8 @@ function sfRedNaoCreateFormElementByName(elementName,options)
         return new sfRedNaoCaptcha(options);
     if(elementName=='rednaohtml')
         return new sfHtmlElement(options);
+    if(elementName=='rednaosearchablelist')
+        return new sfSearchableList(options);
 
     for(var i=0;i<sfFormElementBase.Extensions.length;i++)
         if(sfFormElementBase.Extensions[i].Name==elementName)
@@ -2586,4 +2588,170 @@ sfHtmlElement.prototype.GenerateInlineElement=function()
     '</div>';
 
     return html;
+};
+
+
+/*************************************************************************************Searchable list ***************************************************************************************************/
+
+function sfSearchableList(options)
+{
+    sfFormElementBase.call(this,options);
+    this.Title="Searchable List";
+    var i=undefined;
+    if(this.IsNew)
+    {
+        this.Options.Label="Searchable List";
+        this.Options.ClassName="rednaosearchablelist";
+        this.Options.DefaultText="Select a value";
+        this.Options.Options=[{label:'Option 1',value:0,sel:'n'},{label:'Option 2',value:0,sel:'n'},{label:'Option',value:0,sel:'n'}];
+        this.Options.Multiple='n';
+    }
+}
+
+sfSearchableList.prototype=Object.create(sfFormElementBase.prototype);
+
+sfSearchableList.prototype.CreateProperties=function()
+{
+    var self=this;
+    this.Properties.push(new IdProperty(this,this.Options));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"DefaultText","Default text",{ManipulatorType:'basic'}));
+    this.OptionsProperty=new ArrayProperty(this,this.Options,"Options","Options",{ManipulatorType:'basic',SelectorType:(this.Options.Multiple=='n'?'radio':'checkbox')});
+    this.Properties.push(this.OptionsProperty);
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"Multiple","Enable Select Multiple Items",{ManipulatorType:'basic',ChangeCallBack:function(newValue){
+        if(newValue=='y')
+            self.OptionsProperty.AdditionalInformation.SelectorType='checkbox';
+        else
+            self.OptionsProperty.AdditionalInformation.SelectorType='radio';
+
+        self.OptionsProperty.RefreshProperty();
+    }}));
+
+
+
+
+};
+
+sfSearchableList.prototype.GenerateInlineElement=function()
+{
+    var additionalStyle='';
+    if(!isNaN(parseFloat(this.Options.Width)))
+        additionalStyle='width:'+this.Options.Width+'px'+' !important;';
+
+    var multiple='';
+    if(this.Options.Multiple=='y')
+        multiple='multiple="multiple"';
+
+    var html=  '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label">'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>\
+        <div class="redNaoControls col-sm-9">\
+        <select data-placeholder="'+RedNaoEscapeHtml(this.Options.DefaultText)+'" style="'+additionalStyle+'" name="'+this.GetPropertyName()+'" class="redNaoSelect" '+multiple+'>';
+
+    var selected='';
+    var i=undefined;
+
+
+    if(this.Options.Multiple=='n')
+        html+='<option></option>';
+
+
+
+    selected='';
+    for(i=0;i<this.Options.Options.length;i++)
+    {
+        if(this.Options.Options[i].sel=='y')
+            selected='selected="selected"';
+        else
+            selected='';
+
+        html+='<option   value="'+i+'" '+selected+'>'+RedNaoEscapeHtml(this.Options.Options[i].label)+'</opton>';
+
+        selected="";
+
+    }
+    html+='</select></div>';
+    return html;
+};
+
+sfSearchableList.prototype.GetSelectedValuesFromNormalSelect=function()
+{
+    var selectedOptionIndexes=[];
+    var $selectedOptions=this.GetRootContainer().find('.redNaoSelect option:selected');
+
+    for(var i=0;i<$selectedOptions.length;i++)
+    {
+        var optionIndex=parseInt(rnJQuery($selectedOptions[i]).val());
+        if(!isNaN(optionIndex))
+            selectedOptionIndexes.push(optionIndex);
+    }
+
+    return selectedOptionIndexes;
+};
+
+sfSearchableList.prototype.GetValueString=function()
+{
+    this.amount=0;
+    if(this.IsIgnored())
+        return {selectedValues:[]};
+    var data={};
+    data.selectedValues=[];
+    var select2SelectedValues;
+    if(this.Select2.hasClass('select2-offscreen'))
+        select2SelectedValues=this.Select2.select2('val');
+    else
+        select2SelectedValues=this.GetSelectedValuesFromNormalSelect();
+
+
+
+    for(var i=0;i<select2SelectedValues.length;i++)
+    {
+        var option=this.Options.Options[select2SelectedValues[i]];
+        this.amount=parseFloat(option.value);
+        if(isNaN(this.amount))
+            this.amount=0;
+
+        data.selectedValues.push(
+            {
+                value:rnJQuery.trim(option.label),
+                amount:this.amount,
+                label:rnJQuery.trim(option.label)
+            }
+        );
+    }
+
+    return data;
+};
+
+sfSearchableList.prototype.GetValuePath=function()
+{
+    return 'RedNaoGetValueFromArray(formData.'+this.Id+'.selectedValues)';
+};
+
+
+sfSearchableList.prototype.IsValid=function()
+{
+    if(this.Options.IsRequired=='y'&&(this.GetValueString().selectedValues.length==0))
+    {
+        rnJQuery('#'+this.Id).addClass('has-error');
+        return false;
+    }
+    return true;
+};
+
+
+//noinspection JSUnusedLocalSymbols
+sfSearchableList.prototype.GenerationCompleted=function(jQueryElement)
+{
+    var self=this;
+    this.Select2=this.GetRootContainer().find('.redNaoSelect');
+    rnJQuery.RNLoadLibrary([smartFormsPath+'js/utilities/select2/select2.js'],[smartFormsPath+'js/utilities/select2/select2.css'],function(){self.LoadSelect2()});
+    rnJQuery('#'+this.Id+ ' .redNaoSelect').change(function(){self.FirePropertyChanged();});
+};
+
+sfSearchableList.prototype.LoadSelect2=function()
+{
+    this.Select2.select2({
+        width:'100%'
+    });
+
 };

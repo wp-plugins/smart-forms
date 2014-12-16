@@ -184,6 +184,8 @@ RedNaoFormBuilder.prototype.GetComponentType = function (element) {
         return 'rednaocaptcha';
     if (rnJQuery(element).children().first().hasClass('rednaohtml'))
         return 'rednaohtml';
+    if (rnJQuery(element).children().first().hasClass('rednaosearchablelist'))
+        return 'rednaosearchablelist';
 
 
     for(var i=0;i<this.extensions.length;i++)
@@ -236,6 +238,7 @@ RedNaoFormBuilder.prototype.InitializeComponents = function () {
     sfRedNaoCreateFormElementByName('rednaoemail', null).GenerateHtml(rnJQuery("#components .rednaoemail"));
     sfRedNaoCreateFormElementByName('rednaonumber', null).GenerateHtml(rnJQuery("#components .rednaonumber"));
     sfRedNaoCreateFormElementByName('rednaohtml', null).GenerateHtml(rnJQuery("#components .rednaohtml"));
+    sfRedNaoCreateFormElementByName('rednaosearchablelist', null).GenerateHtml(rnJQuery("#components .rednaosearchablelist"));
 
     for(var i=0;i<this.extensions.length;i++)
         sfRedNaoCreateFormElementByName(this.extensions[i], null).GenerateHtml(rnJQuery("#components ."+this.extensions[i]));

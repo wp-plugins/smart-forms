@@ -89,6 +89,7 @@ if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
 
     var smartForms_arrow_closed="<?php echo SMART_FORMS_DIR_URL?>images/arrow_right.png";
     var smartForms_arrow_open="<?php echo SMART_FORMS_DIR_URL?>images/arrow_down.png";
+    var smartFormsPath="<?php echo SMART_FORMS_DIR_URL?>";
 
     var smartFormsRootPath="<?php echo SMART_FORMS_DIR_URL?>";
 
@@ -568,6 +569,11 @@ TIP: if the rule is not working try adding !important, e.g. background-color:red
 
                                                         <div class="component">
                                                             <div class="control-group rednaoselectbasic">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="component">
+                                                            <div class="control-group rednaosearchablelist">
                                                             </div>
                                                         </div>
 

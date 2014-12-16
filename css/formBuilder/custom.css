@@ -449,3 +449,7 @@
 .bootstrap-wrapper .input-group .glyphicon {
   top: 0px;
 }
+
+.has-error .select2-choice,.has-error .select2-choices{
+    border-color:#a94442;
+}

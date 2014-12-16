@@ -21,7 +21,7 @@ function RedNaoCreateColumn(options)
 
 
 
-    if(elementName=='rednaomultiplecheckboxes')
+    if(elementName=='rednaomultiplecheckboxes'||elementName=='rednaosearchablelist')
         return RedNaoMultipleCheckBoxesColumn(options);
     if(elementName=='rednaoselectbasic')
         return RedNaoTextInputColumn(options);

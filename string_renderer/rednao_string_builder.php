@@ -43,6 +43,9 @@ class rednao_string_builder {
 			case "rednaomultiplecheckboxes":
 				return $renderer=$this->GetRenderer("rednao_checkbox_renderer");
 				break;
+            case "rednaosearchablelist":
+                return $renderer=$this->GetRenderer("rednao_checkbox_renderer");
+                break;
 
 			case "rednaoselectbasic":
 				return $renderer=$this->GetRenderer("rednao_select_renderer");
@@ -69,6 +72,7 @@ class rednao_string_builder {
 			default:
 				return $renderer=$this->GetRenderer("rednao_text_input_renderer");
 				break;
+
 		}
 	}
     public function  GetStringFromColumn($formElement,$entry){

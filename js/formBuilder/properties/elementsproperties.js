@@ -10,6 +10,7 @@ function ElementPropertiesBase(formelement,propertiesObject,propertyName,propert
     this.PropertyName=propertyName;
     this.PropertyTitle=propertyTitle;
     this.PropertyId="redNaoFormProperty"+this.PropertyName;
+    this.$PropertiesContainer=null;
 
 }
 
@@ -20,14 +21,20 @@ ElementPropertiesBase.prototype.FormulaExists=function(formElement,propertyName)
 
 ElementPropertiesBase.prototype.CreateProperty=function(jQueryObject)
 {
-    var newRow=rnJQuery("<tr></tr>");
-    newRow.append(this.GenerateHtml());
-    jQueryObject.append(newRow);
+    this.$PropertiesContainer=rnJQuery("<tr></tr>");
+    this.$PropertiesContainer.append(this.GenerateHtml());
+    jQueryObject.append(this.$PropertiesContainer);
 };
 
 ElementPropertiesBase.prototype.GenerateHtml=function()
 {
     throw 'Abstract Method';
+};
+
+ElementPropertiesBase.prototype.RefreshProperty=function()
+{
+    this.$PropertiesContainer.empty();
+    this.$PropertiesContainer.append(this.GenerateHtml());
 };
 
 ElementPropertiesBase.prototype.GetPropertyCurrentValue=function()
