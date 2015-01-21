@@ -32,7 +32,7 @@ function RedNaoEmailEditor()
 
 RedNaoEmailEditor.prototype.EmailConfigurationIsValid=function()
 {
-    for(var i=0;i<this.Emails.lengh;i++)
+    for(var i=0;i<this.Emails.length;i++)
     {
         if(this.Emails[i].ToEmail.indexOf("[field")==0||this.Emails[i].FromEmail.indexOf("[field")==0)
         {
