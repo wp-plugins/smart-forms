@@ -12,6 +12,7 @@ function SmartFormsAddNew()
     this.RestoreDefault();
     this.Emails=[{ToEmail:"",FromEmail:"",Name:"Default",FromName:"",EmailSubject:"",EmailText:""}];
     this.ExtensionData={};
+    var splitFormOptions=null;
     if(typeof smartFormsOptions!='undefined')
     {
         options=smartFormsOptions;
@@ -32,6 +33,7 @@ function SmartFormsAddNew()
             }
         }
 
+        var property;
         if(typeof smartFormsOptions.Extensions!='undefined')
             for(property in smartFormsOptions.Extensions)
             {
@@ -64,8 +66,6 @@ function SmartFormsAddNew()
                     this.ExtensionData[property]={};
                 this.ExtensionData[property].Client=smartFormClientOptions.Extensions[property];
             }
-    }else{
-        smartFormClientOptions={};
     }
 
 
@@ -74,8 +74,7 @@ function SmartFormsAddNew()
         formElements=smartFormsElementOptions;
 
 
-    this.FormBuilder= new RedNaoFormBuilder(options,formElements,smartFormClientOptions);
-
+    this.FormBuilder= new RedNaoFormBuilder(options,formElements,(typeof smartFormClientOptions=='undefined'?{}:smartFormClientOptions) );
 
     var self=this;
     rnJQuery('#smartFormsBasic').click(self.SmartFormsTagClicked);
@@ -106,13 +105,21 @@ function SmartFormsAddNew()
         }
     }
 
-
-    for(var i=0;i<self.Subscribers.length;i++)
+    for(i=0;i<self.Subscribers.length;i++)
     {
         self.Subscribers[i].OnLoad();
     }
+
 }
 
+
+
+
+SmartFormsAddNew.prototype.CreateMultiStepForm=function()
+{
+    if(this.MultiStepsDesigner==null)
+        this.MultiStepsDesigner=new SfMultipleStepsBase();
+};
 
 SmartFormsAddNew.prototype.OpenParameterPicker=function()
 {
@@ -193,7 +200,7 @@ SmartFormsAddNew.prototype.ShowFieldPicker=function(popUpTitle,formElements,call
     $dialog.find(".btn-success").click(function()
     {
         $dialog.modal('hide');
-        $checkedBoxes=$form.find('input[type=checkbox]:checked');
+        var $checkedBoxes=$form.find('input[type=checkbox]:checked');
         var selectedFields=[];
         for(var i=0;i<$checkedBoxes.length;i++)
         {
@@ -304,7 +311,6 @@ SmartFormsAddNew.prototype.SaveForm=function(e)
     if(clientFormOptions==null)
         return;
     var elementsOptions=this.FormBuilder.GetFormInformation();
-
     if(!this.DonationConfigurationIsValid())
         return;
 
@@ -315,7 +321,7 @@ SmartFormsAddNew.prototype.SaveForm=function(e)
 
 };
 
-SmartFormsAddNew.prototype.ExecuteSaveRequest=function(formOptions,clientFormOptions,elementOptions)
+SmartFormsAddNew.prototype.ExecuteSaveRequest=function(formOptions,clientFormOptions,elementOptions,splitFormOptions)
 {
     var data={};
     data.form_options=JSON.stringify(formOptions);
@@ -346,6 +352,7 @@ SmartFormsAddNew.prototype.GetFormOptions=function()
     formOptions.LatestId=sfFormElementBase.IdCounter;
     formOptions.SendNotificationEmail=(rnJQuery('#smartFormsSendNotificationEmail').is(':checked')?'y':'n');
     formOptions.Emails=this.Emails;
+
 
     var usesCaptcha='n';
     var formElements=this.FormBuilder.RedNaoFormElements;
@@ -396,7 +403,9 @@ SmartFormsAddNew.prototype.GetClientFormOptions=function(usesCaptcha)
         PayPalDescription:rnJQuery('#smartDonationsDescription').val(),
         PayPalCurrency:rnJQuery('#smartDonationsCurrencyDropDown').val(),
         Formulas:smartFormsIntegrationFormula.Formulas,
-        InvalidInputMessage:rnJQuery("#smartFormsInvalidFieldMessage").val()
+        InvalidInputMessage:rnJQuery("#smartFormsInvalidFieldMessage").val(),
+        FormType:this.FormBuilder.FormType,
+        SplitSteps:this.FormBuilder.GetMultipleStepsOptions()
     };
 
     clientOptions.Extensions={};
@@ -475,7 +484,7 @@ SmartFormsAddNew.prototype.RestoreDefault=function()
 //YOU CAN PUT YOUR CODE BELLOW\n\n\n\
 //jQueryFormReference:A jquery reference of the loaded form\n\
 AfterFormLoaded:function(jQueryFormReference){\n\
-     //Here you can put code that you want to be executed after the form is loades\n\
+     //Here you can put code that you want to be executed after the form is loaded\n\
 },\n\n\n\
 //jQueryFormReference:A jquery reference of the loaded form\n\
 //formData:An object with the information that is going to be submitted\n\
@@ -511,7 +520,7 @@ SmartFormsAddNew.prototype.Validate=function()
         code.BeforeFormSubmit({},rnJQuery('<form></form>'));
     }catch(exception)
     {
-        alert('An error ocurred\n'+exception);
+        alert('An error occurred\n'+exception);
         return;
     }
 

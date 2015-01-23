@@ -17,6 +17,8 @@ function RedNaoFormBuilder(smartFormsOptions,formElementsOptions,formClientOptio
     this.extensions=[];
     this.FormBuilderDisabled=false;
     this.Conditions=[];
+    this.MultipleStepsDesigner=null;
+    this.FormType='nor';
     if(RedNaoSmartFormLicenseIsValid)
         rnJQuery("#tabpro").empty();
     RedNaoEventManager.Publish('AddNewRegisterElementExtensions');
@@ -47,20 +49,56 @@ function RedNaoFormBuilder(smartFormsOptions,formElementsOptions,formClientOptio
     rnJQuery('#formRadio3').click(function () {
         self.SfConditionalLogicManager.FillSavedConditionList();
     });
-
+    rnJQuery('#rnFormType').change(function(){self.FormTypeChanged()});
+    this.DragManager = new RedNaoDragManager(this);
 
     this.RecreateExistingFormIfAny(formElementsOptions);
 
     this.InitializeTabs();
     this.InitializeComponents();
 
+    this.InitializeSplitFormIfNeeded(formClientOptions);
     if(smartFormsOptions!=null)
         sfFormElementBase.IdCounter=smartFormsOptions.LatestId;
     else
         sfFormElementBase.IdCounter=0;
-    this.DragManager = new RedNaoDragManager(this);
+
 }
 
+
+RedNaoFormBuilder.prototype.FormTypeChanged=function()
+{
+    if(rnJQuery('#rnFormType').val()=='sec'&&!RedNaoLicensingManagerVar.LicenseIsValid("Sorry, this version doesn't support multi steps forms"))
+    {
+        rnJQuery('#rnFormType').val('nor');
+        return;
+    }
+    this.FormType=rnJQuery('#rnFormType').val();
+    this.CreateFormPreview();
+};
+
+RedNaoFormBuilder.prototype.InitializeSplitFormIfNeeded=function(clientOptions)
+{
+    if(clientOptions!=null&&typeof clientOptions.FormType!='undefined'&&clientOptions.FormType=='sec')
+    {
+        this.InitializeStepDesigner(clientOptions);
+        rnJQuery('#rnFormType').val('sec').change();
+    }
+};
+
+RedNaoFormBuilder.prototype.InitializeStepDesigner=function(options)
+{
+    if(options!=null)
+        this.MultipleStepsDesigner=new SfMultipleStepsDesigner(options.SplitSteps,rnJQuery("#redNaoElementlist"),this.RedNaoFormElements);
+    else
+        this.MultipleStepsDesigner=new SfMultipleStepsDesigner(null,rnJQuery("#redNaoElementlist"),this.RedNaoFormElements);
+
+    var self=this;
+    this.MultipleStepsDesigner.GenerationCompletedCallBack=function(){
+        rnJQuery("#redNaoElementlist").find('.step-pane').append('<div class="formelement last" style="height:77px;width:100%"><p>Drop new fields here</p></div>');
+        self.DragManager.MakeAlreadySelectedElementsDraggable();
+    };
+};
 
 //used in drag manager
 //noinspection JSUnusedGlobalSymbols
@@ -75,6 +113,36 @@ RedNaoFormBuilder.prototype.SmartDonationsPrepareDraggableItems = function () {
     })
 };
 
+RedNaoFormBuilder.prototype.InsertFieldInPosition=function(formElement,target)
+{
+
+    if(this.FormType=='sec')
+    {
+        this.MultipleStepsDesigner.AddFormElement(formElement,target);
+    }else
+        this.RedNaoFormElements.splice(target.index(), 0, formElement);
+};
+
+RedNaoFormBuilder.prototype.GetFormElementByContainer=function(container)
+{
+    return this.RedNaoFormElements[this.GetFormElementIndexByContainer(container)];
+};
+
+
+RedNaoFormBuilder.prototype.GetFormElementIndexByContainer=function(container)
+{
+    var fieldId=container.attr('id');
+    for(var i=0;i<this.RedNaoFormElements.length;i++)
+    {
+        if(this.RedNaoFormElements[i].Id==fieldId)
+        {
+            return i;
+        }
+    }
+
+    throw 'Field not found';
+};
+
 
 RedNaoFormBuilder.prototype.RecreateExistingFormIfAny=function(elementOptions)
 {
@@ -85,18 +153,34 @@ RedNaoFormBuilder.prototype.RecreateExistingFormIfAny=function(elementOptions)
         this.RedNaoFormElements.push(element);
     }
 
-
-    var form=rnJQuery("#redNaoElementlist");
-    form.empty();
-    for(i=0;i<this.RedNaoFormElements.length;i++)
-    {
-        this.RedNaoFormElements[i].AppendElementToContainer(form);
-    }
-
-    form.append('<div class="formelement last" style="height:77px;width:100%"><p>Drop new fields here</p></div>');
-
+    this.CreateFormPreview();
 };
 
+
+RedNaoFormBuilder.prototype.CreateFormPreview=function()
+{
+    var form=rnJQuery("#redNaoElementlist");
+    form.empty();
+
+    if(this.FormType=='nor') {
+        for (var i = 0; i < this.RedNaoFormElements.length; i++) {
+            this.RedNaoFormElements[i].AppendElementToContainer(form);
+        }
+        form.append('<div class="formelement last" style="height:77px;width:100%"><p>Drop new fields here</p></div>');
+        this.DragManager.MakeAlreadySelectedElementsDraggable();
+    }
+    else
+    {
+        if(this.MultipleStepsDesigner==null)
+        {
+            this.InitializeStepDesigner(null);
+        }
+        this.MultipleStepsDesigner.Generate();
+
+
+    }
+
+};
 
 /************************************************************************************* Tabs ***************************************************************************************************/
 
@@ -106,7 +190,7 @@ RedNaoFormBuilder.prototype.RecreateExistingFormIfAny=function(elementOptions)
 
 RedNaoFormBuilder.prototype.OpenProperties = function (element) {
     rnJQuery('#formRadio2').click();
-    this.FillPropertiesPanel(this.RedNaoFormElements[element.index()]);
+    this.FillPropertiesPanel(this.GetFormElementByContainer(element));
 };
 
 RedNaoFormBuilder.prototype.FillPropertiesPanel = function (element) {
@@ -304,10 +388,10 @@ RedNaoFormBuilder.prototype.CloneFormElement=function(jQueryElement){
     {
         return;
     }
-    var formObject=this.RedNaoFormElements[jQueryElement.index()];
+    var formObject=this.GetFormElementByContainer(jQueryElement);
     var newElement= formObject.Clone();
 
-    this.RedNaoFormElements.splice(jQueryElement.index()+1,0,newElement);
+    this.RedNaoFormElements.splice(this.GetFormElementIndexByContainer(jQueryElement)+1,0,newElement);
 
     var container=rnJQuery("<div></div>");
     container.insertAfter(jQueryElement);
@@ -341,14 +425,22 @@ RedNaoFormBuilder.prototype.ElementClicked=function(jQueryElement)
 };
 
 RedNaoFormBuilder.prototype.EditStyle=function(jQueryElement){
-    var formElement=this.RedNaoFormElements[jQueryElement.index()];
+    var formElement=this.GetFormElementByContainer(jQueryElement);
     RedNaoStyleEditorVar.OpenStyleEditor(formElement,jQueryElement);
 };
 
 RedNaoFormBuilder.prototype.DeleteFormElement=function(jQueryElement){
-    var index=jQueryElement.index();
+    var index=this.GetFormElementIndexByContainer(jQueryElement);
     this.RedNaoFormElements.splice(index,1);
     jQueryElement.remove();
+};
+
+RedNaoFormBuilder.prototype.GetMultipleStepsOptions=function()
+{
+    if(this.FormType!='nor')
+        return this.MultipleStepsDesigner.Options;
+    else
+        return {};
 };
 
 

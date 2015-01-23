@@ -9,33 +9,33 @@ function DragItemBehaviorBase(formBuilder,draggedElement)
 DragItemBehaviorBase.prototype.HoverInElement=function(formBuilder,target)
 {
 
-}
+};
 
 DragItemBehaviorBase.prototype.HoverInAnything=function(formBuilder,target)
 {
 
-}
+};
 
 DragItemBehaviorBase.prototype.DragDrop=function(formBuilder,target)
 {
 
-}
+};
 
 DragItemBehaviorBase.prototype.FireEvent=function(eventName,args)
 {
     if(typeof this[eventName]!='undefined')
         this[eventName](args);
-}
+};
 
 DragItemBehaviorBase.prototype.DisplayDraggedItem=function (draggedElementSource, classOrigin)
 {
 
-}
+};
 
 DragItemBehaviorBase.prototype.ElementClicked=function()
 {
 
-}
+};
 
 /************************************************************************************New Element Behavior****************************************/
 
@@ -53,12 +53,12 @@ DragItemBehaviorNewElement.prototype.HoverInElement=function(target)
     rnJQuery('#redNaoSmartFormsPlaceHolder').remove();
     rnJQuery(this.DraggedElement).fadeTo(0.5, 1);
     rnJQuery("<div id='redNaoSmartFormsPlaceHolder' class='redNaoTarget'></div>").insertBefore(target);
-}
+};
 
 DragItemBehaviorNewElement.prototype.HoverInAnything=function(target)
 {
     rnJQuery('#redNaoSmartFormsPlaceHolder').remove();
-}
+};
 
 DragItemBehaviorNewElement.prototype.DragDrop=function(target)
 {
@@ -70,18 +70,18 @@ DragItemBehaviorNewElement.prototype.DragDrop=function(target)
     var newElement = this.FormBuilder.CreateNewInstanceOfElement(this.DraggedElement);
     if (newElement != null)
     {
-        this.FormBuilder.RedNaoFormElements.splice(target.index(), 0, newElement);
+        this.FormBuilder.InsertFieldInPosition(newElement,target);
         var newElementJQuery= newElement.GenerateHtml(target);
         this.FireEvent("ElementAdded",newElementJQuery);
     }
-}
+};
 
 DragItemBehaviorNewElement.prototype.DisplayDraggedItem=function (classOrigin) {
     var tempForm=rnJQuery('<div class="form-horizontal span6 temp ' + classOrigin + ' tempForm" >' + this.DraggedElement.html() + '</div>');
     rnJQuery(".rednaoformbuilder").append(tempForm);
     return tempForm;
 
-}
+};
 
 
 /************************************************************************************Existing Element Behavior****************************************/
@@ -90,7 +90,7 @@ DragItemBehaviorNewElement.prototype.DisplayDraggedItem=function (classOrigin) {
 function DragItemBehaviorExistingElement(formBuilder,draggedElement)
 {
     DragItemBehaviorBase.call(this,formBuilder,draggedElement);
-    this.FormElementIndex=draggedElement.index();
+    this.FormElementIndex=this.FormBuilder.GetFormElementIndexByContainer(draggedElement);
 }
 
 DragItemBehaviorExistingElement.prototype=Object.create(DragItemBehaviorBase.prototype);
@@ -108,13 +108,13 @@ DragItemBehaviorExistingElement.prototype.HoverInElement=function(target)
     rnJQuery('#redNaoSmartFormsPlaceHolder').remove();
     rnJQuery(this.DraggedElement).fadeTo(0.5, 1);
     rnJQuery("<div id='redNaoSmartFormsPlaceHolder' class='redNaoTarget'></div>").insertBefore(target);
-}
+};
 
 
 DragItemBehaviorExistingElement.prototype.HoverInAnything=function(target)
 {
 
-}
+};
 
 DragItemBehaviorExistingElement.prototype.DragDrop=function(target)
 {
@@ -124,11 +124,11 @@ DragItemBehaviorExistingElement.prototype.DragDrop=function(target)
 
     if (formElement != null)
     {
-        this.FormBuilder.RedNaoFormElements.splice(target.index(), 0, formElement);
+        this.FormBuilder.InsertFieldInPosition(formElement,target);
         var newElementJQuery= formElement.GenerateHtml(target);
         this.FireEvent("ElementAdded",newElementJQuery);
     }
-}
+};
 
 DragItemBehaviorExistingElement.prototype.DisplayDraggedItem=function (classOrigin)
 {
@@ -137,12 +137,12 @@ DragItemBehaviorExistingElement.prototype.DisplayDraggedItem=function (classOrig
 
     this.DraggedElement.replaceWith("<div id='redNaoSmartFormsPlaceHolder' class='redNaoTarget'></div>");
     return tempForm;
-}
+};
 
 DragItemBehaviorExistingElement.prototype.ElementClicked=function()
 {
 
     this.FormBuilder.ElementClicked(this.DraggedElement);
 
-}
+};
 

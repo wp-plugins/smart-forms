@@ -279,9 +279,10 @@ function rednao_smart_forms_submit_license()
     $email=GetPostValue("email");
     $key=GetPostValue("key");
 
-    if(smart_forms_check_license($email,$key,$error))
+    $license=smart_forms_check_license($email,$key,$error);
+    if($license["is_valid"])
     {
-        echo '{"IsValid":"y","Message":"'.__("License submitted successfully, thank you!!").'"}';
+        echo '{"IsValid":"y","Message":"'.__("License submitted successfully, thank you!!").'","licenseType":"'.$license["licenseType"].'"}';
     }else
     {
         if($error==null)

@@ -3,20 +3,28 @@ function RedNaoDragManager(formBuilder) {
     this.FormBuilder = formBuilder;
     this.moveFunction=null;
 
-    var items= rnJQuery(".rednaoformbuilder .component,#redNaoElementlist .rednao-control-group");
+    this.MakeFieldsCatalogDraggable();
+
+}
+
+RedNaoDragManager.prototype.MakeFieldsCatalogDraggable=function()
+{
+    var items= rnJQuery(".rednaoformbuilder .component");
     for(var i=0;i<items.length;i++)
     {
         this.MakeItemDraggable(rnJQuery(items[i]));
 
     }
+};
 
-    var self=this;
-
-
-
-
-}
-
+RedNaoDragManager.prototype.MakeAlreadySelectedElementsDraggable=function()
+{
+    var items= rnJQuery("#redNaoElementlist .rednao-control-group");
+    for(var i=0;i<items.length;i++)
+    {
+        this.MakeItemDraggable(rnJQuery(items[i]));
+    }
+};
 
 
 RedNaoDragManager.prototype.MakeItemDraggable=function(jQueryElement)
@@ -51,7 +59,7 @@ RedNaoDragManager.prototype.SmartDonationsFormMouseDownFired = function (e,dragg
         return;
 
     var classOrigin = "";
-    if (draggedElement.parent().hasClass('formelements'))
+    if (draggedElement.parent().hasClass('formelements')||draggedElement.parent().hasClass('step-pane'))//step-pane for splitted forms;
         this.DragBehavior=new DragItemBehaviorExistingElement(this.FormBuilder, draggedElement);
     else
         this.DragBehavior=new DragItemBehaviorNewElement(this.FormBuilder,draggedElement);
@@ -167,14 +175,5 @@ RedNaoDragManager.prototype.SwitchFormElements = function (draggedElementSource,
      SmartDonationsPrepareDraggableItems();*/
 
 };
-
-RedNaoDragManager.prototype.AddFormElement = function (draggedElement, target) {
-    var newElement = this.FormBuilder.CreateNewInstanceOfElement(draggedElement);
-    if (newElement != null)
-        this.FormBuilder.RedNaoFormElements.splice(target.index(), 0, newElement);
-
-    //this.FormBuilder.RefreshForm();
-};
-
 
 

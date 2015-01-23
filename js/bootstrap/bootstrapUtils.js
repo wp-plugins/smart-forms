@@ -190,6 +190,12 @@ RNAlertDialog.prototype.Hide=function()
     this.$Dialog.modal('hide');
 };
 
+RNAlertDialog.prototype.Hide=function()
+{
+    this.$Dialog.modal('hide');
+};
+
+
 /************************************************************************************* Confirmation Dialog ***************************************************************************************************/
 rnJQuery.RNGetConfirmationDialog=function()
 {
@@ -242,7 +248,11 @@ RNConfirmationDialog.prototype.ShowConfirmation=function(title,message,callback)
 };
 
 
-RNAlertDialog.prototype.Hide=function()
+rnJQuery.fn.modal.Constructor.prototype.ShowInCenter=function()
 {
-    this.$Dialog.modal('hide');
+    var $dialog=this.$element.find('.modal-dialog');
+    var offset = (rnJQuery(window).height() - $dialog.height()) / 2;
+    // Center modal vertically in window
+    $dialog.css("margin-top", offset);
+    this.$element.modal('show');
 };

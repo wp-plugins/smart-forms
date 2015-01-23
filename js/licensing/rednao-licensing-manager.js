@@ -75,10 +75,12 @@ RedNaoLicensingManager.prototype.SubmitLicenseForValidation=function()
         {
             self.Popup.dialog('close');
             RedNaoSmartFormLicenseIsValid=true;
+            RedNaoLicenseType=result.licenseType;
+
         }
     });
     return false;
-}
+};
 
 RedNaoLicensingManager.prototype.LicenseIsValid=function(errorMessage)
 {
@@ -88,14 +90,44 @@ RedNaoLicensingManager.prototype.LicenseIsValid=function(errorMessage)
     this.Popup.find('p').text(errorMessage);
     this.Popup.dialog('open');
     return false;
-}
+};
+
+RedNaoLicensingManager.prototype.GetLicenseWeight=function(license)
+{
+    if(license=='b')
+        return 1;
+    if(license=='p')
+        return 2;
+    if(license=='u' || license[0]=='f')
+        return 3;
+
+};
+
+RedNaoLicensingManager.prototype.LicenseIsValid=function(minimumVersion,errorMessage)
+{
+    if(RedNaoSmartFormLicenseIsValid)
+    {
+        if(this.GetLicenseWeight(minimumVersion)>this.GetLicenseWeight(RedNaoLicenseType))
+        {
+            this.Popup.find('p').text("Sorry your current license doesn't support this function");
+            this.Popup.dialog('open');
+            return false;
+        }
+        return true;
+    }
+
+    this.Popup.find('p').text(errorMessage);
+    this.Popup.dialog('open');
+    return false;
+};
+
 
 RedNaoLicensingManager.prototype.ActivateLicense=function()
 {
     this.Popup.find('p').text('');
     this.Popup.dialog('open');
     this.ValidateLicense();
-}
+};
 
 RedNaoLicensingManager.prototype.LicenseIsValidNoPopUp=function()
 {
@@ -103,7 +135,7 @@ RedNaoLicensingManager.prototype.LicenseIsValidNoPopUp=function()
         return true;
 
     return false;
-}
+};
 
 var RedNaoLicensingManagerVar=null;
 rnJQuery(function(){

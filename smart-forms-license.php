@@ -6,47 +6,52 @@ function smart_forms_check_license($email,$key,&$error)
     {
         if(get_transient("smart_forms_check_again"))
             return true;
-        if(smart_forms_license_is_valid($email,$key,$error))
+
+        $result=smart_forms_license_is_valid($email,$key,$error);
+        if($result["is_valid"])
         {
             update_option('smart_forms_email',$email);
             update_option('smart_forms_key',$key);
+            update_option('smart_forms_license',$result['licenseType']);
 
             set_transient("smart_forms_check_again",1,60*60*24*7);
-            return true;
+            return $result;
         }
     }
 
-    return false;
+    return array("is_valid"=>false);
 }
 
 function smart_forms_check_license_with_options(&$error)
 {
     $result=apply_filters("smart_forms_lc_is_valid_with_options",array());
 	$error=$result["error"];
-	return $result["is_valid"];
+	return $result;
 }
 
 function smart_forms_license_is_valid($email,$key,&$error)
 {
 	$result = apply_filters( "smart_forms_lc_is_valid", array(
-		email=>$email,
-		key=>$key,
-		is_valid=>false,
-		error=>""
+		"email"=>$email,
+		"key"=>$key,
+		"is_valid"=>false,
+		"error"=>""
 	) );
 
 	$error=$result["error"];
-	return $result["is_valid"];
+	return $result;
 
 }
 
 function smart_forms_load_license_manager($errorMessage)
 {
-    if(smart_forms_check_license_with_options($error))
+    $result=apply_filters("smart_forms_lc_is_valid_with_options",array());
+    if($result["is_valid"])
     {
         ?><script language="javascript">
             var RedNaoSmartFormLicenseIsValid=true;
             var RedNaoSmartFormLicenseErrorMessage="";
+            var RedNaoLicenseType="<?php echo $result["licenseType"];?>";
         </script><?php
     }else
     {
@@ -57,6 +62,7 @@ function smart_forms_load_license_manager($errorMessage)
         ?>
                 <script language="javascript">
                     var RedNaoSmartFormLicenseIsValid=false;
+                    var RedNaoLicenseType="";
                     var RedNaoSmartFormLicenseErrorMessage="<?php echo $errorMessage?>";
                 </script>
 

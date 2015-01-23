@@ -18,6 +18,7 @@ smart_forms_load_license_manager("");
 
 wp_enqueue_script('jquery');
 wp_enqueue_script('isolated-slider',SMART_FORMS_DIR_URL.'js/rednao-isolated-jq.js',array('jquery'));
+wp_enqueue_script('rednap-fuelux',SMART_FORMS_DIR_URL.'js/utilities/fuelux/wizard.js',array('isolated-slider'));
 
 
 wp_enqueue_script('smart-forms-event-manager',SMART_FORMS_DIR_URL.'js/formBuilder/eventmanager.js',array('isolated-slider'));
@@ -33,6 +34,9 @@ wp_enqueue_script('smart-forms-conditional-steps',SMART_FORMS_DIR_URL.'js/condit
 wp_enqueue_script('smart-forms-conditional-handlers',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-handlers.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-conditional-manager',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-logic-manager.js',array('isolated-slider','smart-forms-conditional-handlers'));
 wp_enqueue_script('ismart-forms-add-new',SMART_FORMS_DIR_URL.'js/subscriber_interfaces/ismart-forms-add-new.js');
+wp_enqueue_script('smart-forms-multiple-step-base',SMART_FORMS_DIR_URL.'js/multiple_steps/multiple_steps_base.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-multiple-step-designer',SMART_FORMS_DIR_URL.'js/multiple_steps/multiple_steps_designer.js',array('smart-forms-multiple-step-base'));
+
 
 $additionalJS=apply_filters("sf_form_configuration_on_load_js",array());
 $addNewDependencies= array('smart-forms-list-manager','ismart-forms-add-new','isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2','smart-forms-event-manager','smart-forms-conditional-manager');
@@ -71,6 +75,7 @@ wp_enqueue_style('form-builder-boot-strap',SMART_FORMS_DIR_URL.'css/formBuilder/
 wp_enqueue_style('form-builder-custom',SMART_FORMS_DIR_URL.'css/formBuilder/custom.css');
 wp_enqueue_style('form-builder-icheck-normal',SMART_FORMS_DIR_URL.'js/utilities/iCheck/skins/minimal/minimal.css');
 wp_enqueue_style('form-builder-select2',SMART_FORMS_DIR_URL.'js/utilities/select2/select2.css');
+wp_enqueue_style('form-builder-fuelux',SMART_FORMS_DIR_URL.'js/utilities/fuelux/fuelux.css');
 
 if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
 	wp_enqueue_script('smart-forms-detail-generator',SMART_FORMS_DIR_URL.'utilities/smart-forms-detail-generator.js',array('isolated-slider'));
@@ -382,6 +387,12 @@ TIP: if the rule is not working try adding !important, e.g. background-color:red
 				<input style="width: 300px;" type="text"  id="smartFormsInvalidFieldMessage" value="*Please fill all the required fields"/>
 				<span class="description" style="margin-bottom:5px;" ><?php echo __("*The message that is displayed when a required field is empty"); ?></span>
 				<br/>
+                <span><?php echo __("Form Type"); ?></span>
+                <select id="rnFormType">
+                    <option value="nor">Normal</option>
+                    <option value="sec">Multiple Steps Form (pro)</option>
+                </select>
+                <br/>
 
 
 

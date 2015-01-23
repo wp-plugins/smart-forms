@@ -100,7 +100,7 @@ SfHandlerFieldPicker.prototype.InitializeScreen=function(container)
     container.css('padding-right','5px');
     var jQueryDocument=rnJQuery(document);
     var self=this;
-    rnJQuery('.rednao-control-group').bind("click.FieldPicker",function(){self.FormElementClicked(rnJQuery(this));});
+    rnJQuery('#redNaoElementlist').on("click.FieldPicker",'.rednao-control-group',function(){self.FormElementClicked(rnJQuery(this));});
     rnJQuery('body').append('<div class="smartFormsSlider smartFormsFieldPickerOverlay"><div class="ui-widget-overlay" style="z-index: 1001;width:'+jQueryDocument.width()+'px;height:'+jQueryDocument.height()+'" ></div></div>');
     rnJQuery('.rednaoformbuilder').addClass('smartFormsFieldPick');
     var pickerInterface=rnJQuery('<div class="fieldPickContainer" style="margin:10px;"></div>');
@@ -132,7 +132,7 @@ SfHandlerFieldPicker.prototype.InitializeScreen=function(container)
 SfHandlerFieldPicker.prototype.Exit=function()
 {
     this.FormBuilder.Enable();
-    rnJQuery('.rednao-control-group').unbind("click.FieldPicker");
+    rnJQuery('#redNaoElementlist').off("click.FieldPicker");
     rnJQuery('.fieldPickerSelected').removeClass('fieldPickerSelected');
     rnJQuery('.rednaoformbuilder').removeClass('smartFormsFieldPick');
     rnJQuery('.smartFormsFieldPickerOverlay').remove();
@@ -152,7 +152,7 @@ SfHandlerFieldPicker.prototype.Commit=function()
 
 SfHandlerFieldPicker.prototype.FormElementClicked=function(elementClickedJQuery)
 {
-    var fieldId=this.FormBuilder.RedNaoFormElements[elementClickedJQuery.index()].Id;
+    var fieldId=this.FormBuilder.GetFormElementByContainer(elementClickedJQuery).Id;
     var selectedFields=this.Select.select2('val');
     if(rnJQuery.inArray(fieldId,selectedFields)>=0)
         return;

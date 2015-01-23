@@ -43,16 +43,20 @@ function smart_forms_lc_is_valid($val)
 	$email=trim($email);
 	$key=trim($key);
 	delete_transient("smart_forms_check_again");
-	$response=wp_remote_post(SECURE_SMART_FORMS_REDNAO_URL.'smart_forms_license_validation.php',array('body'=> array( 'email'=>$email,'key'=>$key,'product'=>'sf'),'timeout'=>10));
+	$response=wp_remote_post(SECURE_SMART_FORMS_REDNAO_URL.'smart_forms_license_validation.php',array('body'=> array( 'email'=>$email,'key'=>$key,'product'=>'sf','ver'=>"2"),'timeout'=>10));
 	if($response instanceof WP_Error)
 	{
 		$val["error"]=$response->get_error_message();
 		$val["is_valid"]=false;
+		$val["licenseType"]="";
 	}
 	else
 	{
-		if(strcmp ($response['body'], "valid") == 0)
-			$val["is_valid"]=true;
+		if(strpos ($response['body'], "invalid")===false&&strpos ($response['body'], "valid") !==false)
+		{
+			$val["is_valid"] = true;
+			$val["licenseType"]=explode("|", $response['body'])[1];
+		}
 		else{
 			$val["is_valid"]=false;
 		}
@@ -64,12 +68,12 @@ function smart_forms_lc_is_valid($val)
 function smart_forms_lc_is_valid_with_options($val)
 {
 	if(get_transient("smart_forms_check_again"))
-		return array("is_valid"=>true,"error"=>"");
+		return array("is_valid"=>true,"error"=>"","licenseType"=>get_option("smart_forms_license"));
 	$email=get_option('smart_forms_email');
 	$key=get_option('smart_forms_key');
 
 	if($email==false||$key==false)
-		return array("is_valid"=>false,"error"=>"");
+		return array("is_valid"=>false,"error"=>"","licenseType"=>"");
 
 	return smart_forms_lc_is_valid(
 		array(

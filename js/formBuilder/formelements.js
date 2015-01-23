@@ -182,11 +182,26 @@ sfFormElementBase.IdCounter=0;
 sfFormElementBase.prototype.Ignore=function()
 {
     this._ignore=true;
+    this.FirePropertyChanged();
+};
+
+sfFormElementBase.prototype.GetStepId=function()
+{
+    if(typeof this.Options.StepId=='undefined')
+        return '';
+
+    return this.Options.StepId;
+};
+
+sfFormElementBase.prototype.SetStepId=function(stepId)
+{
+    this.Options.StepId=stepId;
 };
 
 sfFormElementBase.prototype.UnIgnore=function()
 {
     this._ignore=false;
+    this.FirePropertyChanged();
 };
 
 sfFormElementBase.prototype.IsIgnored=function()
@@ -2744,7 +2759,7 @@ sfSearchableList.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     this.Select2=this.GetRootContainer().find('.redNaoSelect');
-    rnJQuery.RNLoadLibrary([smartFormsPath+'js/utilities/select2/select2.js'],[smartFormsPath+'js/utilities/select2/select2.css'],function(){self.LoadSelect2()});
+    rnJQuery.RNLoadLibrary([smartFormsPath+'js/utilities/select2/select2.js'],[smartFormsPath+'js/utilities/select2/select2.css'],function(){self.LoadSelect2()});1
     rnJQuery('#'+this.Id+ ' .redNaoSelect').change(function(){self.FirePropertyChanged();});
 };
 
