@@ -440,7 +440,7 @@ smartFormGenerator.prototype.SaveCompleted=function(result){
     if((RedNaoGetValueOrEmpty(this.client_form_options.alert_message_cb)!='y'&&RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)!='y')||result.success=='n')
     {
         alert(result.message);
-        //this.CreateForm();
+        this.CreateForm();
         return;
     }
 
