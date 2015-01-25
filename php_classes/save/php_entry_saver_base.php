@@ -326,9 +326,11 @@ class php_entry_saver_base {
 			"entry_id"=>$entry_id,
 			"field_id"=>$fieldId,
 			"json_value"=>$jsonValue,
-			"value"=>$value,
-			"datevalue"=>$dateValue
+			"value"=>$value
 		),$exValue);
+
+		if($dateValue!=null)
+			$arrayToInsert["datevalue"]=$dateValue;
 		return $wpdb->insert(SMART_FORMS_ENTRY_DETAIL,$arrayToInsert);
 	}
 
