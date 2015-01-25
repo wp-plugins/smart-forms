@@ -97,6 +97,11 @@ class rednao_string_builder {
         return $this->$rendererName;
     }
 
+	public function GetDateValue($formElement,$entry)
+	{
+		$renderer=$this->GetElementRenderer($formElement);
+		return $renderer->GetDateValue($formElement,$entry);
+	}
 
 
-} 
+}

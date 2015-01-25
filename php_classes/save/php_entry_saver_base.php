@@ -61,7 +61,6 @@ class php_entry_saver_base {
 			"ContinueInsertion"=>true,
 			"FormInformation"=>array(
 				"FormId"=>$this->FormId,
-				"FormString"=>$this->FormString,
 				"FormEntryData"=>$this->FormEntryData,
 				"FormOptions"=>$this->FormOptions,
 				"ElementOptions"=>$this->ElementOptions
@@ -70,6 +69,11 @@ class php_entry_saver_base {
 			"Actions"=>array()
 		));
 
+		if(has_filter('sf_before_saving_form'))
+		{
+			$this->FormEntryData = $additionalActions["FormInformation"]["FormEntryData"];
+			$this->FormString = json_encode($this->FormEntryData);
+		}
 
 		if($additionalActions["ContinueInsertion"]==false)
 		{
@@ -139,11 +143,7 @@ class php_entry_saver_base {
 
     private function InsertEntryData(){
 
-		$parsedData=json_decode($this->FormString);
-		if($parsedData==null)
-			return false;
-
-        global $wpdb;
+		global $wpdb;
         $result= $wpdb->insert(SMART_FORMS_ENTRY,array(
             'form_id'=>$this->FormId,
             'date'=>date('Y-m-d H:i:s'),
@@ -310,22 +310,24 @@ class php_entry_saver_base {
 			if($fieldConfiguration["ClassName"]!="sfFileUpload")
 				$this->InsertedValuesString[$key]=$value;
 			$exValue=$this->StringBuilder->GetExValue($fieldConfiguration,$unprocessedValue);
+			$dateValue=$this->StringBuilder->GetDateValue($fieldConfiguration,$unprocessedValue);
 			$jsonValue=json_encode($unprocessedValue);
-			if(!$this->InsertDetailRecord($entryId,$key,$value,$jsonValue,$exValue))
+			if(!$this->InsertDetailRecord($entryId,$key,$value,$jsonValue,$exValue,$dateValue))
 				return false;
 		}
 
 		return true;
 	}
 
-	private function InsertDetailRecord($entry_id, $fieldId, $value, $jsonValue,$exValue)
+	private function InsertDetailRecord($entry_id, $fieldId, $value, $jsonValue,$exValue,$dateValue)
 	{
 		global $wpdb;
 		$arrayToInsert=array_merge(array(
 			"entry_id"=>$entry_id,
 			"field_id"=>$fieldId,
 			"json_value"=>$jsonValue,
-			"value"=>$value
+			"value"=>$value,
+			"datevalue"=>$dateValue
 		),$exValue);
 		return $wpdb->insert(SMART_FORMS_ENTRY_DETAIL,$arrayToInsert);
 	}

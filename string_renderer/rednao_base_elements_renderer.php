@@ -10,5 +10,9 @@ abstract class rednao_base_elements_renderer {
 
     public abstract function GetString($formElement,$entry);
 	public abstract function GetExValues($formElement,$entry);
+    public function GetDateValue($formElement,$entry)
+    {
+        return null;
+    }
 
 } 

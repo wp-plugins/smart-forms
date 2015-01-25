@@ -35,25 +35,32 @@ RedNaoFormulaManager.prototype.PropertyChanged=function(data)
 
 RedNaoFormulaManager.prototype.SetFormulaValue=function(fieldName,data)
 {
-    if(RedNaoPathExists(data,'value'))
+    var fieldData={};
+    fieldData.OriginalValues=data;
+    if(typeof data.value!='undefined')
+        fieldData.value=data.value;
+
+    if(typeof data.selectedValues!='undefined')
+        fieldData.selectedValues=data.selectedValues;
+    if(RedNaoPathExists(fieldData,'value'))
     {
-        data.label=data.value.toString();
-        data.numericalValue=0;
-        if(data.value=='')
-            data.value=0;
+        fieldData.label=fieldData.value.toString();
+        fieldData.numericalValue=0;
+        if(fieldData.value=='')
+            fieldData.value=0;
         else
-            if(!isNaN(data.value))
+            if(!isNaN(fieldData.value))
             {
-                data.value=parseFloat(data.value);
-                data.numericalValue=data.value;
+                fieldData.value=parseFloat(data.value);
+                fieldData.numericalValue=data.value;
             }
     }else
     {
-        data.label='';
-        data.numericalValue=0;
+        fieldData.label='';
+        fieldData.numericalValue=0;
     }
 
-    this.Data[fieldName]=data;
+    this.Data[fieldName]=fieldData;
 };
 
 RedNaoFormulaManager.prototype.UpdateFormulaFieldsIfNeeded=function(fieldName)

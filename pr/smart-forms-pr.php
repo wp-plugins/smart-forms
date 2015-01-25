@@ -55,7 +55,7 @@ function smart_forms_lc_is_valid($val)
 		if(strpos ($response['body'], "invalid")===false&&strpos ($response['body'], "valid") !==false)
 		{
 			$val["is_valid"] = true;
-			$val["licenseType"]=explode("|", $response['body'])[1];
+			$val["licenseType"]="";
 		}
 		else{
 			$val["is_valid"]=false;

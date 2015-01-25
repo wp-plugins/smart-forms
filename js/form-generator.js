@@ -1,5 +1,7 @@
 function smartFormGenerator(options){
     this.client_form_options=options.client_form_options;
+    this.Extensions=[];
+    RedNaoEventManager.Publish('GetClientExtension',{Generator:this,Extensions:this.Extensions});
     this.MultipleStepsManager=null;
     this.InitializeConditionalLogic();
     this.SetDefaultIfUndefined('InvalidInputMessage','*Please fill all the required fields');
@@ -19,6 +21,7 @@ function smartFormGenerator(options){
     for(var i=0;i<elementOptions.length;i++)
     {
         var element=sfRedNaoCreateFormElementByName(elementOptions[i].ClassName,elementOptions[i]);
+        this.FormId=this.form_id;
         this.RedNaoFormElements.push(element);
         this.FormElements.push(element);
     }
@@ -29,6 +32,11 @@ function smartFormGenerator(options){
     this.CreateForm();
 
 }
+
+smartFormGenerator.prototype.GetCurrentData=function()
+{
+  return RedNaoFormulaManagerVar.Data;
+};
 
 smartFormGenerator.prototype.CreateCSS=function()
 {
@@ -68,13 +76,13 @@ smartFormGenerator.prototype.CreateForm=function(){
     var i;
     for(i=0;i<this.RedNaoFormElements.length;i++)
     {
-        var formElement=this.RedNaoFormElements[i];
-        formElement.AppendElementToContainer(this.JQueryForm);
-
-        if(formElement.StoresInformation())
-            RedNaoFormulaManagerVar.SetFormulaValue(formElement.Id,formElement.GetValueString())
-
+        this.RedNaoFormElements[i].AppendElementToContainer(this.JQueryForm);
     }
+
+
+
+
+
 
     var self=this;
     //if(RedNaoGetValueOrNull(this.client_form_options.Campaign))
@@ -98,8 +106,6 @@ smartFormGenerator.prototype.CreateForm=function(){
         e.stopPropagation();
         self.SaveForm();
     });
-    if(this.JQueryForm.width()<=500)
-        this.JQueryForm.parent().addClass('compact');
 
 
 
@@ -111,13 +117,28 @@ smartFormGenerator.prototype.CreateForm=function(){
         });
     }else
     {
-       this.FormLoaded();
+        if(this.JQueryForm.width()<=500)
+            this.JQueryForm.parent().addClass('compact');
+        this.FormLoaded();
     }
 
 };
 
+smartFormGenerator.prototype.FireExtensionMethod=function(methodName)
+{
+    for(var i=0;i<this.Extensions.length;i++)
+        this.Extensions[i][methodName]();
+};
+
 smartFormGenerator.prototype.FormLoaded=function()
 {
+    this.FireExtensionMethod('BeforeInitializingFieldData');
+    for(i=0;i<this.RedNaoFormElements.length;i++)
+    {
+        if(this.RedNaoFormElements[i].StoresInformation())
+            RedNaoFormulaManagerVar.SetFormulaValue(this.RedNaoFormElements[i].Id,this.RedNaoFormElements[i].GetValueString())
+    }
+
     RedNaoFormulaManagerVar.RefreshAllFormulasAndConditionalLogic();
     if(RedNaoGetValueOrNull(this.client_form_options.Campaign))
         this.CreatePayPalHiddenFields();

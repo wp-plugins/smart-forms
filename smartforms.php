@@ -134,6 +134,7 @@ function rednao_smart_forms_plugin_was_activated()
         exvalue4 MEDIUMTEXT NOT NULL,
         exvalue5 MEDIUMTEXT NOT NULL,
         exvalue6 MEDIUMTEXT NOT NULL,
+        datevalue DATETIME,
         PRIMARY KEY  (entry_detail_id)
         );";
 		dbDelta($sql);

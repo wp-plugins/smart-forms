@@ -173,11 +173,17 @@ function sfFormElementBase(options)
 
 
     }
+    this.FormId=0;
     this.Properties=null;
     this.amount=0;
 }
 sfFormElementBase.Extensions=[];
 sfFormElementBase.IdCounter=0;
+
+sfFormElementBase.prototype.SetData=function(data)
+{
+
+};
 
 sfFormElementBase.prototype.Ignore=function()
 {
@@ -212,7 +218,7 @@ sfFormElementBase.prototype.IsIgnored=function()
 
 sfFormElementBase.prototype.FirePropertyChanged=function(){
 
-    RedNaoEventManager.Publish('formPropertyChanged',{FieldName:this.Id, Value:this.GetValueString()});
+    RedNaoEventManager.Publish('formPropertyChanged',{FieldName:this.Id, Value:this.GetValueString(),FormId:this.FormId});
 
 };
 
@@ -553,6 +559,11 @@ sfTextInputElement.prototype.GetValueString=function()
     return {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 };
 
+sfTextInputElement.prototype.SetData=function(data)
+{
+    this.JQueryElement.find('.redNaoInputText').val(data.value);
+};
+
 sfTextInputElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
@@ -649,6 +660,12 @@ sfPrependTexElement.prototype.GetValueString=function()
     return {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 };
 
+sfPrependTexElement.prototype.SetData=function(data)
+{
+    this.JQueryElement.find('.redNaoInputText').val(data.value);
+};
+
+
 sfPrependTexElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
@@ -740,6 +757,13 @@ sfAppendedTexElement.prototype.GetValueString=function()
     return  {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 };
 
+sfAppendedTexElement.prototype.SetData=function(data)
+{
+    this.JQueryElement.find('.redNaoInputText').val(data.value);
+};
+
+
+
 sfAppendedTexElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
@@ -828,6 +852,19 @@ sfPrependCheckBoxElement.prototype.GetValueString=function()
     return  {checked:(rnJQuery('#'+this.Id).find('.redNaoRealCheckBox').is(':checked')?'Yes':'No'),value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 };
 
+sfPrependCheckBoxElement.prototype.SetData=function(data)
+{
+    if(data.checked=='Yes')
+        this.JQueryElement.find('.redNaoRealCheckBox').attr('checked','checked');
+    else
+        this.JQueryElement.find('.redNaoRealCheckBox').removeAttr('checked');
+
+
+    this.JQueryElement.find('.redNaoInputText').val(data.value);
+};
+
+
+
 sfPrependCheckBoxElement.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
@@ -914,6 +951,19 @@ sfAppendCheckBoxElement.prototype.GetValueString=function()
         return {checked:'n',value:''};
     return  {checked:(rnJQuery('#'+this.Id).find('.redNaoRealCheckBox').is(':checked')?'Yes':'No'),value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
 };
+
+
+sfAppendCheckBoxElement.prototype.SetData=function(data)
+{
+    if(data.checked=='Yes')
+        this.JQueryElement.find('.redNaoRealCheckBox').attr('checked','checked');
+    else
+        this.JQueryElement.find('.redNaoRealCheckBox').removeAttr('checked');
+
+
+    this.JQueryElement.find('.redNaoInputText').val(data.value);
+};
+
 
 sfAppendCheckBoxElement.prototype.GetValuePath=function()
 {
@@ -1015,6 +1065,11 @@ sfTextAreaElement.prototype.GetValueString=function()
     if(this.IsIgnored())
         return {value:''};
     return  {value:rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').val()};
+};
+
+sfTextAreaElement.prototype.SetData=function(data)
+{
+    this.JQueryElement.find('.redNaoTextAreaInput').val(data.value);
 };
 
 sfTextAreaElement.prototype.GetValuePath=function()
@@ -1152,6 +1207,23 @@ sfMultipleRadioElement.prototype.GetValueString=function()
         this.amount=0;
     return  {value:rnJQuery.trim(jQueryElement.parent().parent().text()),amount:this.amount};
 };
+
+sfMultipleRadioElement.prototype.SetData=function(data)
+{
+    if(data.value!='')
+    {
+        var labels=this.JQueryElement.find('label');
+        for(var i=0;i<radios[i].length;i++)
+        {
+            if (rnJQuery(rnJQuery.trim(labels[i]).text()) == data.value)
+            {
+                this.JQueryElement.find('input:radio').removeAttr('checked');
+                rnJQuery(labels[i]).find('input:radio').attr('checked','checked');
+            }
+        }
+    }
+};
+
 
 
 sfMultipleRadioElement.prototype.GetValuePath=function()
@@ -1300,6 +1372,28 @@ sfMultipleCheckBoxElement.prototype.GetValueString=function()
     return data;
 
 };
+
+
+sfMultipleCheckBoxElement.prototype.SetData=function(data)
+{
+    if(typeof data.selectedValues=='undefined')
+        return;
+
+    this.JQueryElement.find('input:checkbox').removeAttr('checked');
+
+    var labels=this.JQueryElement.find('label');
+    for(var i=0;i<data.selectedValues.length;i++)
+    {
+        for(var t=0;i<radios[t].length;t++)
+        {
+            if (rnJQuery.trim(rnJQuery(labels[t]).text()) == data.selectedValues[i].value)
+            {
+                rnJQuery(labels[t]).find('input:checkbox').attr('checked','checked');
+            }
+        }
+    }
+};
+
 
 
 sfMultipleCheckBoxElement.prototype.GetValuePath=function()
@@ -1458,6 +1552,20 @@ sfSelectBasicElement.prototype.GetValueString=function()
         this.amount=0;
     return  {value:jQueryElement.text(),amount:this.amount};
 };
+
+sfSelectBasicElement.prototype.SetData=function(data)
+{
+    var options=this.JQueryElement.find('option');
+    for(var i=0;i<options.length;i++)
+    {
+        var $option=rnJQuery(options[i]);
+        $option.removeAttr('selected');
+        if($option.text()==data.value)
+            $option.attr('selected','selected');
+    }
+};
+
+
 
 sfSelectBasicElement.prototype.GetValuePath=function()
 {
@@ -1628,6 +1736,11 @@ sfRecurrenceElement.prototype.GetValueString=function()
 
 };
 
+sfRecurrenceElement.prototype.SetData=function(data)
+{
+   this.JQueryElement.find('select').val(data.value);
+};
+
 
 sfRecurrenceElement.prototype.GetValuePath=function()
 {
@@ -1710,6 +1823,7 @@ sfRedNaoDatePicker.prototype=Object.create(sfFormElementBase.prototype);
 
 sfRedNaoDatePicker.prototype.CreateProperties=function()
 {
+    this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"DateFormat","Date Format",{ManipulatorType:'basic'}));
     this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
@@ -1743,19 +1857,27 @@ sfRedNaoDatePicker.prototype.GenerateInlineElement=function()
 sfRedNaoDatePicker.prototype.GetValueString=function()
 {
     if(this.IsIgnored())
-        return {value:''};
-    var selectedDate= rnJQuery('#'+this.Id).find('.redNaoDatePicker').datepicker('getDate');
+        return {value:'',formattedValue:''};
+    var selectedDate= this.JQueryElement.find('.redNaoDatePicker').datepicker('getDate');
     var dateLabel='';
     if(selectedDate==null)
         selectedDate ="";
     else
     {
         selectedDate=selectedDate.getFullYear()+'-'+(selectedDate.getMonth()+1)+'-'+selectedDate.getDate();
-        dateLabel=rnJQuery('#'+this.Id).find('.redNaoDatePicker').datepicker({dateFormat: this.Options.DateFormat}).val();
+        dateLabel=this.JQueryElement.find('.redNaoDatePicker').datepicker({dateFormat: this.Options.DateFormat}).val();
     }
     return {value:selectedDate,formattedValue:dateLabel};
 
 };
+
+
+
+sfRedNaoDatePicker.prototype.SetData=function(data)
+{
+    this.JQueryElement.find('.redNaoDatePicker').datepicker('setDate',data.formattedValue);
+};
+
 
 sfRedNaoDatePicker.prototype.GetValuePath=function()
 {
@@ -1772,7 +1894,7 @@ sfRedNaoDatePicker.prototype.StoresInformation=function()
 //noinspection JSUnusedLocalSymbols
 sfRedNaoDatePicker.prototype.GenerationCompleted=function(jQueryElement)
 {
-    rnJQuery('#'+this.Id).find('.redNaoDatePicker').datepicker({
+    this.JQueryElement.find('.redNaoDatePicker').datepicker({
         dateFormat:this.Options.DateFormat,
         beforeShow: function() {
             rnJQuery('#ui-datepicker-div').wrap('<div class="smartFormsSlider"></div>')
@@ -1783,7 +1905,7 @@ sfRedNaoDatePicker.prototype.GenerationCompleted=function(jQueryElement)
     });
 
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoDatePicker').change(function(){self.FirePropertyChanged();});
+    this.JQueryElement.change(function(){self.FirePropertyChanged();});
 
 
 };
@@ -1885,6 +2007,14 @@ sfRedNaoName.prototype.GetValueString=function()
 
 
 };
+
+
+sfRedNaoName.prototype.SetData=function(data)
+{
+    this.JQueryElement.find('.redNaoInputFirstName').val(data.firstName);
+    this.JQueryElement.find('.redNaoInputLastName').val(data.lastName);
+};
+
 
 
 sfRedNaoName.prototype.GetValuePath=function()
@@ -2104,6 +2234,16 @@ sfRedNaoAddress.prototype.GetValueString=function()
 };
 
 
+sfRedNaoAddress.prototype.SetData=function(data)
+{
+    this.JQueryElement.find('.redNaoStreetAddress1').val(data.streetAddress1);
+    this.JQueryElement.find('.redNaoStreetAddress2').val(data.streetAddress2);
+    this.JQueryElement.find('.redNaoCity').val(data.city);
+    this.JQueryElement.find('.redNaoState').val(data.state);
+    this.JQueryElement.find('.redNaoZip').val(data.zip);
+    this.JQueryElement.find('.redNaoCountry').val(data.country);
+};
+
 sfRedNaoAddress.prototype.GetValuePath=function()
 {
     return  "formData."+this.Id+'.streetAddress1'+
@@ -2256,7 +2396,11 @@ sfRedNaoPhone.prototype.GetValueString=function()
 
 };
 
-
+sfRedNaoPhone.prototype.SetData=function(data)
+{
+    this.JQueryElement.find('.redNaoInputArea').val(data.area);
+    this.JQueryElement.find('.redNaoInputPhone').val(data.phone);
+};
 
 sfRedNaoPhone.prototype.GetValuePath=function()
 {
@@ -2352,6 +2496,12 @@ sfRedNaoEmail.prototype.GetValueString=function()
         return {value:''};
     return {value:rnJQuery('#'+this.Id+ ' .redNaoEmail').val()};
 };
+
+sfRedNaoEmail.prototype.SetData=function(data)
+{
+    this.JQueryElement.find('.redNaoEmail').val(data.value);
+};
+
 
 sfRedNaoEmail.prototype.GetValuePath=function()
 {
@@ -2455,6 +2605,11 @@ sfRedNaoNumber.prototype.GetValueString=function()
     return {value:rnJQuery('#'+this.Id+ ' .redNaoNumber').val()};
 };
 
+sfRedNaoNumber.prototype.SetData=function(data)
+{
+    this.JQueryElement.find('.redNaoNumber').val(data.value);
+};
+
 sfRedNaoNumber.prototype.GetValuePath=function()
 {
     return 'formData.'+this.Id+'.value';
@@ -2480,7 +2635,7 @@ sfRedNaoNumber.prototype.InputIsValid=function()
         return false;
 
     var inputNumber=parseFloat(inputText);
-    if(!isNaN(this.Options.MaximumValue))
+    if(!isNaN(parseInt(this.Options.MaximumValue)))
     {
         var maximumValue=parseFloat(this.Options.MaximumValue);
         if(inputNumber>maximumValue)
@@ -2597,12 +2752,12 @@ sfHtmlElement.prototype.StoresInformation=function()
 
 sfHtmlElement.prototype.GenerateInlineElement=function()
 {
-    var html=  '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label" for="textarea">'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>'+
+    return  '<div class="rednao_label_container col-sm-3"><label class="rednao_control_label" for="textarea">'+RedNaoEscapeHtml(this.Options.Label)+'</label></div>'+
                 '<div class="redNaoControls col-sm-9">'+
                 this.Options.HTML+
     '</div>';
 
-    return html;
+
 };
 
 
@@ -2612,7 +2767,6 @@ function sfSearchableList(options)
 {
     sfFormElementBase.call(this,options);
     this.Title="Searchable List";
-    var i=undefined;
     if(this.IsNew)
     {
         this.Options.Label="Searchable List";
@@ -2663,16 +2817,14 @@ sfSearchableList.prototype.GenerateInlineElement=function()
         <select data-placeholder="'+RedNaoEscapeHtml(this.Options.DefaultText)+'" style="'+additionalStyle+'" name="'+this.GetPropertyName()+'" class="redNaoSelect" '+multiple+'>';
 
     var selected='';
-    var i=undefined;
+
 
 
     if(this.Options.Multiple=='n')
         html+='<option></option>';
 
 
-
-    selected='';
-    for(i=0;i<this.Options.Options.length;i++)
+    for(var i=0;i<this.Options.Options.length;i++)
     {
         if(this.Options.Options[i].sel=='y')
             selected='selected="selected"';
@@ -2737,6 +2889,17 @@ sfSearchableList.prototype.GetValueString=function()
     return data;
 };
 
+sfSearchableList.prototype.SetData=function(data)
+{
+    var values=[];
+    for(var i=0;i<data.selectedValues;i++)
+    {
+        values.push(data.selectedValues[i].value);
+    }
+
+    this.Select2.select2('val',values);
+};
+
 sfSearchableList.prototype.GetValuePath=function()
 {
     return 'RedNaoGetValueFromArray(formData.'+this.Id+'.selectedValues)';
@@ -2759,7 +2922,7 @@ sfSearchableList.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     this.Select2=this.GetRootContainer().find('.redNaoSelect');
-    rnJQuery.RNLoadLibrary([smartFormsPath+'js/utilities/select2/select2.js'],[smartFormsPath+'js/utilities/select2/select2.css'],function(){self.LoadSelect2()});1
+    rnJQuery.RNLoadLibrary([smartFormsPath+'js/utilities/select2/select2.js'],[smartFormsPath+'js/utilities/select2/select2.css'],function(){self.LoadSelect2()});
     rnJQuery('#'+this.Id+ ' .redNaoSelect').change(function(){self.FirePropertyChanged();});
 };
 
