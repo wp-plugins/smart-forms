@@ -42,6 +42,8 @@ RedNaoFormulaManager.prototype.SetFormulaValue=function(fieldName,data)
 
     if(typeof data.selectedValues!='undefined')
         fieldData.selectedValues=data.selectedValues;
+    if(typeof data.amount!='undefined')
+        fieldData.amount=data.amount;
     if(RedNaoPathExists(fieldData,'value'))
     {
         fieldData.label=fieldData.value.toString();
