@@ -103,23 +103,6 @@ RedNaoLicensingManager.prototype.GetLicenseWeight=function(license)
 
 };
 
-RedNaoLicensingManager.prototype.LicenseIsValid=function(minimumVersion,errorMessage)
-{
-    if(RedNaoSmartFormLicenseIsValid)
-    {
-        if(this.GetLicenseWeight(minimumVersion)>this.GetLicenseWeight(RedNaoLicenseType))
-        {
-            this.Popup.find('p').text("Sorry your current license doesn't support this function");
-            this.Popup.dialog('open');
-            return false;
-        }
-        return true;
-    }
-
-    this.Popup.find('p').text(errorMessage);
-    this.Popup.dialog('open');
-    return false;
-};
 
 
 RedNaoLicensingManager.prototype.ActivateLicense=function()
