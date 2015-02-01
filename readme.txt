@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: form, forms, form builder, form maker, form creator, form generator, contact form, form widget, form plugin, bootstrap forms, jquery forms, form manager, ajax forms
 Requires at least: 3.3
 Tested up to: 4.1
-Stable tag: 2.1.6
+Stable tag: 2.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,6 +36,7 @@ You can easily customize forms to do additional actions after a form is submitte
 *   **Style editor**- Change the aspect of your form with the build-in style editor, or if you are a designer create your own css rules easily.
 *   **JavaScript editor**_ Create your own JavaScript code and customize your form exactly as you want it.
 *   **Forms Compatible with Smart donations**- - You can create paypal forms with this plugin, and also enjoy all the power of smart donations (https://wordpress.org/plugins/smart-donations/, a smart donation license is required).
+*   **Multiple Step Forms(pro)**- Split your forms in section, making them easier to understand and submit.
 == Installation ==
 1. Upload smart forms to the `/wp-content/plugins/` directory
 2. Activate the item named  'smart forms' in the 'Plugins' menu in WordPress
@@ -73,6 +74,7 @@ This generally happens when your database doesn't support UTF-8 characters, so t
 9. Calculated field interface
 10. Dragging a form element
 11. Form Entries example
+12. Multiple Step Form (license required)
 == Changelog ==
 = Smart Forms 2.5 =
 * Update smart forms logic, making required but hidden fields in the forms not required.

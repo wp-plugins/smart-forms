@@ -8,3 +8,8 @@ ISmartFormsGeneratorBase.prototype.BeforeInitializingFieldData=function()
 {
 
 };
+
+ISmartFormsGeneratorBase.prototype.FormSubmissionCompleted=function()
+{
+
+};

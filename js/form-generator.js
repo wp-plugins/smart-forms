@@ -313,7 +313,7 @@ smartFormGenerator.prototype.SendToSmartForms=function(formValues,isUsingAFileUp
     }
 
     if(isUsingAFileUploader)
-        this.SendFilesWithForm(data);
+        this.SendFilesWithForm(data,formValues);
     else
     {
         var self=this;
@@ -323,7 +323,7 @@ smartFormGenerator.prototype.SendToSmartForms=function(formValues,isUsingAFileUp
             url:ajaxurl,
             dataType:"json",
             data:data,
-            success:function(result){self.SaveCompleted(result)},
+            success:function(result){self.SaveCompleted(result,formValues)},
             error:function(result){
                 rnJQuery('body, input[type="submit"]').removeClass('redNaoWait');
                 self.JQueryForm.find('input[type="submit"],.redNaoMSButton').removeAttr('disabled');
@@ -332,7 +332,7 @@ smartFormGenerator.prototype.SendToSmartForms=function(formValues,isUsingAFileUp
     }
 };
 
-smartFormGenerator.prototype.SendFilesWithForm=function(data)
+smartFormGenerator.prototype.SendFilesWithForm=function(data,formValues)
 {
     data=JSON.stringify(data);
     rnJQuery('#sfTemporalIFrame').remove();
@@ -347,7 +347,7 @@ smartFormGenerator.prototype.SendFilesWithForm=function(data)
             response = this.contentWindow.document.body.innerHTML;
         }
 
-        self.SaveCompleted(rnJQuery.parseJSON(response));
+        self.SaveCompleted(rnJQuery.parseJSON(response),formValues);
     });
     this.JQueryForm.attr('method','post');
     this.JQueryForm.attr('enctype','multipart/form-data');
@@ -414,7 +414,7 @@ smartFormGenerator.prototype.SendToSmartDonations=function(formValues,isUsingAFi
 
 };
 
-smartFormGenerator.prototype.SaveCompleted=function(result){
+smartFormGenerator.prototype.SaveCompleted=function(result,formValues){
     rnJQuery('body, input[type="submit"]').removeClass('redNaoWait');
     this.JQueryForm.find('input[type="submit"],.redNaoMSButton').removeAttr('disabled');
 
@@ -437,6 +437,9 @@ smartFormGenerator.prototype.SaveCompleted=function(result){
         return;
     }
 
+    if(result.success=='y')
+        this.FireExtensionMethod('FormSubmissionCompleted');
+
     if((RedNaoGetValueOrEmpty(this.client_form_options.alert_message_cb)!='y'&&RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)!='y')||result.success=='n')
     {
         alert(result.message);
@@ -449,14 +452,14 @@ smartFormGenerator.prototype.SaveCompleted=function(result){
 
     if(RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)=="y")
     {
-        window.location=this.ProcessRedirectUrl(this.client_form_options.redirect_to, result.insertedValues);
+        window.location=this.ProcessRedirectUrl(this.client_form_options.redirect_to, result.insertedValues,formValues);
     }
 
     this.CreateForm();
 
 };
 
-smartFormGenerator.prototype.ProcessRedirectUrl=function(url,insertedValues)
+smartFormGenerator.prototype.ProcessRedirectUrl=function(url,insertedValues,formValues)
 {
     var regEx=/{([^}]+)}/g;
     var matches;
@@ -469,8 +472,12 @@ smartFormGenerator.prototype.ProcessRedirectUrl=function(url,insertedValues)
                 continue;
             var value='';
             if(typeof insertedValues[matches[i]]!='undefined')
-                value=insertedValues[matches[i]];
-
+            {
+                value = insertedValues[matches[i]];
+                for(var t=0;t<this.RedNaoFormElements.length;t++)
+                    if(matches[i]==this.RedNaoFormElements[t].Id&&this.RedNaoFormElements[t].Options.ClassName=="rednaodatepicker")
+                        value=formValues[matches[i]].value;
+            }
             url=url.replace('{'+matches[i]+'}',encodeURIComponent(value));
         }
     }

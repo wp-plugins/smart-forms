@@ -1212,13 +1212,13 @@ sfMultipleRadioElement.prototype.SetData=function(data)
 {
     if(data.value!='')
     {
-        var labels=this.JQueryElement.find('label');
-        for(var i=0;i<radios[i].length;i++)
+        var labels=this.JQueryElement.find('.radio label');
+        for(var i=0;i<labels.length;i++)
         {
-            if (rnJQuery(rnJQuery.trim(labels[i]).text()) == data.value)
+            if (rnJQuery.trim(rnJQuery(labels[i]).text()) == data.value)
             {
-                this.JQueryElement.find('input:radio').removeAttr('checked');
-                rnJQuery(labels[i]).find('input:radio').attr('checked','checked');
+                this.JQueryElement.find('input:radio').iCheck('uncheck');
+                rnJQuery(labels[i]).find('input:radio').iCheck('check');
             }
         }
     }
@@ -1379,16 +1379,16 @@ sfMultipleCheckBoxElement.prototype.SetData=function(data)
     if(typeof data.selectedValues=='undefined')
         return;
 
-    this.JQueryElement.find('input:checkbox').removeAttr('checked');
+    this.JQueryElement.find('input:checkbox').iCheck('uncheck');
 
     var labels=this.JQueryElement.find('label');
     for(var i=0;i<data.selectedValues.length;i++)
     {
-        for(var t=0;i<radios[t].length;t++)
+        for(var t=0;t<labels.length;t++)
         {
             if (rnJQuery.trim(rnJQuery(labels[t]).text()) == data.selectedValues[i].value)
             {
-                rnJQuery(labels[t]).find('input:checkbox').attr('checked','checked');
+                rnJQuery(labels[t]).find('input:checkbox').iCheck('check');
             }
         }
     }
@@ -1738,7 +1738,7 @@ sfRecurrenceElement.prototype.GetValueString=function()
 
 sfRecurrenceElement.prototype.SetData=function(data)
 {
-   this.JQueryElement.find('select').val(data.value);
+   this.JQueryElement.find('.redNaoSelect').val(data.value);
 };
 
 
@@ -1747,6 +1747,13 @@ sfRecurrenceElement.prototype.GetValuePath=function()
     return 'formData.'+this.Id+'.value';
 };
 
+
+//noinspection JSUnusedLocalSymbols
+sfRecurrenceElement.prototype.GenerationCompleted=function(jQueryElement)
+{
+    var self=this;
+    this.JQueryElement.find('.redNaoSelect').change(function(){self.FirePropertyChanged();});
+};
 
 
 /************************************************************************************* Submission Button ***************************************************************************************************/
@@ -2767,6 +2774,7 @@ function sfSearchableList(options)
 {
     sfFormElementBase.call(this,options);
     this.Title="Searchable List";
+    this.DataToLoad=null;
     if(this.IsNew)
     {
         this.Options.Label="Searchable List";
@@ -2864,7 +2872,11 @@ sfSearchableList.prototype.GetValueString=function()
     data.selectedValues=[];
     var select2SelectedValues;
     if(this.Select2.hasClass('select2-offscreen'))
-        select2SelectedValues=this.Select2.select2('val');
+    {
+        select2SelectedValues = this.Select2.select2('val');
+        if(select2SelectedValues==null)
+            select2SelectedValues=[];
+    }
     else
         select2SelectedValues=this.GetSelectedValuesFromNormalSelect();
 
@@ -2892,12 +2904,24 @@ sfSearchableList.prototype.GetValueString=function()
 sfSearchableList.prototype.SetData=function(data)
 {
     var values=[];
-    for(var i=0;i<data.selectedValues;i++)
-    {
-        values.push(data.selectedValues[i].value);
-    }
 
-    this.Select2.select2('val',values);
+
+    for(var i=0;i<data.selectedValues.length;i++)
+    {
+        for(var t=0;t<this.Options.Options.length;t++)
+        {
+            if(data.selectedValues[i].value==rnJQuery.trim(this.Options.Options[t].label))
+            {
+                values.push(t);
+                break;
+            }
+
+        }
+    }
+    if(typeof this.Select2.select2=='undefined')
+        this.DataToLoad=values;
+    else
+        this.Select2.select2('val',values);
 };
 
 sfSearchableList.prototype.GetValuePath=function()
@@ -2931,5 +2955,11 @@ sfSearchableList.prototype.LoadSelect2=function()
     this.Select2.select2({
         width:'100%'
     });
+
+    if(this.DataToLoad!=null)
+    {
+        this.Select2.select2('val', this.DataToLoad);
+        this.DataToLoad=null;
+    }
 
 };

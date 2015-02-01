@@ -73,7 +73,7 @@ SimpleTextProperty.prototype.GenerateHtml=function()
     var tdStyle="";
     if(this.AdditionalInformation.MultipleLine==true)
     {
-        input='<textarea style="width:206px;" class="rednao-input-large" data-type="input" name="name" id="'+this.PropertyId+'" value="'+RedNaoEscapeHtml(this.GetPropertyCurrentValue())+'" placeholder="'+this.AdditionalInformation.Placeholder+'"/>';
+        input='<textarea style="width:206px;" class="rednao-input-large" data-type="input" name="name" id="'+this.PropertyId+'" placeholder="'+this.AdditionalInformation.Placeholder+'">'+RedNaoEscapeHtml(this.GetPropertyCurrentValue())+'</textarea>';
         tdStyle='vertical-align:top;'
     }
     else

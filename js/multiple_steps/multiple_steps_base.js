@@ -73,7 +73,7 @@ SfMultipleStepsBase.prototype.StepIsValid=function(step)
     this.FormGenerator.GetRootContainer().find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea,.redNaoInvalid,.has-error').removeClass('redNaoInvalid').removeClass('has-error');
     var isValid=true;
     for(var i=0;i<step.Fields.length;i++)
-        if(!step.Fields[i].IsValid())
+        if(!step.Fields[i].IsIgnored()&&!step.Fields[i].IsValid())
             isValid=false;
 
     if(this.$CurrentErrorMessage!=null)
