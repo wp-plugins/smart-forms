@@ -2960,6 +2960,7 @@ sfSearchableList.prototype.LoadSelect2=function()
     {
         this.Select2.select2('val', this.DataToLoad);
         this.DataToLoad=null;
+        this.FirePropertyChanged();
     }
 
 };
