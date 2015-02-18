@@ -16,7 +16,7 @@
 
 <p style="font-size: 20px; font-weight: bold;">You can reach me in:</p>
 
-<h1 style="margin-bottom:30px; margin-left: 50px;"><a href="https://twitter.com/edgarerojas" target="_blank"  style="padding: 0;margin:0 0 10px 0;font-family: verdana;">Twitter</a></h1>
+<h1 style="margin-bottom:30px; margin-left: 50px;"><a href="https://twitter.com/ed_roj" target="_blank"  style="padding: 0;margin:0 0 10px 0;font-family: verdana;">Twitter</a></h1>
 
 <h1 style="margin-left: 50px;"><a href="https://www.facebook.com/pages/Smart-Forms/1453714741522601" target="_blank" style="font-family: verdana;"> Facebook </a></h1>
 
