@@ -57,7 +57,11 @@ class php_entry_saver_base {
 			}
 		}
 
-		$additionalActions=apply_filters('sf_before_saving_form',array(
+		require_once SMART_FORMS_DIR.'php_classes/save/pre_insert_entry.php';
+		$preInsertedEntry=new PreInsertEntry($this->FormId,$this->FormEntryData,$this->FormOptions,$this->ElementOptions,$additionalData);
+		do_action('sf_before_saving_form',$preInsertedEntry);
+
+		/*$additionalActions=apply_filters('sf_before_saving_form',array(
 			"ContinueInsertion"=>true,
 			"FormInformation"=>array(
 				"FormId"=>$this->FormId,
@@ -67,22 +71,22 @@ class php_entry_saver_base {
 			),
 			"AdditionalData"=>$additionalData,
 			"Actions"=>array()
-		));
+		));*/
 
-		if(has_filter('sf_before_saving_form'))
+		if(has_action('sf_before_saving_form'))
 		{
-			$this->FormEntryData = $additionalActions["FormInformation"]["FormEntryData"];
+			$this->FormEntryData = $preInsertedEntry->FormEntryData;
 			$this->FormString = json_encode($this->FormEntryData);
 		}
 
-		if($additionalActions["ContinueInsertion"]==false)
+		if(!$preInsertedEntry->ContinueInsertion)
 		{
 			echo json_encode(
 				array(
 					"message"=>__("Information submitted successfully."),
 					"success"=>"y",
 					"insertedValues"=>$this->InsertedValuesString,
-					"AdditionalActions"=>$additionalActions["Actions"]
+					"AdditionalActions"=>$preInsertedEntry->GetActions()
 				)
 			);
 
@@ -101,10 +105,12 @@ class php_entry_saver_base {
         if($result==true)
 		{
 			$additionalActions=apply_filters('sf_submitted_successfully',array(
-				"FormId"=>$this->FormId,
-				"FormEntryData"=>$this->FormEntryData,
-				"FormOptions"=>$this->FormOptions,
-				"ElementOptions"=>$this->ElementOptions,
+				"FormInformation"=>array(
+					"FormId"=>$this->FormId,
+					"FormEntryData"=>$this->FormEntryData,
+					"FormOptions"=>$this->FormOptions,
+					"ElementOptions"=>$this->ElementOptions
+				),
 				"Actions"=>array()
 			));
 
@@ -191,6 +197,16 @@ class php_entry_saver_base {
             $value=GetValueByField($this->StringBuilder,$match,$entryData,$elementOptions,$useTestData);
             $EmailText=str_replace("[field $match]",$value,$EmailText);
         }
+
+		if(strpos($EmailSubject,"[field")!==false)
+		{
+			preg_match_all($fieldPattern,$EmailSubject, $matches, PREG_PATTERN_ORDER);
+			foreach($matches[1] as $match)
+			{
+				$value=GetValueByField($this->StringBuilder,$match,$entryData,$elementOptions,$useTestData);
+				$EmailSubject=str_replace("[field $match]",$value,$EmailSubject);
+			}
+		}
 
 
 		if(strpos($FromEmail,"[field")===0)

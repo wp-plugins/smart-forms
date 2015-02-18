@@ -3,6 +3,8 @@ function RedNaoEmailEditor()
     rnJQuery( "#redNaoAccordion" ).accordion({ clearStyle: true, autoHeight: false });
     this.SelectedEmail=null;
     this.SetUpFixedFields();
+    this.FocusEventsInitialized=false;
+    this.LastFocus='Body';
     var self=this;
     //noinspection JSUnusedLocalSymbols
     this.Dialog=rnJQuery("#redNaoEmailEditor").dialog(
@@ -12,10 +14,12 @@ function RedNaoEmailEditor()
             autoOpen:false,
             create: function(event, ui){
                 rnJQuery('.ui-dialog').wrap('<div class="smartFormsSlider" />');
+
             },
             open: function(event, ui){
                 rnJQuery('.ui-widget-overlay').wrap('<div class="smartFormsSlider" />');
-
+                if(self.FocusEventsInitialized==false)
+                    self.InitializeFocusEvents();
             },
             beforeClose:function(event,ui)
             {
@@ -29,6 +33,21 @@ function RedNaoEmailEditor()
 
 
 }
+
+RedNaoEmailEditor.prototype.InitializeFocusEvents=function()
+{
+    var self=this;
+    tinymce.activeEditor.on('focus', function(e) {
+        self.LastFocus='Body';
+    });
+
+    rnJQuery('#redNaoEmailSubject').focus(function()
+    {
+        self.LastFocus='Subject';
+    });
+
+    self.FocusEventsInitialized=true;
+};
 
 RedNaoEmailEditor.prototype.EmailConfigurationIsValid=function()
 {
@@ -266,7 +285,17 @@ RedNaoEmailEditor.prototype.CloseEmailEditor=function()
 
 RedNaoEmailEditor.prototype.AddFieldToEmail=function(id)
 {
-    tinymce.activeEditor.execCommand('mceInsertContent', false, "[field "+id.trim()+"]");
+    var field="[field "+id.trim()+"]";
+    if(this.LastFocus=='Body')
+        tinymce.activeEditor.execCommand('mceInsertContent', false,field );
+    else
+    {
+        if(!RedNaoLicensingManagerVar.LicenseIsValid('Sorry, you can\'t add fields to the "subject" box in this version, please type the subject that you want to use'))
+        {
+            return false;
+        }
+        rnJQuery('#redNaoEmailSubject').val(rnJQuery('#redNaoEmailSubject').val() + field).focus();
+    }
 };
 
 

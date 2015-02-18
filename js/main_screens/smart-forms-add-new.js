@@ -12,7 +12,6 @@ function SmartFormsAddNew()
     this.RestoreDefault();
     this.Emails=[{ToEmail:"",FromEmail:"",Name:"Default",FromName:"",EmailSubject:"",EmailText:""}];
     this.ExtensionData={};
-    var splitFormOptions=null;
     if(typeof smartFormsOptions!='undefined')
     {
         options=smartFormsOptions;
@@ -97,6 +96,7 @@ function SmartFormsAddNew()
     var i;
     for(i=0;i<self.Subscribers.length;i++)
     {
+        this.Subscribers[i].FormElements=this.FormBuilder.RedNaoFormElements;
         var saveDataId= self.Subscribers[i].GetSaveDataId();
         if(saveDataId!=null)
         {
@@ -105,21 +105,21 @@ function SmartFormsAddNew()
         }
     }
 
-    for(i=0;i<self.Subscribers.length;i++)
-    {
-        self.Subscribers[i].OnLoad();
-    }
+    self.PublishToSubscribers('OnLoadComplete');
 
 }
 
-
-
-
-SmartFormsAddNew.prototype.CreateMultiStepForm=function()
+SmartFormsAddNew.prototype.PublishToSubscribers=function(methodName,args)
 {
-    if(this.MultiStepsDesigner==null)
-        this.MultiStepsDesigner=new SfMultipleStepsBase();
+    for(var i=0;i<this.Subscribers.length;i++)
+    {
+        if(args!=null)
+            this.Subscribers[i][methodName](args);
+        else
+            this.Subscribers[i][methodName]();
+    }
 };
+
 
 SmartFormsAddNew.prototype.OpenParameterPicker=function()
 {
@@ -321,7 +321,7 @@ SmartFormsAddNew.prototype.SaveForm=function(e)
 
 };
 
-SmartFormsAddNew.prototype.ExecuteSaveRequest=function(formOptions,clientFormOptions,elementOptions,splitFormOptions)
+SmartFormsAddNew.prototype.ExecuteSaveRequest=function(formOptions,clientFormOptions,elementOptions)
 {
     var data={};
     data.form_options=JSON.stringify(formOptions);
@@ -432,11 +432,13 @@ SmartFormsAddNew.prototype.GetClientFormOptions=function(usesCaptcha)
 
 SmartFormsAddNew.prototype.SendTestEmail=function()
 {
-    RedNaoEmailEditorVar.UpdateToEmails();
+
+    RedNaoEmailEditorVar.UpdateSelectedEmail();
     var emailData={};
     emailData.action="rednao_smart_form_send_test_email";
     emailData.element_options=JSON.stringify(this.FormBuilder.GetFormInformation());
-    this.FillEmailData(emailData);
+    emailData=rnJQuery.extend(true, emailData,this.Emails[0]);
+    // this.FillEmailData(emailData);
 
     //noinspection JSUnresolvedVariable
     rnJQuery.post(ajaxurl,emailData,function(result){
@@ -454,6 +456,13 @@ SmartFormsAddNew.prototype.ActivateTab=function(activationName)
 
     rnJQuery('#'+activationName+'Tab').addClass('nav-tab-active');
     rnJQuery('#'+activationName+'Div').css('display','block');
+
+    var tabId=rnJQuery('#'+activationName+'Tab').data('tab-id');
+    if(typeof tabId!='undefined'&&tabId!=null)
+    {
+        this.PublishToSubscribers('TabActivated',{"TabId":tabId});
+    }
+
 };
 
 SmartFormsAddNew.prototype.GoToGeneral=function()

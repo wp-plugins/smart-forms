@@ -12,9 +12,10 @@ RedNaoBasicManipulator.prototype.GetValue=function(propertiesObject,propertyName
 
 RedNaoBasicManipulator.prototype.SetValue=function(propertiesObject,propertyName,value,additionalInformation)
 {
+    var oldValue= propertiesObject[propertyName];
     propertiesObject[propertyName]=value;
     if (typeof additionalInformation != 'undefined' && typeof additionalInformation.ChangeCallBack != 'undefined')
-        additionalInformation.ChangeCallBack(value);
+        additionalInformation.ChangeCallBack(value,oldValue);
 };
 
 

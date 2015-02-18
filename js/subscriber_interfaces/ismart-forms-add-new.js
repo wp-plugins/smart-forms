@@ -1,12 +1,18 @@
 
 function ISmartFormsAddNew()
 {
+    this.FormElements=null;
     ISmartFormsAddNew.prototype.Subscribers.push(this);
 }
 ISmartFormsAddNew.prototype.Subscribers=[];
 
 /************************************************************************************* Events ***************************************************************************************************/
-ISmartFormsAddNew.prototype.OnLoad=function()
+ISmartFormsAddNew.prototype.OnLoadComplete=function()
+{
+    return null;
+};
+
+ISmartFormsAddNew.prototype.TabActivated=function(tabId)
 {
     return null;
 };

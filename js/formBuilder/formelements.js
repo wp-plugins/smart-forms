@@ -264,7 +264,8 @@ sfFormElementBase.prototype.RefreshElement=function()
 };
 sfFormElementBase.prototype.GenerateHtml=function(jqueryElement)
 {
-    var newElement=rnJQuery('<div class="rednao-control-group form-group  row '+this.Options.ClassName+'" id="'+this.Id+'" >'+this.GenerateInlineElement()+'</div>');
+
+    var newElement=rnJQuery('<div class="'+this.GetElementClasses()+'" id="'+this.Id+'" >'+this.GenerateInlineElement()+'</div>');
     jqueryElement.replaceWith(newElement );
     //noinspection JSUnusedGlobalSymbols
     this.JQueryElement=newElement;
@@ -276,13 +277,18 @@ sfFormElementBase.prototype.GenerateHtml=function(jqueryElement)
 
 sfFormElementBase.prototype.AppendElementToContainer=function(jqueryElement)
 {
-    var JQueryElement=rnJQuery( '<div class="rednao-control-group form-group row '+this.Options.ClassName+'" id="'+this.Id+'">'+this.GenerateInlineElement()+'</div>');
+    var JQueryElement=rnJQuery( '<div class="'+this.GetElementClasses()+'" id="'+this.Id+'">'+this.GenerateInlineElement()+'</div>');
     jqueryElement.append(JQueryElement);
     //noinspection JSUnusedGlobalSymbols
     this.JQueryElement=JQueryElement;
     this.GenerationCompleted(JQueryElement);
     this.ApplyAllStyles();
 
+};
+
+sfFormElementBase.prototype.GetElementClasses=function()
+{
+    return 'rednao-control-group form-group row '+this.Options.ClassName+' '+this.Options.CustomCSS;
 };
 
 sfFormElementBase.prototype.GetFriendlyName=function()
@@ -451,6 +457,9 @@ function sfTitleElement(options)
     {
         this.Options.ClassName="rednaotitle";
         this.Options.Title="Title";
+        this.Options.CustomCSS='';
+    }else{
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 }
 sfTitleElement.prototype=Object.create(sfFormElementBase.prototype);
@@ -465,6 +474,7 @@ sfTitleElement.prototype.CreateProperties=function()
 {
 
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Title","Title",{ManipulatorType:'basic'}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
 };
 
 sfTitleElement.prototype.GenerateInlineElement=function()
@@ -501,11 +511,13 @@ function sfTextInputElement(options)
         this.Options.ReadOnly='n';
         this.Options.Width="";
         this.Options.Icon={ClassName:''};
+        this.Options.CustomCSS='';
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('ReadOnly','n');
         this.SetDefaultIfUndefined('Width','');
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 
 
@@ -525,6 +537,7 @@ sfTextInputElement.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ReadOnly","Read Only",{ManipulatorType:'basic'}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
     this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
 };
 
@@ -605,10 +618,12 @@ function sfPrependTexElement(options)
         this.Options.Checked='y';
         this.Options.Width='';
         this.Options.Icon={ClassName:''};
+        this.Options.CustomCSS='';
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 
 
@@ -626,8 +641,8 @@ sfPrependTexElement.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
     this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
-
 };
 
 sfPrependTexElement.prototype.GenerateInlineElement=function()
@@ -705,10 +720,12 @@ function sfAppendedTexElement(options)
         this.Options.Value="";
         this.Options.Width='';
         this.Options.Icon={ClassName:''};
+        this.Options.CustomCSS='';
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
         this.SetDefaultIfUndefined('Icon',{ClassName:""});
+        this.SetDefaultIfUndefined('CustomCSS','');
 
     }
 }
@@ -724,8 +741,8 @@ sfAppendedTexElement.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
     this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
-
 };
 
 sfAppendedTexElement.prototype.GenerateInlineElement=function()
@@ -802,9 +819,11 @@ function sfPrependCheckBoxElement(options)
         this.Options.IsChecked='n';
         this.Options.Value="";
         this.Options.Width='';
+        this.Options.CustomCSS='';
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
+        this.SetDefaultIfUndefined('CustomCSS','');
 
     }
 }
@@ -820,6 +839,7 @@ sfPrependCheckBoxElement.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsChecked","Is Checked",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
 
 };
 
@@ -902,9 +922,11 @@ function sfAppendCheckBoxElement(options)
         this.Options.IsChecked='n';
         this.Options.Value="";
         this.Options.Width='';
+        this.Options.CustomCSS='';
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
+        this.SetDefaultIfUndefined('CustomCSS','');
 
     }
 }
@@ -920,6 +942,7 @@ sfAppendCheckBoxElement.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsChecked","Is Checked",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
 
 };
 
@@ -1003,7 +1026,8 @@ function sfTextAreaElement(options)
         this.Options.Height='';
         this.Options.Placeholder='Placeholder';
         this.Options.Disabled="n";
-        this.Options.MaxLength=''
+        this.Options.MaxLength='';
+        this.Options.CustomCSS='';
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
@@ -1011,6 +1035,7 @@ function sfTextAreaElement(options)
         this.SetDefaultIfUndefined('Placeholder','');
         this.SetDefaultIfUndefined('Disabled','n');
         this.SetDefaultIfUndefined('MaxLength','');
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 
     this.MaxLength=parseFloat(this.Options.MaxLength);
@@ -1029,6 +1054,7 @@ sfTextAreaElement.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Height","Height",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"Disabled","Disabled",{ManipulatorType:'basic'}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
 
 
 
@@ -1121,8 +1147,10 @@ function sfMultipleRadioElement(options)
         this.Options.ClassName="rednaomultipleradios";
         this.Options.Orientation='v';
         this.Options.Options=[{label:'Option 1',value:0,sel:'n'},{label:'Option 2',value:0,sel:'n'},{label:'Option 3',value:0,sel:'n'}];
+        this.Options.CustomCSS='';
     }else
     {
+        this.SetDefaultIfUndefined('CustomCSS','');
         if(RedNaoGetValueOrNull(this.Options.Orientation)==null)
             this.Options.Orientation='v';
         if(this.Options.Options.length>0&&typeof this.Options.Options[0].sel=='undefined')
@@ -1155,7 +1183,7 @@ sfMultipleRadioElement.prototype.CreateProperties=function()
     this.Properties.push(new ArrayProperty(this,this.Options,"Options","Options",{ManipulatorType:'basic',SelectorType:'radio'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new ComboBoxProperty(this,this.Options,"Orientation","Orientation",{ManipulatorType:'basic',Values:[{label:'Vertical',value:'v'},{label:'Horizontal',value:'h'}]}));
-
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
 
 
 };
@@ -1278,8 +1306,10 @@ function sfMultipleCheckBoxElement(options)
         this.Options.ClassName="rednaomultiplecheckboxes";
         this.Options.Orientation='v';
         this.Options.Options=[{label:'Check 1',value:0,sel:'n'},{label:'Check 2',value:0,sel:'n'},{label:'Check 3',value:0,sel:'n'}];
+        this.Options.CustomCSS='';
     }else
     {
+        this.SetDefaultIfUndefined('CustomCSS','');
         if(RedNaoGetValueOrNull(this.Options.Orientation)==null)
             this.Options.Orientation='v';
         if(this.Options.Options.length>0&&typeof this.Options.Options[0].sel=='undefined')
@@ -1312,6 +1342,7 @@ sfMultipleCheckBoxElement.prototype.CreateProperties=function()
     this.Properties.push(new ArrayProperty(this,this.Options,"Options","Options",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new ComboBoxProperty(this,this.Options,"Orientation","Orientation",{ManipulatorType:'basic',Values:[{label:'Vertical',value:'v'},{label:'Horizontal',value:'h'}]}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
 };
 
 sfMultipleCheckBoxElement.prototype.GenerateInlineElement=function()
@@ -1451,9 +1482,11 @@ function sfSelectBasicElement(options)
         this.Options.DefaultText="Select a value";
         this.Options.Options=[{label:'Option 1',value:0,sel:'n'},{label:'Option 2',value:0,sel:'n'},{label:'Option',value:0,sel:'n'}];
         this.SetDefaultIfUndefined('Width','');
+        this.Options.CustomCSS='';
 
     }else
     {
+        this.SetDefaultIfUndefined('CustomCSS','');
         this.SetDefaultIfUndefined('Width','');
         this.SetDefaultIfUndefined("DefaultText","");
         if(this.Options.Options.length>0&&typeof this.Options.Options[0].sel=='undefined')
@@ -1487,7 +1520,7 @@ sfSelectBasicElement.prototype.CreateProperties=function()
     this.Properties.push(new ArrayProperty(this,this.Options,"Options","Options",{ManipulatorType:'basic',SelectorType:'radio'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
-
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
 
 
 
@@ -1605,8 +1638,10 @@ function sfDonationButtonElement(options)
         this.Options.Label="Donation Button";
         this.Options.ClassName="rednaodonationbutton";
         this.Options.Image='https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif';
+        this.Options.CustomCSS='';
     }else
     {
+        this.SetDefaultIfUndefined('CustomCSS','');
         if(typeof this.Options.Image=='undefined')
             this.Options.Image='https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif';
     }
@@ -1621,6 +1656,7 @@ sfDonationButtonElement.prototype.CreateProperties=function()
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Image","Image Url",{ManipulatorType:'basic'}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
 };
 
 sfDonationButtonElement.prototype.GenerateInlineElement=function()
@@ -1662,7 +1698,10 @@ function sfRecurrenceElement(options)
         this.Options.ShowWeekly='y';
         this.Options.ShowMonthly='y';
         this.Options.ShowYearly='y';
-
+        this.Options.CustomCSS='';
+    }else
+    {
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 
 
@@ -1679,6 +1718,7 @@ sfRecurrenceElement.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowWeekly","Show weekly option",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowMonthly","Show monthly option",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowYearly","Show yearly option",{ManipulatorType:'basic'}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
 };
 
 sfRecurrenceElement.prototype.GenerateInlineElement=function()
@@ -1769,8 +1809,9 @@ function sfRedNaoSubmissionButton(options)
     {
         this.Options.ClassName="rednaosubmissionbutton";
         this.Options.ButtonText="Submit";
-
-
+        this.Options.CustomCSS='';
+    }else{
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 }
 sfRedNaoSubmissionButton.prototype=Object.create(sfFormElementBase.prototype);
@@ -1783,6 +1824,7 @@ sfRedNaoSubmissionButton.prototype.GetFriendlyName=function()
 sfRedNaoSubmissionButton.prototype.CreateProperties=function()
 {
     this.Properties.push(new SimpleTextProperty(this,this.Options,"ButtonText","Button Text",{ManipulatorType:'basic'}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
 };
 
 sfRedNaoSubmissionButton.prototype.GenerateInlineElement=function()
@@ -1820,8 +1862,14 @@ function sfRedNaoDatePicker(options)
         this.Options.DateFormat="MM-dd-yy";
         this.Options.Value='';
         this.Options.Icon={ClassName:''};
+        this.Options.ReadOnly='n';
+        this.Options.Value='';
+        this.Options.CustomCSS='';
     }else{
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
+        this.SetDefaultIfUndefined('ReadOnly','n');
+        this.SetDefaultIfUndefined('Value','');
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 
 }
@@ -1833,8 +1881,10 @@ sfRedNaoDatePicker.prototype.CreateProperties=function()
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"DateFormat","Date Format",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"ReadOnly","Read Only",{ManipulatorType:'basic'}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
     this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
-
 };
 
 sfRedNaoDatePicker.prototype.GenerateInlineElement=function()
@@ -1911,6 +1961,13 @@ sfRedNaoDatePicker.prototype.GenerationCompleted=function(jQueryElement)
         }
     });
 
+    if(rnJQuery.trim(this.Options.Value)!='')
+        this.JQueryElement.find('.redNaoDatePicker').datepicker('setDate',this.Options.Value);
+
+
+    if(this.Options.ReadOnly=='y')
+        this.JQueryElement.find('.redNaoDatePicker').datepicker('disable');
+
     var self=this;
     this.JQueryElement.change(function(){self.FirePropertyChanged();});
 
@@ -1938,9 +1995,11 @@ function sfRedNaoName(options)
         this.Options.LastNameValue="";
         this.Options.ReadOnly='n';
         this.Options.Icon={ClassName:''};
+        this.Options.CustomCSS='';
     }else
     {
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 
 
@@ -1959,8 +2018,8 @@ sfRedNaoName.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"LastNamePlaceholder","Last name placeholder",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ReadOnly","Read Only",{ManipulatorType:'basic'}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
     this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
-
 };
 
 sfRedNaoName.prototype.GenerateInlineElement=function()
@@ -2084,10 +2143,12 @@ function sfRedNaoAddress(options)
         this.Options.ShowZip='y';
         this.Options.ShowCountry='y';
         this.Options.Icon={ClassName:''};
+        this.Options.CustomCSS='';
     }else
     {
         this.SetDefaultIfUndefined("DefaultCountry","United States");
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 }
 
@@ -2121,9 +2182,8 @@ sfRedNaoAddress.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowZip","Show Zip",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ShowCountry","Show Country",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
     this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
-
-
 };
 
 sfRedNaoAddress.prototype.GenerateInlineElement=function()
@@ -2338,8 +2398,10 @@ function sfRedNaoPhone(options)
         this.Options.AreaLabel="Area";
         this.Options.PhoneLabel="Phone";
         this.Options.Icon={ClassName:''};
+        this.Options.CustomCSS='';
     }else{
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 }
 
@@ -2352,6 +2414,7 @@ sfRedNaoPhone.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"AreaLabel","Area",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"PhoneLabel","Phone",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
     this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
 };
 
@@ -2463,8 +2526,10 @@ function sfRedNaoEmail(options)
         this.Options.Label="Email";
         this.Options.Placeholder="Placeholder";
         this.Options.Icon={ClassName:''};
+        this.Options.CustomCSS='';
     }else{
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 }
 
@@ -2476,6 +2541,7 @@ sfRedNaoEmail.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
     this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
 };
 
@@ -2564,11 +2630,13 @@ function sfRedNaoNumber(options)
         this.Options.MaximumValue="";
         this.Options.MinimumValue="";
         this.Options.Icon={ClassName:''};
+        this.Options.CustomCSS='';
     }else
     {
         this.SetDefaultIfUndefined("MaximumValue","");
         this.SetDefaultIfUndefined("MinimumValue","");
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 }
 
@@ -2583,6 +2651,7 @@ sfRedNaoNumber.prototype.CreateProperties=function()
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"MinimumValue","Minimum Value",{ManipulatorType:'basic',Placeholder:'No Minimum'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"MaximumValue","Maximum Value",{ManipulatorType:'basic',Placeholder:'No Maximum'}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
     this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
 };
 
@@ -2682,6 +2751,9 @@ function sfRedNaoCaptcha(options)
         this.Options.ClassName="rednaocaptcha";
         this.Options.Label="Captcha";
         this.Options.Theme="red";
+        this.Options.CustomCSS='';
+    }else{
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 
     this.Options.Id="captcha";
@@ -2693,6 +2765,7 @@ sfRedNaoCaptcha.prototype=Object.create(sfFormElementBase.prototype);
 sfRedNaoCaptcha.prototype.CreateProperties=function()
 {
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
 
 };
 
@@ -2741,6 +2814,9 @@ function sfHtmlElement(options)
         this.Options.ClassName="rednaohtml";
         this.Options.Label="Html";
         this.Options.HTML='';
+        this.Options.CustomCSS='';
+    }else{
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 }
 sfHtmlElement.prototype=Object.create(sfFormElementBase.prototype);
@@ -2750,6 +2826,7 @@ sfHtmlElement.prototype.CreateProperties=function()
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"HTML","HTML",{ManipulatorType:'basic',RefreshFormData:true,MultipleLine:true}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
 };
 
 sfHtmlElement.prototype.StoresInformation=function()
@@ -2782,6 +2859,9 @@ function sfSearchableList(options)
         this.Options.DefaultText="Select a value";
         this.Options.Options=[{label:'Option 1',value:0,sel:'n'},{label:'Option 2',value:0,sel:'n'},{label:'Option',value:0,sel:'n'}];
         this.Options.Multiple='n';
+        this.Options.CustomCSS='';
+    }else{
+        this.SetDefaultIfUndefined('CustomCSS','');
     }
 }
 
@@ -2796,7 +2876,7 @@ sfSearchableList.prototype.CreateProperties=function()
     this.OptionsProperty=new ArrayProperty(this,this.Options,"Options","Options",{ManipulatorType:'basic',SelectorType:(this.Options.Multiple=='n'?'radio':'checkbox')});
     this.Properties.push(this.OptionsProperty);
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
-    this.Properties.push(new CheckBoxProperty(this,this.Options,"Multiple","Enable Select Multiple Items",{ManipulatorType:'basic',ChangeCallBack:function(newValue){
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"Multiple","Enable Select Multiple Items",{ManipulatorType:'basic',ChangeCallBack:function(newValue,oldValue){
         if(newValue=='y')
             self.OptionsProperty.AdditionalInformation.SelectorType='checkbox';
         else
@@ -2804,6 +2884,7 @@ sfSearchableList.prototype.CreateProperties=function()
 
         self.OptionsProperty.RefreshProperty();
     }}));
+    this.Properties.push(new CustomCSSProperty(this,this.Options));
 
 
 

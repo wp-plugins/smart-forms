@@ -33,7 +33,7 @@ wp_enqueue_script('smart-forms-dragitembehaviors',SMART_FORMS_DIR_URL.'js/formBu
 wp_enqueue_script('smart-forms-conditional-steps',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-handler-steps.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-conditional-handlers',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-handlers.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-conditional-manager',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-logic-manager.js',array('isolated-slider','smart-forms-conditional-handlers'));
-wp_enqueue_script('ismart-forms-add-new',SMART_FORMS_DIR_URL.'js/subscriber_interfaces/ismart-forms-add-new.js');
+wp_enqueue_script('ismart-forms-add-new',SMART_FORMS_DIR_URL.'js/subscriber_interfaces/ismart-forms-add-new.js',array('smart-forms-event-manager','isolated-slider'));
 wp_enqueue_script('smart-forms-multiple-step-base',SMART_FORMS_DIR_URL.'js/multiple_steps/multiple_steps_base.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-multiple-step-designer',SMART_FORMS_DIR_URL.'js/multiple_steps/multiple_steps_designer.js',array('smart-forms-multiple-step-base'));
 
@@ -95,8 +95,21 @@ if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
     var smartForms_arrow_closed="<?php echo SMART_FORMS_DIR_URL?>images/arrow_right.png";
     var smartForms_arrow_open="<?php echo SMART_FORMS_DIR_URL?>images/arrow_down.png";
     var smartFormsPath="<?php echo SMART_FORMS_DIR_URL?>";
-
     var smartFormsRootPath="<?php echo SMART_FORMS_DIR_URL?>";
+
+    <?php
+
+        $customVars=array();
+        $customVars=apply_filters('smart-forms-add-new-js-vars',$customVars);
+
+        foreach($customVars as $var)
+        {
+            echo "var ".$var["name"]." = ".$var["value"];
+        }
+
+
+
+     ?>
 
 
 </script>
@@ -118,7 +131,7 @@ if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
 		$tabs=apply_filters("sf_form_configuration_on_load_tabs",$tabs);
 		for($i=0;$i<count($tabs);$i++)
 		{
-			echo '<a id="smartFormsCustom'.$i.'Tab" class="nav-tab sfcustomtab" onclick="SmartFormsAddNewVar.GoToCustomTab('.$i.');" >'.esc_html($tabs[$i]["name"]).'</a>';
+			echo '<a id="smartFormsCustom'.$i.'Tab" data-tab-id="'.$tabs[$i]["id"].'" class="nav-tab sfcustomtab" onclick="SmartFormsAddNewVar.GoToCustomTab('.$i.');" >'.esc_html($tabs[$i]["name"]).'</a>';
 		}
 	?>
 

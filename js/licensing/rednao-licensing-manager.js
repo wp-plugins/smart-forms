@@ -104,7 +104,6 @@ RedNaoLicensingManager.prototype.GetLicenseWeight=function(license)
 };
 
 
-
 RedNaoLicensingManager.prototype.ActivateLicense=function()
 {
     this.Popup.find('p').text('');
