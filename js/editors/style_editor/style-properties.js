@@ -60,7 +60,7 @@ function RedNaoFontFamilyStyleProperty(styleSetter,formElement,elementName,cssPr
     RedNaoBaseStyleProperty.call(this,styleSetter,formElement,elementName,cssProperty,propertyLabel);
 
     this.Fonts=fonts = [smartFormsTranslation.Default,
-                                    '"Arial,Helvetica","sans-serif"',
+                                    '"Arial","Helvetica","sans-serif"',
                                     '"Arial Black","Gadget","sans-serif"',
                                     '"Comic Sans MS","cursive"',
                                     '"Courier New","Courier","monospace"',

@@ -71,7 +71,8 @@ function SmartFormsAddNew()
     var formElements=[];
     if(typeof smartFormsElementOptions!='undefined')
         formElements=smartFormsElementOptions;
-
+    this.CustomStyles=rnJQuery("<style type='text/css'></style>");
+    rnJQuery("head").append(this.CustomStyles);
 
     this.FormBuilder= new RedNaoFormBuilder(options,formElements,(typeof smartFormClientOptions=='undefined'?{}:smartFormClientOptions) );
 
@@ -90,6 +91,7 @@ function SmartFormsAddNew()
     rnJQuery('#smartFormsAddParameter').click(function(e){e.preventDefault();self.OpenParameterPicker();});
     rnJQuery('#redNaoRedirectToCB').change();
     rnJQuery('#redNaoAlertMessageCB').change();
+    rnJQuery('#sfApplyCss').click(function(){self.ApplyCustomCSS();});
     this.Subscribers=ISmartFormsAddNew.prototype.Subscribers;
     RedNaoEventManager.Subscribe('FormulaButtonClicked',function(data){self.OpenFormulaBuilder(data.FormElement,data.PropertyName,data.AdditionalInformation,data.Image)});
 
@@ -105,9 +107,15 @@ function SmartFormsAddNew()
         }
     }
 
+    this.ApplyCustomCSS();
     self.PublishToSubscribers('OnLoadComplete');
 
 }
+
+SmartFormsAddNew.prototype.ApplyCustomCSS=function()
+{
+    this.CustomStyles.empty().append(rnJQuery('#smartFormsCSSText').val());
+};
 
 SmartFormsAddNew.prototype.PublishToSubscribers=function(methodName,args)
 {

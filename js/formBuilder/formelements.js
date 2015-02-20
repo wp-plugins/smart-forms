@@ -2957,6 +2957,12 @@ sfSearchableList.prototype.GetValueString=function()
         select2SelectedValues = this.Select2.select2('val');
         if(select2SelectedValues==null)
             select2SelectedValues=[];
+        if(!rnJQuery.isArray(select2SelectedValues))
+        {
+            var aux=select2SelectedValues;
+            select2SelectedValues=[];
+            select2SelectedValues.push(aux);
+        }
     }
     else
         select2SelectedValues=this.GetSelectedValuesFromNormalSelect();

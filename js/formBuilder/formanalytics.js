@@ -24,12 +24,12 @@ function RedNaoCreateColumn(options)
     if(elementName=='rednaomultiplecheckboxes'||elementName=='rednaosearchablelist')
         return RedNaoMultipleCheckBoxesColumn(options);
     if(elementName=='rednaoselectbasic')
-        return RedNaoTextInputColumn(options);
+        return RedNaoTextOrAmountColumn(options);
 
     if(elementName=='rednaotextarea')
         return RedNaoTextInputColumn(options);
     if(elementName=='rednaomultipleradios')
-        return RedNaoTextInputColumn(options);
+        return RedNaoTextOrAmountColumn(options);
     if(elementName=='rednaodatepicker')
         return RedNaoDatePicker(options);
     if(elementName=='rednaoname')
@@ -55,6 +55,21 @@ function GetObjectOrNull(rowObject,options)
 
 }
 
+function RedNaoTextOrAmountColumn(options)
+{
+    return [{"name":options.Id,label:options.Label,"index":options.Id,formatter: function (cellvalue, cellOptions, rowObject)
+    {
+        try{
+            var data=GetObjectOrNull(rowObject,cellOptions);
+            if(data==null)
+                return '';
+            return RedNaoEscapeHtml(data.value);
+        }catch(exception)
+        {
+            return '';
+        }
+    }}];
+}
 
 function RedNaoTextInputColumn(options)
 {

@@ -366,6 +366,7 @@ button{
 }
 TIP: if the rule is not working try adding !important, e.g. background-color:red !important;
 "></textarea>
+    <button id="sfApplyCss">Apply</button>
 
 </div>
 
