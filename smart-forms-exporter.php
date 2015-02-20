@@ -10,29 +10,36 @@ if(!current_user_can('manage_options'))
 
 $data=GetPostValue("exportdata");
 $json=json_decode($data,true);
-
+$rows=$json["rowsInfo"];
+$headers=$json["headers"];
 header('Content-Encoding: UTF-8');
 header('Content-type: text/csv; charset=UTF-8');
 header('Content-Disposition: attachment; filename=Export.csv');
 
-if(count($json)<=0)
+if(count($rows)<=0)
     die();
-$keys=array_keys($json[0]);
 $firstColumn=true;
-$numberOfColumns=count($keys);
+$numberOfColumns=count($rows[0]);
 $count=0;
-foreach($keys as $header)
+echo '"date"';
+foreach($rows[0] as $key=>$value)
 {
 	$count++;
 	if($numberOfColumns==$count)
 		break;
-    if(!$firstColumn)
-        echo ",";
-    $firstColumn=false;
-    echo '"'.$header.'"';
+    if($firstColumn)
+    {
+        $firstColumn=false;
+        continue;//skip date column
+    }
+    echo ",";
+    $label="";
+    if(isset($headers[$key]))
+        $label=$headers[$key];
+    echo '"'.$label.'"';
 
 }
-foreach($json as $row)
+foreach($rows as $row)
 {
     $firstColumn=true;
     echo "\r\n";

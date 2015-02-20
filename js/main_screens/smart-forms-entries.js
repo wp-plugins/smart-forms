@@ -299,7 +299,18 @@ rnJQuery(function () {
                     alert('Warning the export funcion can export up to 1,0000,000 records. Please export the data directly though the database');
                 var rowNum= rnJQuery('#grid').getGridParam('rowNum');
                 rnJQuery('#grid').setGridParam({ rowNum: 1000000 }).trigger("reloadGrid");
-                var data=JSON.stringify(rnJQuery("#grid").jqGrid('getRowData'));
+                var data={};
+                data.headers={};
+                for(var i=0;i<formOptions.length;i++)
+                {
+                    if(typeof formOptions[i].Label =='undefined')
+                        continue;
+                    data.headers[formOptions[i].Id]=formOptions[i].Label;
+                }
+
+
+                data.rowsInfo=rnJQuery("#grid").jqGrid('getRowData');
+                var data=JSON.stringify(data);
                 rnJQuery('#smartFormsExportData').val(data);
                 rnJQuery('#exporterForm').submit();
                 rnJQuery('#grid').setGridParam({ rowNum: rowNum }).trigger("reloadGrid");

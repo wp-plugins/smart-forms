@@ -422,9 +422,15 @@ smartFormGenerator.prototype.SaveCompleted=function(result,formValues){
     {
         for(var i=0;i<result.AdditionalActions.length;i++)
         {
-            if(result.AdditionalActions[0].Action=="RedirectTo")
+            if(result.AdditionalActions[i].Action=="RedirectTo")
             {
                 window.location=result.AdditionalActions[0].Value;
+                return;
+            }
+
+            if(result.AdditionalActions[i].Action=="ShowMessage")
+            {
+                alert(result.AdditionalActions[i].Value.Message);
                 return;
             }
         }

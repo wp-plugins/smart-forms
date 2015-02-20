@@ -57,6 +57,7 @@ class php_entry_saver_base {
 			}
 		}
 
+		require_once SMART_FORMS_DIR.'php_classes/save/insert_entry_base.php';
 		require_once SMART_FORMS_DIR.'php_classes/save/pre_insert_entry.php';
 		$preInsertedEntry=new PreInsertEntry($this->FormId,$this->FormEntryData,$this->FormOptions,$this->ElementOptions,$additionalData);
 		do_action('sf_before_saving_form',$preInsertedEntry);
@@ -83,10 +84,8 @@ class php_entry_saver_base {
 		{
 			echo json_encode(
 				array(
-					"message"=>__("Information submitted successfully."),
-					"success"=>"y",
-					"insertedValues"=>$this->InsertedValuesString,
-					"AdditionalActions"=>$preInsertedEntry->GetActions()
+					"success"=>"n",
+					"AdditionalActions"=>$preInsertedEntry->GetSerializedActions()
 				)
 			);
 
