@@ -131,8 +131,33 @@ SfMultipleStepsDesigner.prototype.GetStepById=function(id)
 
 };
 
+
+SfMultipleStepsDesigner.prototype.SynchronizeFormElementsAndStepFields=function()
+{
+    var listOfElements=[];
+    var fieldCount=0;
+    for(var i=0;i<this.SortedSteps.length;i++)
+        for(var t=0;t<this.SortedSteps[i].Fields.length;t++)
+        {
+            if(this.SortedSteps[i].Fields[t].Id!=this.FormElements[fieldCount].Id)
+                for(var h=fieldCount+1;h<this.FormElements.length;h++)
+                {
+                    if(this.SortedSteps[i].Fields[t].Id==this.FormElements[h].Id)
+                    {
+                        var aux=this.FormElements[fieldCount];
+                        this.FormElements[fieldCount]=this.FormElements[h];
+                        this.FormElements[h]=aux;
+                    }
+
+                }
+            fieldCount++;
+        }
+
+};
+
 SfMultipleStepsDesigner.prototype.GenerationCompleted=function()
 {
+    //this.SynchronizeFormElementsAndStepFields();
     var self=this;
     this.$StepForm.find('.steps li').css('cursor','pointer').click(function(){
         var id=rnJQuery(this).data('step-id');
