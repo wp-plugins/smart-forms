@@ -113,7 +113,7 @@ RedNaoFormBuilder.prototype.SmartDonationsPrepareDraggableItems = function () {
     })
 };
 
-RedNaoFormBuilder.prototype.InsertFieldInPosition=function(formElement,target)
+RedNaoFormBuilder.prototype.AddFieldInPosition=function(formElement,target)
 {
 
     if(this.FormType=='sec')
@@ -122,6 +122,18 @@ RedNaoFormBuilder.prototype.InsertFieldInPosition=function(formElement,target)
     }else
         this.RedNaoFormElements.splice(target.index(), 0, formElement);
 };
+
+RedNaoFormBuilder.prototype.MoveFieldInPosition=function(formElement,target)
+{
+
+    if(this.FormType=='sec')
+    {
+        this.MultipleStepsDesigner.MoveFormElement(formElement,target);
+    }else
+        this.RedNaoFormElements.splice(target.index(), 0, formElement);
+};
+
+
 
 RedNaoFormBuilder.prototype.GetFormElementByContainer=function(container)
 {
@@ -391,10 +403,18 @@ RedNaoFormBuilder.prototype.CloneFormElement=function(jQueryElement){
     var formObject=this.GetFormElementByContainer(jQueryElement);
     var newElement= formObject.Clone();
 
-    this.RedNaoFormElements.splice(this.GetFormElementIndexByContainer(jQueryElement)+1,0,newElement);
+   // this.RedNaoFormElements.splice(this.GetFormElementIndexByContainer(jQueryElement)+1,0,newElement);
 
     var container=rnJQuery("<div></div>");
     container.insertAfter(jQueryElement);
+
+    if(this.FormType=='sec')
+    {
+        this.MultipleStepsDesigner.AddFormElement(newElement,container);
+    }else
+        this.RedNaoFormElements.splice(container.index(), 0, newElement);
+
+
     container=newElement.GenerateHtml(container);
 
 

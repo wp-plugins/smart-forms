@@ -70,7 +70,7 @@ DragItemBehaviorNewElement.prototype.DragDrop=function(target)
     var newElement = this.FormBuilder.CreateNewInstanceOfElement(this.DraggedElement);
     if (newElement != null)
     {
-        this.FormBuilder.InsertFieldInPosition(newElement,target);
+        this.FormBuilder.AddFieldInPosition(newElement,target);
         var newElementJQuery= newElement.GenerateHtml(target);
         this.FireEvent("ElementAdded",newElementJQuery);
     }
@@ -124,7 +124,7 @@ DragItemBehaviorExistingElement.prototype.DragDrop=function(target)
 
     if (formElement != null)
     {
-        this.FormBuilder.InsertFieldInPosition(formElement,target);
+        this.FormBuilder.MoveFieldInPosition(formElement,target);
         var newElementJQuery= formElement.GenerateHtml(target);
         this.FireEvent("ElementAdded",newElementJQuery);
     }

@@ -97,11 +97,30 @@ SfMultipleStepsDesigner.prototype.AddFormElement=function(formElement,target)
         if(this.SortedSteps[i].Id!=parentStep.Id)
             formElementsIndex+=this.SortedSteps[i].Fields.length;
         else
-            formElementsIndex+=target.index();
+        {
+            formElementsIndex += target.index();
+            break;
+        }
     }
     this.FormElements.splice(formElementsIndex, 0, formElement);
     formElement.SetStepId(parentStep.Id);
 };
+
+
+SfMultipleStepsDesigner.prototype.MoveFormElement=function(formElement,target)
+{
+    var i;
+    for(i=0;i<this.SortedSteps.length;i++)
+        for(var t=0;t<this.SortedSteps[i].Fields.length;t++)
+        {
+            if(this.SortedSteps[i].Fields[t].Id==formElement.Id)
+                this.SortedSteps[i].Fields.splice(t,1);
+        }
+
+    this.AddFormElement(formElement,target);
+
+};
+
 
 SfMultipleStepsDesigner.prototype.GetStepById=function(id)
 {
