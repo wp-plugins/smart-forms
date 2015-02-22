@@ -185,6 +185,7 @@ smartFormGenerator.prototype.CreatePayPalHiddenFields=function()
                 <input type="hidden" name="bn" value="PP-DonationsBF:btn_donateCC_LG.gif:NonHostedGuest">\
                 <input type="hidden" name="custom" value=type=form&campaign_id='+options.Campaign+'&formId='+this.options.form_id+'>\
                 <input type="hidden" name="amount" class="amountToDonate" value="0">\
+                <input name="bn" value="Rednao_SP" type="hidden">\
                 <input type="hidden" name="notify_url" value="'+smartDonationsRootPath+'ipn/rednao_paypal_ipn.php">'
         );
 

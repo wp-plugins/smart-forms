@@ -23,9 +23,7 @@
     width: 100% !important;
 }
 
-.rednaoaddress .form-group{
-    margin-bottom: 0 !important;
-}
+
 
 .bootstrap-wrapper .radio{
     padding-top: 0 !important;
@@ -136,4 +134,9 @@
 
 #sfTemporalIFrame{
     display:none !important;
+}
+
+
+.rednaoaddress .cityAndState .form-group.col-sm-6{
+    margin-bottom:10px;
 }

@@ -2048,12 +2048,10 @@ sfRedNaoName.prototype.GenerateInlineElement=function()
                         '<div class="redNaoFirstNameDiv redNaoTwoColumnsDiv form-group col-sm-6">'+
                             startOfInput+
                             '<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_firstname" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.FirstNamePlaceholder)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputFirstName '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>'+
-                            endOfInput+
-                            firstNameLabel+
+                            endOfInput+ /*firstNameLabel+*/
                         '</div>    '+
                         '<div class="redNaoLastNameDiv redNaoTwoColumnsDiv form-group col-sm-6">'+
-                            '<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_lastname" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.LastNamePlaceholder)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputLastName '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'+
-                            lastNameLabel+
+                            '<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_lastname" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.LastNamePlaceholder)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputLastName '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'+ /*lastNameLabel+*/
                         '</div>'+
                      '</div>   '+
                '<div>     '+
@@ -2230,34 +2228,29 @@ sfRedNaoAddress.prototype.GenerateInlineElement=function()
                 <div class="redNaoControls col-sm-9">';
                 if(this.Options.ShowStreetAddress1=='y')
                     html+='<div class="redNaoStreetAddress1Div form-group">'+
-                        startOfInput+'<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_streetaddress1" type="teºxt" placeholder="'+RedNaoEscapeHtml(this.Options.StreetAddress1Label)+'" class="form-control redNaoInputText redNaoOneColumn redNaoStreetAddress1 '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>'+endOfInput+
-                        StreetAddress1Label+'\
-                    </div>';
+                        startOfInput+'<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_streetaddress1" type="teºxt" placeholder="'+RedNaoEscapeHtml(this.Options.StreetAddress1Label)+'" class="form-control redNaoInputText redNaoOneColumn redNaoStreetAddress1 '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>'+endOfInput+ /* StreetAddress1Label+'\*/
+                    '</div>';
                 if(this.Options.ShowStreetAddress2=='y')
                     html+='<div class="redNaoStreetAddress2Div form-group">\
-                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_streetaddress2" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.StreetAddress2Label)+'" class="form-control redNaoInputText redNaoOneColumn redNaoStreetAddress2 '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
-                        '+StreetAddress2Label+'\
-                    </div>';
+                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_streetaddress2" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.StreetAddress2Label)+'" class="form-control redNaoInputText redNaoOneColumn redNaoStreetAddress2 '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>'+/*+StreetAddress2Label+'\*/
+                    '</div>';
 
-                html+="<div class='form-inline'>";
+                html+="<div><div class='form-inline cityAndState'>";
                 if(this.Options.ShowCity=='y')
                     html+='<div class="form-group col-sm-6">\
-                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_city" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.CityLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoCity '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
-                        '+CityLabel+'\
-                    </div>';
+                        <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_city" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.CityLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoCity '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>'+/*'+CityLabel+'\*/
+                    '</div>';
                 if(this.Options.ShowState=='y')
                     html+='<div class="form-group col-sm-6">\
-                          <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'state" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.StateLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoState '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
-                        '+StateLabel+'\
-                    </div>';
-                html+='</div>';
+                          <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'state" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.StateLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoState '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>'+/*+StateLabel+'\*/
+                    '</div>';
+                html+='</div></div>';
 
                 html+="<div class='form-inline'>";
                 if(this.Options.ShowZip=='y')
                     html+='<div class="form-group col-sm-6">\
-                                    <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'zip" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.ZipLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoZip '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>\
-                                    '+ZipLabel+'\
-                                </div>';
+                                    <input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'zip" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.ZipLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoZip '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>'+/*+ZipLabel+'\*/
+                                '</div>';
 
                 if(this.Options.ShowCountry=='y')
                 {
@@ -2268,8 +2261,8 @@ sfRedNaoAddress.prototype.GenerateInlineElement=function()
                             html+='<option '+((this.Countries[i]==this.Options.DefaultCountry)?'selected="selected"':'')+'  value="'+RedNaoEscapeHtml(this.Countries[i])+'">'+RedNaoEscapeHtml(this.Countries[i])+'</option>';
                             isFirstElement=false;
                         }
-                html+="</select>"+CountryLabel+'\
-                    </div>';
+                html+="</select>"+/*CountryLabel+'\*/
+                    "</div>";
                 }
 
     html+='</div></div>';
@@ -2440,12 +2433,10 @@ sfRedNaoPhone.prototype.GenerateInlineElement=function()
                 '<div class="redNaoControls col-sm-9">'+
                     '<div class="form-inline">'+
                         '<div class="form-group col-sm-3">'+
-                            startOfInput+'<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_area" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.AreaLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputArea '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>'+endOfInput+
-                            areaLabel+''+
+                            startOfInput+'<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_area" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.AreaLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputArea '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'"/>'+endOfInput+ /*areaLabel+''+*/
                         '</div>    '+
                         '<div class="form-group col-sm-6">'+
-                            '<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_phone" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.PhoneLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputPhone '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'+
-                            phoneLabel+''+
+                            '<input '+(this.Options.ReadOnly=='y'?'disabled="disabled"':"")+' name="'+this.GetPropertyName()+'_phone" type="text" placeholder="'+RedNaoEscapeHtml(this.Options.PhoneLabel)+'" class="form-control redNaoInputText redNaoTwoColumns redNaoInputPhone '+(this.Options.ReadOnly=='y'?'redNaoDisabledElement':"")+'">'+ /*phoneLabel+''+*/
                         '</div>'+
                     '</div>'+
                '<div>     '+
@@ -2961,7 +2952,8 @@ sfSearchableList.prototype.GetValueString=function()
         {
             var aux=select2SelectedValues;
             select2SelectedValues=[];
-            select2SelectedValues.push(aux);
+            if(rnJQuery.trim(aux)!="")
+                select2SelectedValues.push(aux);
         }
     }
     else
