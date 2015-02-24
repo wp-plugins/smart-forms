@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: form, forms, form builder, form maker, form creator, form generator, contact form, form widget, form plugin, bootstrap forms, jquery forms, form manager, ajax forms
 Requires at least: 3.3
 Tested up to: 4.1
-Stable tag: 2.1.7
+Stable tag: 2.1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,8 @@ This generally happens when your database doesn't support UTF-8 characters, so t
 11. Form Entries example
 12. Multiple Step Form (license required)
 == Changelog ==
+= Smart Froms 2.1.8 =
+https://smartforms.rednao.com/2.1.8
 = Smart Forms 2.5 =
 * Update smart forms logic, making required but hidden fields in the forms not required.
 = Smart Forms 2.3 =
