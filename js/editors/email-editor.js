@@ -37,7 +37,7 @@ function RedNaoEmailEditor()
 RedNaoEmailEditor.prototype.InitializeFocusEvents=function()
 {
     var self=this;
-    tinymce.activeEditor.on('focus', function(e) {
+    tinymce.activeEditor.onClick.add(function(e) {
         self.LastFocus='Body';
     });
 
