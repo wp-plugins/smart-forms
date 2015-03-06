@@ -45,11 +45,29 @@ SfMultipleStepsBase.prototype.Generate=function()
     //noinspection SpellCheckingInspection
     this.$StepForm.on('actionclicked.fu.wizard',function(e,data){
         if(data.direction=='next')
-            if(!self.ProcessCurrentStep())
+        {
+            self.MoveToTop();
+            if (!self.ProcessCurrentStep())
                 e.preventDefault();
+        }
     });
     this.GenerationCompleted();
 };
+
+
+SfMultipleStepsBase.prototype.MoveToTop=function()
+{
+   /* try
+    {
+        var scroll = this.FormGenerator.JQueryForm.offset();
+        if ((window.pageYOffset + window.innerHeight) > scroll.top)
+            rnJQuery('html, body').animate({scrollTop: scroll.top}, 200);
+    }catch(err)
+    {
+
+    }*/
+};
+
 
 SfMultipleStepsBase.prototype.FormCompleted=function()
 {

@@ -21,7 +21,7 @@ function smartFormGenerator(options){
     for(var i=0;i<elementOptions.length;i++)
     {
         var element=sfRedNaoCreateFormElementByName(elementOptions[i].ClassName,elementOptions[i]);
-        this.FormId=this.form_id;
+        element.FormId=this.form_id;
         this.RedNaoFormElements.push(element);
         this.FormElements.push(element);
     }
@@ -319,6 +319,7 @@ smartFormGenerator.prototype.SendToSmartForms=function(formValues,isUsingAFileUp
     {
         var self=this;
         //noinspection JSUnusedLocalSymbols
+        RedNaoEventManager.Publish('FormSubmitted',{Generator:this});
         rnJQuery.ajax({
             type:'POST',
             url:ajaxurl,
@@ -339,6 +340,7 @@ smartFormGenerator.prototype.SendFilesWithForm=function(data,formValues)
     rnJQuery('#sfTemporalIFrame').remove();
     rnJQuery('body').append('<iframe id="sfTemporalIFrame" name="sfTemporalIFrame"></iframe>');
     var self=this;
+    RedNaoEventManager.Publish('FormSubmitted',{Generator:this});
     rnJQuery('#sfTemporalIFrame').on('load',function()
     {
         var response;
@@ -391,6 +393,7 @@ smartFormGenerator.prototype.SendToSmartDonations=function(formValues,isUsingAFi
         formString:JSON.stringify(formValues)
     };
 
+    RedNaoEventManager.Publish('FormSubmitted',{Generator:this});
     rnJQuery.post(ajaxurl,data,function(data){
         if(data.status=="success")
         {
@@ -416,6 +419,7 @@ smartFormGenerator.prototype.SendToSmartDonations=function(formValues,isUsingAFi
 };
 
 smartFormGenerator.prototype.SaveCompleted=function(result,formValues){
+    RedNaoEventManager.Publish('FormSubmittedCompleted',{Generator:this});
     rnJQuery('body, input[type="submit"]').removeClass('redNaoWait');
     this.JQueryForm.find('input[type="submit"],.redNaoMSButton').removeAttr('disabled');
 

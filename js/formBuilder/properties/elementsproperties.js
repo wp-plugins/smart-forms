@@ -51,7 +51,7 @@ ElementPropertiesBase.prototype.UpdateProperty=function()
 ElementPropertiesBase.prototype.RefreshElement=function()
 {
     var refreshedElements=this.FormElement.RefreshElement();
-    refreshedElements.find('input[type=submit]').click(function(e){e.preventDefault();e.stopPropagation();})
+    refreshedElements.find('input[type=submit],button').click(function(e){e.preventDefault();e.stopPropagation();})
 
 };
 
@@ -373,7 +373,7 @@ IdProperty.prototype.GenerateHtml=function()
 
 
         var refreshedElements=self.FormElement.RefreshElement();
-        refreshedElements.find('input[type=submit]').click(function(e){e.preventDefault();e.stopPropagation();});
+        refreshedElements.find('input[type=submit],button').click(function(e){e.preventDefault();e.stopPropagation();});
         self.RefreshElement();
 
     });
@@ -407,8 +407,14 @@ ComboBoxProperty.prototype.GenerateHtml=function()
     }
     selectText+='</select>';
 
+    var tooltip="";
+    if(typeof this.AdditionalInformation.ToolTip !='undefined')
+    {
+        tooltip='<span style="margin-left: 2px;cursor:hand;cursor:pointer;" data-toggle="tooltip" data-placement="right" title="'+this.AdditionalInformation.ToolTip.Text+'" class="sfToolTip glyphicon glyphicon-question-sign"></span>';
+    }
+
     var newProperty=rnJQuery( '<td style="text-align: right"><label class="rednao-properties-control-label"> '+RedNaoEscapeHtml(this.PropertyTitle)+' </label></td>'+
-            '<td style="text-align: left">'+selectText+' </td>');
+            '<td style="text-align: left">'+selectText+' '+tooltip+' </td>');
 
     var self=this;
     newProperty.find('select').change(function(){
@@ -416,6 +422,14 @@ ComboBoxProperty.prototype.GenerateHtml=function()
         self.RefreshElement();
 
     });
+
+    var tooltipOptions={};
+    if(typeof this.AdditionalInformation.ToolTip !='undefined'&&typeof this.AdditionalInformation.ToolTip.Width!=undefined)
+        tooltipOptions.Width= this.AdditionalInformation.ToolTip.Width;
+    newProperty.find('.sfToolTip').tooltip(tooltipOptions);
+
+
+
 
     newProperty.find('img').click(function(){RedNaoEventManager.Publish('FormulaButtonClicked',{"FormElement":self.FormElement,"PropertyName":self.PropertyName,AdditionalInformation:self.AdditionalInformation,Image:null})});
     return newProperty;

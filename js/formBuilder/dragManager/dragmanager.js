@@ -31,7 +31,7 @@ RedNaoDragManager.prototype.MakeItemDraggable=function(jQueryElement)
 {
     var self = this;
     jQueryElement.mousedown(function(e){self.SmartDonationsFormMouseDownFired(e, rnJQuery(this))});
-    jQueryElement.find('input[type=submit],input[type=image]').click(function(e){e.preventDefault();e.stopPropagation();});
+    jQueryElement.find('input[type=submit],button,input[type=image]').click(function(e){e.preventDefault();e.stopPropagation();});
 
     jQueryElement.find('.redNaoCheckBox').unbind('mouseover');
     jQueryElement.find('.redNaoCheckBox').unbind('click');

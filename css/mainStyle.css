@@ -167,3 +167,6 @@
 .rnMSRemoveStep:hover{
     color:#d43f3a !important;
 }
+#redNaoSmartFormsPlaceHolder{
+    clear:both;
+}

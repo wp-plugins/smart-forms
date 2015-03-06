@@ -115,7 +115,7 @@ if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
 </script>
 
 <div style="text-align: left;" class="bootstrap-wrapper">
-	<button style="width:100px;cursor: hand;cursor: pointer;" class="btn btn-success ladda-button" id="smartFormsSaveButton"  data-style="expand-left" onclick="return false;" >
+	<button style="min-width:100px;cursor: hand;cursor: pointer;" class="btn btn-success ladda-button" id="smartFormsSaveButton"  data-style="expand-left" onclick="return false;" >
 		<span class="glyphicon glyphicon-floppy-disk"></span><span class="ladda-label">Save</span>
 	</button>
 </div>
@@ -458,7 +458,7 @@ TIP: if the rule is not working try adding !important, e.g. background-color:red
                                 <div id="build">
                                     <div id="target" class="form-horizontal" style="background-color:white;">
                                         <fieldset id="redNaoElementlist" class="formelements" >
-                                            <div class="formelement last" style="height:77px;width:100%; ">
+                                            <div class="formelement last" style="clear:both;height:77px;width:100%; ">
 
                                             </div>
                                         </fieldset>

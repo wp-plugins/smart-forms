@@ -176,9 +176,18 @@ function sfFormElementBase(options)
     this.FormId=0;
     this.Properties=null;
     this.amount=0;
+    this.SetGlobalProperties();
 }
 sfFormElementBase.Extensions=[];
 sfFormElementBase.IdCounter=0;
+
+sfFormElementBase.prototype.SetGlobalProperties=function()
+{
+    if(this.IsNew)
+        this.Options.Spacing='col-sm-12';
+    else
+        this.SetDefaultIfUndefined('Spacing','col-sm-12');
+};
 
 sfFormElementBase.prototype.SetData=function(data)
 {
@@ -253,7 +262,7 @@ sfFormElementBase.prototype.RefreshElement=function()
     var generatedElement=rnJQuery(this.GenerateInlineElement());
     element.append(generatedElement);
     //noinspection JSUnusedGlobalSymbols
-    this.JQueryElement=generatedElement;
+    this.JQueryElement=element;
     this.GenerationCompleted(element);
     if(!smartFormsDesignMode)
     {
@@ -288,7 +297,7 @@ sfFormElementBase.prototype.AppendElementToContainer=function(jqueryElement)
 
 sfFormElementBase.prototype.GetElementClasses=function()
 {
-    return 'rednao-control-group form-group row '+this.Options.ClassName+' '+this.Options.CustomCSS;
+    return 'rednao-control-group form-group row '+this.Options.ClassName+' '+this.Options.Spacing+' '+this.Options.CustomCSS;
 };
 
 sfFormElementBase.prototype.GetFriendlyName=function()
@@ -318,11 +327,41 @@ sfFormElementBase.prototype.GetProperties=function()
     {
         this.Properties=[];
         this.CreateProperties();
+        this.CreateGlobalProperties();
     }
 
     return this.Properties;
 };
 
+sfFormElementBase.prototype.CreateGlobalProperties=function()
+{
+    var self=this;
+    this.Properties.push(new ComboBoxProperty(this,this.Options,"Spacing","Spacing",{ManipulatorType:'basic',Values:[
+        {label:'Fill entire row',value:'col-sm-12'},
+        {label:'Fill 11/12 of row',value:'col-sm-11'},
+        {label:'Fill 10/12 of row',value:'col-sm-10'},
+        {label:'Fill 9/12 of row',value:'col-sm-9'},
+        {label:'Fill 8/12 of row',value:'col-sm-8'},
+        {label:'Fill 7/12 of row',value:'col-sm-7'},
+        {label:'Fill 6/12 of row',value:'col-sm-6'},
+        {label:'Fill 5/12 of row',value:'col-sm-5'},
+        {label:'Fill 4/12 of row',value:'col-sm-4'},
+        {label:'Fill 3/12 of row',value:'col-sm-3'},
+        {label:'Fill 2/12 of row',value:'col-sm-2'},
+        {label:'Fill 1/12 of row',value:'col-sm-1'}
+        ],
+        ChangeCallBack:function()
+        {
+           var previousClasses=self.JQueryElement.attr('class');
+            var newClasses=self.GetElementClasses();
+            if(previousClasses.indexOf('SmartFormsElementSelected')>=0)
+                newClasses+=' SmartFormsElementSelected';
+            self.JQueryElement.attr('class',newClasses);
+        },
+        ToolTip:{Text:"Space that the field will occupy.\r\nNote: The rows will be filled with as much fields as possible, for example, if you sequentially have two fields that occupy 6/12 of a row they will be placed in the same row",
+            Width:'400px'}
+    }));
+};
 
 sfFormElementBase.prototype.GetPropertyName=function()
 {
@@ -367,8 +406,8 @@ sfFormElementBase.prototype.Clone=function()
     sfFormElementBase.IdCounter++;
     newObject.Id='rnField'+sfFormElementBase.IdCounter;
     newObject.Options.Id=newObject.Id;
-    newObject.Properties=[];
-    newObject.CreateProperties();
+    newObject.Properties=null;
+
 
     return newObject;
 };
@@ -1810,11 +1849,40 @@ function sfRedNaoSubmissionButton(options)
         this.Options.ClassName="rednaosubmissionbutton";
         this.Options.ButtonText="Submit";
         this.Options.CustomCSS='';
+        this.Options.Icon={ClassName:''};
+        this.Options.Animated='y';
+
     }else{
         this.SetDefaultIfUndefined('CustomCSS','');
+        this.SetDefaultIfUndefined('Icon',{ClassName:''});
+        this.SetDefaultIfUndefined('Animated','n');
     }
+
+    if(this.Options.Animated=='y')
+        this.RegisterAnimationEvents();
+
 }
+
 sfRedNaoSubmissionButton.prototype=Object.create(sfFormElementBase.prototype);
+
+sfRedNaoSubmissionButton.prototype.RegisterAnimationEvents=function()
+{
+
+    var self=this;
+    RedNaoEventManager.Subscribe('FormSubmitted',function(data)
+    {
+        if(data.Generator.form_id!=self.FormId)
+            return;
+        self.JQueryElement.find('button').RNWait('start');
+    });
+
+    RedNaoEventManager.Subscribe('FormSubmittedCompleted',function(data)
+    {
+        if(data.Generator.form_id!=self.FormId)
+            return;
+        self.JQueryElement.find('button').RNWait('stop');
+    });
+};
 
 sfRedNaoSubmissionButton.prototype.GetFriendlyName=function()
 {
@@ -1825,11 +1893,20 @@ sfRedNaoSubmissionButton.prototype.CreateProperties=function()
 {
     this.Properties.push(new SimpleTextProperty(this,this.Options,"ButtonText","Button Text",{ManipulatorType:'basic'}));
     this.Properties.push(new CustomCSSProperty(this,this.Options));
+    this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"Animated","Animated",{ManipulatorType:'basic'}));
 };
 
 sfRedNaoSubmissionButton.prototype.GenerateInlineElement=function()
 {
-    return '<div class="rednao_label_container col-sm-3"></div><div class="redNaoControls col-sm-9"><input type="submit" class="redNaoSubmitButton btn btn-normal" value="'+RedNaoEscapeHtml(this.Options.ButtonText)+'" /></div>';
+    var icon='';
+    if(this.Options.Icon.ClassName!='')
+        icon='<span class="'+RedNaoEscapeHtml(this.Options.Icon.ClassName)+' "></span>';
+
+    return '<div class="rednao_label_container col-sm-3"></div><div class="redNaoControls col-sm-9"><button class="redNaoSubmitButton btn btn-normal ladda-button" >'+
+                icon+
+                '<span class="ladda-label">'+RedNaoEscapeHtml(this.Options.ButtonText)+'</span>'+
+            '</button></div>';
 };
 
 

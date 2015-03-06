@@ -178,7 +178,7 @@ RedNaoFormBuilder.prototype.CreateFormPreview=function()
         for (var i = 0; i < this.RedNaoFormElements.length; i++) {
             this.RedNaoFormElements[i].AppendElementToContainer(form);
         }
-        form.append('<div class="formelement last" style="height:77px;width:100%"><p>Drop new fields here</p></div>');
+        form.append('<div class="formelement last" style="clear:both;height:77px;width:100%"><p>Drop new fields here</p></div>');
         this.DragManager.MakeAlreadySelectedElementsDraggable();
     }
     else

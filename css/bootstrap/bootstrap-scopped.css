@@ -6302,3 +6302,24 @@
     background-color:#3399FF !important;
     color:white !important;
 }
+
+.bootstrap-wrapper .tooltip-inner{
+  white-space:pre-wrap;
+  text-align:left;
+  max-width: 400px;
+}
+
+.bootstrap-wrapper .rednao-control-group.col-sm-12,
+.bootstrap-wrapper .rednao-control-group.col-sm-11,
+.bootstrap-wrapper .rednao-control-group.col-sm-10,
+.bootstrap-wrapper .rednao-control-group.col-sm-9,
+.bootstrap-wrapper .rednao-control-group.col-sm-8,
+.bootstrap-wrapper .rednao-control-group.col-sm-7,
+.bootstrap-wrapper .rednao-control-group.col-sm-6,
+.bootstrap-wrapper .rednao-control-group.col-sm-5,
+.bootstrap-wrapper .rednao-control-group.col-sm-4,
+.bootstrap-wrapper .rednao-control-group.col-sm-3,
+.bootstrap-wrapper .rednao-control-group.col-sm-2,
+.bootstrap-wrapper .rednao-control-group.col-sm-1{
+  padding-left:0px !important;
+}
