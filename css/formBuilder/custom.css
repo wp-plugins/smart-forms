@@ -140,3 +140,7 @@
 .rednaoaddress .cityAndState .form-group.col-sm-6{
     margin-bottom:10px;
 }
+
+.form-horizontal{
+    float:left;
+}
