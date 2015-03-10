@@ -228,6 +228,8 @@
 
 .rednaoformbuilder .component {
     cursor: pointer !important;
+    float:left;
+    width:100%;
 }
 
 .rednaoformbuilder input {
