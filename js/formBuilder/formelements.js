@@ -1858,14 +1858,13 @@ function sfRedNaoSubmissionButton(options)
         this.SetDefaultIfUndefined('Animated','n');
     }
 
-    if(this.Options.Animated=='y')
-        this.RegisterAnimationEvents();
+    this.RegisterForSubmitEvents();
 
 }
 
 sfRedNaoSubmissionButton.prototype=Object.create(sfFormElementBase.prototype);
 
-sfRedNaoSubmissionButton.prototype.RegisterAnimationEvents=function()
+sfRedNaoSubmissionButton.prototype.RegisterForSubmitEvents=function()
 {
 
     var self=this;
@@ -1873,14 +1872,24 @@ sfRedNaoSubmissionButton.prototype.RegisterAnimationEvents=function()
     {
         if(data.Generator.form_id!=self.FormId)
             return;
-        self.JQueryElement.find('button').RNWait('start');
+
+
+        if(self.Options.Animated=='y')
+            self.JQueryElement.find('button').RNWait('start');
+        else
+            self.JQueryElement.find('button').attr('disabled','disabled');
     });
 
     RedNaoEventManager.Subscribe('FormSubmittedCompleted',function(data)
     {
         if(data.Generator.form_id!=self.FormId)
             return;
-        self.JQueryElement.find('button').RNWait('stop');
+
+
+        if(self.Options.Animated=='y')
+            self.JQueryElement.find('button').RNWait('stop');
+        else
+            self.JQueryElement.find('button').removeAttr('disabled','disabled');
     });
 };
 
