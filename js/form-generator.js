@@ -73,12 +73,13 @@ smartFormGenerator.prototype.CreateForm=function(){
     this.JQueryForm=rnJQuery('<form class="form-horizontal" ></form>');
     this.JQueryForm.css('visibility','hidden');
     container.append(this.JQueryForm);
+
     var i;
     for(i=0;i<this.RedNaoFormElements.length;i++)
     {
         this.RedNaoFormElements[i].AppendElementToContainer(this.JQueryForm);
     }
-
+    this.JQueryForm.append('<div class="sfClearFloat"></div>');
 
 
 

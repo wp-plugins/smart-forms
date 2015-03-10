@@ -1737,7 +1737,7 @@ END
   list-style: none outside none;
   padding: 0;
   margin: 0;
-
+  width: 4000px;
 }
 .fuelux .wizard > .steps.previous-disabled li.complete {
   cursor: default;

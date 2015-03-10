@@ -170,3 +170,24 @@
 #redNaoSmartFormsPlaceHolder{
     clear:both;
 }
+
+
+.rednaotablist
+{
+    float:left;
+}
+
+.rednaotablist .component
+{
+    float:left;
+    width:100%;
+}
+
+#smartFormsGeneralDiv #target{
+    width:100%;
+}
+
+.formelement.last
+{
+    clear:both;
+}
