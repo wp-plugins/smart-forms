@@ -31,7 +31,12 @@ class rednao_checkbox_renderer extends  rednao_base_elements_renderer {
 		if(strlen($rowInformation)==3)
 			$rowInformation="";
 		return array(
-			"exvalue1"=>htmlspecialchars($rowInformation)
+			"exvalue1"=>htmlspecialchars($rowInformation),
+            "exvalue2"=>"",
+            "exvalue3"=>"",
+            "exvalue4"=>"",
+            "exvalue5"=>"",
+            "exvalue6"=>""
 		);
 	}
 }

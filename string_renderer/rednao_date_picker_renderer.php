@@ -11,7 +11,12 @@ class rednao_date_picker_renderer extends rednao_base_elements_renderer {
 	public function GetExValues($formElement, $entry)
 	{
 		return array(
-			"exvalue1"=>$entry["formattedValue"]
+			"exvalue1"=>$entry["formattedValue"],
+            "exvalue2"=>"",
+            "exvalue3"=>"",
+            "exvalue4"=>"",
+            "exvalue5"=>"",
+            "exvalue6"=>""
 		);
 	}
 

@@ -13,7 +13,11 @@ class rednao_name_renderer extends rednao_base_elements_renderer {
 	{
 		return array(
 			"exvalue1"=>htmlspecialchars($entry["firstName"]),
-			"exvalue2"=>htmlspecialchars($entry["lastName"])
+			"exvalue2"=>htmlspecialchars($entry["lastName"]),
+            "exvalue3"=>"",
+            "exvalue4"=>"",
+            "exvalue5"=>"",
+            "exvalue6"=>""
 		);
 	}
 }

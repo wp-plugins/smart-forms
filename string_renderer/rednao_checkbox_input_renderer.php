@@ -16,7 +16,11 @@ class rednao_checkbox_input_renderer extends  rednao_base_elements_renderer{
 	{
 		return array(
 			"exvalue1"=>htmlspecialchars($entry["value"]),
-			"exvalue2"=>htmlspecialchars($entry["checked"])
+			"exvalue2"=>htmlspecialchars($entry["checked"]),
+            "exvalue3"=>"",
+            "exvalue4"=>"",
+            "exvalue5"=>"",
+            "exvalue6"=>""
 		);
 	}
 }

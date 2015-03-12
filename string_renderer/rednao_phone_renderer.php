@@ -13,7 +13,11 @@ class rednao_phone_renderer extends rednao_base_elements_renderer {
 	{
 		return array(
 			"exvalue1"=> htmlspecialchars($entry["area"]),
-			"exvalue2"=> htmlspecialchars($entry["phone"])
+			"exvalue2"=> htmlspecialchars($entry["phone"]),
+            "exvalue3"=>"",
+            "exvalue4"=>"",
+            "exvalue5"=>"",
+            "exvalue6"=>""
 		);
 	}
 }
