@@ -457,11 +457,11 @@ TIP: if the rule is not working try adding !important, e.g. background-color:red
 
                                 <div id="build">
                                     <div id="target" class="form-horizontal" style="background-color:white;">
-                                        <fieldset id="redNaoElementlist" class="formelements" >
+                                        <div id="redNaoElementlist" class="formelements" >
                                             <div class="formelement last" style="clear:both;height:77px;width:100%; ">
 
                                             </div>
-                                        </fieldset>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
