@@ -149,3 +149,39 @@
     padding:0 !important;
     margin:0 !important;
 }
+
+
+
+.bootstrap-wrapper .has-feedback-left .form-control {
+    padding-left: 30px !important;
+    padding-right: 12px;
+}
+
+
+
+.bootstrap-wrapper .has-feedback-left .form-control-feedback {
+    left: 15px;
+    top:0;
+}
+
+
+.bootstrap-wrapper .input-group.has-feedback-left .form-control-feedback {
+    left: 0;
+}
+
+.sfPlaceHolderIcon{
+    font-size:14px;
+    color:#ccc;
+}
+
+.sfPlaceHolderIcon.sfActive{
+    color:#66afe9;
+    -webkit-transition: color ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
+    -o-transition: color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+
+
+.bootstrap-wrapper .redNaoCheckBox span{
+    vertical-align:middle;
+}

@@ -191,3 +191,13 @@
 {
     clear:both;
 }
+
+.sfAddIcon{
+    color:#ccc;
+}
+
+
+.sfAddIcon:hover,
+.sfAddIcon.sfSelected{
+    color:#428bca;
+}

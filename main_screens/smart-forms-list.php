@@ -28,11 +28,29 @@ if($action==="add"||$action=="clone"){
 
 }
 
+if($action=='upload')
+{
+    include SMART_FORMS_DIR.'smart-forms-import-form.php';
+}
+
 if($action!=="edit")
 {
 
 	echo "<div class='bootstrap-wrapper'><h1>".__("Forms")."</h1>";
-	echo sprintf(' <a href="?page=%s&action=%s" class="btn btn-default btn-success" ><span class="glyphicon glyphicon-plus" ></span>Add New</a></div>',$_REQUEST['page'],'add');
+	echo sprintf(' <a href="?page=%s&action=%s" class="btn btn-default btn-success" ><span class="glyphicon glyphicon-plus" ></span>Add New</a>',$_REQUEST['page'],'add');
+    ?>
+
+    <form style="display: inline; margin-left:10px;" id="sfFileUploadForm" method="post" enctype="multipart/form-data" target="_self" action="?page=<?php echo $_REQUEST['page'] ?>&action=upload">
+        <button  class="btn btn-default btn-default" onclick="document.getElementById('sfFileUpload').click();return false;">
+            <span class="glyphicon glyphicon-plus" ></span>
+            Import Form
+        </button>
+        <input type="file" id="sfFileUpload" name="upload_file" style="display: none;" onchange="document.getElementById('sfFileUploadForm').submit();">
+    </form>
+</div>
+
+<?php
+
 }
 
 
@@ -138,6 +156,7 @@ class RednaoForms extends WP_List_Table
             __('edit')      => sprintf('<a href="?page=%s&id=%s&action=%s">Edit</a>',$_REQUEST['page'],$item->form_id,'edit'),
             __('delete')    => sprintf('<a href="?page=%s&id=%s&action=%s">Delete</a>',$_REQUEST['page'],$item->form_id,'delete'),
             __('clone')    => sprintf('<a href="?page=%s&id=%s&action=%s">Clone</a>',$_REQUEST['page'],$item->form_id,'clone'),
+            __('export')    => sprintf('<a target="_blank" href="'.SMART_FORMS_DIR_URL.'/smart-forms-export-form.php?formId=%s'.'">Export</a>',$item->form_id,'export')
         );
 
         return sprintf('%1$s %2$s', $item->form_name, $this->row_actions($actions) );

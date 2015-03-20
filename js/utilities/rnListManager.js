@@ -6,6 +6,7 @@ function RNListManager($list,options)
             Items:[]
         };
 
+    this.SelectedItem=null;
     if(typeof options.Items=='undefined')
         options.Items=[];
 
@@ -19,6 +20,14 @@ function RNListManager($list,options)
         options.ItemSelected=function(item){};
     }
 
+    if(typeof options.Clear=='undefined')
+    {
+        options.Clear=function(){};
+    }
+
+    if(typeof options.ItemUpdated=='undefined')
+        options.ItemUpdated=function(item){};
+
     if(typeof options.CreationLabel=='undefined')
         this.CreationLabel='Click here to create a new item';
     else
@@ -26,6 +35,8 @@ function RNListManager($list,options)
 
     this.FireItemCreated=options.ItemCreated;
     this.FireItemSelected=options.ItemSelected;
+    this.FireItemUpdated=options.ItemUpdated;
+    this.FireClear=options.Clear;
 
     this.Items=options.Items;
     this.InitializeList();
@@ -73,9 +84,34 @@ RNListManager.prototype.SelectItem=function(item)
     {
         this.$List.find('.rnListManagerItemSelected').removeClass('rnListManagerItemSelected');
         this.$List.find('a:nth-child('+(index+1)+')').addClass('rnListManagerItemSelected');
-        this.FireItemSelected(item);
+        this.InternalFireItemSelected(item);
     }
 
+};
+
+RNListManager.prototype.GetItems=function()
+{
+    this.Commit();
+    return this.Items;
+};
+
+RNListManager.prototype.InternalFireItemSelected=function(item)
+{
+    if(this.SelectedItem!=null)
+    {
+        this.FireItemUpdated(this.SelectedItem);
+    }
+    this.FireItemSelected(item);
+    this.SelectedItem=item;
+};
+
+RNListManager.prototype.Commit=function()
+{
+    if(this.SelectedItem!=null)
+    {
+        this.FireItemUpdated(this.SelectedItem);
+        this.SelectedItem=null;
+    }
 };
 
 RNListManager.prototype.AddItem=function(item)
@@ -121,6 +157,12 @@ RNListManager.prototype.AddItemToUIList=function(item,container)
                                     var itemIndex=self.Items.indexOf(item);
                                     self.Items.splice(itemIndex,1);
                                     $item.remove();
+                                    if(item==self.SelectedItem)
+                                    {
+                                        self.SelectedItem=null;
+                                        self.FireClear();
+                                    }
+
                                 });
                         });
     $item.mouseenter(function()
@@ -136,7 +178,7 @@ RNListManager.prototype.AddItemToUIList=function(item,container)
     $item.click(function(){
         self.$List.find('.rnListManagerItemSelected').removeClass('rnListManagerItemSelected');
         $item.addClass('rnListManagerItemSelected');
-        self.FireItemSelected(item);
+        self.InternalFireItemSelected(item);
 
     });
 

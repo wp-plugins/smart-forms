@@ -337,18 +337,18 @@ sfFormElementBase.prototype.CreateGlobalProperties=function()
 {
     var self=this;
     this.Properties.push(new ComboBoxProperty(this,this.Options,"Spacing","Spacing",{ManipulatorType:'basic',Values:[
-        {label:'Fill entire row',value:'col-sm-12'},
-        {label:'Fill 11/12 of row',value:'col-sm-11'},
-        {label:'Fill 10/12 of row',value:'col-sm-10'},
-        {label:'Fill 9/12 of row',value:'col-sm-9'},
-        {label:'Fill 8/12 of row',value:'col-sm-8'},
-        {label:'Fill 7/12 of row',value:'col-sm-7'},
-        {label:'Fill 6/12 of row',value:'col-sm-6'},
-        {label:'Fill 5/12 of row',value:'col-sm-5'},
-        {label:'Fill 4/12 of row',value:'col-sm-4'},
-        {label:'Fill 3/12 of row',value:'col-sm-3'},
-        {label:'Fill 2/12 of row',value:'col-sm-2'},
-        {label:'Fill 1/12 of row',value:'col-sm-1'}
+        {label:'Fill entire row (12 Columns)',value:'col-sm-12'},
+        {label:'Use 11 columns',value:'col-sm-11'},
+        {label:'Use 10 columns',value:'col-sm-10'},
+        {label:'Use 9 columns',value:'col-sm-9'},
+        {label:'Use 8 columns',value:'col-sm-8'},
+        {label:'Use 7 columns',value:'col-sm-7'},
+        {label:'Use 6 columns',value:'col-sm-6'},
+        {label:'Use 5 columns',value:'col-sm-5'},
+        {label:'Use 4 columns',value:'col-sm-4'},
+        {label:'Use 3 columns',value:'col-sm-3'},
+        {label:'Use 2 columns',value:'col-sm-2'},
+        {label:'Use 1 columns',value:'col-sm-1'}
         ],
         ChangeCallBack:function()
         {
@@ -358,7 +358,7 @@ sfFormElementBase.prototype.CreateGlobalProperties=function()
                 newClasses+=' SmartFormsElementSelected';
             self.JQueryElement.attr('class',newClasses);
         },
-        ToolTip:{Text:"Space that the field will occupy.\r\nNote: The rows will be filled with as much fields as possible, for example, if you sequentially have two fields that occupy 6/12 of a row they will be placed in the same row",
+        ToolTip:{Text:"Space that the field will occupy.\r\nNote: All rows have a capacity of 12 columns and will be filled with as much fields as possible, for example, if you sequentially have two fields that use 6 columns each they will be placed in the same row",
             Width:'400px'}
     }));
 };
@@ -486,6 +486,13 @@ sfFormElementBase.prototype.GetSelectorByScope=function(scope,elementName)
 };
 
 
+sfFormElementBase.prototype.LoadPlaceHolderIcon=function($element,$offsetLeft,$offsetRight,options)
+{
+    rnJQuery.RNLoadLibrary([smartFormsPath+'js/utilities/rnPlaceHolderIcons.js'],null,function(){
+        SfLoadPlaceHolderIcon($element,$offsetLeft,$offsetRight,options);
+    });
+};
+
 /************************************************************************************* Title Element ***************************************************************************************************/
 
 function sfTitleElement(options)
@@ -551,12 +558,14 @@ function sfTextInputElement(options)
         this.Options.Width="";
         this.Options.Icon={ClassName:''};
         this.Options.CustomCSS='';
+        this.Options.Placeholder_Icon={ClassName:'',Orientation:''};
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('ReadOnly','n');
         this.SetDefaultIfUndefined('Width','');
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
         this.SetDefaultIfUndefined('CustomCSS','');
+        this.SetDefaultIfUndefined('Placeholder_Icon',{ClassName:''});
     }
 
 
@@ -571,7 +580,7 @@ sfTextInputElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic',IconOptions:{Type:'leftAndRight'}}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
@@ -638,6 +647,10 @@ sfTextInputElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged();});
+    if(this.Options.Placeholder_Icon.ClassName!='')
+    {
+        this.LoadPlaceHolderIcon(jQueryElement.find('.redNaoInputText'),null,null,this.Options.Placeholder_Icon);
+    }
 };
 
 /************************************************************************************* Prepend Text Element ***************************************************************************************************/
@@ -658,11 +671,14 @@ function sfPrependTexElement(options)
         this.Options.Width='';
         this.Options.Icon={ClassName:''};
         this.Options.CustomCSS='';
+        this.Options.Placeholder_Icon={ClassName:'',Orientation:''};
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
         this.SetDefaultIfUndefined('CustomCSS','');
+        this.SetDefaultIfUndefined('Placeholder_Icon',{ClassName:''});
+
     }
 
 
@@ -676,7 +692,7 @@ sfPrependTexElement.prototype.CreateProperties=function()
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Prepend","Prepend",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic',IconOptions:{Type:'leftAndRight'}}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
@@ -741,6 +757,10 @@ sfPrependTexElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged();});
+    if(this.Options.Placeholder_Icon.ClassName!='')
+    {
+        this.LoadPlaceHolderIcon(jQueryElement.find('.redNaoInputText'),jQueryElement.find('.redNaoPrepend'),null,this.Options.Placeholder_Icon);
+    }
 };
 
 /************************************************************************************* Appended Text Element ***************************************************************************************************/
@@ -760,11 +780,13 @@ function sfAppendedTexElement(options)
         this.Options.Width='';
         this.Options.Icon={ClassName:''};
         this.Options.CustomCSS='';
+        this.Options.Placeholder_Icon={ClassName:'',Orientation:''};
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
         this.SetDefaultIfUndefined('Icon',{ClassName:""});
         this.SetDefaultIfUndefined('CustomCSS','');
+        this.SetDefaultIfUndefined('Placeholder_Icon',{ClassName:''});
 
     }
 }
@@ -776,7 +798,7 @@ sfAppendedTexElement.prototype.CreateProperties=function()
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Append","Append",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic',IconOptions:{Type:'leftAndRight'}}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
@@ -840,6 +862,10 @@ sfAppendedTexElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged();});
+    if(this.Options.Placeholder_Icon.ClassName!='')
+    {
+        this.LoadPlaceHolderIcon(jQueryElement.find('.redNaoInputText'),null,jQueryElement.find('.redNaoAppend'),this.Options.Placeholder_Icon);
+    }
 };
 
 
@@ -859,10 +885,12 @@ function sfPrependCheckBoxElement(options)
         this.Options.Value="";
         this.Options.Width='';
         this.Options.CustomCSS='';
+        this.Options.Placeholder_Icon={ClassName:'',Orientation:''};
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
         this.SetDefaultIfUndefined('CustomCSS','');
+        this.SetDefaultIfUndefined('Placeholder_Icon',{ClassName:''});
 
     }
 }
@@ -873,7 +901,7 @@ sfPrependCheckBoxElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic',IconOptions:{Type:'leftAndRight'}}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsChecked","Is Checked",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
@@ -945,6 +973,12 @@ sfPrependCheckBoxElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText,#'+this.Id+' .redNaoRealCheckBox').change(function(){self.FirePropertyChanged();});
+    if(this.Options.Placeholder_Icon.ClassName!='')
+    {
+        this.LoadPlaceHolderIcon(jQueryElement.find('.redNaoInputText'),jQueryElement.find('.redNaoPrepend'),null,this.Options.Placeholder_Icon);
+    }
+
+
 };
 /************************************************************************************* Append Checkbox Element ***************************************************************************************************/
 
@@ -962,10 +996,12 @@ function sfAppendCheckBoxElement(options)
         this.Options.Value="";
         this.Options.Width='';
         this.Options.CustomCSS='';
+        this.Options.Placeholder_Icon={ClassName:'',Orientation:''};
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
         this.SetDefaultIfUndefined('CustomCSS','');
+        this.SetDefaultIfUndefined('Placeholder_Icon',{ClassName:''});
 
     }
 }
@@ -976,7 +1012,7 @@ sfAppendCheckBoxElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic',IconOptions:{Type:'leftAndRight'}}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsChecked","Is Checked",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
@@ -1047,6 +1083,12 @@ sfAppendCheckBoxElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoInputText,#'+this.Id+' .redNaoRealCheckBox').change(function(){self.FirePropertyChanged();});
+    if(this.Options.Placeholder_Icon.ClassName!='')
+    {
+        this.LoadPlaceHolderIcon(jQueryElement.find('.redNaoInputText'),null,jQueryElement.find('.redNaoAppend'),this.Options.Placeholder_Icon);
+    }
+
+
 };
 /************************************************************************************* Text Area Element ***************************************************************************************************/
 
@@ -1522,12 +1564,14 @@ function sfSelectBasicElement(options)
         this.Options.Options=[{label:'Option 1',value:0,sel:'n'},{label:'Option 2',value:0,sel:'n'},{label:'Option',value:0,sel:'n'}];
         this.SetDefaultIfUndefined('Width','');
         this.Options.CustomCSS='';
+        this.Options.DefaultText_Icon={ClassName:'',Orientation:''};
 
     }else
     {
         this.SetDefaultIfUndefined('CustomCSS','');
         this.SetDefaultIfUndefined('Width','');
         this.SetDefaultIfUndefined("DefaultText","");
+        this.SetDefaultIfUndefined('DefaultText_Icon',{ClassName:''});
         if(this.Options.Options.length>0&&typeof this.Options.Options[0].sel=='undefined')
         {
             this.Options.Options[0].sel='y';
@@ -1555,7 +1599,7 @@ sfSelectBasicElement.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"DefaultText","Default text",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"DefaultText","Default text",{ManipulatorType:'basic',IconOptions:{Type:'leftAndRight'}}));
     this.Properties.push(new ArrayProperty(this,this.Options,"Options","Options",{ManipulatorType:'basic',SelectorType:'radio'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
@@ -1661,6 +1705,13 @@ sfSelectBasicElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoSelect').change(function(){self.FirePropertyChanged();});
+    if(this.Options.DefaultText_Icon.ClassName!='')
+    {
+        this.LoadPlaceHolderIcon(jQueryElement.find('.redNaoSelect'),null,null,this.Options.DefaultText_Icon);
+    }
+
+
+
 };
 
 /*************************************************************************************Donation Button***************************************************************************************************/
@@ -2604,9 +2655,11 @@ function sfRedNaoEmail(options)
         this.Options.Placeholder="Placeholder";
         this.Options.Icon={ClassName:''};
         this.Options.CustomCSS='';
+        this.Options.Placeholder_Icon={ClassName:'',Orientation:''};
     }else{
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
         this.SetDefaultIfUndefined('CustomCSS','');
+        this.SetDefaultIfUndefined('Placeholder_Icon',{ClassName:''});
     }
 }
 
@@ -2616,7 +2669,7 @@ sfRedNaoEmail.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic',IconOptions:{Type:'leftAndRight'}}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new CustomCSSProperty(this,this.Options));
     this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
@@ -2689,6 +2742,11 @@ sfRedNaoEmail.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
     rnJQuery('#'+this.Id+ ' .redNaoEmail').change(function(){self.FirePropertyChanged();});
+    if(this.Options.Placeholder_Icon.ClassName!='')
+    {
+        this.LoadPlaceHolderIcon(jQueryElement.find('.redNaoInputText'),null,null,this.Options.Placeholder_Icon);
+    }
+
 };
 
 
@@ -2708,12 +2766,14 @@ function sfRedNaoNumber(options)
         this.Options.MinimumValue="";
         this.Options.Icon={ClassName:''};
         this.Options.CustomCSS='';
+        this.Options.Placeholder_Icon={ClassName:'',Orientation:''};
     }else
     {
         this.SetDefaultIfUndefined("MaximumValue","");
         this.SetDefaultIfUndefined("MinimumValue","");
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
         this.SetDefaultIfUndefined('CustomCSS','');
+        this.SetDefaultIfUndefined('Placeholder_Icon',{ClassName:''});
     }
 }
 
@@ -2723,7 +2783,7 @@ sfRedNaoNumber.prototype.CreateProperties=function()
 {
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic'}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic',IconOptions:{Type:'leftAndRight'}}));
     //this.Properties.push(new SimpleTextProperty(this,this.Options,"NumberOfDecimals","Number of decimals",{ManipulatorType:'basic'}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"MinimumValue","Minimum Value",{ManipulatorType:'basic',Placeholder:'No Minimum'}));
@@ -2814,6 +2874,10 @@ sfRedNaoNumber.prototype.GenerationCompleted=function(jQueryElement)
 
         self.FirePropertyChanged();});
     rnJQuery('#'+this.Id+ ' .redNaoNumber').ForceNumericOnly();
+    if(this.Options.Placeholder_Icon.ClassName!='')
+    {
+        this.LoadPlaceHolderIcon(jQueryElement.find('.redNaoInputText'),null,null,this.Options.Placeholder_Icon);
+    }
 };
 
 

@@ -89,10 +89,16 @@ SimpleTextProperty.prototype.GenerateHtml=function()
     var self=this;
     if(typeof this.AdditionalInformation.IconOptions!='undefined')
     {
-        var addIconButton=rnJQuery('<a style="margin-left: 5px;" href="#"><span class="glyphicon glyphicon-tags" title="Add Icon"></span></a>');
+        var selected='';
+        var defaultValue=this.PropertiesObject[this.PropertyName+'_Icon'].ClassName;
+        if(defaultValue!='')
+            selected='sfSelected';
+        var addIconButton=rnJQuery('<a style="margin-left: 5px;" href="#"><span class="glyphicon glyphicon-tags sfAddIcon '+selected+'" title="Add Icon"></span></a>');
         addIconButton.click(function()
         {
-            RedNaoIconSelectorVar.Show( self.AdditionalInformation.IconOptions.Type,function(itemClass,orientation){self.IconSelected(itemClass,orientation)});
+            RedNaoIconSelectorVar.Show( self.AdditionalInformation.IconOptions.Type,defaultValue,function(itemClass,orientation){
+                defaultValue=itemClass;
+                self.IconSelected(itemClass,orientation,addIconButton)});
         });
         rnJQuery(newProperty[1]).append(addIconButton);
     }
@@ -106,12 +112,17 @@ SimpleTextProperty.prototype.GenerateHtml=function()
     return newProperty;
 };
 
-SimpleTextProperty.prototype.IconSelected=function(itemClass,orientation)
+SimpleTextProperty.prototype.IconSelected=function(itemClass,orientation,$addIconButton)
 {
     this.PropertiesObject[this.PropertyName+'_Icon']={
         ClassName:itemClass,
         Orientation:orientation
     };
+
+    if(itemClass=='')
+        $addIconButton.find('span').removeClass('sfSelected');
+    else
+        $addIconButton.find('span').addClass('sfSelected');
     this.RefreshElement();
 };
 
@@ -443,7 +454,7 @@ function RedNaoIconSelector()
     this.$Select=null;
 }
 
-RedNaoIconSelector.prototype.Show=function(type,callBack)
+RedNaoIconSelector.prototype.Show=function(type,defaultValue,callBack)
 {
     this.CallBack=callBack;
     if(this.$Dialog==null)
@@ -458,6 +469,8 @@ RedNaoIconSelector.prototype.Show=function(type,callBack)
         this.$Dialog.find('.rnBtnAdd').show();
     }
     this.$Dialog.modal('show');
+
+    this.$Select.select2("val",defaultValue);
 
 };
 
