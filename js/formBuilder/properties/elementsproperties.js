@@ -757,7 +757,7 @@ IconProperty.prototype.GenerateHtml=function()
     newProperty.find('button').click(function(e)
     {
         e.preventDefault();
-        RedNaoIconSelectorVar.Show( 'add',function(itemClass,orientation){
+        RedNaoIconSelectorVar.Show( 'add',self.GetPropertyCurrentValue().ClassName,function(itemClass,orientation){
             self.PropertiesObject[self.PropertyName]={
                 ClassName:itemClass,
                 Orientation:orientation
