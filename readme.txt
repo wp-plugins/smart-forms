@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: form, forms, form builder, form maker, form creator, form generator, contact form, form widget, form plugin, bootstrap forms, jquery forms, form manager, ajax forms
 Requires at least: 3.3
 Tested up to: 4.1
-Stable tag: 2.2
+Stable tag: 2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,7 +29,7 @@ You can easily customize forms to do additional actions after a form is submitte
 *   **Forms Entry Screen**- Easily view responses.
 *   **Customizable forms emails**- After a form is submitted, send notification email with any information, and in any format that you need.
 *   **Calculated forms fields**- Formulas fill fields automatically (up to three fields per formula in the free version)
-*   **Custom forms fields**- The plugin currently supports these custom forms elements: name, phone, email, address, number, captcha (free version support up to 8 fields per form).
+*   **Custom forms fields**- The plugin currently supports these custom forms elements: name, phone, email, address, number, captcha (**free version support up to 8 fields per form**).
 *   **File Uploader (pro)**- Allows you to upload files in a form; you can configure the form to accept only one file or multiple files.
 *   **Conditional Logic**- Show and hide fields depending on values in other fields; allows you to have an all-in-one form all in one place, instead of in multiple pages; prevents forms from overwhelming users.
 *   **Tons of icons to decorate your form**- Create awesome forms with more than 200 icons; more coming soon.
