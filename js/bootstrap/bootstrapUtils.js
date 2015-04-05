@@ -72,7 +72,7 @@ rnJQuery.fn.RDNotifications=function(dynamicHeight)
 
             this.Element.addClass('alert '+classType );
             this.Element.hide();
-            this.Element.empty()
+            this.Element.empty();
             this.Element.append('<span class="'+glyph+'" style="margin-right: 5px;"></span><span>'+message+'</span>');
             this.Element.slideDown('1000','easeInQuint');
         },
@@ -255,4 +255,121 @@ rnJQuery.fn.modal.Constructor.prototype.ShowInCenter=function()
     // Center modal vertically in window
     $dialog.css("margin-top", offset);
     this.$element.modal('show');
+};
+
+
+//************************************************************************Dialog******************************************************
+
+rnJQuery.fn.RNDialog=function(params,param2)
+{
+    var $body=rnJQuery(this);
+    var rnDialog=$body.data('rndialog');
+    var command='';
+    if(typeof params=='string')
+    {
+        command=params;
+        params={};
+    }
+
+    if(typeof rnDialog=='undefined')
+    {
+        rnDialog=new RNDialog($body,params);
+        rnDialog.$Dialog.data('rndialog',rnDialog);
+        $body.data('rndialog',rnDialog);
+    }
+
+    if(command!='')
+        rnDialog[command](param2);
+
+    return rnDialog.$Dialog;
+};
+
+function RNDialog($body,params)
+{
+    this.Options={};
+    this.SetUpOptions(params);
+    this.$Dialog=rnJQuery(
+        '<div class="modal fade" data-backdrop="static"  style="display: none"  tabindex="-1">'+
+            '<div class="modal-dialog">'+
+                '<div class="modal-content">'+
+                    '<div class="modal-header" style="background-color: #3399FF;color:white;">'+
+                        '<h4 style="display: inline" class="modal-title"></h4>'+
+                    '</div>'+
+                    '<div class="modal-body">'+
+                    '</div>'+
+                    '<div class="modal-footer">'+
+                    '</div>'+
+                '</div>'+
+            '</div>'+
+        '</div>');
+
+    if(this.Options.Width!=null)
+        this.$Dialog.find('.modal-dialog').css('width',this.Options.Width);
+
+
+
+    var container=rnJQuery('<div class="bootstrap-wrapper"></div>');
+    container.append(this.$Dialog);
+    rnJQuery('body').append(container);
+
+    if(this.Options.Title==null)
+        this.$Dialog.find('.modal-header').remove();
+    else
+        this.$Dialog.find('.modal-header').append(rnJQuery(this.Options.Title));
+
+    if(this.Options.Buttons.length==0)
+        this.$Dialog.find('.modal-footer').remove();
+    else
+        for(var i=0;i<this.Options.Buttons.length;i++)
+        {
+            var button=this.CreateButton(this.Options.Buttons[i]);
+            this.$Dialog.find('.modal-footer').append(button);
+        }
+
+    this.$Dialog.find('.modal-body').append($body);
+}
+
+RNDialog.prototype.CreateButton=function(btnOptions)
+{
+    if(typeof btnOptions.Icon=='undefined')
+        btnOptions.Icon='';
+    var button=rnJQuery('<button data-button-id="'+btnOptions.Id+'" type="button" class="btn btn-'+btnOptions.Style+'" ><span class="'+btnOptions.Icon+'"></span>'+btnOptions.Label+'</button>');
+    var self=this;
+    button.click(function()
+    {
+        if(btnOptions.Action=='cancel')
+            self.Hide();
+        self.Options.ButtonClick(btnOptions.Action,button);
+    });
+    return button;
+};
+
+RNDialog.prototype.SetUpOptions=function(params)
+{
+    this.Options=rnJQuery.extend(
+        {
+            Title:null,
+            Width:null,
+            Buttons:[
+                {Label:'Cancel',Id:'dialogCancel',Style:'danger',Icon:'glyphicon glyphicon-remove',Action:'cancel'},
+                {Label:'Accept',Id:'dialogAccept',Style:'success',Icon:'glyphicon glyphicon-ok',Action:'accept'}
+            ],
+            ButtonClick:function(Action){alert()}
+        },params
+    )
+};
+
+RNDialog.prototype.GetButton=function(buttonId)
+{
+    return this.$Dialog.find('button[data-button-id="'+buttonId+'"]');
+};
+
+RNDialog.prototype.Hide=function(params)
+{
+    this.$Dialog.modal('hide');
+};
+
+RNDialog.prototype.Show=function(params)
+{
+    this.$Dialog.modal('show');
 };

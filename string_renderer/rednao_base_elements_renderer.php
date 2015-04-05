@@ -15,4 +15,10 @@ abstract class rednao_base_elements_renderer {
         return null;
     }
 
+
+    public function GetListValue($formElement,$entry)
+    {
+        throw new Exception('List serialization type not supported');
+    }
+
 } 

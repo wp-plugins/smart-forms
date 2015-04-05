@@ -102,6 +102,12 @@ class rednao_string_builder {
 		$renderer=$this->GetElementRenderer($formElement);
 		return $renderer->GetDateValue($formElement,$entry);
 	}
+	public function GetListValue($formElement,$entry)
+	{
+		$renderer=$this->GetElementRenderer($formElement);
+		return $renderer->GetListValue($formElement,$entry);
+	}
+
 
 
 }

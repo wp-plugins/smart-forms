@@ -37,7 +37,7 @@ function smartFormsAjaxCompleted(result,status)
 {
     var shortCodeOptions=rnJQuery.parseJSON(result);
 
-    //todo: acer que el popup funcione con los shortcodeoptions
+
     if(smartFormsShortCodeDialog==null)
     {
         var $optionsSelect=rnJQuery('<select style="display: block;width:100%;margin-bottom: 10px;" ></select>');

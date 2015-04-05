@@ -62,17 +62,7 @@ class php_entry_saver_base {
 		$preInsertedEntry=new PreInsertEntry($this->FormId,$this->FormEntryData,$this->FormOptions,$this->ElementOptions,$additionalData);
 		do_action('sf_before_saving_form',$preInsertedEntry);
 
-		/*$additionalActions=apply_filters('sf_before_saving_form',array(
-			"ContinueInsertion"=>true,
-			"FormInformation"=>array(
-				"FormId"=>$this->FormId,
-				"FormEntryData"=>$this->FormEntryData,
-				"FormOptions"=>$this->FormOptions,
-				"ElementOptions"=>$this->ElementOptions
-			),
-			"AdditionalData"=>$additionalData,
-			"Actions"=>array()
-		));*/
+
 
 		if(has_action('sf_before_saving_form'))
 		{
@@ -80,7 +70,7 @@ class php_entry_saver_base {
 			$this->FormString = json_encode($this->FormEntryData);
 		}
 
-		if(!$preInsertedEntry->ContinueInsertion)
+		if($preInsertedEntry->ContinueInsertion==false)
 		{
 			echo json_encode(
 				array(
@@ -103,21 +93,15 @@ class php_entry_saver_base {
 
         if($result==true)
 		{
-			$additionalActions=apply_filters('sf_submitted_successfully',array(
-				"FormInformation"=>array(
-					"FormId"=>$this->FormId,
-					"FormEntryData"=>$this->FormEntryData,
-					"FormOptions"=>$this->FormOptions,
-					"ElementOptions"=>$this->ElementOptions
-				),
-				"Actions"=>array()
-			));
+			$postInsertEntry=new PreInsertEntry($this->FormId,$this->FormEntryData,$this->FormOptions,$this->ElementOptions,$additionalData);
+			do_action('sf_after_saving_form',$postInsertEntry);
+
 
 			echo json_encode(
 				array(
 					"message"=>__("Information submitted successfully."),
 					"success"=>"y",
-					"AdditionalActions"=>$additionalActions["Actions"],
+					"AdditionalActions"=>$postInsertEntry->GetSerializedActions(),
 					"insertedValues"=>$this->InsertedValuesString,
 				)
 			);
@@ -326,6 +310,8 @@ class php_entry_saver_base {
 				$this->InsertedValuesString[$key]=$value;
 			$exValue=$this->StringBuilder->GetExValue($fieldConfiguration,$unprocessedValue);
 			$dateValue=$this->StringBuilder->GetDateValue($fieldConfiguration,$unprocessedValue);
+			if($dateValue!=null)
+				$dateValue=date('Y-m-d',$dateValue);
 			$jsonValue=json_encode($unprocessedValue);
 			if(!$this->InsertDetailRecord($entryId,$key,$value,$jsonValue,$exValue,$dateValue))
 				return false;

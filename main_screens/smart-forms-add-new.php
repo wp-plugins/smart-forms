@@ -30,7 +30,8 @@ wp_enqueue_script('smart-forms-elements-properties',SMART_FORMS_DIR_URL.'js/form
 wp_enqueue_script('smart-forms-formBuilder',SMART_FORMS_DIR_URL.'js/formBuilder/formbuilder.js',array('smart-forms-elements-properties'));
 wp_enqueue_script('smart-forms-dragmanager',SMART_FORMS_DIR_URL.'js/formBuilder/dragManager/dragmanager.js');
 wp_enqueue_script('smart-forms-dragitembehaviors',SMART_FORMS_DIR_URL.'js/formBuilder/dragManager/dragitembehaviors.js');
-wp_enqueue_script('smart-forms-conditional-steps',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-handler-steps.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-condition-designer',SMART_FORMS_DIR_URL.'js/conditional_manager/condition-designer.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-conditional-steps',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-handler-steps.js',array('isolated-slider','smart-forms-condition-designer'));
 wp_enqueue_script('smart-forms-conditional-handlers',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-handlers.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-conditional-manager',SMART_FORMS_DIR_URL.'js/conditional_manager/conditional-logic-manager.js',array('isolated-slider','smart-forms-conditional-handlers'));
 wp_enqueue_script('ismart-forms-add-new',SMART_FORMS_DIR_URL.'js/subscriber_interfaces/ismart-forms-add-new.js',array('smart-forms-event-manager','isolated-slider'));
@@ -41,7 +42,10 @@ wp_enqueue_script('smart-forms-multiple-step-designer',SMART_FORMS_DIR_URL.'js/m
 $additionalJS=apply_filters("sf_form_configuration_on_load_js",array());
 $addNewDependencies= array('smart-forms-list-manager','ismart-forms-add-new','isolated-slider','smart-forms-formula-window','smart-forms-formBuilder','smart-forms-select2','smart-forms-event-manager','smart-forms-conditional-manager');
 for($i=0;$i<count($additionalJS);$i++){
-	wp_enqueue_script($additionalJS[$i]["handler"],$additionalJS[$i]["path"],array('ismart-forms-add-new'));
+
+    if(!isset($additionalJS[$i]['dependencies']))
+        $additionalJS[$i]['dependencies']=array('ismart-forms-add-new');
+	wp_enqueue_script($additionalJS[$i]["handler"],$additionalJS[$i]["path"],$additionalJS[$i]['dependencies']);
 	array_push($addNewDependencies,$additionalJS[$i]["handler"]);
 }
 wp_enqueue_script('smart-forms-add-new',SMART_FORMS_DIR_URL.'js/main_screens/smart-forms-add-new.js',$addNewDependencies);
@@ -80,7 +84,7 @@ wp_enqueue_style('form-builder-fuelux',SMART_FORMS_DIR_URL.'js/utilities/fuelux/
 if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
 	wp_enqueue_script('smart-forms-detail-generator',SMART_FORMS_DIR_URL.'utilities/smart-forms-detail-generator.js',array('isolated-slider'));
 
-
+do_action('smart_forms_load_designer_scripts');
 ?>
 
 
@@ -104,7 +108,7 @@ if(get_option("SMART_FORMS_REQUIRE_DB_DETAIL_GENERATION")=='y')
 
         foreach($customVars as $var)
         {
-            echo "var ".$var["name"]." = ".$var["value"];
+            echo "var ".$var["name"]." = ".$var["value"].'; ';
         }
 
 

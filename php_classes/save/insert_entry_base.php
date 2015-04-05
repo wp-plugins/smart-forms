@@ -7,6 +7,7 @@ class InsertEntryBase {
     public $FormOptions;
     public $ElementOptions;
     public $AdditionalData;
+    protected $_StringBuilder;
     /**
      * @var InsertEntryActionBase[] array
      */
@@ -19,6 +20,7 @@ class InsertEntryBase {
         $this->FormOptions=$formOptions;
         $this->ElementOptions=$elementOptions;
         $this->AdditionalData=$additionalData;
+        $this->_StringBuilder=null;
     }
 
     public function GetSerializedActions()
@@ -52,8 +54,7 @@ class InsertEntryBase {
     {
         foreach($this->FormEntryData as $key=>$value)
             if($key==$fieldId)
-                return $value
-                    ;
+                return $value;
 
         throw new Exception("Invalid field ".$fieldId);
     }
@@ -63,9 +64,35 @@ class InsertEntryBase {
         array_push($this->_actions,$action);
     }
 
+    protected function GetStringBuilder()
+    {
+        if($this->_StringBuilder==null)
+        {
+            include_once(SMART_FORMS_DIR.'string_renderer/rednao_string_builder.php');
+            $this->_StringBuilder=new rednao_string_builder();
+        }
 
+        return $this->_StringBuilder;
+    }
 
+    public function GetFieldValue($fieldId,$serializationType=0)
+    {
+        if($serializationType==SFSerializationType::TEXT)
+            return $this->GetStringBuilder()->GetStringFromColumn($this->GetField($fieldId),$this->GetFieldEntryData($fieldId));
+        if($serializationType==SFSerializationType::DATE)
+            return $this->GetStringBuilder()->GetDateValue($this->GetField($fieldId),$this->GetFieldEntryData($fieldId));
+        if($serializationType==SFSerializationType::ARRAYLIST)
+            return $this->GetStringBuilder()->GetListValue($this->GetField($fieldId),$this->GetFieldEntryData($fieldId));
 
+        throw new Exception('Invalid Serialization Type');
+    }
+
+}
+
+abstract class SFSerializationType{
+    const TEXT=0;
+    const DATE=1;
+    const ARRAYLIST=2;
 }
 
 

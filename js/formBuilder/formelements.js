@@ -1666,6 +1666,12 @@ sfSelectBasicElement.prototype.GetValueString=function()
         this.amount=parseFloat(jQueryElement.val());
     if(isNaN(this.amount))
         this.amount=0;
+
+    if(jQueryElement.text()==this.Options.DefaultText)
+    {
+        this.amount=0;
+        return {value:'',amount:0};
+    }
     return  {value:jQueryElement.text(),amount:this.amount};
 };
 

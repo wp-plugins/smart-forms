@@ -201,3 +201,15 @@
 .sfAddIcon.sfSelected{
     color:#428bca;
 }
+
+.sfActionIcon{
+    cursor:hand;
+    cursor:pointer;
+}
+
+.sfActionIcon:hover{
+    color:#ff0000;
+    -webkit-transition: color ease-in-out 0.15s;
+    -o-transition: color ease-in-out 0.15s;
+    transition: color ease-in-out 0.15s;
+}

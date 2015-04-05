@@ -144,6 +144,7 @@ SfShowConditionalHandler.prototype.Initialize=function(form,data)
     this.Form=form;
     var self=this;
     self.HideFields();
+    self.PreviousActionWasTrue=-1;
     self.SubscribeCondition(self.Options.Condition,data);
 
 };

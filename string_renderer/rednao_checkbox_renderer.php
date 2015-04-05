@@ -39,4 +39,21 @@ class rednao_checkbox_renderer extends  rednao_base_elements_renderer {
             "exvalue6"=>""
 		);
 	}
+
+
+    public function GetListValue($formElement,$entry)
+    {
+        $array= Array();
+        foreach($formElement["Options"] as $value)
+            foreach($entry["selectedValues"] as $selectedValues)
+                if($value["label"]==$selectedValues["value"])
+                {
+                    array_push($array,$value);
+                }
+
+        if(count($array)!=count($entry["selectedValues"]))
+            throw new Exception('Value selected not found');
+
+        return $array;
+    }
 }

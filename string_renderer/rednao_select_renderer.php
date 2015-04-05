@@ -24,4 +24,20 @@ class rednao_select_renderer extends  rednao_base_elements_renderer{
             "exvalue6"=>""
 		);
 	}
+
+
+    public function GetListValue($formElement,$entry)
+    {
+        $array= Array();
+        foreach($formElement["Options"] as $value)
+            if($value["label"]==$entry["value"])
+            {
+                array_push($array,$value);
+            }
+
+        if(count($array)!=1&&$entry["value"]!='')
+            throw new Exception('Value selected not found');
+
+        return $array;
+    }
 }

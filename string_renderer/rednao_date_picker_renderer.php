@@ -28,7 +28,7 @@ class rednao_date_picker_renderer extends rednao_base_elements_renderer {
 			if(count($splitDate)!=3)
 				return null;
 
-			return date('Y-m-d', mktime(null,null,null,intval($splitDate[1]),intval($splitDate[2]),intval($splitDate[0])));
+			return mktime(null,null,null,intval($splitDate[1]),intval($splitDate[2]),intval($splitDate[0]));
 
 		}
 		return null;
