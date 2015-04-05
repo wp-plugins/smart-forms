@@ -358,7 +358,7 @@ IdProperty.prototype.GenerateHtml=function()
         var jqueryElement=rnJQuery(this).find('#'+self.PropertyId);
         var fieldName=jqueryElement.val().trim();
 
-        if(!fieldName.match(/^[a-zA-Z][\w:.-]+$/))
+        if(!fieldName.match(/^[a-zA-Z][\w:.-]*$/))
         {
             alert("Invalid field name, it should start with a letter and not contain spaces or symbols");
             jqueryElement.val(self.PreviousId);
