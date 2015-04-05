@@ -1109,6 +1109,7 @@ function sfTextAreaElement(options)
         this.Options.Disabled="n";
         this.Options.MaxLength='';
         this.Options.CustomCSS='';
+        this.Options.Placeholder_Icon={ClassName:'',Orientation:''};
     }else{
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('Width','');
@@ -1117,6 +1118,7 @@ function sfTextAreaElement(options)
         this.SetDefaultIfUndefined('Disabled','n');
         this.SetDefaultIfUndefined('MaxLength','');
         this.SetDefaultIfUndefined('CustomCSS','');
+        this.SetDefaultIfUndefined('Placeholder_Icon',{ClassName:''});
     }
 
     this.MaxLength=parseFloat(this.Options.MaxLength);
@@ -1129,7 +1131,7 @@ sfTextAreaElement.prototype.CreateProperties=function()
     this.Properties.push(new IdProperty(this,this.Options));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Label","Label",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"DefaultText","Value",{ManipulatorType:'basic',RefreshFormData:true,MultipleLine:true}));
-    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic',RefreshFormData:true}));
+    this.Properties.push(new SimpleTextProperty(this,this.Options,"Placeholder","Placeholder",{ManipulatorType:'basic',RefreshFormData:true,IconOptions:{Type:'leftAndRight'}}));
     this.Properties.push(new SimpleNumericProperty(this,this.Options,"MaxLength","Max Character",{ManipulatorType:'basic',Placeholder:"No Limit"}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Width","Width",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Height","Height",{ManipulatorType:'basic'}));
@@ -1213,6 +1215,13 @@ sfTextAreaElement.prototype.GenerationCompleted=function(jQueryElement)
                 wordCounter.removeClass("smartFormsAlmostFull");
 
         });
+
+
+
+    if(this.Options.Placeholder_Icon.ClassName!='')
+    {
+        this.LoadPlaceHolderIcon(jQueryElement.find('.redNaoTextAreaInput'),null,null,this.Options.Placeholder_Icon);
+    }
 };
 
 /*************************************************************************************Multiple Radio Element ***************************************************************************************************/
