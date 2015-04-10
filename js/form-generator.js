@@ -70,7 +70,7 @@ smartFormGenerator.prototype.SetDefaultIfUndefined=function(propertyName,default
 smartFormGenerator.prototype.CreateForm=function(){
     var container=this.GetRootContainer();
     container.empty();
-    this.JQueryForm=rnJQuery('<form class="form-horizontal" ></form>');
+    this.JQueryForm=rnJQuery('<form id="sf'+this.form_id+'" class="form-horizontal" ></form>');
     this.JQueryForm.css('visibility','hidden');
     container.append(this.JQueryForm);
 
