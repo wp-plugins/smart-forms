@@ -2729,17 +2729,17 @@ sfRedNaoEmail.prototype.GetValuePath=function()
 
 sfRedNaoEmail.prototype.IsValid=function()
 {
-    var email=rnJQuery('#'+this.Id+ ' .redNaoEmail').val();
+    var email=this.JQueryElement.find('.redNaoEmail').val();
     if(email==""&&this.Options.IsRequired=='y')
     {
-        rnJQuery('#'+this.Id).addClass('has-error');
+        this.JQueryElement.addClass('has-error');
         return false;
     }
 
 
     if(email!=''&&!this.EmailIsValid(email))
     {
-        rnJQuery('#'+this.Id).addClass('has-error');
+        this.JQueryElement.addClass('has-error');
         return false;
     }
 
@@ -2756,7 +2756,7 @@ sfRedNaoEmail.prototype.EmailIsValid=function(email)
 sfRedNaoEmail.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoEmail').change(function(){self.FirePropertyChanged();});
+    this.JQueryElement.find('.redNaoEmail').change(function(){self.FirePropertyChanged();});
     if(this.Options.Placeholder_Icon.ClassName!='')
     {
         this.LoadPlaceHolderIcon(jQueryElement.find('.redNaoInputText'),null,null,this.Options.Placeholder_Icon);
