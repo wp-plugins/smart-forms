@@ -633,9 +633,9 @@ sfTextInputElement.prototype.GetValuePath=function()
 
 sfTextInputElement.prototype.IsValid=function()
 {
-     if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
+     if(this.JQueryElement.find('.redNaoInputText').val()==""&&this.Options.IsRequired=='y')
      {
-        rnJQuery('#'+this.Id).addClass('has-error');
+         this.JQueryElement.addClass('has-error');
         return false;
      }
 
@@ -646,7 +646,7 @@ sfTextInputElement.prototype.IsValid=function()
 sfTextInputElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoInputText').change(function(){self.FirePropertyChanged();});
+    this.JQueryElement.find( '.redNaoInputText').change(function(){self.FirePropertyChanged();});
     if(this.Options.Placeholder_Icon.ClassName!='')
     {
         this.LoadPlaceHolderIcon(jQueryElement.find('.redNaoInputText'),null,null,this.Options.Placeholder_Icon);
@@ -1173,7 +1173,7 @@ sfTextAreaElement.prototype.GetValueString=function()
 {
     if(this.IsIgnored())
         return {value:''};
-    return  {value:rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').val()};
+    return  {value:this.JQueryElement.find('.redNaoTextAreaInput').val()};
 };
 
 sfTextAreaElement.prototype.SetData=function(data)
@@ -1189,9 +1189,9 @@ sfTextAreaElement.prototype.GetValuePath=function()
 
 sfTextAreaElement.prototype.IsValid=function()
 {
-    if(rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').val()==""&&this.Options.IsRequired=='y')
+    if(this.JQueryElement.find('.redNaoTextAreaInput').val()==""&&this.Options.IsRequired=='y')
     {
-        rnJQuery('#'+this.Id).addClass('has-error');
+        this.JQueryElement.addClass('has-error');
         return false;
     }
     return true;
@@ -1201,9 +1201,9 @@ sfTextAreaElement.prototype.IsValid=function()
 sfTextAreaElement.prototype.GenerationCompleted=function(jQueryElement)
 {
     var self=this;
-    rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').change(function(){self.FirePropertyChanged();});
+    this.JQueryElement.find('.redNaoTextAreaInput').change(function(){self.FirePropertyChanged();});
     if(!isNaN(this.MaxLength))
-        rnJQuery('#'+this.Id+ ' .redNaoTextAreaInput').bind('keyup keydown',function(){
+        this.JQueryElement.find(' .redNaoTextAreaInput').bind('keyup keydown',function(){
             var length=rnJQuery(this).val().length;
             var charactersRemaining=self.MaxLength-length;
             var wordCounter=self.GetElementByClassName('smartFormsCharacterCount');
