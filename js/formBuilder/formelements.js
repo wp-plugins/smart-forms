@@ -617,7 +617,7 @@ sfTextInputElement.prototype.GetValueString=function()
 {
     if(this.IsIgnored())
         return {value:''};
-    return {value:rnJQuery('#'+this.Id+ ' .redNaoInputText').val()};
+    return {value:this.JQueryElement.find('.redNaoInputText').val()};
 };
 
 sfTextInputElement.prototype.SetData=function(data)
@@ -2712,7 +2712,7 @@ sfRedNaoEmail.prototype.GetValueString=function()
 {
     if(this.IsIgnored())
         return {value:''};
-    return {value:rnJQuery('#'+this.Id+ ' .redNaoEmail').val()};
+    return {value:this.JQueryElement.find('.redNaoEmail').val()};
 };
 
 sfRedNaoEmail.prototype.SetData=function(data)
