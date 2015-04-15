@@ -312,3 +312,8 @@ function rednao_smart_forms_execute_op()
 	}
 
 }
+
+function rednao_smart_forms_dont_show_again()
+{
+    update_option('sf_dont_show_again',true);
+}

@@ -49,6 +49,7 @@ add_shortcode('sform','rednao_smart_form_short_code');
 
 add_action('init', 'rednao_smart_forms_init');
 add_action( 'wp_ajax_rednao_smart_forms_save', 'rednao_smart_forms_save' );
+add_action( 'wp_ajax_rednao_smart_forms_dont_show_again', 'rednao_smart_forms_dont_show_again' );
 add_action( 'wp_ajax_rednao_smart_form_short_code_setup', 'rednao_smart_form_short_code_setup' );
 add_action( 'wp_ajax_rednao_smart_forms_entries_list', 'rednao_smart_forms_entries_list' );
 add_action( 'wp_ajax_rednao_smart_forms_save_form_values','rednao_smart_forms_save_form_values');

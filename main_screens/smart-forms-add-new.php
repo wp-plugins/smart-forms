@@ -118,6 +118,63 @@ do_action('smart_forms_load_designer_scripts');
 
 </script>
 
+<?php
+
+if(get_option('sf_dont_show_again')===false)
+{
+?>
+<div style="margin-bottom: 5px; border-style: dashed;border-color: black;border-width: 2px;padding:5px; margin-left: 5px; background-color;background-color: #ffffff" class="bootstrap-wrapper sfSignUpForm" >
+
+    <span style=" vertical-align: middle; font-size:30px;" class="glyphicon glyphicon-envelope"></span>  <p style="vertical-align: middle; display: inline; margin-top: 5px;margin-bottom:5px; font-size: 15px;">Get news and tips directly in your email <a data-toggle="modal" data-target="#signUpModal" style="cursor:hand;cursor:pointer;">Subscribe to the Smart Forms mailing list here</a></p>
+    <div style="float: right">
+
+        <a style="clear: both;cursor: pointer;cursor:hand;" onclick="DontShowSignUpAgain()">Don't show this again</a>
+        <span>|</span>
+        <a style="clear: both;cursor: pointer;cursor:hand;" onclick="rnJQuery('.sfSignUpForm').hide();">Close</a>
+    </div>
+
+</div>
+
+<script>
+    function DontShowSignUpAgain()
+    {
+        var data={};
+        data.action="rednao_smart_forms_dont_show_again";
+        rnJQuery.post(ajaxurl,data,function(result){
+            rnJQuery('.sfSignUpForm').hide();
+        });
+    }
+</script>
+
+<div class="bootstrap-wrapper">
+    <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <form class="modal-content" method="post" target="_blank" action="https://www.aweber.com/scripts/addlead.pl">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Almost done =). Submit your email to register to the newsletter.</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="display: inline-block;width:29%"><label>Email</label></div>
+                    <input style="display:inline-block; width: 70%;" name="email" type="text" placeholder="your@email.com" class="form-control redNaoInputText " value="">
+                    <input type="hidden" name="meta_web_form_id" value="1886998542"/>
+                    <input type="hidden" name="listname" value="awlist3810311"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span>Subscribe</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<?php
+}
+?>
+
+
+
 <div style="text-align: left;" class="bootstrap-wrapper">
 	<button style="min-width:100px;cursor: hand;cursor: pointer;" class="btn btn-success ladda-button" id="smartFormsSaveButton"  data-style="expand-left" onclick="return false;" >
 		<span class="glyphicon glyphicon-floppy-disk"></span><span class="ladda-label">Save</span>
