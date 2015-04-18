@@ -125,7 +125,7 @@ if(get_option('sf_dont_show_again')===false)
 ?>
 <div style="margin-bottom: 5px; border-style: dashed;border-color: black;border-width: 2px;padding:5px; margin-left: 5px; background-color;background-color: #ffffff" class="bootstrap-wrapper sfSignUpForm" >
 
-    <span style=" vertical-align: middle; font-size:30px;" class="glyphicon glyphicon-envelope"></span>  <p style="vertical-align: middle; display: inline; margin-top: 5px;margin-bottom:5px; font-size: 15px;">Get custom templates, news and tips directly in your email <a data-toggle="modal" data-target="#signUpModal" style="cursor:hand;cursor:pointer;">Subscribe to the Smart Forms mailing list here</a></p>
+    <span style=" vertical-align: middle; font-size:30px;" class="glyphicon glyphicon-envelope"></span>  <p style="vertical-align: middle; display: inline; margin-top: 5px;margin-bottom:5px; font-size: 15px;">Get exclusive content, news and tips directly in your email <a data-toggle="modal" data-target="#signUpModal" style="cursor:hand;cursor:pointer;">Subscribe to the Smart Forms mailing list here</a></p>
     <div style="float: right">
 
         <a style="clear: both;cursor: pointer;cursor:hand;" onclick="DontShowSignUpAgain()">Don't show this again</a>
