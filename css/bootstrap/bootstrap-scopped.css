@@ -6323,3 +6323,8 @@
 .bootstrap-wrapper .rednao-control-group.col-sm-1{
   padding-left:0px !important;
 }
+
+.bootstrap-wrapper .sfRequired .rednao_control_label::after{
+  content:" *";
+  color:red;
+}

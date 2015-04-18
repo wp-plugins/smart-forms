@@ -31,6 +31,8 @@ ElementPropertiesBase.prototype.GenerateHtml=function()
     throw 'Abstract Method';
 };
 
+
+
 ElementPropertiesBase.prototype.RefreshProperty=function()
 {
     this.$PropertiesContainer.empty();
@@ -50,7 +52,13 @@ ElementPropertiesBase.prototype.UpdateProperty=function()
 
 ElementPropertiesBase.prototype.RefreshElement=function()
 {
+    var previousClasses=this.FormElement.JQueryElement.attr('class');
+    var newClasses=this.FormElement.GetElementClasses();
+    if(previousClasses.indexOf('SmartFormsElementSelected')>=0)
+        newClasses+=' SmartFormsElementSelected';
+
     var refreshedElements=this.FormElement.RefreshElement();
+    this.FormElement.JQueryElement.attr('class',newClasses);
     refreshedElements.find('input[type=submit],button').click(function(e){e.preventDefault();e.stopPropagation();})
 
 };
@@ -798,12 +806,3 @@ CustomCSSProperty.prototype.GenerateHtml=function()
     return newProperty;
 };
 
-CustomCSSProperty.prototype.RefreshElement=function()
-{
-    var previousClasses=this.FormElement.JQueryElement.attr('class');
-    var newClasses=this.FormElement.GetElementClasses();
-    if(previousClasses.indexOf('SmartFormsElementSelected')>=0)
-        newClasses+=' SmartFormsElementSelected';
-    this.FormElement.JQueryElement.attr('class',newClasses);
-
-};

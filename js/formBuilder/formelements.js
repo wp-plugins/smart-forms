@@ -297,7 +297,11 @@ sfFormElementBase.prototype.AppendElementToContainer=function(jqueryElement)
 
 sfFormElementBase.prototype.GetElementClasses=function()
 {
-    return 'rednao-control-group form-group row '+this.Options.ClassName+' '+this.Options.Spacing+' '+this.Options.CustomCSS;
+    var isRequired='';
+    if(typeof this.Options.IsRequired!='undefined'&&this.Options.IsRequired=='y')
+        isRequired='sfRequired';
+
+    return 'rednao-control-group form-group row '+this.Options.ClassName+' '+this.Options.Spacing+' '+ isRequired+' '+this.Options.CustomCSS;
 };
 
 sfFormElementBase.prototype.GetFriendlyName=function()
