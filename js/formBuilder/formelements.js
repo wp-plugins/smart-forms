@@ -1710,7 +1710,7 @@ sfSelectBasicElement.prototype.GetValuePath=function()
 
 sfSelectBasicElement.prototype.IsValid=function()
 {
-    if(this.Options.IsRequired=='y'&&(this.GetValueString().value==this.Options.DefaultText||rnJQuery('#'+this.Id+ ' .redNaoSelect option:selected').length==0))
+    if(this.Options.IsRequired=='y'&&(this.GetValueString().value==''||rnJQuery('#'+this.Id+ ' .redNaoSelect option:selected').length==0))
     {
         rnJQuery('#'+this.Id).addClass('has-error');
         return false;
