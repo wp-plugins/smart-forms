@@ -147,7 +147,7 @@ class php_entry_saver_base {
 		$this->EntryId=$wpdb->insert_id;
         $this->FormEntryData["_formid"]=$this->EntryId;
 		$this->InsertedValuesString["_formid"]=$this->EntryId;
-		return result;
+		return $result;
 		$result=$this->ParseAndInsertDetail($this->EntryId,$this->FormEntryData,$this->GetFormElementsDictionary());
 		return $result;
 
