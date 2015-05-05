@@ -21,6 +21,13 @@ function SmartFormsGetConditionalHandlerArray()
     return SmartFormsConditionalHandlerArray;
 }
 
+function SmartFormsCalculateCondition(condition,values)
+{
+    condition=new Function('formData','return '+condition.CompiledCondition);
+    return condition(values);
+}
+RedNaoEventManager.Subscribe('CalculateCondition',function(data){return SmartFormsCalculateCondition(data.Condition,data.Values);});
+
 
 /************************************************************************************* Base ***************************************************************************************************/
 function SfConditionalHandlerBase(options)
@@ -61,7 +68,8 @@ SfConditionalHandlerBase.prototype.Initialize=function(form,data)
 SfConditionalHandlerBase.prototype.SubscribeCondition=function(condition,initialData)
 {
     var self=this;
-    this.ConditionFunction=new Function('formData','return '+condition.CompiledCondition);
+    this.Condition=condition;
+    //this.ConditionFunction=new Function('formData','return '+condition.CompiledCondition);
     var fieldsInCondition=[];
     for(var i=0;i<condition.Conditions.length;i++)
         fieldsInCondition.push(condition.Conditions[i].Field);
@@ -82,7 +90,7 @@ SfConditionalHandlerBase.prototype.SubscribeCondition=function(condition,initial
 SfConditionalHandlerBase.prototype.ProcessCondition=function(data)
 {
     var self=this;
-    if(this.ConditionFunction(data))
+    if(RedNaoEventManager.Publish('CalculateCondition',{Condition:this.Condition ,Values:data})) //this.ConditionFunction(data))
     {
         if(this.PreviousActionWasTrue!=1)
         {

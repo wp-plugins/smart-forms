@@ -5,7 +5,15 @@ function RedNaoFormulaManager()
 
     var self=this;
     RedNaoEventManager.Subscribe('formPropertyChanged',function(data){self.PropertyChanged(data)});
+    RedNaoEventManager.Subscribe('CalculateFormula',function(data){return self.CalculateFormula(data.Formula,data.Values);})
 }
+
+
+RedNaoFormulaManager.prototype.CalculateFormula=function (formula,values)
+{
+    formula=new Function('formData','return '+formula.CompiledFormula);
+    return formula(values);
+};
 
 RedNaoFormulaManager.prototype.PropertyChanged=function(data)
 {

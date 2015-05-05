@@ -192,21 +192,43 @@
 			$stepContent.find('.step-pane[data-step="' + target + '"]:first').addClass('active');
 
 			// reset the wizard position to the left
-			this.$element.find('.steps').first().attr('style','margin-left: 0');
+			//this.$element.find('.steps').first().attr('style','margin-left: 0');
 
 			// check if the steps are wider than the container div
 			var totalWidth = 0;
+			var stepWidths=[];
 			this.$element.find('.steps > li').each(function () {
 				totalWidth += $(this).outerWidth();
+				stepWidths.push($(this).outerWidth());
 			});
 			var containerWidth = 0;
 			if (this.$element.find('.actions').length) {
-				containerWidth = this.$element.width() - this.$element.find('.actions').first().outerWidth();
+				containerWidth = this.$element.width();// - this.$element.find('.actions').first().outerWidth();
 			} else {
 				containerWidth = this.$element.width();
 			}
-			if (totalWidth > containerWidth) {
-			
+
+			//created by me
+			var startPosition=this.$element.find('li.active').position().left;
+			var marginLeft=Math.abs(parseInt(this.$element.find('.steps').css('margin-left').replace('px','')));
+			var activeStepWidth=this.$element.find('li.active').outerWidth();
+
+			//var startPosition=activeStepLeft-marginLeft;
+			var endPosition=startPosition+activeStepWidth;
+
+			if(startPosition<0|| endPosition>this.$element.outerWidth() )
+			{
+				var activeStepIndex = this.$element.find('li.active').first().index();
+				var margin = 0;
+				for (var i = 0; i < activeStepIndex; i++)
+				{
+					margin -= stepWidths[i];
+				}
+				this.$element.find('.steps').first().attr('style', 'margin-left: ' + margin + 'px');
+			}
+			//end of my awesome creation
+			/*if (totalWidth > containerWidth) {
+
 				// set the position so that the last step is on the right
 				var newMargin = totalWidth - containerWidth;
 				this.$element.find('.steps').first().attr('style','margin-left: -' + newMargin + 'px');
@@ -221,7 +243,7 @@
 						this.$element.find('.steps').first().attr('style','margin-left: -' + newMargin + 'px');
 					}
 				}
-			}
+			}*/
 
 			// only fire changed event after initializing
 			if(typeof(this.initialized) !== 'undefined' ) {

@@ -264,7 +264,7 @@ function rednao_smart_form_send_test_email()
 
 	include_once(SMART_FORMS_DIR.'php_classes/save/php_entry_saver_base.php');
 	$entrySaver=new php_entry_saver_base("","","");
-    if($entrySaver->SendFormEmail($valueArray,$entryData,$elementOptions,true))
+    if($entrySaver->SendFormEmail($valueArray,$entryData,$elementOptions,null,true))
         echo '{"Message":"'.__("Email sent successfully").'"}';
     else
         echo '{"Message":"'.__("There was an error sending the email, please check the configuration").'"}';

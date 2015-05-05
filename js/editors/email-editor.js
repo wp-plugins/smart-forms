@@ -121,7 +121,7 @@ RedNaoEmailEditor.prototype.UpdateFromEmail=function()
 RedNaoEmailEditor.prototype.UpdateSelectedEmail=function()
 {
     var selectedToEmails=rnJQuery('#redNaoToEmail').select2('val');
-
+    selectedToEmails=rnJQuery.unique(selectedToEmails);
     var selectedEmailsString="";
     for(var i=0;i<selectedToEmails.length;i++)
     {
@@ -155,7 +155,7 @@ RedNaoEmailEditor.prototype.SetupEmailTo=function(emailToOptions,alreadySelected
             i--;
             continue;
         }
-        if(alreadySelectedEmails.indexOf("[field")!=0)
+        if(alreadySelectedEmails[i].indexOf("[field")!=0)
         {
             selectOptions+='<option value="'+alreadySelectedEmails[i]+'">'+alreadySelectedEmails[i]+'</option>'
         }
@@ -172,14 +172,46 @@ RedNaoEmailEditor.prototype.SetupEmailTo=function(emailToOptions,alreadySelected
     if(!multiple)
         select2Options.maximumSelectionSize=1;
 
+    var self=this;
+    select2Options.formatSelection=function(state)
+    {
+        if(rnJQuery(state.element[0]).data('type')=='multiple')
+        {
+            var id=rnJQuery(state.element[0]).data('field-id');
+            var $field=rnJQuery('<span style="color:blue;text-decoration: underline;cursor:hand;cursor:pointer;">'+RedNaoEscapeHtml(state.text)+'</span>');
+            $field.click(function()
+            {
+                self.OpenMultipleOptionsFieldDialog(id);
+            });
+
+            return $field;
+
+        }
+        return state.text;
+    };
+
     jQuerySelect.empty();
     jQuerySelect.append(selectOptions);
+    var self=this;
     jQuerySelect.select2(
         select2Options
         ).unbind("dropdown-closed")
+        .off("dropdown-closed")
         .on("dropdown-closed", function(event) {
             callBack(event.val);
 
+        })
+        .off('select2-selecting')
+        .on('select2-selecting',function(event)
+        {
+            var $selectedOption=rnJQuery(event.object.element[0]);
+            if($selectedOption.data('type')=='multiple')
+            {
+                var id=$selectedOption.data('field-id');
+                event.preventDefault();
+                jQuerySelect.select2('close');
+                self.OpenMultipleOptionsFieldDialog(id);
+            }
         });
 
     jQuerySelect.select2('val',alreadySelectedEmails);
@@ -192,6 +224,81 @@ RedNaoEmailEditor.prototype.SetupEmailTo=function(emailToOptions,alreadySelected
 
         }
     });
+};
+
+RedNaoEmailEditor.prototype.OpenMultipleOptionsFieldDialog=function(fieldId)
+{
+    var selectedMultipleOptions=this.SelectedEmail.MultipleOptionsToEmails[fieldId];
+    if(typeof selectedMultipleOptions=='undefined')
+        selectedMultipleOptions=[];
+
+    var fieldOptions='';
+    var selectedField;
+    var i;
+    for(i=0;i<this.FormElements.length;i++)
+    {
+        if(this.FormElements[i].Id==fieldId)
+        {
+            selectedField=this.FormElements[i];
+            fieldOptions=selectedField.Options.Options;
+            break;
+        }
+    }
+
+    var table='<table class="table table-striped""><thead><tr><th>When this option is selected</th><th>Email To (If multiple emails, separate them with a comma)</th></tr></thead><tbody>';
+    for(i=0;i<fieldOptions.length;i++)
+    {
+        var emails='';
+        for(var t=0;t<selectedMultipleOptions.length;t++)
+        {
+            if(selectedMultipleOptions[i].Label==fieldOptions[i].label)
+                emails=selectedMultipleOptions[i].EmailTo;
+        }
+        table+=' <tr class="sfOptionRow">' +
+        '        <td><label class="sfOptionLabel">'+RedNaoEscapeHtml(fieldOptions[i].label)+'</label></td>' +
+        '        <td><input  type="text" class="sfEmailTo form-control" value="'+RedNaoEscapeHtml(emails)+'"/> </td>' +
+        '       </tr>';
+    }
+    table+='</tbody></table>';
+    var self=this;
+    var $dialog=rnJQuery(table).RNDialog({
+        ButtonClick:function(action,button){if(action=='accept')self.AddMultipleOptionsEmail(fieldId,selectedField.Options.Label,$dialog);},
+        Width:'750px',
+        Buttons:[
+            {Label:'Cancel',Id:'dialogCancel',Style:'danger',Icon:'glyphicon glyphicon-remove',Action:'cancel'},
+            {Label:'Apply',Id:'dialogAccept',Style:'success',Icon:'glyphicon glyphicon-ok',Action:'accept'}
+        ]
+
+    });
+
+    $dialog.RNDialog('Show');
+
+};
+
+RedNaoEmailEditor.prototype.AddMultipleOptionsEmail=function(fieldId,label,$dialog)
+{
+    var optionRows=$dialog.find('.sfOptionRow');
+    var options=[];
+    for(var i=0;i<optionRows.length;i++)
+    {
+        var $row=rnJQuery(optionRows[i]);
+        options.push({
+            Label:$row.find('.sfOptionLabel').text(),
+            EmailTo:$row.find('.sfEmailTo').val()
+
+        });
+    }
+
+    this.SelectedEmail.MultipleOptionsToEmails[fieldId]=options;
+
+    $dialog.RNDialog('Hide');
+    var field='[field '+fieldId+']';
+
+    var select=rnJQuery('#redNaoToEmail');
+    var selectedValues=select.select2('val');
+    selectedValues.push(field);
+    select.select2('val',selectedValues);
+
 };
 
 RedNaoEmailEditor.prototype.AddEmailIfValid=function(text,select,multiple)
@@ -227,6 +334,8 @@ RedNaoEmailEditor.prototype.OpenEmailEditor=function(redNaoFormElements,emails)
     var formList=rnJQuery('#redNaoEmailFormFields');
     formList.empty();
     this.EmailToOptions="";
+    this.MultiSelectOptions="";
+    this.FormElements=redNaoFormElements;
     for(var i=0;i<redNaoFormElements.length;i++)
     {
         if(redNaoFormElements[i].StoresInformation())
@@ -234,6 +343,9 @@ RedNaoEmailEditor.prototype.OpenEmailEditor=function(redNaoFormElements,emails)
             formList.append('<li><button onclick="RedNaoEmailEditorVar.AddFieldToEmail(\''+redNaoFormElements[i].Options.Id+'\');">'+redNaoFormElements[i].Options.Label+'</button></li>');
             if(redNaoFormElements[i].Options.ClassName=="rednaoemail")
                 this.EmailToOptions+='<option value="[field '+redNaoFormElements[i].Options.Id+']">'+redNaoFormElements[i].Options.Label+'</option>';
+            if(redNaoFormElements[i].Options.ClassName=="rednaomultipleradios"||redNaoFormElements[i].Options.ClassName=="rednaomultiplecheckboxes"
+                ||redNaoFormElements[i].Options.ClassName=="rednaoselectbasic"||redNaoFormElements[i].Options.ClassName=="rednaosearchablelist")
+                this.MultiSelectOptions+='<option data-type="multiple" data-field-id="'+redNaoFormElements[i].Options.Id+'" value="[field '+redNaoFormElements[i].Options.Id+']">'+redNaoFormElements[i].Options.Label+'</option>';
         }
     }
 
@@ -249,6 +361,7 @@ RedNaoEmailEditor.prototype.OpenEmailEditor=function(redNaoFormElements,emails)
             createdItem.ToEmail='';
             createdItem.EmailSubject='';
             createdItem.EmailText='';
+            createdItem.MultipleOptionsToEmails={};
         },
         ItemSelected:function(item){self.EmailSelected(item)},
         CreationLabel:'Click here to create a new email',
@@ -262,10 +375,12 @@ RedNaoEmailEditor.prototype.EmailSelected=function(email)
     if(this.SelectedEmail!=null)
         this.UpdateSelectedEmail();
     this.SelectedEmail=email;
+    if(typeof this.SelectedEmail.MultipleOptionsToEmails=='undefined')
+        this.SelectedEmail.MultipleOptionsToEmails={};
     rnJQuery('#redNaoFromName').val(email.FromName);
     rnJQuery('#redNaoEmailSubject').val(email.EmailSubject);
     var self=this;
-    this.SetupEmailTo(this.EmailToOptions,RedNaoGetValueOrEmpty(email.ToEmail).split(','),rnJQuery('#redNaoToEmail'),function(text){self.AddEmailIfValid(text,rnJQuery('#redNaoToEmail'),true);},true);
+    this.SetupEmailTo(this.EmailToOptions+this.MultiSelectOptions,RedNaoGetValueOrEmpty(email.ToEmail).split(','),rnJQuery('#redNaoToEmail'),function(text){self.AddEmailIfValid(text,rnJQuery('#redNaoToEmail'),true);},true);
     this.SetupEmailTo(this.EmailToOptions,RedNaoGetValueOrEmpty(email.FromEmail).split(','),rnJQuery('#redNaoFromEmail'),function(text){self.AddEmailIfValid(text,rnJQuery('#redNaoFromEmail'),false);},false);
 
 

@@ -113,6 +113,7 @@ SmartFormsPopUpWizard.prototype.InitializeDialog=function()
                         '</div>'+
 
                     '</div>'+
+                    '<button style="position: absolute !important;top: 0;font-size:25px;right: 5px;" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>'+
                 '</div>'+
             '</div>'+
         '</div>');

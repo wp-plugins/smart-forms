@@ -40,7 +40,7 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
     wp_enqueue_style('smart-forms-custom-elements',plugin_dir_url(__FILE__).'css/formBuilder/custom.css');
 	wp_enqueue_style('form-builder-icheck-normal',SMART_FORMS_DIR_URL.'js/utilities/iCheck/skins/minimal/minimal.css');
 	wp_enqueue_style('form-builder-icheck-normal-red',SMART_FORMS_DIR_URL.'js/utilities/iCheck/skins/minimal/red.css');
-    echo "<script type=\"text/javascript\">var ajaxurl = '".admin_url('admin-ajax.php')."';</script>";
+
     $random=rand();
 
 	if(!defined ("SMART_DONATIONS_PLUGIN_URL"))
@@ -51,6 +51,7 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
 
     if($returnComponent==false)
     {
+        echo "<script type=\"text/javascript\">var ajaxurl = '".admin_url('admin-ajax.php')."';</script>";
 		echo "<div class='widget'>";
         if($options==null)
             return null;
@@ -83,7 +84,7 @@ function rednao_smart_forms_load_form($title,$form_id,$returnComponent)
     }else{
         if($options==null)
             return "";
-        return "<div id='formContainer$random' class='rednaoFormContainer bootstrap-wrapper'></div>
+        return "<script type='text/javascript'>var ajaxurl = '".admin_url('admin-ajax.php')."';</script><div id='formContainer$random' class='rednaoFormContainer bootstrap-wrapper'></div>
             <script>
             	var smartFormsCurrentTime=new Date('".date('D M d Y H:i:s O')."');
                 var smartFormsPath=\"".plugin_dir_url(__FILE__)."\";

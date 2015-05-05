@@ -1,5 +1,7 @@
 function SmartFormsWizardStep(Options)
 {
+    if(typeof Options=='undefined')
+        Options={};
     this.Options=Options;
 }
 

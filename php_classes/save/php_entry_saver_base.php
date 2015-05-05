@@ -87,7 +87,7 @@ class php_entry_saver_base {
         if($this->FormOptions["SendNotificationEmail"]=="y")
 		{
 			foreach($this->FormOptions["Emails"] as $email)
-            	$this->SendFormEmail($email,$this->FormEntryData,$this->ElementOptions,false);
+            	$this->SendFormEmail($email,$this->FormEntryData,$this->ElementOptions,$preInsertedEntry, false);
 		}
 
 
@@ -147,13 +147,14 @@ class php_entry_saver_base {
 		$this->EntryId=$wpdb->insert_id;
         $this->FormEntryData["_formid"]=$this->EntryId;
 		$this->InsertedValuesString["_formid"]=$this->EntryId;
+		return result;
 		$result=$this->ParseAndInsertDetail($this->EntryId,$this->FormEntryData,$this->GetFormElementsDictionary());
 		return $result;
 
 
     }
 
-    public function SendFormEmail($formOptions,$entryData,$elementOptions,$useTestData)
+    public function SendFormEmail($formOptions,$entryData,$elementOptions,$preInsertEntry,$useTestData)
     {
         $EmailText=$formOptions["EmailText"];
         $FromName=$formOptions["FromName"];
@@ -215,6 +216,7 @@ class php_entry_saver_base {
         {
 
 			$toEmailArray=explode(",",$ToEmail);
+            $finalToEmails=array();
 			for($i=0;$i<count($toEmailArray);$i++)
 			{
 				if(strpos($toEmailArray[$i],"[field")===0)
@@ -223,18 +225,65 @@ class php_entry_saver_base {
 					if(count($matches[1])>0)
 					{
 						$field=$matches[1][0];
-						$value=GetValueByField($this->StringBuilder,$field,$entryData,$elementOptions,$useTestData);
-						$toEmailArray[$i]=$value;
-					}else
-						$toEmailArray[$i]="";
-				}
+
+						//$value=GetValueByField($this->StringBuilder,$field,$entryData,$elementOptions,$useTestData);
+                        $value=$this->GetEmailsFromField($formOptions, $field,$preInsertEntry);
+						$toEmailArray=array_merge($toEmailArray,$value);
+					}
+
+
+				}else
+                {
+                    if(trim($toEmailArray[$i])!="")
+                        array_push($finalToEmails,$toEmailArray[$i]);
+                }
+
 			}
 			$toEmailArray=array_filter($toEmailArray);
-            return wp_mail($toEmailArray, $EmailSubject, $EmailText, $headers);
+            return wp_mail($finalToEmails, $EmailSubject, $EmailText, $headers);
         }
 
         return false;
     }
+
+    private function GetEmailsFromField($emailOptions,$fieldId,$preInsertEntry)
+    {
+        $fieldData=$preInsertEntry->GetField($fieldId);
+        if($fieldData["ClassName"]=="rednaomultipleradios"||$fieldData["ClassName"]=="rednaomultiplecheckboxes"
+            ||$fieldData["ClassName"]=="rednaoselectbasic"||$fieldData["ClassName"]=="rednaosearchablelist")
+        {
+            $selectedValues= $preInsertEntry->GetFieldValue($fieldId, SFSerializationType::ARRAYLIST);
+            if(!isset($emailOptions["MultipleOptionsToEmails"][$fieldId]))
+                return array();
+            $emailsToReturn=array();
+            $optionsToEmail=$emailOptions["MultipleOptionsToEmails"][$fieldId];
+            foreach($selectedValues as $selectedValue)
+                foreach($optionsToEmail as $optionToEmail)
+                    if($selectedValue["label"]==$optionToEmail["Label"])
+                    {
+                        $emails=$optionToEmail["EmailTo"];
+                        if(trim($emails)=="")
+                            continue;
+                        $emailsToReturn=array_merge($emailsToReturn,explode(",",$emails));
+                    }
+
+            return $emailsToReturn;
+
+
+        }
+        else
+        {
+            $text=$preInsertEntry->GetFieldValue($fieldId, SFSerializationType::TEXT);
+            if(trim($text)=="")
+                return array();
+            else
+                return array($text);
+
+        }
+
+
+    }
+
 
     private function CaptchaIsValid()
     {

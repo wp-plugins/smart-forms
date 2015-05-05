@@ -22,6 +22,9 @@ wp_enqueue_script('rednap-fuelux',SMART_FORMS_DIR_URL.'js/utilities/fuelux/wizar
 
 
 wp_enqueue_script('smart-forms-event-manager',SMART_FORMS_DIR_URL.'js/formBuilder/eventmanager.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-wizard-steps',SMART_FORMS_DIR_URL. 'js/utilities/popup-wizard/wizard-steps.js',array('smart-forms-form-elements','isolated-slider'));
+wp_enqueue_script('smart-forms-popup-wizard',SMART_FORMS_DIR_URL. 'js/utilities/popup-wizard/popup-wizard.js',array('smart-forms-wizard-steps'));
+wp_enqueue_script('smart-forms-redirect-to-wizard-steps',SMART_FORMS_DIR_URL. 'js/wizards/redirect-to-wizard-steps.js',array('smart-forms-popup-wizard'));
 wp_enqueue_script('smart-forms-form-elements',SMART_FORMS_DIR_URL.'js/formBuilder/formelements.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-list-manager',SMART_FORMS_DIR_URL.'js/utilities/rnListManager.js',array('isolated-slider'));
 wp_enqueue_script('smart-forms-formula-window',SMART_FORMS_DIR_URL.'js/formBuilder/formula/formulawindow.js',array('isolated-slider'));
@@ -393,30 +396,49 @@ Tip:If your rule is not working try adding !important (e.g. background-color:red
     </table>
 </div>
 
-<div id="smartFormsAfterSubmitDiv" style="display: none;padding: 10px" class="form-horizontal bootstrap-wrapper">
+<div class="bootstrap-wrapper">
+    <table id="smartFormsAfterSubmitDiv" style="display: none;" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Activate</th>
+                <th>Action</th>
+            </tr>
+        </thead>
 
-	<div class="row">
-		<input type="checkbox"  id="smartFormsSendNotificationEmail"/>
-		<span><?php echo __("Send notification email"); ?></span>
-		<button id="redNaoEditEmailButton" disabled="disabled"><?php echo __("Edit Email"); ?></button>
-	</div>
+        <tbody>
+            <tr class="sfAfterSubmitAction">
+                <td style="text-align: center"> <input type="checkbox"  id="smartFormsSendNotificationEmail"/></td>
+                <td>
+                    <span><?php echo __("Send notification email"); ?></span>
+                    <button id="redNaoEditEmailButton" class="btn btn-default" disabled="disabled"><?php echo __("Edit Email"); ?></button>
+                </td>
+            </tr>
 
-    <div  class="row">
-		<input  type="checkbox"  id="redNaoRedirectToCB"/>
-		<span ><?php echo __("Redirect to"); ?></span>
-		<input type="text" style="width: 600px;" id="redirectToInput" disabled="disabled" class="redNaoDisabled"/>
-		<button disabled="disabled" id="smartFormsAddParameter">Add Parameters to Url</button>
-    </div>
+            <tr class="sfAfterSubmitAction">
+                <td style="text-align: center"><input  type="checkbox"   id="redNaoRedirectToCB"/></td>
+                <td>
+                    <span ><?php echo __("Redirect to"); ?></span>
+                    <table id="redirectToOptionsItems">
 
-
-    <div class="row">
-		<input style="vertical-align: top" type="checkbox"  id="redNaoAlertMessageCB"/>
-		<span style="vertical-align: top"><?php echo __("Show alert message"); ?></span>
-		<textarea style="width:250px;height: 70px;" id="alertMessageInput" disabled="disabled" class="redNaoDisabled"></textarea>
-    </div>
+                    </table>
 
 
+                </td>
+            </tr>
+
+            <tr class="sfAfterSubmitAction">
+                <td style="text-align: center"><input style="vertical-align: top"  type="checkbox"  id="redNaoAlertMessageCB"/></td>
+                <td>
+                    <span style="vertical-align: top"><?php echo __("Show alert message"); ?></span>
+                    <textarea style="width:250px;height: 70px;" id="alertMessageInput" disabled="disabled" ></textarea>
+                </td>
+            </tr>
+
+
+        </tbody>
+    </table>
 </div>
+
 
 
 <div id="smartFormsCSSDiv" style="display: none;padding: 10px" class="form-horizontal bootstrap-wrapper">

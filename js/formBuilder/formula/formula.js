@@ -30,11 +30,12 @@ RedNaoFormula.prototype.UpdateFieldWithValue=function(value)
 
 RedNaoFormula.prototype.GetValueFromFormula=function(values)
 {
-    var formula=new Function('formData','return '+this.Formula.CompiledFormula);
 
-    var calculatedValue=formula(values);
+    var calculatedValue=RedNaoEventManager.Publish('CalculateFormula',{Formula:this.Formula,Values:values});
+
     if(typeof calculatedValue=='number'&&isNaN(calculatedValue))
         calculatedValue=0;
 
     return calculatedValue;
 };
+

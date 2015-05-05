@@ -3,6 +3,7 @@ function smartFormGenerator(options){
     this.Extensions=[];
     RedNaoEventManager.Publish('GetClientExtension',{Generator:this,Extensions:this.Extensions});
     this.MultipleStepsManager=null;
+    this.RedirectUrl='';
     this.InitializeConditionalLogic();
     this.SetDefaultIfUndefined('InvalidInputMessage','*Please fill all the required fields');
     this.SubmittingThroughIframe=false;
@@ -29,6 +30,16 @@ function smartFormGenerator(options){
     this.containerName=options.container;
     if(typeof this.client_form_options.CSS!='undefined')
         this.CreateCSS();
+    if(this.client_form_options.redirect_to_cb=="y"&&typeof this.client_form_options.redirect_to=='string')
+    {
+        this.client_form_options.redirect_to={
+            URL:this.client_form_options.redirect_to,
+            RCSettings:{
+                Redirect:'always',
+                ConditionSettings:[]
+            }
+        }
+    }
     this.CreateForm();
 
 }
@@ -191,7 +202,7 @@ smartFormGenerator.prototype.CreatePayPalHiddenFields=function()
         );
 
     if(RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)=="y")
-        this.JQueryForm.append('<input type="hidden" name="return" value="'+this.client_form_options.redirect_to+'">');
+        this.JQueryForm.append('<input type="hidden" name="return" value="">');
 
 };
 
@@ -279,6 +290,7 @@ smartFormGenerator.prototype.SaveForm=function()
 
     }
 
+    this.RedirectUrl=this.ProcessRedirectUrl();
     if(RedNaoGetValueOrNull(this.client_form_options.Campaign))
         this.SendToSmartDonations(formValues,isUsingAFileUploader);
     else
@@ -368,6 +380,7 @@ smartFormGenerator.prototype.SendFilesWithForm=function(data,formValues)
 //noinspection JSUnusedLocalSymbols
 smartFormGenerator.prototype.SendToSmartDonations=function(formValues,isUsingAFileUploader)
 {
+    this.JQueryForm.find('input[name="return"]').val(this.RedirectUrl);
     if(RedNaoPathExists(this.client_form_options,'Formulas.DonationFormula'))
     {
         //noinspection JSUnresolvedVariable
@@ -464,21 +477,34 @@ smartFormGenerator.prototype.SaveCompleted=function(result,formValues){
 
     if(RedNaoGetValueOrEmpty(this.client_form_options.redirect_to_cb)=="y")
     {
-        window.location=this.ProcessRedirectUrl(this.client_form_options.redirect_to, result.insertedValues,formValues);
+        window.location=this.RedirectUrl;
     }
 
     this.CreateForm();
 
 };
 
-smartFormGenerator.prototype.ProcessRedirectUrl=function(url,insertedValues,formValues)
+smartFormGenerator.prototype.ProcessRedirectUrl=function()
 {
-    var regEx=/{([^}]+)}/g;
+    var redirectOptions=this.client_form_options.redirect_to;
+    var formValues=this.GetCurrentData();
+    var i;
+    var url='';
+    var redirectToUse=null;
+    for(i=0;i<redirectOptions.length;i++)
+    {
+        if(redirectOptions[i].RCSettings.Redirect=='always'||RedNaoEventManager.Publish('CalculateCondition',{Condition:redirectOptions[i].RCSettings.ConditionSettings ,Values:formValues}))
+        {
+            url=redirectOptions[i].URL;
+        }
+    }
+
+        var regEx=/{([^}]+)}/g;
     var matches;
 
     while(matches=regEx.exec(url))
     {
-        for(var i=0;i<matches.length;i++)
+        for(i=0;i<matches.length;i++)
         {
             if(matches[i][0]=='{')
                 continue;

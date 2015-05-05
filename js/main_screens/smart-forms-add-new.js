@@ -12,6 +12,8 @@ function SmartFormsAddNew()
     this.RestoreDefault();
     this.Emails=[{ToEmail:"",FromEmail:"",Name:"Default",FromName:"",EmailSubject:"",EmailText:""}];
     this.ExtensionData={};
+    this.RedirectToOptions=[this.CreateEmptyRedirectOption()];
+    this.RedirectToMode='s';
     if(typeof smartFormsOptions!='undefined')
     {
         options=smartFormsOptions;
@@ -42,12 +44,23 @@ function SmartFormsAddNew()
             }
     }
 
+
+
+
+
     if(typeof smartFormClientOptions!='undefined')
     {
         rnJQuery('#smartFormsJavascriptText').val(smartFormClientOptions.JavascriptCode);
         if(typeof smartFormClientOptions.CSS!='undefined')
             rnJQuery('#smartFormsCSSText').val(smartFormClientOptions.CSS);
-        rnJQuery('#redirectToInput').val(RedNaoGetValueOrEmpty(smartFormClientOptions.redirect_to));
+
+        if(typeof smartFormClientOptions.redirect_to=='string')
+            this.RedirectToOptions[0].URL=smartFormClientOptions.redirect_to;
+        else
+            if(typeof smartFormClientOptions.redirect_to!='undefined')
+                this.RedirectToOptions=smartFormClientOptions.redirect_to;
+
+
         rnJQuery('#alertMessageInput').val(RedNaoGetValueOrEmpty(smartFormClientOptions.alert_message));
         if(RedNaoGetValueOrEmpty(smartFormClientOptions.redirect_to_cb)=='y')
             rnJQuery('#redNaoRedirectToCB').attr('checked','checked');
@@ -66,7 +79,7 @@ function SmartFormsAddNew()
                 this.ExtensionData[property].Client=smartFormClientOptions.Extensions[property];
             }
     }
-
+    this.LoadRedirectToInfo();
 
     var formElements=[];
     if(typeof smartFormsElementOptions!='undefined')
@@ -80,15 +93,8 @@ function SmartFormsAddNew()
     rnJQuery('#smartFormsBasic').click(self.SmartFormsTagClicked);
     rnJQuery('#smartFormsSaveButton').click(function(e){self.SaveForm(e);});
 
-    rnJQuery('#smartFormsSendNotificationEmail').change(function(){self.NotifyToChanged()});
-    rnJQuery('#smartFormsSendNotificationEmail').change();
+
     rnJQuery('#redNaoEditEmailButton').click(function(e){e.preventDefault();self.EditEmailClicked();});
-    rnJQuery('#redNaoRedirectToCB').change(function(){
-        self.DisableOnEmpty(rnJQuery(this),rnJQuery('#redirectToInput'));
-        self.DisableOnEmpty(rnJQuery(this),rnJQuery('#smartFormsAddParameter'));
-    });
-    rnJQuery('#redNaoAlertMessageCB').change(function(){self.DisableOnEmpty(rnJQuery(this),rnJQuery('#alertMessageInput'))});
-    rnJQuery('#smartFormsAddParameter').click(function(e){e.preventDefault();self.OpenParameterPicker();});
     rnJQuery('#redNaoRedirectToCB').change();
     rnJQuery('#redNaoAlertMessageCB').change();
     rnJQuery('#sfApplyCss').click(function(){self.ApplyCustomCSS();});
@@ -109,8 +115,35 @@ function SmartFormsAddNew()
 
     this.ApplyCustomCSS();
     self.PublishToSubscribers('OnLoadComplete');
+    this.InitializeAfterSubmitUI();
 
 }
+
+
+
+SmartFormsAddNew.prototype.InitializeAfterSubmitUI=function()
+{
+    rnJQuery('#smartFormsAfterSubmitDiv .sfAfterSubmitAction').each(
+        function()
+        {
+            var $row=rnJQuery(this);
+            $row.find('td:first input[type="checkbox"]').change(
+                function()
+                {
+                    $actionsContainer=rnJQuery(this).parent().parent().find('td:nth-child(2)');
+                    if(rnJQuery(this).is(':checked'))
+                    {
+                        $actionsContainer.find('button,input[type=text],textarea').removeAttr('disabled');
+                        $actionsContainer.find('span').removeClass('text-muted');
+                    }else{
+                        $actionsContainer.find('button,input[type=text],textarea').attr('disabled','disabled');
+                        $actionsContainer.find('span').addClass('text-muted');
+                    }
+                }
+            ).change();
+        }
+    );
+};
 
 SmartFormsAddNew.prototype.ApplyCustomCSS=function()
 {
@@ -129,16 +162,15 @@ SmartFormsAddNew.prototype.PublishToSubscribers=function(methodName,args)
 };
 
 
-SmartFormsAddNew.prototype.OpenParameterPicker=function()
+SmartFormsAddNew.prototype.OpenParameterPicker=function($row)
 {
     var self=this;
     this.ShowFieldPicker('Select the fields you want to send as parameters to the redirect page',this.FormBuilder.RedNaoFormElements.slice(0),function(success,selectedFields){
-                                                                                                                                                    if(success)
-                                                                                                                                                         self.AddFieldsToRedirectUrl(selectedFields);});
+                                                                                                                                                    if(success)self.AddFieldsToRedirectUrl(selectedFields,$row);});
 };
 
 
-SmartFormsAddNew.prototype.AddFieldsToRedirectUrl=function(selectedFields)
+SmartFormsAddNew.prototype.AddFieldsToRedirectUrl=function(selectedFields,$row)
 {
     var parameterString="";
     for(var i=0;i<selectedFields.length;i++)
@@ -147,7 +179,7 @@ SmartFormsAddNew.prototype.AddFieldsToRedirectUrl=function(selectedFields)
     }
     parameterString=parameterString.substring(0,parameterString.length-1);
 
-    var currentRedirectUrl=rnJQuery.trim(rnJQuery('#redirectToInput').val());
+    var currentRedirectUrl=rnJQuery.trim($row.find('.redirectToInput').val());
     if(currentRedirectUrl.indexOf('?')>=0)
         currentRedirectUrl+='&';
     else
@@ -158,7 +190,7 @@ SmartFormsAddNew.prototype.AddFieldsToRedirectUrl=function(selectedFields)
     }
     currentRedirectUrl+=parameterString;
 
-    rnJQuery('#redirectToInput').val(currentRedirectUrl);
+    $row.find('.redirectToInput').val(currentRedirectUrl).change();
 
 
 
@@ -224,18 +256,6 @@ SmartFormsAddNew.prototype.ShowFieldPicker=function(popUpTitle,formElements,call
 
 };
 
-SmartFormsAddNew.prototype.DisableOnEmpty=function(checkbox,elementToDisable)
-{
-    if(checkbox.is(':checked'))
-    {
-        elementToDisable.removeAttr('disabled');
-        elementToDisable.removeClass('redNaoDisabled');
-    }else
-    {
-        elementToDisable.attr('disabled','disabled');
-        elementToDisable.addClass('redNaoDisabled');
-    }
-};
 
 
 SmartFormsAddNew.prototype.OpenFormulaBuilder=function(formElement,propertyName,additionalInformation,image)
@@ -246,14 +266,6 @@ SmartFormsAddNew.prototype.OpenFormulaBuilder=function(formElement,propertyName,
 SmartFormsAddNew.prototype.EditEmailClicked=function()
 {
     RedNaoEmailEditorVar.OpenEmailEditor(this.FormBuilder.RedNaoFormElements,this.Emails);
-};
-
-SmartFormsAddNew.prototype.NotifyToChanged=function()
-{
-    if(rnJQuery('#smartFormsSendNotificationEmail').is(':checked'))
-        rnJQuery('#redNaoEditEmailButton').removeAttr('disabled');
-    else
-        rnJQuery('#redNaoEditEmailButton').attr('disabled','disabled');
 };
 
 
@@ -404,7 +416,7 @@ SmartFormsAddNew.prototype.GetClientFormOptions=function(usesCaptcha)
         UsesCaptcha:usesCaptcha,
         alert_message:rnJQuery('#alertMessageInput').val(),
         alert_message_cb:(rnJQuery('#redNaoAlertMessageCB').is(':checked')?'y':'n'),
-        redirect_to:rnJQuery('#redirectToInput').val(),
+        redirect_to:this.RedirectToOptions,
         redirect_to_cb:(rnJQuery('#redNaoRedirectToCB').is(':checked')?'y':'n'),
         Campaign:rnJQuery('#redNaoCampaign').val(),
         PayPalEmail:rnJQuery('#smartDonationsEmail').val(),
@@ -550,6 +562,128 @@ SmartFormsAddNew.prototype.GoToCustomTab=function(tabIndex)
 {
     this.ActivateTab("smartFormsCustom"+tabIndex.toString());
 };
+
+
+//------------------------------------------------------------------------------------------------------------------------------------------------RedirectToUIConfiguration------------------------------------------------------------------------------------------------------------------------------
+SmartFormsAddNew.prototype.LoadRedirectToInfo=function(redirectOptions)
+{
+
+    for(var i=0;i<this.RedirectToOptions.length;i++)
+    {
+        var $row=this.CreateRedirectToOption(this.RedirectToOptions[i]);
+        if(i==0)
+            $row.find('.sfDelete').remove();
+    }
+    this.ValidateRedirectToMode();
+};
+
+
+SmartFormsAddNew.prototype.CreateRedirectToOption=function(redirectOption)
+{
+
+    var $row=rnJQuery('<tr>'+
+    '<td style="padding-bottom:3px;"><input type="text" style="width: 600px !important;display: inline;" class="redirectToInput form-control"  /></td>'+
+    '<td style="padding-bottom:3px;">'+
+    '<button class="btn btn-default smartFormsAddParameter" >Add Parameters to Url</button>'+
+    '<span  class="addConditionLogic glyphicon glyphicon glyphicon-link sfConditionLogic" style="cursor: pointer; cursor:hand;margin-left:5px;" title="Add/Edit conditional logic"></span>'+
+    '<span  class="glyphicon glyphicon glyphicon-minus sfDelete" style="cursor: pointer; cursor:hand;margin-left:5px;" title="Delete row"></span>'+
+    '</td>'+
+    '</tr>');
+
+    var self=this;
+    $row.find('.smartFormsAddParameter').click(function(e){e.preventDefault();self.OpenParameterPicker($row);});
+    $row.find('.redirectToInput').val(redirectOption.URL);
+
+
+    $row.find('.redirectToInput').change(function()
+    {
+        redirectOption.URL=rnJQuery(this).val();
+    });
+    $row.find('.addConditionLogic').click(function()
+    {
+        if(!rnJQuery('#redNaoRedirectToCB').is(':checked'))
+            return;
+
+        var pop=new SmartFormsPopUpWizard(
+            {
+                Steps:[new SFRedirectWizardCondition(self.FormBuilder.RedNaoFormElements,redirectOption.URL)],
+                SavedData:redirectOption,
+                OnFinish:function(data){
+                    self.ValidateRedirectToMode();
+                }
+            });
+        pop.Show();
+    });
+
+    $row.find('.sfDelete').click(function()
+    {
+        rnJQuery.RNGetConfirmationDialog().ShowConfirmation('Deleting row','Are you sure you want to delete the row?',
+            function(){
+                var index=rnJQuery.inArray(redirectOption,self.RedirectToOptions);
+                if(index>=0)
+                {
+                    self.RedirectToOptions.splice(index,1);
+                    $row.remove();
+                }
+            });
+    });
+    rnJQuery('#redirectToOptionsItems').append($row);
+
+    return $row;
+
+};
+
+
+SmartFormsAddNew.prototype.ValidateRedirectToMode=function()
+{
+    if(this.RedirectToMode=='s')
+    {
+        if(this.RedirectToOptions.length>1||(this.RedirectToOptions.length==1&&this.RedirectToOptions[0].RCSettings.Redirect!='always'))
+            this.ChangeToMultipleRedirectsMode();
+    }
+
+    if(this.RedirectToMode=='m')
+    {
+        if(this.RedirectToOptions.length==0||(this.RedirectToOptions.length==1&&this.RedirectToOptions[0].RCSettings.Redirect=='always'))
+        {
+            this.ChangeToSingleRedirectMode();
+        }
+    }
+
+};
+
+SmartFormsAddNew.prototype.CreateEmptyRedirectOption=function()
+{
+    return {
+        URL:'',
+        RCSettings:{
+                Redirect:'always',
+                ConditionSettings:[]
+        }
+    }
+};
+
+SmartFormsAddNew.prototype.ChangeToMultipleRedirectsMode=function()
+{
+    this.RedirectToMode='m';
+    var $buttonRow=rnJQuery('<tr class="sfAddRedirectToRow"><td><button style="margin-top:0px;" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>Add another redirect to url</button></td></tr>');
+    var self=this;
+    $buttonRow.find('button').click(function()
+    {
+        var newRedirectOption=self.CreateEmptyRedirectOption();
+        self.RedirectToOptions.push(newRedirectOption);
+        self.CreateRedirectToOption(newRedirectOption);
+    });
+    $buttonRow.insertAfter(rnJQuery('#redirectToOptionsItems'));
+};
+
+SmartFormsAddNew.prototype.ChangeToSingleRedirectMode=function()
+{
+    this.RedirectToMode='s';
+    rnJQuery('.sfAddRedirectToRow').remove();
+};
+//------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 var SmartFormsAddNewVar=null;
 rnJQuery(function(){SmartFormsAddNewVar=new SmartFormsAddNew();});

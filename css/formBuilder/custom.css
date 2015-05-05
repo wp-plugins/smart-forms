@@ -185,3 +185,7 @@
 .bootstrap-wrapper .redNaoCheckBox span{
     vertical-align:middle;
 }
+
+.bootstrap-wrapper span.text-muted{
+    cursor:auto !important;
+}
