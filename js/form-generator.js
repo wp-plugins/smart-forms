@@ -511,7 +511,7 @@ smartFormGenerator.prototype.ProcessRedirectUrl=function()
             var value='';
             if(typeof formValues[matches[i]]!='undefined')
             {
-                value = formValues[matches[i]];
+                value = formValues[matches[i]].label;
                 for(var t=0;t<this.RedNaoFormElements.length;t++)
                     if(matches[i]==this.RedNaoFormElements[t].Id&&this.RedNaoFormElements[t].Options.ClassName=="rednaodatepicker")
                         value=formValues[matches[i]].value;
