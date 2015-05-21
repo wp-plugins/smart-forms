@@ -147,7 +147,6 @@ class php_entry_saver_base {
 		$this->EntryId=$wpdb->insert_id;
         $this->FormEntryData["_formid"]=$this->EntryId;
 		$this->InsertedValuesString["_formid"]=$this->EntryId;
-		return $result;
 		$result=$this->ParseAndInsertDetail($this->EntryId,$this->FormEntryData,$this->GetFormElementsDictionary());
 		return $result;
 
@@ -363,7 +362,7 @@ class php_entry_saver_base {
 				$dateValue=date('Y-m-d',$dateValue);
 			$jsonValue=json_encode($unprocessedValue);
 			if(!$this->InsertDetailRecord($entryId,$key,$value,$jsonValue,$exValue,$dateValue))
-				return false;
+				return true;
 		}
 
 		return true;
