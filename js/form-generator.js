@@ -7,19 +7,35 @@ function smartFormGenerator(options){
     this.InitializeConditionalLogic();
     this.SetDefaultIfUndefined('InvalidInputMessage','*Please fill all the required fields');
     this.SubmittingThroughIframe=false;
-    try{
-        this.JavaScriptCode=eval(this.client_form_options.JavascriptCode)();
 
-    }catch(exception)
+    this.JavascriptCodes=[];
+    if(typeof this.client_form_options.JavascriptCode!='undefined')
     {
-
+        if(typeof this.client_form_options.JavascriptCode=='string')
+            this.client_form_options.JavaScriptCode=[{
+                JavascriptCode:this.client_form_options.JavascriptCode,
+                ActionType:'customjs'
+            }];
     }
+
+    var i;
+    for(i=0;i<this.client_form_options.JavascriptCode.length;i++)
+    {
+        try{
+            this.JavascriptCodes.push(eval(this.client_form_options.JavascriptCode[i].JavascriptCode)());
+
+        }catch(exception)
+        {
+
+        }
+    }
+
     this.form_id=options.form_id;
     this.options=options;
     this.RedNaoFormElements=[];
     this.FormElements=[];
     var elementOptions=options.elements;
-    for(var i=0;i<elementOptions.length;i++)
+    for(i=0;i<elementOptions.length;i++)
     {
         var element=sfRedNaoCreateFormElementByName(elementOptions[i].ClassName,elementOptions[i]);
         element.FormId=this.form_id;
@@ -145,6 +161,7 @@ smartFormGenerator.prototype.FireExtensionMethod=function(methodName)
 smartFormGenerator.prototype.FormLoaded=function()
 {
     this.FireExtensionMethod('BeforeInitializingFieldData');
+    var i;
     for(i=0;i<this.RedNaoFormElements.length;i++)
     {
         if(this.RedNaoFormElements[i].StoresInformation())
@@ -157,7 +174,8 @@ smartFormGenerator.prototype.FormLoaded=function()
     this.ExecuteConditionalLogicInAllFields();
     this.JQueryForm.css('visibility', 'visible');
     try{
-        this.JavaScriptCode.AfterFormLoaded();
+        for(i=0;i<this.JavascriptCodes.length;i++)
+            this.JavascriptCodes[i].AfterFormLoaded();
     }catch(exception)
     {
 
@@ -283,8 +301,12 @@ smartFormGenerator.prototype.SaveForm=function()
 
     try{
 
-        if(typeof this.JavaScriptCode.BeforeFormSubmit!='undefined'&&(this.JavaScriptCode.BeforeFormSubmit(formValues,this.FormElements)==false))
-            return;
+        for(i=0;i<this.JavascriptCodes.length;i++)
+        {
+            if(typeof this.JavascriptCodes[i].BeforeFormSubmit!='undefined'&&(this.JavascriptCodes[i].BeforeFormSubmit(formValues,this.FormElements)==false))
+                return;
+        }
+
     }catch(exception)
     {
 
