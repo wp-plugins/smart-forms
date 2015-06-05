@@ -5,7 +5,7 @@
  * Description: Place diferent form of donations on your blog...
  * Author: RedNao
  * Author URI: http://rednao.com
- * Version: 2.3.2
+ * Version: 2.3.3
  * Text Domain: Smart Forms
  * Domain Path: /languages/
  * Network: true
@@ -59,6 +59,7 @@ add_action('wp_ajax_rednao_smart_forms_submit_license','rednao_smart_forms_submi
 add_action('wp_ajax_rednao_smart_forms_execute_op','rednao_smart_forms_execute_op');
 add_action('wp_ajax_rednao_smart_forms_generate_detail','rednao_smart_forms_generate_detail');
 add_action('wp_ajax_rednao_smart_forms_get_form_element_info','rednao_smart_forms_get_form_element_info');
+add_action('wp_ajax_rednao_get_context_tutorials','rednao_get_context_tutorials');
 
 
 //integration
@@ -211,4 +212,28 @@ function rednao_smart_forms_add_ons()
 function rednao_smart_forms_generate_detail()
 {
 	include(SMART_FORMS_DIR.'utilities/smart-forms-detail-generator.php');
+}
+
+function rednao_get_context_tutorials()
+{
+    $lastContextCheck=get_option("SmartFormsLastContextCheck");
+    $contextJSON=get_option("SmartFormsContextJSON");
+    $currentTime=new DateTime();
+    if($lastContextCheck!=null&&$contextJSON!=null&&$lastContextCheck->diff($currentTime)->days<=7&&false)
+    {
+        header("Content-Type: application/json");
+        echo $contextJSON;
+    }else
+    {
+        $response=wp_remote_get("http://smartforms.rednao.com/api/context_tutorials.php");
+        if(is_wp_error($response))
+            die();
+        header("Content-Type: application/json");
+        $tutorials= $response["body"];
+        update_option("SmartFormsContextJSON",$tutorials);
+        update_option("SmartFormsLastContextCheck",$currentTime);
+        echo $tutorials;
+    }
+    die();
+
 }

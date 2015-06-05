@@ -9,11 +9,11 @@ function SmartFormsAddNew()
         this.id=0;
 
     var options=null;
-    this.RestoreDefault();
-    this.Emails=[{ToEmail:"",FromEmail:"",Name:"Default",FromName:"",EmailSubject:"",EmailText:""}];
+    this.Emails=[{ToEmail:"",FromEmail:"",Name:smartFormsTranslation.Default,FromName:"",EmailSubject:"",EmailText:""}];
     this.ExtensionData={};
     this.RedirectToOptions=[this.CreateEmptyRedirectOption()];
     this.RedirectToMode='s';
+    this.JavascriptCodes=[];
     if(typeof smartFormsOptions!='undefined')
     {
         options=smartFormsOptions;
@@ -50,7 +50,20 @@ function SmartFormsAddNew()
 
     if(typeof smartFormClientOptions!='undefined')
     {
-        rnJQuery('#smartFormsJavascriptText').val(smartFormClientOptions.JavascriptCode);
+        if(typeof smartFormClientOptions.JavascriptCode=='string' )
+        {
+            this.JavascriptCodes.push(
+                {
+                    Name:smartFormsTranslation.Default,
+                    JavascriptCode:smartFormClientOptions.JavascriptCode,
+                    ActionType:'customjs'
+                }
+            );
+        }
+        else if(rnJQuery.isArray(smartFormClientOptions.JavascriptCode))
+            this.JavascriptCodes=smartFormClientOptions.JavascriptCode;
+
+
         if(typeof smartFormClientOptions.CSS!='undefined')
             rnJQuery('#smartFormsCSSText').val(smartFormClientOptions.CSS);
 
@@ -116,8 +129,39 @@ function SmartFormsAddNew()
     this.ApplyCustomCSS();
     self.PublishToSubscribers('OnLoadComplete');
     this.InitializeAfterSubmitUI();
+    this.InitializeJavascriptTab();
 
 }
+
+SmartFormsAddNew.prototype.InitializeJavascriptTab=function()
+{
+    var self=this;
+    this.JavascriptListManager=rnJQuery('#javascriptList').RNList({
+        ItemCreated:function(createdItem){
+            self.RestoreDefault();
+            createdItem.JavascriptCode=rnJQuery('#smartFormsJavascriptText').val();
+            createdItem.ActionType='customjs';
+        },
+        ItemSelected:function(item){
+            rnJQuery('#smartFormsJavascriptText').val(item.JavascriptCode);
+            rnJQuery('#smartFormsJavascriptText').removeAttr('disabled');
+        },
+        ItemUpdated:function(item)
+        {
+            item.JavascriptCode=rnJQuery('#smartFormsJavascriptText').val();
+        },
+        Clear:function()
+        {
+            rnJQuery('#smartFormsJavascriptText').val('');
+            rnJQuery('#smartFormsJavascriptText').attr('disabled','disabled');
+        },
+        CreationLabel:smartFormsTranslation.ClickHereToCreateSnippet,
+        Items:this.JavascriptCodes
+    });
+
+    if(this.JavascriptCodes.length>0)
+        this.JavascriptListManager.SelectItem(this.JavascriptCodes[0]);
+};
 
 
 
@@ -165,7 +209,7 @@ SmartFormsAddNew.prototype.PublishToSubscribers=function(methodName,args)
 SmartFormsAddNew.prototype.OpenParameterPicker=function($row)
 {
     var self=this;
-    this.ShowFieldPicker('Select the fields you want to send as parameters to the redirect page',this.FormBuilder.RedNaoFormElements.slice(0),function(success,selectedFields){
+    this.ShowFieldPicker(smartFormsTranslation.SelectTheFieldsRedirectPage,this.FormBuilder.RedNaoFormElements.slice(0),function(success,selectedFields){
                                                                                                                                                     if(success)self.AddFieldsToRedirectUrl(selectedFields,$row);});
 };
 
@@ -279,21 +323,21 @@ SmartFormsAddNew.prototype.DonationConfigurationIsValid=function()
         {
             if(rnJQuery('#redNaoCampaign').val()=='')
             {
-                alert('If you are going to use a donation button, please select a campaign before saving');
+                alert(smartFormsTranslation.SelectCampaignBeforeSaving);
                 this.GoToSmartDonations();
                 return false;
             }
 
             if(rnJQuery('#smartDonationsEmail').val()=='')
             {
-                alert('Please select a paypal donation email before saving');
+                alert(smartFormsTranslation.SelectPaypalEmailBeforeSaving);
                 this.GoToSmartDonations();
                 return false;
             }
 
             if(typeof smartFormsIntegrationFormula.Formulas.DonationFormula=='undefined'||smartFormsIntegrationFormula.Formulas.DonationFormula=='')
             {
-                alert('Please setup a donation formula before saving');
+                alert(smartFormsTranslation.SetupDonationFormulaBeforeSaving);
                 this.GoToSmartDonations();
                 return false;
             }
@@ -311,7 +355,7 @@ SmartFormsAddNew.prototype.FormOptionsAreValid = function (formOptions) {
         if(formOptions.Emails[0].EmailText.trim()=="")
         {
             rnJQuery("#redNaoEditEmailButton").addClass('redNaoInvalidInput');
-            alert('Please configure the email that is going to sent before saving.');
+            alert(smartFormsTranslation.ConfigureEmailIsGoingToBeSent);
             this.GoToAfterSubmit();
             return false;
         }
@@ -527,13 +571,14 @@ BeforeFormSubmit:function(formData,jQueryFormReference){\n\
 
 SmartFormsAddNew.prototype.GetJavascriptCode=function()
 {
-    return rnJQuery('#smartFormsJavascriptText').val();
+    this.JavascriptListManager.Commit();
+    return this.JavascriptCodes;
 };
 
 
 SmartFormsAddNew.prototype.Validate=function()
 {
-    var javascriptCode=this.GetJavascriptCode();
+    var javascriptCode=rnJQuery('#smartFormsJavascriptText').val();
     try{
         var obj=eval(javascriptCode);
         var code=obj();
@@ -549,11 +594,11 @@ SmartFormsAddNew.prototype.Validate=function()
         code.BeforeFormSubmit({},rnJQuery('<form></form>'));
     }catch(exception)
     {
-        alert('An error occurred\n'+exception);
+        alert(smartFormsTranslation.AnErrorOccurred+'\n'+exception);
         return;
     }
 
-    alert('Code tested successfully!!')
+    alert(smartFormsTranslation.CodeTestedSuccessfully);
 };
 
 //used in an string
@@ -584,9 +629,9 @@ SmartFormsAddNew.prototype.CreateRedirectToOption=function(redirectOption)
     var $row=rnJQuery('<tr>'+
     '<td style="padding-bottom:3px;"><input type="text" style="width: 600px !important;display: inline;" class="redirectToInput form-control"  /></td>'+
     '<td style="padding-bottom:3px;">'+
-    '<button class="btn btn-default smartFormsAddParameter" >Add Parameters to Url</button>'+
-    '<span  class="addConditionLogic glyphicon glyphicon glyphicon-link sfConditionLogic" style="cursor: pointer; cursor:hand;margin-left:5px;" title="Add/Edit conditional logic"></span>'+
-    '<span  class="glyphicon glyphicon glyphicon-minus sfDelete" style="cursor: pointer; cursor:hand;margin-left:5px;" title="Delete row"></span>'+
+    '<button class="btn btn-default smartFormsAddParameter" >' +smartFormsTranslation.AddParametersToUrl+'</button>'+
+    '<span  class="addConditionLogic glyphicon glyphicon glyphicon-link sfConditionLogic" style="cursor: pointer; cursor:hand;margin-left:5px;" title="'+smartFormsTranslation.AddEditConditionalLogic+'"></span>'+
+    '<span  class="glyphicon glyphicon glyphicon-minus sfDelete" style="cursor: pointer; cursor:hand;margin-left:5px;" title="'+smartFormsTranslation.DeleteRow+'"></span>'+
     '</td>'+
     '</tr>');
 
@@ -617,7 +662,7 @@ SmartFormsAddNew.prototype.CreateRedirectToOption=function(redirectOption)
 
     $row.find('.sfDelete').click(function()
     {
-        rnJQuery.RNGetConfirmationDialog().ShowConfirmation('Deleting row','Are you sure you want to delete the row?',
+        rnJQuery.RNGetConfirmationDialog().ShowConfirmation(smartFormsTranslation.DeletingRow,smartFormsTranslation.AreYouSureDeleteRow,
             function(){
                 var index=rnJQuery.inArray(redirectOption,self.RedirectToOptions);
                 if(index>=0)
@@ -666,7 +711,7 @@ SmartFormsAddNew.prototype.CreateEmptyRedirectOption=function()
 SmartFormsAddNew.prototype.ChangeToMultipleRedirectsMode=function()
 {
     this.RedirectToMode='m';
-    var $buttonRow=rnJQuery('<tr class="sfAddRedirectToRow"><td><button style="margin-top:0px;" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>Add another redirect to url</button></td></tr>');
+    var $buttonRow=rnJQuery('<tr class="sfAddRedirectToRow"><td><button style="margin-top:0px;" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>' +smartFormsTranslation.AddAnotherRedirectToUrl+'</button></td></tr>');
     var self=this;
     $buttonRow.find('button').click(function()
     {

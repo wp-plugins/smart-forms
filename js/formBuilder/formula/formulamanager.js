@@ -66,8 +66,22 @@ RedNaoFormulaManager.prototype.SetFormulaValue=function(fieldName,data)
             }
     }else
     {
-        fieldData.label='';
-        fieldData.numericalValue=0;
+        if(typeof fieldData.selectedValues!='undefined')
+        {
+            fieldData.label="";
+            for(var i=0;i<fieldData.selectedValues.length;i++)
+            {
+                fieldData.label+=";"+fieldData.selectedValues[i].label;
+            }
+            if(fieldData.label.length>0)
+                fieldData.label=fieldData.label.substring(1);
+
+        }else
+        {
+            fieldData.label='';
+            fieldData.numericalValue=0;
+        }
+
     }
 
     this.Data[fieldName]=fieldData;

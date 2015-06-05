@@ -72,6 +72,11 @@ RNListManager.prototype.CreateItem=function(itemName)
     };
     this.Items.push(createdItem);
     var $createdItem=this.AddItemToUIList(createdItem,null);
+    if(this.SelectedItem!=null)
+    {
+        this.FireItemUpdated(this.SelectedItem);
+        this.SelectedItem=null;
+    }
     this.FireItemCreated(createdItem);
     $createdItem.click();
     return createdItem;

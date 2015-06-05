@@ -22,6 +22,7 @@ wp_enqueue_script('rednap-fuelux',SMART_FORMS_DIR_URL.'js/utilities/fuelux/wizar
 
 
 wp_enqueue_script('smart-forms-event-manager',SMART_FORMS_DIR_URL.'js/formBuilder/eventmanager.js',array('isolated-slider'));
+wp_enqueue_script('smart-forms-tutorials',SMART_FORMS_DIR_URL. 'js/tutorials/rnTutorials.js',array('smart-forms-form-elements','isolated-slider','smart-forms-event-manager'));
 wp_enqueue_script('smart-forms-wizard-steps',SMART_FORMS_DIR_URL. 'js/utilities/popup-wizard/wizard-steps.js',array('smart-forms-form-elements','isolated-slider'));
 wp_enqueue_script('smart-forms-popup-wizard',SMART_FORMS_DIR_URL. 'js/utilities/popup-wizard/popup-wizard.js',array('smart-forms-wizard-steps'));
 wp_enqueue_script('smart-forms-redirect-to-wizard-steps',SMART_FORMS_DIR_URL. 'js/wizards/redirect-to-wizard-steps.js',array('smart-forms-popup-wizard'));
@@ -128,12 +129,12 @@ if(get_option('sf_dont_show_again')===false)
 ?>
 <div style="margin-bottom: 5px; border-style: dashed;border-color: black;border-width: 2px;padding:5px; margin-left: 5px; background-color;background-color: #ffffff" class="bootstrap-wrapper sfSignUpForm" >
 
-    <span style=" vertical-align: middle; font-size:30px;" class="glyphicon glyphicon-envelope"></span>  <p style="vertical-align: middle; display: inline; margin-top: 5px;margin-bottom:5px; font-size: 15px;">Get exclusive content, news and tips directly in your email <a data-toggle="modal" data-target="#signUpModal" style="cursor:hand;cursor:pointer;">Subscribe to the Smart Forms mailing list here</a></p>
+    <span style=" vertical-align: middle; font-size:30px;" class="glyphicon glyphicon-envelope"></span>  <p style="vertical-align: middle; display: inline; margin-top: 5px;margin-bottom:5px; font-size: 15px;"><?php echo __("Get exclusive content, news and tips directly in your email") ?> <a data-toggle="modal" data-target="#signUpModal" style="cursor:hand;cursor:pointer;"><?php echo __("Subscribe to the Smart Forms mailing list here") ?></a></p>
     <div style="float: right">
 
-        <a style="clear: both;cursor: pointer;cursor:hand;" onclick="DontShowSignUpAgain()">Don't show this again</a>
+        <a style="clear: both;cursor: pointer;cursor:hand;" onclick="DontShowSignUpAgain()"><?php echo __("Don't show this again") ?></a>
         <span>|</span>
-        <a style="clear: both;cursor: pointer;cursor:hand;" onclick="rnJQuery('.sfSignUpForm').hide();">Close</a>
+        <a style="clear: both;cursor: pointer;cursor:hand;" onclick="rnJQuery('.sfSignUpForm').hide();"><?php echo __("Close") ?></a>
     </div>
 
 </div>
@@ -149,23 +150,25 @@ if(get_option('sf_dont_show_again')===false)
     }
 </script>
 
+
+
 <div class="bootstrap-wrapper">
     <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <form class="modal-content" method="post" target="_blank" action="https://www.aweber.com/scripts/addlead.pl">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Almost done =). Submit your email to register to the newsletter.</h4>
+                    <h4 class="modal-title" id="myModalLabel"><?php echo __("Almost done =). Submit your email to register to the newsletter.") ?></h4>
                 </div>
                 <div class="modal-body">
-                    <div style="display: inline-block;width:29%"><label>Email</label></div>
+                    <div style="display: inline-block;width:29%"><label><?php echo __("Email") ?></label></div>
                     <input style="display:inline-block; width: 70%;" name="email" type="text" placeholder="your@email.com" class="form-control redNaoInputText " value="">
                     <input type="hidden" name="meta_web_form_id" value="1886998542"/>
                     <input type="hidden" name="listname" value="awlist3810311"/>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span>Subscribe</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __("Close") ?></button>
+                    <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span><?php echo __("Subscribe") ?></button>
                 </div>
             </form>
         </div>
@@ -179,15 +182,63 @@ if(get_option('sf_dont_show_again')===false)
 
 
 <div style="text-align: left;" class="bootstrap-wrapper">
+
+        <table style="z-index: 10000;;position: fixed;top:50px;right:0px;height: calc(100% - 100px)" class="sfHelper">
+            <tr>
+                <td style="vertical-align: top">
+                    <div style="background-color: white" class="sfHelpIconContainer" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."  >
+                        <span title="Tutorials" style="font-size: 30px;" class="glyphicon glyphicon-question-sign"></span>
+                    </div>
+                </td>
+                <td>
+                    <div class="sfHelpContent" style="width:0px;" >
+                        <table>
+                            <tr>
+                                <td>
+                                    <div class="redNaoControls col-sm-9 has-feedback-left" style="width:300px;margin:12px 10px 10px 10px;">
+                                        <input style="" id="tbHelpSearch" name="Search_f" type="text" placeholder="Search for specific topic" class="form-control redNaoInputText " value="">
+                                        <span class="sfPlaceHolderIcon glyphicon glyphicon-search form-control-feedback"></span>
+                                    </div>
+                                </td>
+                                <td><button id="btnHelpSearch" class="btn btn-success">Search</button></td>
+                            </tr>
+                        </table>
+
+
+
+                        <div  style="clear:both;">
+
+                            <div style="margin:10px;display: none;" class="waitPanel">
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                        <span><?php echo __("Loading tutorials") ?></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group videoList" style="display: none;">
+                                <!-- <span class="list-group-item">Dapibus ac facilisis in</span>
+                               <a href="#" class="list-group-item">Morbi leo risus</a>
+                                <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                                <a href="#" class="list-group-item">Vestibulum at eros</a>-->
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+
+
+
 	<button style="min-width:100px;cursor: hand;cursor: pointer;" class="btn btn-success ladda-button" id="smartFormsSaveButton"  data-style="expand-left" onclick="return false;" >
-		<span class="glyphicon glyphicon-floppy-disk"></span><span class="ladda-label">Save</span>
+		<span class="glyphicon glyphicon-floppy-disk"></span><span class="ladda-label"><?php echo __("Save") ?></span>
 	</button>
 </div>
 <h2 class="nav-tab-wrapper" id="smartFormsTopTab">
-    <a style="cursor: hand;cursor: pointer;" class='nav-tab nav-tab-active' id="smartFormsGeneralTab"  onclick="SmartFormsAddNewVar.GoToGeneral();">General Info</a>
-    <a style="cursor: hand;cursor: pointer;" class='nav-tab' id="smartFormsJavascriptTab" onclick="SmartFormsAddNewVar.GoToJavascript();">Javascript</a>
-	<a style="cursor: hand;cursor: pointer;" class='nav-tab' id="smartFormsCSStTab" onclick="SmartFormsAddNewVar.GoToCSS();">CSS</a>
-    <a style="cursor: hand;cursor: pointer;" class='nav-tab' id="smartFormsAfterSubmitTab" onclick="SmartFormsAddNewVar.GoToAfterSubmit();">After Submit</a>
+    <a style="cursor: hand;cursor: pointer;" class='nav-tab nav-tab-active' id="smartFormsGeneralTab"  onclick="SmartFormsAddNewVar.GoToGeneral();"><?php echo __("General Info") ?></a>
+    <a style="cursor: hand;cursor: pointer;" class='nav-tab' id="smartFormsJavascriptTab" onclick="SmartFormsAddNewVar.GoToJavascript();"><?php echo __("Javascript") ?></a>
+	<a style="cursor: hand;cursor: pointer;" class='nav-tab' id="smartFormsCSStTab" onclick="SmartFormsAddNewVar.GoToCSS();"><?php echo __("CSS") ?></a>
+    <a style="cursor: hand;cursor: pointer;" class='nav-tab' id="smartFormsAfterSubmitTab" onclick="SmartFormsAddNewVar.GoToAfterSubmit();"><?php echo __("After Submit") ?></a>
 
 
 	<?php
@@ -204,7 +255,7 @@ if(get_option('sf_dont_show_again')===false)
         {
             wp_enqueue_script('smart-forms-donation-elements',SMART_FORMS_DIR_URL.'js/integration/smart-donations-integration.js',array('smart-forms-form-elements','smart-forms-add-new'));
             ?>
-            <a class='nav-tab' id="smartDonationsTab" onclick="SmartFormsAddNewVar.GoToSmartDonations();">Smart Donations</a>
+            <a class='nav-tab' id="smartDonationsTab" onclick="SmartFormsAddNewVar.GoToSmartDonations();"><?php echo __("Smart Donations") ?></a>
         <?php
         }
     ?>
@@ -215,7 +266,7 @@ if(get_option('sf_dont_show_again')===false)
         <tr>
             <td style="text-align: right">From email address</td><td> <select  multiple="multiple"  id="redNaoFromEmail" style="width:300px"></td>
 			<td rowspan="5">
-				<a target="_blank" style="margin-right: 10px;margin-top: 10px;" href="http://smartforms.rednao.com/not-receiving-form-submission-in-your-email/">Not receiving the email?</a>
+				<a target="_blank" style="margin-right: 10px;margin-top: 10px;" href="http://smartforms.rednao.com/not-receiving-form-submission-in-your-email/"><?php echo __("Not receiving the email?") ?></a>
 				<div class="bootstrap-wrapper" style="height: 150px;overflow-y: scroll;width: 340px;">
 					<div id="emailList"></div>
 				</div>
@@ -223,15 +274,15 @@ if(get_option('sf_dont_show_again')===false)
         </tr>
 
         <tr>
-            <td style="text-align: right">From name</td><td> <input placeholder="Default (Wordpress)" type="text" id="redNaoFromName" style="width:300px"></td>
+            <td style="text-align: right"><?php echo __("From name") ?></td><td> <input placeholder="Default (Wordpress)" type="text" id="redNaoFromName" style="width:300px"></td>
         </tr>
 
         <tr>
-            <td style="text-align: right">To email address(es)</td><td> <select multiple="multiple" id="redNaoToEmail" style="width:300px"></select></td>
+            <td style="text-align: right"><?php echo __("To email address(es)") ?></td><td> <select multiple="multiple" id="redNaoToEmail" style="width:300px"></select></td>
         </tr>
 
         <tr>
-            <td style="text-align: right">Email subject</td><td> <input placeholder="Default (Form Submitted)" type="text" id="redNaoEmailSubject" style="width:300px"></td>
+            <td style="text-align: right"><?php echo __("Email subject") ?></td><td> <input placeholder="Default (Form Submitted)" type="text" id="redNaoEmailSubject" style="width:300px"></td>
         </tr>
     </table>
 
@@ -239,7 +290,7 @@ if(get_option('sf_dont_show_again')===false)
 		<table>
 			<tr>
 				<td>
-					<textarea style="width:510px;height:300px;padding: 5px;" id="redNaoFormulaTextArea" PLACEHOLDER="Here you can add arithmetical operations between fields.                    Example: [field rnfield1]+[field rnfield2]"></textarea>
+					<textarea style="width:510px;height:300px;padding: 5px;" id="redNaoFormulaTextArea" PLACEHOLDER="<?php echo __("Here you can add arithmetical operations between fields.                    Example:") ?> [field rnfield1]+[field rnfield2]"></textarea>
 				</td>
 				<td style="vertical-align: top">
 					<div id="redNaoFormulaAccordion" class="smartFormsSlider" >
@@ -255,7 +306,7 @@ if(get_option('sf_dont_show_again')===false)
 			</tr>
 			<tr>
 				<td>
-					<div ><button  onclick="RedNaoFormulaWindowVar.Validate();">Validate</button> <input type="checkbox" id="smartFormsHumanReadableCheck" style="vertical-align: middle;display: none;"/> <span style="display: none">Show field id</span></div>
+					<div ><button  onclick="RedNaoFormulaWindowVar.Validate();">Validate</button> <input type="checkbox" id="smartFormsHumanReadableCheck" style="vertical-align: middle;display: none;"/> <span style="display: none"><?php echo __("Show field id") ?></span></div>
 				</td>
 			</tr>
 		</table>
@@ -281,7 +332,7 @@ if(get_option('sf_dont_show_again')===false)
 
             </ul>
         </div>
-		<h3>Fixed Values</h3>
+		<h3><?php echo __("Fixed Values") ?></h3>
 		<div>
 			<ul id="redNaoEmailFormFixedFields">
 
@@ -290,8 +341,8 @@ if(get_option('sf_dont_show_again')===false)
     </div>
     </div>
     <div style="text-align: right;clear: both;">
-        <button onclick="RedNaoEmailEditorVar.CloseEmailEditor();">Close</button>
-        <button onclick="SmartFormsAddNewVar.SendTestEmail();">Send Test Email</button>
+        <button onclick="RedNaoEmailEditorVar.CloseEmailEditor();"><?php echo __("Close") ?></button>
+        <button onclick="SmartFormsAddNewVar.SendTestEmail();"><?php echo __("Send Test Email") ?></button>
     </div>
 </div>
 <div id="redNaoStyleEditor" title="<?php echo __("Style Editor")?>" style="display: none;margin:0;padding:0;">
@@ -312,27 +363,27 @@ if(get_option('sf_dont_show_again')===false)
 			<td>
 				<div style="width: 100%;height: 100%;" class="bootstrap-wrapper">
 					<div style="text-align: right" class="rnEditorContainer">
-						<label>Apply to:</label>
+						<label><?php echo __("Apply to:") ?></label>
 						<select  id="rnStyleApplyTo">
-							<option value="1">This field</option>
-							<option id="allOfTypeOption" value="2">All fields of the same type</option>
-							<option value="3">All fields</option>
+							<option value="1"><?php echo __("This field") ?></option>
+							<option id="allOfTypeOption" value="2"><?php echo __("All fields of the same type") ?></option>
+							<option value="3"><?php echo __("All fields") ?></option>
 						</select>
 					</div>
 
 
 					<ul class="nav nav-tabs rnEditorContainer" >
-						<li role="presentation" class="active"><a id="rnStyleEditorAttribute" href="#styleEditorAttributes" data-toggle="tab">Styles</a></li>
-						<li role="presentation"><a href="#styleCustomRules" data-toggle="tab">Custom CSS (Advanced)</a></li>
+						<li role="presentation" class="active"><a id="rnStyleEditorAttribute" href="#styleEditorAttributes" data-toggle="tab"><?php echo __("Styles") ?></a></li>
+						<li role="presentation"><a href="#styleCustomRules" data-toggle="tab"><?php echo __("Custom CSS (Advanced)") ?></a></li>
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane active" id="styleEditorAttributes" >
 						</div>
 						<div class="tab-pane" id="styleCustomRules" >
-							<textarea style="width: 100%;height: 555px;" id="rnCustomStyleContent" placeholder="Here you can put only style rules (e.g. background-color:red;), not selectors (e.g. .mybutton{background-color:red;}.
-If you want to add your own selectors and rules please add them in the CSS tab of your form.
-Tip:If your rule is not working try adding !important (e.g. background-color:red !important;)"></textarea>
-							<button id="rnApplyCustomRule" style="margin-left: auto;display: block;">Apply Custom Rules</button>
+							<textarea style="width: 100%;height: 555px;" id="rnCustomStyleContent" placeholder="<?php echo __("Here you can put only style rules") ?> (<?php echo __("e.g.") ?> background-color:red;), <?php echo __("not selectors") ?> (<?php echo __("e.g.") ?> .mybutton{background-color:red;}.
+<?php echo __("If you want to add your own selectors and rules please add them in the CSS tab of your form.") ?>
+<?php echo __("Tip:If your rule is not working try adding !important (e.g. background-color:red !important;)") ?>"></textarea>
+							<button id="rnApplyCustomRule" style="margin-left: auto;display: block;"><?php echo __("Apply Custom Rules") ?></button>
 						</div>
 					</div>
 				</div>
@@ -343,12 +394,21 @@ Tip:If your rule is not working try adding !important (e.g. background-color:red
 </div>
 
 
-<div id="smartFormsJavascriptDiv" style="display: none;margin: 0 20px 0 0;">
-    <textarea id="smartFormsJavascriptText"></textarea>
-    <div style="text-align: right;">
-        <button onclick="SmartFormsAddNewVar.RestoreDefault()">Restore default</button>
-        <button onclick="SmartFormsAddNewVar.Validate()">Validate</button>
-    </div>
+<div id="smartFormsJavascriptDiv" class="bootstrap-wrapper" style="display: none;margin: 0 20px 0 0;">
+    <table style="width:100%;">
+        <tr>
+            <td style="width:80%;">
+                <textarea id="smartFormsJavascriptText" class="form-control" disabled="disabled"></textarea>
+                <button onclick="SmartFormsAddNewVar.Validate()"><?php echo __("Validate") ?></button>
+                <button onclick="SmartFormsAddNewVar.RestoreDefault()"><?php echo __("Restore default") ?></button>
+            </td>
+            <td style="width:20%;vertical-align: top;">
+                <div id="javascriptList"></div>
+            </td>
+        </tr>
+    </table>
+
+
 </div>
 
 <?php
@@ -365,19 +425,19 @@ Tip:If your rule is not working try adding !important (e.g. background-color:red
 <div id="smartDonationsDiv" style="display: none">
     <table style="width: 100%">
         <tr>
-            <td style="text-align: right;width: 200px;">Campaign</td><td> <select id="redNaoCampaign"></select></td>
+            <td style="text-align: right;width: 200px;"><?php echo __("Campaign") ?></td><td> <select id="redNaoCampaign"></select></td>
         </tr>
         <tr >
-            <td style="text-align: right" ><span class="smartDonationsConfigurationInfo">PayPal email</span></td><td class="smartDonationsConfigurationInfo"> <input type="text" id="smartDonationsEmail" />  <span  class="description smartDonationsConfigurationInfoDesc" style="margin-bottom:5px;display: inline;"> <?php echo __("*The email of your paypal account"); ?></span></td>
+            <td style="text-align: right" ><span class="smartDonationsConfigurationInfo"><?php echo __("PayPal email") ?></span></td><td class="smartDonationsConfigurationInfo"> <input type="text" id="smartDonationsEmail" />  <span  class="description smartDonationsConfigurationInfoDesc" style="margin-bottom:5px;display: inline;"> <?php echo __("*The email of your paypal account"); ?></span></td>
         </tr>
         <tr >
-            <td style="text-align: right"><span class="smartDonationsConfigurationInfo">Donation description</span></td><td class="smartDonationsConfigurationInfo"> <input type="text" id="smartDonationsDescription"/><span class="description smartDonationsConfigurationInfoDesc" style="margin-bottom:5px;display: inline;"> <?php echo __("*This description is going to be shown in the Paypal transaction page "); ?><a href="<?php echo SMART_FORMS_DIR_URL?>images/paypal_transaction_page.png" target="_blank"><?php echo __("(Screenshot)")?></a></span></td>
+            <td style="text-align: right"><span class="smartDonationsConfigurationInfo"><?php echo __("Donation description") ?></span></td><td class="smartDonationsConfigurationInfo"> <input type="text" id="smartDonationsDescription"/><span class="description smartDonationsConfigurationInfoDesc" style="margin-bottom:5px;display: inline;"> <?php echo __("*This description is going to be shown in the Paypal transaction page "); ?><a href="<?php echo SMART_FORMS_DIR_URL?>images/paypal_transaction_page.png" target="_blank"><?php echo __("(Screenshot)")?></a></span></td>
         </tr>
 
 
 
         <tr >
-            <td style="text-align: right"><span class="smartDonationsConfigurationInfo">Currency</span></td><td> <select class="smartDonationsConfigurationInfo" id="smartDonationsCurrencyDropDown" name="donation_currency"></select></td>
+            <td style="text-align: right"><span class="smartDonationsConfigurationInfo"><?php echo __("Currency") ?></span></td><td> <select class="smartDonationsConfigurationInfo" id="smartDonationsCurrencyDropDown" name="donation_currency"></select></td>
         </tr>
 
 
@@ -388,7 +448,7 @@ Tip:If your rule is not working try adding !important (e.g. background-color:red
             <td>
             </td>
             <td>
-                <button class="smartDonationsConfigurationInfo" id="setUpDonationFormulaButton">Setup donation formula</button>
+                <button class="smartDonationsConfigurationInfo" id="setUpDonationFormulaButton"><?php echo __("Setup donation formula") ?></button>
             </td>
         </tr>
 
@@ -400,8 +460,8 @@ Tip:If your rule is not working try adding !important (e.g. background-color:red
     <table id="smartFormsAfterSubmitDiv" style="display: none;" class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>Activate</th>
-                <th>Action</th>
+                <th><?php echo __("Activate") ?></th>
+                <th><?php echo __("Action") ?></th>
             </tr>
         </thead>
 
@@ -443,11 +503,11 @@ Tip:If your rule is not working try adding !important (e.g. background-color:red
 
 <div id="smartFormsCSSDiv" style="display: none;padding: 10px" class="form-horizontal bootstrap-wrapper">
 
-	<textarea id="smartFormsCSSText" placeholder="You can put your custom css rules here, example:
+	<textarea id="smartFormsCSSText" placeholder="<?php echo __("You can put your custom css rules here, example:") ?>
 button{
 	background-color:red;
 }
-TIP: if the rule is not working try adding !important, e.g. background-color:red !important;
+<?php echo __("TIP: if the rule is not working try adding") ?> !important, <?php echo __("e.g.") ?> background-color:red !important;
 "></textarea>
     <button id="sfApplyCss">Apply</button>
 
@@ -463,7 +523,7 @@ TIP: if the rule is not working try adding !important, e.g. background-color:red
         <div  >
             <div class="treeDiv" id="smartFormsBasic" style="display: inline-block">
                 <img class="treeButton" src="<?php echo SMART_FORMS_DIR_URL?>images/arrow_down.png" alt=""/>
-                <h2 class="treeTitle">Basic</h2>
+                <h2 class="treeTitle"><?php echo __("Basic") ?></h2>
             </div>
 
         </div>
@@ -487,7 +547,7 @@ TIP: if the rule is not working try adding !important, e.g. background-color:red
                 <span><?php echo __("Form Type"); ?></span>
                 <select id="rnFormType">
                     <option value="nor">Normal</option>
-                    <option value="sec">Multiple Steps Form (pro)</option>
+                    <option value="sec"><?php echo __("Multiple Steps Form (pro)") ?></option>
                 </select>
                 <br/>
 
@@ -579,7 +639,7 @@ TIP: if the rule is not working try adding !important, e.g. background-color:red
                                             <li><a id="atabselect" class="formtab"><?php echo __("Advanced")?></a></li>
                                             <li><a id="atabradioscheckboxes" class="formtab"><?php echo __("Multiple Choices")?></a></li>
 
-                                            <li><a id="atabbuttons" class="formtab" <?php echo (has_smart_donations_license_and_is_active()?"":'style="display: none"');?> >Paypal</a></li>
+                                            <li><a id="atabbuttons" class="formtab" <?php echo (has_smart_donations_license_and_is_active()?"":'style="display: none"');?> ><?php echo __("Paypal") ?></a></li>
 											<li><a id="atabpro" class="formtab" ><?php echo __("Pro")?></a></li>
                                         </ul>
                                         <div class="form-horizontal" id="components">
@@ -652,7 +712,7 @@ TIP: if the rule is not working try adding !important, e.g. background-color:red
                                                         </div>
                                                         <div class="component">
                                                             <div class="control-group row rednaocaptcha">
-                                                                <div class="rednao_label_container col-sm-3"><label class="rednao_control_label">Captcha</label></div>
+                                                                <div class="rednao_label_container col-sm-3"><label class="rednao_control_label"><?php echo __("Captcha") ?></label></div>
                                                                 <div class="control-group redNaoControls rednaocaptcha col-sm-9">
                                                                     <img style="width:300px;height:116px;" src="<?php echo SMART_FORMS_DIR_URL?>images/captcha.png"/>
                                                                 </div>

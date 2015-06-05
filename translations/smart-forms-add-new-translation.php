@@ -16,7 +16,22 @@ $translationArray=array(
 	"MyNewCondition"=>__("My new condition"),
 	"The title can't be empty"=>__("The title can't be empty"),
 	"AddConditionalLogic"=>__("Add Conditional Logic"),
-	"AreYouSureYouWantToDelete"=>__("Are you sure you want to delete")
+	"AreYouSureYouWantToDelete"=>__("Are you sure you want to delete"),
+	"Default"=>_("Default"),
+	"ClickHereToCreateSnippet"=>__("Click here to create a new javascript snippet"),
+	"SelectTheFieldsRedirectPage"=>__("Select the fields you want to send as parameters to the redirect page"),
+	"SelectCampaignBeforeSaving"=>__("If you are going to use a donation button, please select a campaign before saving"),
+	"SelectPaypalEmailBeforeSaving"=>__("Please select a paypal donation email before saving"),
+	"SetupDonationFormulaBeforeSaving"=>__("Please setup a donation formula before saving"),
+	"ConfigureEmailIsGoingToBeSent."=>__("Please before saving, configure the email that is going to be sent."),
+	"AnErrorOccurred"=>__("An error occurred"),
+	"CodeTestedSuccessfully"=>__("Code tested successfully!!"),
+	"AddParametersToUrl"=>__("Add Parameters to Url"),
+	"AddEditConditionalLogic"=>__("Add/Edit conditional logic"),
+	"DeleteRow"=>__("Delete row"),
+	"DeletingRow"=>__("Deleting row"),
+	"AreYouSureDeleteRow?"=>__("Are you sure you want to delete the row?"),
+	"AddAnotherRedirectToUrl"=>__("Add another redirect to url")
 );
 
 wp_localize_script('smart-forms-add-new','smartFormsTranslation',$translationArray);

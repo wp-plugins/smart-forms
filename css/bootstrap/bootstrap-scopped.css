@@ -6328,3 +6328,25 @@
   content:" *";
   color:red;
 }
+
+.bootstrap-wrapper .arrow{
+  overflow: visible !important;
+  position:absolute !important;
+  left:auto;
+  margin-left:0px;
+  margin-right:0px;
+
+
+}
+
+.bootstrap-wrapper .arrow:after{
+  background-color:transparent;
+  left:auto;
+  top:auto;
+
+  -webkit-transform: none !important;
+  -ms-transform: none !important;
+  transform: none !important;
+
+
+}

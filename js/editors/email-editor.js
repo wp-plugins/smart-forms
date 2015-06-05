@@ -328,6 +328,7 @@ RedNaoEmailEditor.prototype.AddEmail=function(email,select)
 
 RedNaoEmailEditor.prototype.OpenEmailEditor=function(redNaoFormElements,emails)
 {
+    RedNaoEventManager.Publish('ContextTutorialRequested',1);
     this.SelectedEmail=null;
     this.Emails=emails;
     this.Dialog.dialog('open');
