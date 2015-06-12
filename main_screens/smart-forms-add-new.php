@@ -516,43 +516,75 @@ button{
 
 <div id="smartFormsGeneralDiv">
 <form >
-    <div id="rednaoSmartForms">
+    <div id="rednaoSmartForms" class="bootstrap-wrapper">
 
         <input type="hidden" id="smartFormsId" value=""/>
 
-        <div  >
-            <div class="treeDiv" id="smartFormsBasic" style="display: inline-block">
-                <img class="treeButton" src="<?php echo SMART_FORMS_DIR_URL?>images/arrow_down.png" alt=""/>
-                <h2 class="treeTitle"><?php echo __("Basic") ?></h2>
-            </div>
+        <div>
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active">
+                    <a data-toggle="tab"><span class="glyphicon glyphicon-th-large"></span><?php echo __("General") ?></a>
+                </li>
+            </ul>
+
 
         </div>
-        <div  id="smartFormsBasicDetail">
-            <hr/>
-            <div class="category">
-                <span><?php echo __("Name"); ?></span>
-                <input type="text"  id="smartFormName"/>
-                <span class="description" style="margin-bottom:5px;"> <?php echo __("*The name of the form, this name is displayed in the form list"); ?></span>
-                <br/>
+        <div  id="smartFormsBasicDetail" class="tab-content">
+            <div class="tab-pane active">
+                <table class="table table-bordered table-striped">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span><?php echo __("Name"); ?></span>
+                            </td>
+                            <td>
+                                <input type="text"  id="smartFormName" class="form-control" style="width: 400px;display: inline-block;"/>
+                                <span style="margin-left: 2px;cursor:hand;cursor:pointer;" data-toggle="tooltip" data-placement="right" title="" class="glyphicon glyphicon-question-sign" data-original-title=" <?php echo __("The name of the form, this name is displayed in the form list"); ?>"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span><?php echo __("Description"); ?></span>
+                            </td>
+                            <td>
+                                <input type="text"  id="smartFormDescription" style="width: 400px;display: inline-block;" class="form-control"/>
+                                <span style="margin-left: 2px;cursor:hand;cursor:pointer;" data-toggle="tooltip" data-placement="right" title="" class="glyphicon glyphicon-question-sign" data-original-title="<?php echo __("The form description, this is displayed in the form list") ?>"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span><?php echo __("Invalid field message"); ?></span>
+                            </td>
+                            <td>
+                                <input style="width: 400px;display: inline-block;" class="form-control" type="text"  id="smartFormsInvalidFieldMessage" value="*Please fill all the required fields"/>
+                                <span style="margin-left: 2px;cursor:hand;cursor:pointer;" data-toggle="tooltip" data-placement="right" title="" class="glyphicon glyphicon-question-sign" data-original-title="<?php echo __("The message that is displayed when a required field is empty"); ?>"></span>
 
-                <span><?php echo __("Description"); ?></span>
-                <input type="text"  id="smartFormDescription"/>
-                <span class="description" style="margin-bottom:5px;"> <?php echo __("*The form description, this is displayed in the form list"); ?></span>
-                <br/>
+                                <span class="sfToolTipPosition" style="display: none;margin-left: 10px;"><?php echo __("Position") ?></span>
+                                <span class="sfToolTipPosition glyphicon glyphicon-question-sign"style="display: none; margin-left: 2px;cursor:hand;cursor:pointer;" data-toggle="tooltip" data-placement="right" title="" class="glyphicon glyphicon-question-sign" data-original-title="<?php echo __("The invalid message is displayed in a tooltip, select the position of the tooltip") ?>"></span>
+                                <div class="sfToolTipPosition" style="display: none;" role="toolbar" id="tooltipPositionList">
+                                    <button id="toolTipPosition_none" type="button"  style="outline: invert none medium;" title="<?php echo __("Don't display tooltip") ?>" class="btn btn-default"><span class="glyphicon glyphicon-remove-sign"></span></button>
+                                    <button id="toolTipPosition_left" type="button" style="outline: invert none medium;" title="<?php echo __("Left") ?>" class="btn btn-default"><span class="glyphicon glyphicon-hand-left"></span></button>
+                                    <button id="toolTipPosition_top" type="button"  style="outline: invert none medium;" title="<?php echo __("Up") ?>" class="btn btn-default"><span class="glyphicon glyphicon-hand-up"></span></button>
+                                    <button id="toolTipPosition_right" type="button" style="outline: invert none medium;" title="<?php echo __("Right") ?>" class="btn btn-default"><span class="glyphicon glyphicon-hand-right"></span></button>
+                                    <button id="toolTipPosition_bottom" type="button" style="outline: invert none medium;" title="<?php echo __("Down") ?>" class="btn btn-default"><span class="glyphicon glyphicon-hand-down"></span></button>
+                                </div>
 
-				<span><?php echo __("Invalid field message"); ?></span>
-				<input style="width: 300px;" type="text"  id="smartFormsInvalidFieldMessage" value="*Please fill all the required fields"/>
-				<span class="description" style="margin-bottom:5px;" ><?php echo __("*The message that is displayed when a required field is empty"); ?></span>
-				<br/>
-                <span><?php echo __("Form Type"); ?></span>
-                <select id="rnFormType">
-                    <option value="nor">Normal</option>
-                    <option value="sec"><?php echo __("Multiple Steps Form (pro)") ?></option>
-                </select>
-                <br/>
-
-
-
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span><?php echo __("Form Type"); ?></span>
+                            </td>
+                            <td>
+                                <select id="rnFormType" class="form-control" style="width: 400px;display: inline-block;">
+                                    <option value="nor">Normal</option>
+                                    <option value="sec"><?php echo __("Multiple Steps Form (pro)") ?></option>
+                                </select>
+                                <span style="margin-left: 2px;cursor:hand;cursor:pointer;" data-toggle="tooltip" data-placement="right" title="" class="glyphicon glyphicon-question-sign" data-original-title="Normal: The normal form <br>Multiple Steps: A form that is divided in multiple sections, perfect for big forms"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 

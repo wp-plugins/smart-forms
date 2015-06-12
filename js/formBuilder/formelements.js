@@ -132,6 +132,7 @@ function sfFormElementBase(options)
     this.Translations=SmartFormsElementsTranslation;
     this.StyleTags={};
     this._ignore=false;
+    this.Errors={};
     if(options==null)
     {
         this.Options={};
@@ -181,6 +182,27 @@ function sfFormElementBase(options)
 sfFormElementBase.Extensions=[];
 sfFormElementBase.IdCounter=0;
 
+
+sfFormElementBase.prototype.AddError=function(id,errorMessage)
+{
+    this.Errors[id]=errorMessage;
+};
+
+sfFormElementBase.prototype.RemoveError=function(id)
+{
+    if(typeof this.Errors[id]!='undefined')
+        delete this.Errors[id];
+};
+
+sfFormElementBase.prototype.GetFirstError=function()
+{
+    for(var errorId in this.Errors)
+        return this.Errors[errorId];
+
+    return null;
+};
+
+
 sfFormElementBase.prototype.SetGlobalProperties=function()
 {
     if(this.IsNew)
@@ -227,8 +249,14 @@ sfFormElementBase.prototype.IsIgnored=function()
 
 sfFormElementBase.prototype.FirePropertyChanged=function(){
 
+    this.DestroyPopOver();
     RedNaoEventManager.Publish('formPropertyChanged',{FieldName:this.Id, Value:this.GetValueString(),FormId:this.FormId});
 
+};
+
+sfFormElementBase.prototype.DestroyPopOver=function()
+{
+    this.JQueryElement.popover('destroy');
 };
 
 sfFormElementBase.prototype.SetDefaultIfUndefined=function(propertyName,defaultValue)
@@ -397,6 +425,38 @@ sfFormElementBase.prototype.GenerationCompleted=function(jQueryElement)
 sfFormElementBase.prototype.IsValid=function()
 {
     return true;
+};
+
+sfFormElementBase.prototype.InternalIsValid=function()
+{
+    var firstError=this.GetFirstError();
+    if(firstError==null)
+    {
+        this.JQueryElement.removeClass('has-error');
+        this.JQueryElement.popover('destroy');
+        return true;
+    }
+    this.JQueryElement.addClass('has-error');
+    var tooltipPosition=this.ClientOptions.ToolTipPosition;
+    if(this.ClientOptions.DocumentWidth<=768)
+        tooltipPosition='bottom';
+
+
+    if(this.ClientOptions.ToolTipPosition!='none')
+        this.JQueryElement.popover({
+            html : true,
+            content :firstError,
+            placement:tooltipPosition,
+            template:'<div class="popover invalid" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+        });
+
+    if(this.IsIgnored())
+        return true;
+
+    this.JQueryElement.popover('show');
+    return false;
+
+
 };
 
 sfFormElementBase.prototype.ClearInvalidStyle=function()
@@ -637,13 +697,11 @@ sfTextInputElement.prototype.GetValuePath=function()
 
 sfTextInputElement.prototype.IsValid=function()
 {
-     if(this.JQueryElement.find('.redNaoInputText').val()==""&&this.Options.IsRequired=='y')
-     {
-         this.JQueryElement.addClass('has-error');
-        return false;
-     }
-
-    return true;
+    if(this.JQueryElement.find('.redNaoInputText').val()==""&&this.Options.IsRequired=='y')
+        this.AddError('root',this.InvalidInputMessage);
+    else
+        this.RemoveError('root');
+    return this.InternalIsValid();
 };
 
 //noinspection JSUnusedLocalSymbols
@@ -754,9 +812,12 @@ sfPrependTexElement.prototype.IsValid=function()
     if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
     {
         rnJQuery('#'+this.Id).addClass('has-error');
-        return false;
+        this.AddError('root',this.InvalidInputMessage);
     }
-    return true;
+    else
+        this.RemoveError('root');
+
+    return this.InternalIsValid();
 };
 
 //noinspection JSUnusedLocalSymbols
@@ -863,9 +924,11 @@ sfAppendedTexElement.prototype.IsValid=function()
     if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
     {
         rnJQuery('#'+this.Id).addClass('has-error');
-        return false;
-    }
-    return true;
+        this.AddError('root',this.InvalidInputMessage);
+    }else
+        this.RemoveError('root');
+
+    return this.InternalIsValid();
 };
 
 //noinspection JSUnusedLocalSymbols
@@ -974,9 +1037,12 @@ sfPrependCheckBoxElement.prototype.IsValid=function()
     if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
     {
         rnJQuery('#'+this.Id).addClass('has-error');
-        return false;
-    }
-    return true;
+        this.AddError('root',this.InvalidInputMessage);
+    }else
+        this.RemoveError('root');
+
+    return this.InternalIsValid();
+
 };
 
 //noinspection JSUnusedLocalSymbols
@@ -1084,9 +1150,12 @@ sfAppendCheckBoxElement.prototype.IsValid=function()
     if(rnJQuery('#'+this.Id+ ' .redNaoInputText').val()==""&&this.Options.IsRequired=='y')
     {
         rnJQuery('#'+this.Id).addClass('has-error');
-        return false;
+        this.AddError('root',this.InvalidInputMessage);
     }
-    return true;
+    else
+        this.RemoveError('root');
+
+    return this.InternalIsValid();
 };
 
 //noinspection JSUnusedLocalSymbols
@@ -1366,10 +1435,12 @@ sfMultipleRadioElement.prototype.IsValid=function()
     if(rnJQuery('#'+this.Id).find(':checked').length<=0&&this.Options.IsRequired=='y')
     {
         this.SetUpICheck('iradio_minimal-red');
-        return false;
+        this.AddError('root',this.InvalidInputMessage);
     }
+    else
+        this.RemoveError('root');
 
-    return true;
+    return this.InternalIsValid();
 };
 
 sfMultipleRadioElement.prototype.ClearInvalidStyle=function()
@@ -1539,9 +1610,10 @@ sfMultipleCheckBoxElement.prototype.IsValid=function()
     if(rnJQuery('#'+this.Id).find(':checked').length<=0&&this.Options.IsRequired=='y')
     {
         this.SetUpICheck('icheckbox_minimal-red');
-        return false;
-    }
-    return true;
+        this.AddError('root',this.InvalidInputMessage);
+    }else
+        this.RemoveError('root');
+    return this.InternalIsValid();
 };
 
 sfMultipleCheckBoxElement.prototype.ClearInvalidStyle=function()
@@ -1720,9 +1792,12 @@ sfSelectBasicElement.prototype.IsValid=function()
     if(this.Options.IsRequired=='y'&&(this.GetValueString().value==''||rnJQuery('#'+this.Id+ ' .redNaoSelect option:selected').length==0))
     {
         rnJQuery('#'+this.Id).addClass('has-error');
-        return false;
+        this.AddError('root',this.InvalidInputMessage);
     }
-    return true;
+    else
+        this.RemoveError('root');
+
+    return this.InternalIsValid();
 };
 
 
@@ -2028,11 +2103,13 @@ function sfRedNaoDatePicker(options)
         this.Options.ReadOnly='n';
         this.Options.Value='';
         this.Options.CustomCSS='';
+        this.Options.IsRequired='n';
     }else{
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
         this.SetDefaultIfUndefined('ReadOnly','n');
         this.SetDefaultIfUndefined('Value','');
         this.SetDefaultIfUndefined('CustomCSS','');
+        this.SetDefaultIfUndefined('IsRequired','n');
     }
 
 }
@@ -2046,6 +2123,7 @@ sfRedNaoDatePicker.prototype.CreateProperties=function()
     this.Properties.push(new SimpleTextProperty(this,this.Options,"DateFormat","Date Format",{ManipulatorType:'basic'}));
     this.Properties.push(new SimpleTextProperty(this,this.Options,"Value","Value",{ManipulatorType:'basic',RefreshFormData:true}));
     this.Properties.push(new CheckBoxProperty(this,this.Options,"ReadOnly","Read Only",{ManipulatorType:'basic'}));
+    this.Properties.push(new CheckBoxProperty(this,this.Options,"IsRequired","Required",{ManipulatorType:'basic'}));
     this.Properties.push(new CustomCSSProperty(this,this.Options));
     this.Properties.push(new IconProperty(this,this.Options,'Icon','Icon',{ManipulatorType:'basic'}));
 };
@@ -2139,7 +2217,13 @@ sfRedNaoDatePicker.prototype.GenerationCompleted=function(jQueryElement)
 
 sfRedNaoDatePicker.prototype.IsValid=function()
 {
-    return true;
+    var selectedDate= this.JQueryElement.find('.redNaoDatePicker').datepicker('getDate');
+    if(selectedDate==null&&this.Options.IsRequired=='y')
+        this.AddError('root',this.InvalidInputMessage);
+    else
+        this.RemoveError('root');
+
+    return this.InternalIsValid();
 };
 
 /************************************************************************************* Name ***************************************************************************************************/
@@ -2159,10 +2243,12 @@ function sfRedNaoName(options)
         this.Options.ReadOnly='n';
         this.Options.Icon={ClassName:''};
         this.Options.CustomCSS='';
+        this.Options.IsRequired='n';
     }else
     {
         this.SetDefaultIfUndefined('Icon',{ClassName:''});
         this.SetDefaultIfUndefined('CustomCSS','');
+        this.SetDefaultIfUndefined('IsRequired','n');
     }
 
 
@@ -2263,10 +2349,12 @@ sfRedNaoName.prototype.IsValid=function()
         if(lastNameJQuery.val()=="")
             lastNameJQuery.parent().addClass('has-error');
 
-        return false;
+        this.AddError('root',this.InvalidInputMessage);
     }
+    else
+        this.RemoveError('root');
 
-    return true;
+    return this.InternalIsValid();
 };
 
 //noinspection JSUnusedLocalSymbols
@@ -2529,7 +2617,13 @@ sfRedNaoAddress.prototype.IsValid=function()
         countryJQuery.parent().addClass('has-error');
     }
 
-    return isValid;
+    if(!isValid)
+        this.AddError('root',this.InvalidInputMessage);
+    else
+        this.RemoveError('root');
+
+
+    return this.InternalIsValid();
 
 };
 
@@ -2648,10 +2742,12 @@ sfRedNaoPhone.prototype.IsValid=function()
         if(phoneJQuery.val()=="")
             phoneJQuery.parent().addClass('has-error');
 
-        return false;
+        this.AddError('root',this.InvalidInputMessage);
     }
+    else
+        this.RemoveError('root');
 
-    return true;
+    return this.InternalIsValid();
 };
 
 
@@ -2744,17 +2840,16 @@ sfRedNaoEmail.prototype.IsValid=function()
     if(email==""&&this.Options.IsRequired=='y')
     {
         this.JQueryElement.addClass('has-error');
-        return false;
-    }
-
-
-    if(email!=''&&!this.EmailIsValid(email))
-    {
-        this.JQueryElement.addClass('has-error');
-        return false;
-    }
-
-    return true;
+        this.AddError('root',this.InvalidInputMessage);
+    }else
+        if(email!=''&&!this.EmailIsValid(email))
+        {
+            this.JQueryElement.addClass('has-error');
+            this.AddError('root',this.InvalidInputMessage);
+        }
+        else
+            this.RemoveError('root');
+    return this.InternalIsValid();
 };
 
 sfRedNaoEmail.prototype.EmailIsValid=function(email)
@@ -2861,9 +2956,12 @@ sfRedNaoNumber.prototype.IsValid=function()
     if(number==""&&this.Options.IsRequired=='y')
     {
         rnJQuery('#'+this.Id).addClass('has-error');
-        return false;
+        this.AddError('root',this.InvalidInputMessage);
     }
-    return true;
+    else
+        this.RemoveError('root');
+
+    return this.InternalIsValid();
 };
 
 sfRedNaoNumber.prototype.InputIsValid=function()
@@ -3190,9 +3288,11 @@ sfSearchableList.prototype.IsValid=function()
     if(this.Options.IsRequired=='y'&&(this.GetValueString().selectedValues.length==0))
     {
         rnJQuery('#'+this.Id).addClass('has-error');
-        return false;
+        this.AddError('root',this.InvalidInputMessage);
     }
-    return true;
+    else
+        this.RemoveError('root');
+    return this.InternalIsValid();
 };
 
 

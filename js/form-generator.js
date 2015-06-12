@@ -18,6 +18,9 @@ function smartFormGenerator(options){
             }];
     }
 
+    if(typeof this.client_form_options.ToolTipPosition=='undefined')
+        this.client_form_options.ToolTipPosition='none';
+
     var i;
     for(i=0;i<this.client_form_options.JavascriptCode.length;i++)
     {
@@ -35,10 +38,13 @@ function smartFormGenerator(options){
     this.RedNaoFormElements=[];
     this.FormElements=[];
     var elementOptions=options.elements;
+    this.client_form_options.DocumentWidth=rnJQuery(window).width();
     for(i=0;i<elementOptions.length;i++)
     {
         var element=sfRedNaoCreateFormElementByName(elementOptions[i].ClassName,elementOptions[i]);
         element.FormId=this.form_id;
+        element.InvalidInputMessage=RedNaoEscapeHtml(this.client_form_options.InvalidInputMessage);
+        element.ClientOptions=this.client_form_options;
         this.RedNaoFormElements.push(element);
         this.FormElements.push(element);
     }
@@ -168,7 +174,7 @@ smartFormGenerator.prototype.FormLoaded=function()
             RedNaoFormulaManagerVar.SetFormulaValue(this.RedNaoFormElements[i].Id,this.RedNaoFormElements[i].GetValueString())
     }
 
-    RedNaoFormulaManagerVar.RefreshAllFormulasAndConditionalLogic();
+    RedNaoFormulaManagerVar.RefreshAllFormulas();
     if(RedNaoGetValueOrNull(this.client_form_options.Campaign))
         this.CreatePayPalHiddenFields();
     this.ExecuteConditionalLogicInAllFields();
@@ -271,6 +277,8 @@ smartFormGenerator.prototype.SaveForm=function()
     this.GetRootContainer().find('.redNaoSubmitButton').removeClass('btn-danger');
     this.GetRootContainer().find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea,.redNaoInvalid,.has-error').removeClass('redNaoInvalid').removeClass('has-error');
     var isUsingAFileUploader=false;
+    RedNaoEventManager.Publish('BeforeValidatingForm',{Generator:this});
+    var firstInvalidField=null;
     for(var i=0;i<this.FormElements.length;i++)
     {
         this.FormElements[i].ClearInvalidStyle();
@@ -279,6 +287,8 @@ smartFormGenerator.prototype.SaveForm=function()
         if(!this.FormElements[i].IsIgnored()&&!this.FormElements[i].IsValid())
         {
             formIsValid=false;
+            if(firstInvalidField==null)
+            firstInvalidField=this.FormElements[i];
             continue;
         }
         if(this.FormElements[i].StoresInformation())
@@ -290,8 +300,9 @@ smartFormGenerator.prototype.SaveForm=function()
     }
     if(!formIsValid)
     {
-        this.GetRootContainer().prepend('<p class="redNaoValidationMessage" style="margin:0;padding: 0; font-style: italic; color:red;font-family:Arial,serif;font-size:12px;">'+RedNaoEscapeHtml(this.client_form_options.InvalidInputMessage)+'</p>');
+        //this.GetRootContainer().prepend('<p class="redNaoValidationMessage" style="margin:0;padding: 0; font-style: italic; color:red;font-family:Arial,serif;font-size:12px;">'+RedNaoEscapeHtml(this.client_form_options.InvalidInputMessage)+'</p>');
         this.GetRootContainer().find('.redNaoSubmitButton').addClass('btn-danger');
+        this.ScrollTo(firstInvalidField.JQueryElement);
         return;
     }
 
@@ -327,6 +338,13 @@ smartFormGenerator.prototype.SaveForm=function()
     }
 
 
+};
+
+smartFormGenerator.prototype.ScrollTo=function($elementToScrollTo)
+{
+    var scroll = $elementToScrollTo.offset();
+    if (window.pageYOffset>scroll.top)
+        rnJQuery('html, body').animate({scrollTop: scroll.top-50}, 200);
 };
 
 smartFormGenerator.prototype.SendToSmartForms=function(formValues,isUsingAFileUploader)

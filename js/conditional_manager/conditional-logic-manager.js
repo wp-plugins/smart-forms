@@ -41,11 +41,7 @@ SfConditionalLogicManager.prototype.CreateConditionalHandlersListScreen=function
     var table=html.find('table');
     for(var i=0;i<handlers.length;i++)
     {
-        var link=rnJQuery("<tr><td style='cursor: hand;cursor: pointer;text-align: center;'><a style='cursor: hand;cursor: pointer;'>"+handlers[i].Label+"</a></td></tr>");
-        var handlerId=handlers[i].id;
-        link.find('td').click(function(){
-        //noinspection JSReferencingMutableVariableFromClosure
-        self.HandlerSelected(handlerId)});
+        var link=this.CreateHandlerItem(handlers[i]);
         table.append(link);
     }
     var buttonContainer=rnJQuery('<div style="width: 100%; margin-top:20px;margin-left: 5px;"></div>');
@@ -53,6 +49,18 @@ SfConditionalLogicManager.prototype.CreateConditionalHandlersListScreen=function
     buttonContainer.find('.smartFormsPrevious').click(function(){self.GoToRoot();});
     html.append(buttonContainer);
     return html;
+};
+
+SfConditionalLogicManager.prototype.CreateHandlerItem=function(handler)
+{
+    var link=rnJQuery("<tr><td style='cursor: hand;cursor: pointer;text-align: center;'><a style='cursor: hand;cursor: pointer;'>"+handler.Label+"</a></td></tr>");
+    var self=this;
+    link.find('td').click(function(){
+        //noinspection JSReferencingMutableVariableFromClosure
+        self.HandlerSelected(handler.id)
+        }
+    );
+    return link;
 };
 
 SfConditionalLogicManager.prototype.HandlerSelected=function(handlerId)

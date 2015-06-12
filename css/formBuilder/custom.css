@@ -53,9 +53,18 @@
 .bootstrap-wrapper.compact .col-sm-3,
 .bootstrap-wrapper.compact .col-sm-4,
 .bootstrap-wrapper.compact .col-sm-5,
-.bootstrap-wrapper.compact .col-sm-6{
+.bootstrap-wrapper.compact .col-sm-6,
+.bootstrap-wrapper.compact .col-sm-7,
+.bootstrap-wrapper.compact .col-sm-8,
+.bootstrap-wrapper.compact .col-sm-9,
+.bootstrap-wrapper.compact .col-sm-10,
+.bootstrap-wrapper.compact .col-sm-11,
+.bootstrap-wrapper.compact .col-sm-12{
     width:100% !important;
 }
+
+
+
 
 .bootstrap-wrapper.compact .col-sm-2
 {
@@ -64,10 +73,6 @@
 
 
 
-.bootstrap-wrapper.compact .redNaoControls
-{
-    margin-left: 5px;
-}
 
 .bootstrap-wrapper.compact .checkbox-inline,.bootstrap-wrapper.compact .radio-inline{
     display: block !important;
@@ -188,4 +193,34 @@
 
 .bootstrap-wrapper span.text-muted{
     cursor:auto !important;
+}
+
+.bootstrap-wrapper .popover.invalid{
+    background-color: #B22222 !important;
+    color:white;
+}
+
+.bootstrap-wrapper .popover.invalid{
+    background-color: #B22222 !important;
+    color:white;
+}
+
+.bootstrap-wrapper .popover.invalid.right > .arrow:after{
+    border-right-color: #B22222 !important;
+}
+
+.bootstrap-wrapper .popover.invalid.left > .arrow:after{
+    border-left-color: #B22222 !important;
+}
+
+.bootstrap-wrapper .popover.invalid.top > .arrow:after{
+    border-top-color: #B22222 !important;
+}
+
+.bootstrap-wrapper .popover.invalid.bottom > .arrow:after{
+    border-bottom-color: #B22222 !important;
+}
+
+.fuelux .popover{
+    min-width: 160px !important;
 }

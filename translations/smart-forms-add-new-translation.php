@@ -31,7 +31,10 @@ $translationArray=array(
 	"DeleteRow"=>__("Delete row"),
 	"DeletingRow"=>__("Deleting row"),
 	"AreYouSureDeleteRow?"=>__("Are you sure you want to delete the row?"),
-	"AddAnotherRedirectToUrl"=>__("Add another redirect to url")
+	"AddAnotherRedirectToUrl"=>__("Add another redirect to url"),
+	"whichFieldYouWantToMakeInvalid"=>__("Which field(s) you want to make invalid depending on a condition"),
+	"WhenDoYouWantToMakeInvalid"=>__("When do you want to make it/them invalid?"),
+	"WhatMessageWhenInvalid"=>__("Please type the message you want to display when the field(s) is/are invalid")
 );
 
 wp_localize_script('smart-forms-add-new','smartFormsTranslation',$translationArray);

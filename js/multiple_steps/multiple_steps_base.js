@@ -21,8 +21,10 @@ SfMultipleStepsBase.prototype.Generate=function()
     this.$Container.empty();
     this.$StepForm=rnJQuery('<div class="fuelux">'+
                         '<div class="wizard">'+
-                            '<ul class="steps" style="margin-left: 0">'+
-                            '</ul>'+
+                            '<div class="steps-container">'+
+                                '<ul class="steps" style="margin-left: 0">'+
+                                '</ul>'+
+                            '</div>'+
                             '<div class="step-content">'+
                             '</div>'+
                             '<div class="actions">'+
@@ -49,6 +51,9 @@ SfMultipleStepsBase.prototype.Generate=function()
             self.MoveToTop();
             if (!self.ProcessCurrentStep())
                 e.preventDefault();
+            else
+                for(var i=0;i<self.FormElements.length;i++)
+                    self.FormElements[i].DestroyPopOver();
         }
     });
     this.GenerationCompleted();
@@ -88,12 +93,21 @@ SfMultipleStepsBase.prototype.ProcessCurrentStep=function()
 
 SfMultipleStepsBase.prototype.StepIsValid=function(step)
 {
+    this.FormGenerator.GetRootContainer().find('.redNaoValidationMessage').remove();
     this.FormGenerator.GetRootContainer().find('.redNaoInputText,.redNaoRealCheckBox,.redNaoInputRadio,.redNaoInputCheckBox,.redNaoSelect,.redNaoTextArea,.redNaoInvalid,.has-error').removeClass('redNaoInvalid').removeClass('has-error');
+    RedNaoEventManager.Publish('BeforeValidatingForm',{Generator:this});
+    var firstInvalidField=null;
     var isValid=true;
     for(var i=0;i<step.Fields.length;i++)
-        if(!step.Fields[i].IsIgnored()&&!step.Fields[i].IsValid())
-            isValid=false;
-
+    {
+        step.Fields[i].ClearInvalidStyle();
+        if (!step.Fields[i].IsIgnored() && !step.Fields[i].IsValid())
+        {
+            isValid = false;
+            if (firstInvalidField == null)
+                firstInvalidField = step.Fields[i];
+        }
+    }
     if(this.$CurrentErrorMessage!=null)
     {
         this.$CurrentErrorMessage.slideUp('1000','easeOutQuint');
@@ -103,13 +117,14 @@ SfMultipleStepsBase.prototype.StepIsValid=function(step)
     if(!isValid)
     {
         this.$CurrentErrorMessage=rnJQuery(
-            '<div class="alert alert-danger" role="alert" style="display: none;margin-bottom: 0;">'+
+            '<div class="alert alert-danger" role="alert" style="display: none;margin-bottom: 0;clear:both;">'+
                 '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>'+
                 '<span class="sr-only">Error:</span>'+
                    RedNaoEscapeHtml(this.FormGenerator.client_form_options.InvalidInputMessage)+
             '</div>');
         this.$StepForm.find('#_'+step.Id).append(this.$CurrentErrorMessage);
         this.$CurrentErrorMessage.slideDown('1000','easeOutQuint');
+        this.FormGenerator.ScrollTo(firstInvalidField.JQueryElement);
     }
     return isValid;
 };

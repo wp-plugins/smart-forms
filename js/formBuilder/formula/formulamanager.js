@@ -94,12 +94,15 @@ RedNaoFormulaManager.prototype.UpdateFormulaFieldsIfNeeded=function(fieldName)
         if(this.Formulas[i].FieldUsedInFormula(fieldName))
            this.Formulas[i].UpdateFieldWithValue(this.Data);
     }
+
+
 };
 
-RedNaoFormulaManager.prototype.RefreshAllFormulasAndConditionalLogic=function()
+RedNaoFormulaManager.prototype.RefreshAllFormulas=function()
 {
     for(var i=0;i<this.Formulas.length;i++)
         this.Formulas[i].UpdateFieldWithValue(this.Data);
+
 
 
 };

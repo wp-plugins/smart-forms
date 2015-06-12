@@ -15,7 +15,8 @@ function SmartFormsGetConditionalHandlerByType(handlerId,options)
 function SmartFormsGetConditionalHandlerArray()
 {
     SmartFormsConditionalHandlerArray=[
-        {Label:"Show fields depending on a condition",id:"SfShowConditionalHandler",create:function(options){return new SfShowConditionalHandler(options)}}
+        {Label:"Show fields depending on a condition",id:"SfShowConditionalHandler",create:function(options){return new SfShowConditionalHandler(options)}},
+        {Label:"Make fields invalid depending on a condition",id:"SfMkFieldInvalidHandler",create:function(options){return new SfMkFieldInvalidHandler(options)}}
     ];
 
     return SmartFormsConditionalHandlerArray;
@@ -32,7 +33,7 @@ RedNaoEventManager.Subscribe('CalculateCondition',function(data){return SmartFor
 /************************************************************************************* Base ***************************************************************************************************/
 function SfConditionalHandlerBase(options)
 {
-    this.PreviousActionWasTrue=-1;
+    this.PreviousActionWas=-1;
     if(options==null)
     {
         this.Options={};
@@ -68,7 +69,6 @@ SfConditionalHandlerBase.prototype.Initialize=function(form,data)
 SfConditionalHandlerBase.prototype.SubscribeCondition=function(condition,initialData)
 {
     var self=this;
-    this.Condition=condition;
     //this.ConditionFunction=new Function('formData','return '+condition.CompiledCondition);
     var fieldsInCondition=[];
     for(var i=0;i<condition.Conditions.length;i++)
@@ -83,7 +83,7 @@ SfConditionalHandlerBase.prototype.SubscribeCondition=function(condition,initial
         }
     });
 
-    this.ProcessCondition(initialData);
+
 
 };
 
@@ -151,10 +151,10 @@ SfShowConditionalHandler.prototype.Initialize=function(form,data)
 {
     this.Form=form;
     var self=this;
-    self.HideFields();
     self.PreviousActionWasTrue=-1;
+    this.Condition=self.Options.Condition;
     self.SubscribeCondition(self.Options.Condition,data);
-
+    self.ProcessCondition(data).Execute();
 };
 
 SfShowConditionalHandler.prototype.HideFields=function()
@@ -211,5 +211,78 @@ SfShowConditionalHandler.prototype.ExecuteFalseAction=function()
     var formElements=this.GetFormElements();
     for(var i=0;i<formElements.length;i++)
         formElements[i].Ignore();
+};
+
+
+/************************************************************************************* Make field invalid Conditional Handler ***************************************************************************************************/
+function SfMkFieldInvalidHandler(options)
+{
+    SfConditionalHandlerBase.call(this,options);
+    this.Options.Type="SfMkFieldInvalidHandler";
+    this.Fields="";
+    this.FormElements=null;
+}
+SfMkFieldInvalidHandler.prototype=Object.create(SfConditionalHandlerBase.prototype);
+
+SfMkFieldInvalidHandler.prototype.GetConditionalSteps=function()
+{
+    if(this.IsNew){
+        this.Options.GeneralInfo={};
+        this.Options.FieldPicker={};
+        this.Options.Condition={};
+        this.Options.ErrorMessage={};
+    }
+    return [
+        {Type:"SfNamePicker",Label:'HowDoYouWantToName',Options:this.Options.GeneralInfo,Id:this.Id},
+        {Type:"SfHandlerFieldPicker",Label:'whichFieldYouWantToMakeInvalid',Options:this.Options.FieldPicker},
+        {Type:"SfHandlerConditionGenerator",Label:'WhenDoYouWantToMakeInvalid',Options:this.Options.Condition},
+        {Type:"SfTextPicker",Label:'WhatMessageWhenInvalid',Options:this.Options.ErrorMessage}
+    ];
+};
+
+SfMkFieldInvalidHandler.prototype.Initialize=function(form,data)
+{
+    this.Form=form;
+    var self=this;
+    this.Condition=self.Options.Condition;
+    self.PreviousActionWasTrue=-1;
+    RedNaoEventManager.Subscribe('BeforeValidatingForm',function(){
+       self.ProcessCondition(self.Form.GetCurrentData()).Execute();
+    });
+
+};
+
+SfMkFieldInvalidHandler.prototype.GetFormElements=function()
+{
+    if(this.FormElements==null)
+    {
+        this.FormElements=[];
+        for(var i=0;i<this.Options.FieldPicker.AffectedItems.length;i++)
+        {
+            var fieldId=this.Options.FieldPicker.AffectedItems[i];
+            for(var t=0;t<this.Form.FormElements.length;t++)
+                if(this.Form.FormElements[t].Id==fieldId)
+                    this.FormElements.push(this.Form.FormElements[t]);
+
+
+        }
+    }
+    return this.FormElements;
+};
+
+SfMkFieldInvalidHandler.prototype.ExecuteTrueAction=function()
+{
+    var formElements=this.GetFormElements();
+    var errorId="mfi"+this.Id;
+    for(var i=0;i<formElements.length;i++)
+        formElements[i].AddError(errorId,this.Options.ErrorMessage.Text);
+};
+
+SfMkFieldInvalidHandler.prototype.ExecuteFalseAction=function()
+{
+    var formElements=this.GetFormElements();
+    var errorId="mfi"+this.Id;
+    for(var i=0;i<formElements.length;i++)
+        formElements[i].RemoveError(errorId);
 };
 

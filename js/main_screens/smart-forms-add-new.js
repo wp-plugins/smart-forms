@@ -3,6 +3,7 @@ smartFormsIntegrationFormula.Formulas={};
 var smartFormsDesignMode=true;
 function SmartFormsAddNew()
 {
+    rnJQuery('#smartFormsBasicDetail [data-toggle="tooltip"]').tooltip({html:true});
     if(typeof smartFormId!='undefined')
         this.id=smartFormId;
     else
@@ -14,6 +15,7 @@ function SmartFormsAddNew()
     this.RedirectToOptions=[this.CreateEmptyRedirectOption()];
     this.RedirectToMode='s';
     this.JavascriptCodes=[];
+    this.ToolTipPosition='right';
     if(typeof smartFormsOptions!='undefined')
     {
         options=smartFormsOptions;
@@ -50,6 +52,11 @@ function SmartFormsAddNew()
 
     if(typeof smartFormClientOptions!='undefined')
     {
+        if(typeof smartFormClientOptions.ToolTipPosition=='undefined')
+            this.ToolTipPosition='None';
+        else
+            this.ToolTipPosition=smartFormClientOptions.ToolTipPosition;
+
         if(typeof smartFormClientOptions.JavascriptCode=='string' )
         {
             this.JavascriptCodes.push(
@@ -130,8 +137,28 @@ function SmartFormsAddNew()
     self.PublishToSubscribers('OnLoadComplete');
     this.InitializeAfterSubmitUI();
     this.InitializeJavascriptTab();
+    this.InitializeToolTipButtons();
 
 }
+
+SmartFormsAddNew.prototype.InitializeToolTipButtons=function()
+{
+    rnJQuery('.sfToolTipPosition').css('display','inline');
+    var self=this;
+    rnJQuery('#toolTipPosition_none').click(function(){self.SelectToolTipPosition('none')});
+    rnJQuery('#toolTipPosition_left').click(function(){self.SelectToolTipPosition('left')});
+    rnJQuery('#toolTipPosition_top').click(function(){self.SelectToolTipPosition('top')});
+    rnJQuery('#toolTipPosition_right').click(function(){self.SelectToolTipPosition('right')});
+    rnJQuery('#toolTipPosition_bottom').click(function(){self.SelectToolTipPosition('bottom')});
+    this.SelectToolTipPosition(this.ToolTipPosition);
+};
+
+SmartFormsAddNew.prototype.SelectToolTipPosition=function(position)
+{
+    rnJQuery('#toolTipPosition_none,#toolTipPosition_left,#toolTipPosition_top,#toolTipPosition_right,#toolTipPosition_bottom').removeClass('active');
+    this.ToolTipPosition=position;
+    rnJQuery('#toolTipPosition_'+position).addClass('active');
+};
 
 SmartFormsAddNew.prototype.InitializeJavascriptTab=function()
 {
@@ -469,7 +496,8 @@ SmartFormsAddNew.prototype.GetClientFormOptions=function(usesCaptcha)
         Formulas:smartFormsIntegrationFormula.Formulas,
         InvalidInputMessage:rnJQuery("#smartFormsInvalidFieldMessage").val(),
         FormType:this.FormBuilder.FormType,
-        SplitSteps:this.FormBuilder.GetMultipleStepsOptions()
+        SplitSteps:this.FormBuilder.GetMultipleStepsOptions(),
+        ToolTipPosition:this.ToolTipPosition
     };
 
     clientOptions.Extensions={};

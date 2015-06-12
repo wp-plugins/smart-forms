@@ -64,7 +64,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     }
   })
 
-}(jQuery);
+}(rnJQuery);
 
 /* ========================================================================
  * Bootstrap: alert.js v3.2.0
@@ -157,7 +157,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
 
   $(document).on('click.bs.alert.data-api', dismiss, Alert.prototype.close)
 
-}(jQuery);
+}(rnJQuery);
 
 /* ========================================================================
  * Bootstrap: button.js v3.2.0
@@ -268,7 +268,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     e.preventDefault()
   })
 
-}(jQuery);
+}(rnJQuery);
 
 /* ========================================================================
  * Bootstrap: carousel.js v3.2.0
@@ -492,7 +492,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     })
   })
 
-}(jQuery);
+}(rnJQuery);
 
 /* ========================================================================
  * Bootstrap: collapse.js v3.2.0
@@ -663,7 +663,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     Plugin.call($target, option)
   })
 
-}(jQuery);
+}(rnJQuery);
 
 /* ========================================================================
  * Bootstrap: dropdown.js v3.2.0
@@ -815,7 +815,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     .on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle)
     .on('keydown.bs.dropdown.data-api', toggle + ', [role="menu"], [role="listbox"]', Dropdown.prototype.keydown)
 
-}(jQuery);
+}(rnJQuery);
 
 /* ========================================================================
  * Bootstrap: modal.js v3.2.0
@@ -1096,7 +1096,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     Plugin.call($target, option, this)
   })
 
-}(jQuery);
+}(rnJQuery);
 
 /* ========================================================================
  * Bootstrap: tooltip.js v3.2.0
@@ -1350,7 +1350,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     }
 
     var delta = this.getViewportAdjustedDelta(placement, offset, actualWidth, actualHeight)
-
+    delta.top=0
     if (delta.left) offset.left += delta.left
     else offset.top += delta.top
 
@@ -1554,7 +1554,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     return this
   }
 
-}(jQuery);
+}(rnJQuery);
 
 /* ========================================================================
  * Bootstrap: popover.js v3.2.0
@@ -1668,7 +1668,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     return this
   }
 
-}(jQuery);
+}(rnJQuery);
 
 /* ========================================================================
  * Bootstrap: scrollspy.js v3.2.0
@@ -1839,7 +1839,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     })
   })
 
-}(jQuery);
+}(rnJQuery);
 
 /* ========================================================================
  * Bootstrap: tab.js v3.2.0
@@ -1968,7 +1968,7 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     Plugin.call($(this), 'show')
   })
 
-}(jQuery);
+}(rnJQuery);
 
 /* ========================================================================
  * Bootstrap: affix.js v3.2.0
@@ -2111,4 +2111,4 @@ if (typeof jQuery === 'undefined') { throw new Error('Bootstrap\'s JavaScript re
     })
   })
 
-}(jQuery);
+}(rnJQuery);
