@@ -1272,9 +1272,11 @@ sfTextAreaElement.prototype.IsValid=function()
     if(this.JQueryElement.find('.redNaoTextAreaInput').val()==""&&this.Options.IsRequired=='y')
     {
         this.JQueryElement.addClass('has-error');
-        return false;
+        this.AddError('root',this.InvalidInputMessage);
     }
-    return true;
+    else
+        this.RemoveError('root');
+    return this.InternalIsValid();
 };
 
 //noinspection JSUnusedLocalSymbols
