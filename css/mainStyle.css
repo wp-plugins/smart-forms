@@ -250,3 +250,7 @@
     -moz-border-radius-bottomleft: 20px;
     border-bottom-left-radius: 20px;
 }
+
+.sfHelper{
+	width:auto !important;
+}
