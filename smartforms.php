@@ -59,7 +59,9 @@ add_action('wp_ajax_rednao_smart_forms_submit_license','rednao_smart_forms_submi
 add_action('wp_ajax_rednao_smart_forms_execute_op','rednao_smart_forms_execute_op');
 add_action('wp_ajax_rednao_smart_forms_generate_detail','rednao_smart_forms_generate_detail');
 add_action('wp_ajax_rednao_smart_forms_get_form_element_info','rednao_smart_forms_get_form_element_info');
+add_action('wp_ajax_rednao_smart_forms_get_form_options','rednao_smart_forms_get_form_options');
 add_action('wp_ajax_rednao_get_context_tutorials','rednao_get_context_tutorials');
+add_action('wp_ajax_rednao_smart_forms_send_test','rednao_smart_forms_send_test');
 
 
 //integration
