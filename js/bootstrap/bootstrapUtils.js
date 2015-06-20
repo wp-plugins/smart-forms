@@ -354,7 +354,7 @@ RNDialog.prototype.SetUpOptions=function(params)
                 {Label:'Cancel',Id:'dialogCancel',Style:'danger',Icon:'glyphicon glyphicon-remove',Action:'cancel'},
                 {Label:'Accept',Id:'dialogAccept',Style:'success',Icon:'glyphicon glyphicon-ok',Action:'accept'}
             ],
-            ButtonClick:function(Action){alert()}
+            ButtonClick:function(Action){}
         },params
     )
 };

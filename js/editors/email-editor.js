@@ -373,6 +373,23 @@ RedNaoEmailEditor.prototype.OpenEmailEditor=function(redNaoFormElements,emails)
 
 RedNaoEmailEditor.prototype.EmailSelected=function(email)
 {
+    rnJQuery('#sfNotReceivingEmail').unbind('click');
+    var self=this;
+    rnJQuery('#sfNotReceivingEmail').click(function()
+    {
+        var emailIndex=0;
+        for(var i=0;i<self.Emails.length;i++)
+        {
+            if(email==self.Emails[i])
+                emailIndex=i;
+        }
+
+        alert('Please make sure to save your form before using this feature, as the next page will use the latest saved information.');
+        var url=smartFormsEmailDoctorUrl+'&action=debugemail&form_id='+smartFormId+'&email_index='+emailIndex;
+        window.open(url,'_blank');
+
+    });
+
     if(this.SelectedEmail!=null)
         this.UpdateSelectedEmail();
     this.SelectedEmail=email;

@@ -5,6 +5,9 @@
 include_once(SMART_FORMS_DIR.'smart-forms-license.php');
 require_once(SMART_FORMS_DIR.'smart-forms-bootstrap.php');
 
+
+
+
 if(!defined('ABSPATH'))
     die('Forbidden');
 
@@ -12,6 +15,13 @@ if (isset($_GET['action'])) {
     $action=$_GET['action'];
 }else
     $action="";
+
+if($action=='debugemail')
+{
+    require_once SMART_FORMS_DIR.'main_screens/smart-forms-email-helper.php';
+    return;
+}
+
 if($action==="add"||$action=="clone"){
     global $wpdb;
     $result=$wpdb->get_var("SELECT count(*) FROM ".SMART_FORMS_TABLE_NAME);

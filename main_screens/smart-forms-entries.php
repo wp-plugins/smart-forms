@@ -10,6 +10,9 @@
 if(!defined('ABSPATH'))
     die('Forbidden');
 
+
+
+
 wp_enqueue_script('isolated-slider',SMART_FORMS_DIR_URL.'js/rednao-isolated-jq.js');
 wp_enqueue_script('exCanvas',SMART_FORMS_DIR_URL.'js/grid_chart/excanvas.min.js',array('isolated-slider'));
 wp_enqueue_script('jqPlot',SMART_FORMS_DIR_URL.'js/grid_chart/jquery.jqplot.min.js',array('exCanvas'));

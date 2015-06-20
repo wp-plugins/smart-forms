@@ -3,7 +3,10 @@
 function GetPostValue($parameterName)
 {
     if(isset($_POST[$parameterName]))
-        return stripslashes($_POST[$parameterName]);
+        if(is_array(($_POST[$parameterName])))
+            return $_POST[$parameterName];
+        else
+            return stripslashes($_POST[$parameterName]);
 
     return "";
 }
@@ -137,6 +140,31 @@ function rednao_smart_forms_get_form_element_info()
 	die();
 }
 
+function rednao_smart_forms_get_form_options()
+{
+    $formId=GetPostValue("formId");
+    if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') ) {
+        return;
+    }
+
+    global $wpdb;
+    $result=$wpdb->get_results($wpdb->prepare("SELECT form_options,element_options FROM ".SMART_FORMS_TABLE_NAME.' where form_id=%d',$formId));
+
+    global $current_user;
+    echo '{"formOptions":'.$result[0]->form_options;//.'}';
+    echo ',"elementOptions":'.$result[0]->element_options.
+        ',"CurrentEmail":"'.$current_user->user_email.'"'.
+        '}';
+    /*echo json_encode(array(
+        "formOptions"=>,
+        "element_options"=>$result[0]->element_options
+        )
+    );*/
+
+
+    die();
+}
+
 function rednao_get_fixed_field_value($match,$entryData)
 {
 	require_once(SMART_FORMS_DIR.'filter_listeners/fixed-field-listeners.php');
@@ -164,7 +192,8 @@ function GetValueByField($stringBuilder,$match,$entryData,$elementOptions,$useTe
 {
 	if(strpos(trim($match),'{')===0)
 	{
-
+        if($useTestData)
+            return 'Sample data';
 		return rednao_get_fixed_field_value($match,$entryData);
 	}
 
@@ -243,7 +272,9 @@ function rednao_smart_form_send_test_email()
     $EmailText=GetPostValue("EmailText");
     $elementOptions=GetPostValue("element_options");
 
-    $elementOptions=json_decode($elementOptions);
+
+    if(!is_array($elementOptions))
+        $elementOptions=json_decode($elementOptions);
 
 
     $valueArray=Array(
@@ -300,7 +331,9 @@ function rednao_smart_forms_execute_op()
 	$id=$_POST["TransactionId"];
 	$oper=$_POST["oper"];
 
-
+    if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') ) {
+        return;
+    }
 	if($oper=="del")
 	{
 		global $wpdb;
@@ -317,3 +350,34 @@ function rednao_smart_forms_dont_show_again()
 {
     update_option('sf_dont_show_again',true);
 }
+
+function rednao_smart_forms_send_test()
+{
+    if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') ) {
+        return;
+    }
+
+    require_once SMART_FORMS_DIR.'php_classes/smart_forms_troubleshoot/smart_forms_email.php';
+    switch($_POST["Id"])
+    {
+        case "basic":
+            $smartFormsEmail=new smart_forms_email_troubleshoot_basic();
+            break;
+        case "custom":
+            $smartFormsEmail=new smart_forms_email_troubleshoot_custom_smtp();
+            break;
+    }
+    if($smartFormsEmail->Start())
+        echo json_encode(
+            array(
+                "Passed"=>'y'
+        ));
+    else
+        echo json_encode(
+            array(
+                "Passed"=>'n',
+                "Message"=>$smartFormsEmail->LatestError
+            ));
+    die();
+}
+

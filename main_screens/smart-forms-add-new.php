@@ -104,6 +104,7 @@ do_action('smart_forms_load_designer_scripts');
     var smartForms_arrow_open="<?php echo SMART_FORMS_DIR_URL?>images/arrow_down.png";
     var smartFormsPath="<?php echo SMART_FORMS_DIR_URL?>";
     var smartFormsRootPath="<?php echo SMART_FORMS_DIR_URL?>";
+    var smartFormsEmailDoctorUrl="<?php menu_page_url('smart_forms_menu')?>";
 
     <?php
 
@@ -266,7 +267,7 @@ if(get_option('sf_dont_show_again')===false)
         <tr>
             <td style="text-align: right">From email address</td><td> <select  multiple="multiple"  id="redNaoFromEmail" style="width:300px"></td>
 			<td rowspan="5">
-				<a target="_blank" style="margin-right: 10px;margin-top: 10px;" href="http://smartforms.rednao.com/not-receiving-form-submission-in-your-email/"><?php echo __("Not receiving the email?") ?></a>
+				<a target="_blank" style="color:red; margin-right: 10px;margin-top: 10px;cursor:hand;cursor:pointer;" id="sfNotReceivingEmail"><?php echo __("Not receiving the email? check the email doctor.") ?></a>
 				<div class="bootstrap-wrapper" style="height: 150px;overflow-y: scroll;width: 340px;">
 					<div id="emailList"></div>
 				</div>
