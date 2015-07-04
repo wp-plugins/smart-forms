@@ -84,7 +84,7 @@ Object.isNullOrEmpty=function(object){
              // and keypad numbers ONLY
              return (
                  key == 8 ||
-                     key == 9 ||
+                     key == 9 ||key==229||
                      key == 46 ||
                      (key >= 37 && key <= 40) ||
                      (key >= 48 && key <= 57) ||
