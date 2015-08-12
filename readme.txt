@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=edsev
 Tags: form, forms, form builder, form maker, form creator, form generator, contact form, form widget, form plugin, bootstrap forms, jquery forms, form manager, ajax forms
 Requires at least: 3.3
 Tested up to: 4.2.2
-Stable tag: 2.3.6
+Stable tag: 2.3.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
